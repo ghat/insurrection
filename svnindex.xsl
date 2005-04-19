@@ -21,6 +21,51 @@
         <xsl:copy-of select="document('insurrection.xml')/xml/header/*"/>
       </head>
       <body>
+        <!-- Some hidden images for the Javascript to access by Id -->
+        <xsl:element name="img">
+          <xsl:attribute name="src">
+            <xsl:value-of select="document('insurrection.xml')/xml/images/closedicon/@src"/>
+          </xsl:attribute>
+          <xsl:attribute name="id">closedImage</xsl:attribute>
+          <xsl:attribute name="style">display: none</xsl:attribute>
+        </xsl:element>
+        <xsl:element name="img">
+          <xsl:attribute name="src">
+            <xsl:value-of select="document('insurrection.xml')/xml/images/openedicon/@src"/>
+          </xsl:attribute>
+          <xsl:attribute name="id">openedImage</xsl:attribute>
+          <xsl:attribute name="style">display: none</xsl:attribute>
+        </xsl:element>
+        <xsl:element name="img">
+          <xsl:attribute name="src">
+            <xsl:value-of select="document('insurrection.xml')/xml/images/diricon/@src"/>
+          </xsl:attribute>
+          <xsl:attribute name="id">dirImage</xsl:attribute>
+          <xsl:attribute name="style">display: none</xsl:attribute>
+        </xsl:element>
+        <xsl:element name="img">
+          <xsl:attribute name="src">
+            <xsl:value-of select="document('insurrection.xml')/xml/images/fileicon/@src"/>
+          </xsl:attribute>
+          <xsl:attribute name="id">fileImage</xsl:attribute>
+          <xsl:attribute name="style">display: none</xsl:attribute>
+        </xsl:element>
+        <xsl:element name="img">
+          <xsl:attribute name="src">
+            <xsl:value-of select="document('insurrection.xml')/xml/images/infoicon/@src"/>
+          </xsl:attribute>
+          <xsl:attribute name="id">infoImage</xsl:attribute>
+          <xsl:attribute name="style">display: none</xsl:attribute>
+        </xsl:element>
+        <xsl:element name="img">
+          <xsl:attribute name="src">
+            <xsl:value-of select="document('insurrection.xml')/xml/images/blankicon/@src"/>
+          </xsl:attribute>
+          <xsl:attribute name="id">blankImage</xsl:attribute>
+          <xsl:attribute name="style">display: none</xsl:attribute>
+        </xsl:element>
+
+        <!-- Now for the real page... -->
         <table id="pagetable">
           <tr>
             <td id="content">
@@ -150,10 +195,16 @@
     <tr class="dirrow">
       <td class="foldspace">
         <xsl:element name="img">
+          <xsl:attribute name="class">dirarrow</xsl:attribute>
           <xsl:attribute name="align">middle</xsl:attribute>
           <xsl:attribute name="alt">A closed directory</xsl:attribute>
           <xsl:attribute name="src">
             <xsl:value-of select="document('insurrection.xml')/xml/images/closedicon/@src"/>
+          </xsl:attribute>
+          <xsl:attribute name="onclick">loadDir(this)</xsl:attribute>
+          <xsl:attribute name="id">
+            <xsl:text>/</xsl:text>
+            <xsl:value-of select="@href"/>
           </xsl:attribute>
         </xsl:element>
       </td>
@@ -193,6 +244,31 @@
         </xsl:element>
       </td>
     </tr>
+    <!-- The hidden row for expanding the directory "in place" -->
+    <xsl:element name="tr">
+      <xsl:attribute name="style">display: none</xsl:attribute>
+      <xsl:attribute name="id">
+        <xsl:text>./</xsl:text>
+        <xsl:value-of select="@href"/>
+        <xsl:text>_</xsl:text>
+      </xsl:attribute>
+      <td class="foldspace">
+        <xsl:element name="img">
+          <xsl:attribute name="align">middle</xsl:attribute>
+          <xsl:attribute name="alt">A subdir spacer</xsl:attribute>
+          <xsl:attribute name="src">
+            <xsl:value-of select="document('insurrection.xml')/xml/images/blankicon/@src"/>
+          </xsl:attribute>
+        </xsl:element>
+      </td>
+      <xsl:element name="td">
+        <xsl:attribute name="colspan">2</xsl:attribute>
+        <xsl:attribute name="id">
+          <xsl:text>./</xsl:text>
+          <xsl:value-of select="@href"/>
+        </xsl:attribute>
+      </xsl:element>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="file">

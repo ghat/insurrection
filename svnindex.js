@@ -99,7 +99,7 @@ function loadBanner(name)
 			target.xml.open("GET",name,true);
 			target.xml.onreadystatechange = loadBannerCheck;
 			_target = target;
-			_target.xml.send(null);
+			target.xml.send(null);
 		}
 	}
 }
@@ -130,3 +130,104 @@ function loadBannerCheck()
 	}
 }
 
+
+/*
+ * In order to support in-line directory expansion, the directory
+ * arrow calls us like this...
+ */
+var _loadTarget = null;
+function loadDir(name)
+{
+	var target = document.getElementById('.' + name.id);
+	if (target)
+	{
+		if (target.done)
+		{
+			if (target.row.style.display == 'none')
+			{
+				target.row.style.display = '';
+				target.arrow.src = document.getElementById('openedImage').src;
+			}
+			else
+			{
+				target.row.style.display = 'none';
+				target.arrow.src = document.getElementById('closedImage').src;
+			}
+		}
+		else
+		{
+			target.arrow = name;
+			target.row = document.getElementById(target.id + '_');
+			if (target.row)
+			{
+				target.xml = getXMLHTTP();
+				if (target.xml)
+				{
+					target.xml.open("GET",target.id,true);
+					target.xml.onreadystatechange = loadDirCheck;
+					_loadTarget = target;
+					target.xml.send(null);
+				}
+			}
+		}
+	}
+}
+
+function loadDirCheck()
+{
+	var target = _loadTarget;
+	if (target.xml)
+	{
+		if (target.xml.readyState == 4)
+		{
+			if (target.xml.status == 200)
+			{
+				var html = '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
+
+				var dirs = target.xml.responseXML.getElementsByTagName('dir');
+
+				for (var i=0; i < dirs.length; i++)
+				{
+					var d = dirs[i];
+					var dname = d.getAttribute('href');
+					var t = target.id + dname;
+
+					html += '<tr class="dirrow">';
+					html += '<td class="foldspace"><img class="dirarrow" id="' + t.substring(1) + '" onclick="loadDir(this)" src="' + document.getElementById('closedImage').src + '" align="middle"></td>';
+					html += '<td><a href="' + t + '"><div class="dir"><img src="' + document.getElementById('dirImage').src + '" class="svnentryicon" align="middle">' + dname + '</div></a></td>';
+					html += '<td class="showlog"><a onmouseover="logLink(this,\'' + t + '\');"><img src="' + document.getElementById('infoImage').src + '" align="middle"></a></td>';
+					html += '</tr>';
+
+					html += '<tr id="' + t + '_" style="display: none;">';
+					html += '<td class="foldspace"><img src="' + document.getElementById('blankImage').src + '" align="middle"></td>';
+					html += '<td id="' + t + '" colspan="2"></td>';
+					html += '</tr>';
+				}
+
+				var files = target.xml.responseXML.getElementsByTagName('file');
+				for (var i=0; i < files.length; i++)
+				{
+					var d = files[i];
+					var dname = d.getAttribute('href');
+					var t = target.id + dname;
+
+					html += '<tr class="filerow">';
+					html += '<td class="foldspace"><img src="' + document.getElementById('blankImage').src + '" align="middle"></td>';
+					html += '<td><a href="' + t + '"><div class="file"><img src="' + document.getElementById('fileImage').src + '" class="svnentryicon" align="middle">' + dname + '</div></a></td>';
+					html += '<td class="showlog"><a onmouseover="logLink(this,\'' + t + '\');"><img src="' + document.getElementById('infoImage').src + '" align="middle"></a></td>';
+					html += '</tr>';
+				}
+
+				html += '</table>';
+
+				target.innerHTML = html;
+				target.done = 1;
+
+				loadDir(target.arrow);
+
+				// Remove the reference to the loaded document
+				target.xml = null;
+			}
+		}
+	}
+}

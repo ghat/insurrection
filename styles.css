@@ -296,6 +296,16 @@ TD.showlog
   background: rgb(100%,100%,90%);
 }
 
+.dirarrow
+{
+  cursor: pointer; cursor: hand;
+}
+
+.dirarrow:hover
+{
+  background: rgb(100%,100%,50%);
+}
+
 .editable:hover
 {
   background: yellow;
