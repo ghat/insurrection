@@ -186,29 +186,33 @@ A:active {color: red; text-decoration: underline;}
 {
   padding-right: 5px;
   text-align: right;
-  font-size: 90%;
 }
 
-.path
+.updirrow
 {
-  margin: 1px;
-  padding: 3px;
-  padding-left: 6px;
-  background: rgb(100%,80%,40%);
+  padding: 0px;
+  background: rgb(100%,90%,70%);
 }
 
 .updir
 {
-  padding: 3px;
-  padding-left: 6px;
-  margin-left: 1em;
-  border-top: 1px solid rgb(90%,80%,60%);
-  background: rgb(100%,90%,70%);
+  padding: 2px;
 }
 
-.svnentry
+.pathrow
 {
-  clear: right;
+  padding: 0px;
+  background: rgb(100%,80%,40%);
+}
+
+.pathrow TD
+{
+  border-top: 1px solid rgb(90%,70%,30%);
+}
+
+.path
+{
+  padding: 2px;
 }
 
 .svnentryicon
@@ -216,38 +220,65 @@ A:active {color: red; text-decoration: underline;}
   margin-right: 0.5em;
 }
 
+.dirrow
+{
+  padding: 0px;
+  background: rgb(80%,80%,70%);
+}
+
+.dirrow TD
+{
+  border-top: 1px solid rgb(70%,70%,60%);
+}
+
 .dir
 {
-  padding: 3px;
-  padding-left: 0px;
-  margin-left: 1em;
-  border-top: 1px solid rgb(70%,70%,60%);
-  background: rgb(80%,80%,70%);
+  padding: 2px;
+}
+
+.filerow
+{
+  padding: 0px;
+  background: rgb(95%,95%,95%);
+}
+
+.filerow TD
+{
+  border-top: 1px solid rgb(85%,85%,85%);
 }
 
 .file
 {
-  padding: 3px;
-  padding-left: 0px;
-  margin-left: 1em;
-  border-top: 1px solid rgb(85%,85%,85%);
-  background: rgb(95%,95%,95%);
+  padding: 2px;
 }
 
 .showlog
 {
-  float: right;
   padding: 0px;
-  margin: 0px;
-  opacity: 0.75;
+  padding-left: 1px;
+  padding-right: 1px;
+  opacity: 0.6;
+}
+
+TD.showlog
+{
+  width: 1%;
+}
+
+.foldspace
+{
+  width: 1%;
+  padding: 0px;
 }
 
 .showlog:hover
 {
-  margin: -1px;
-  border: 1px solid blue;
-  background: rgb(100%,100%,50%);
   opacity: 1.00;
+}
+
+.showlog A:hover
+{
+  background: rgb(100%,100%,50%);
 }
 
 .updir:hover

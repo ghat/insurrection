@@ -90,14 +90,15 @@ function getXMLHTTP()
 var _target = null;
 function loadBanner(name)
 {
-	_target = document.getElementById('localbanner');
-	if (_target)
+	var target = document.getElementById('localbanner');
+	if (target)
 	{
-		_target.xml = getXMLHTTP();
-		if (_target.xml)
+		target.xml = getXMLHTTP();
+		if (target.xml)
 		{
-			_target.xml.open("GET",name,true);
-			_target.xml.onreadystatechange = loadStateCheck;
+			target.xml.open("GET",name,true);
+			target.xml.onreadystatechange = loadBannerCheck;
+			_target = target;
 			_target.xml.send(null);
 		}
 	}
@@ -110,19 +111,20 @@ function loadBanner(name)
  * provide the XMLHttpRequest object, so I have to store
  * it globally.
  */
-function loadStateCheck()
+function loadBannerCheck()
 {
-	if (_target.xml)
+	var target = _target;
+	if (target.xml)
 	{
-		if (_target.xml.readyState == 4)
+		if (target.xml.readyState == 4)
 		{
-			if (_target.xml.status == 200)
+			if (target.xml.status == 200)
 			{
-				_target.innerHTML = _target.xml.responseText;
-				_target.style.display = 'block';
+				target.innerHTML = target.xml.responseText;
+				target.style.display = 'block';
 
 				// Remove the reference to the loaded document
-				_target.xml = null;
+				target.xml = null;
 			}
 		}
 	}

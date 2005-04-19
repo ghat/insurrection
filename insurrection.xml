@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<xml id="$Id: insurrection.xml 124 2005-03-30 04:07:45Z mks $" copyright="Copyright 2004,2005 - Michael Sinz">
+<xml id="$Id: insurrection.xml 135 2005-04-07 15:44:08Z mks $" copyright="Copyright 2004,2005 - Michael Sinz">
 
   <!--
   This is the global configuration for the header of the
@@ -27,6 +27,7 @@
     <diricon src="/folder.gif"/>
     <infoicon src="/info.gif"/>
     <closedicon src="/closed.gif"/>
+    <openedicon src="/opened.gif"/>
     <blankicon src="/blank.gif"/>
   </images>
 

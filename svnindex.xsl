@@ -53,72 +53,20 @@
   </xsl:template>
 
   <xsl:template match="index">
-    <table class="svn" width="100%" cellpadding="0" cellspacing="0" border="0">
-      <tr class="path">
-        <td class="path">
-          <xsl:value-of select="@path"/>
-        </td>
-        <td class="rev">
-          <xsl:if test="string-length(@name) != 0">
-            <xsl:value-of select="@name"/>
-            <xsl:if test="string-length(@rev) != 0">
-              <xsl:text>&#8212; </xsl:text>
-            </xsl:if>
-          </xsl:if>
-          <xsl:if test="string-length(@rev) != 0">
-            <xsl:text>Revision </xsl:text>
-            <xsl:value-of select="@rev"/>
-          </xsl:if>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <xsl:apply-templates select="updir"/>
-          <xsl:apply-templates select="dir"/>
-          <xsl:apply-templates select="file"/>
-        </td>
-      </tr>
-    </table>
-  </xsl:template>
-
-  <xsl:template match="updir">
-    <xsl:element name="a">
-      <xsl:attribute name="href">..</xsl:attribute>
-      <div class="updir">
-        <xsl:text>.. (Parent Directory)</xsl:text>
-      </div>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="dir">
-    <div class="svnentry">
-      <xsl:element name="a">
-        <xsl:attribute name="class">showlog</xsl:attribute>
-        <xsl:attribute name="onmouseover">
-          <xsl:text>logLink(this,'</xsl:text>
-          <xsl:value-of select="@href"/>
-          <xsl:text>');</xsl:text>
-        </xsl:attribute>
-        <xsl:element name="img">
-          <xsl:attribute name="align">middle</xsl:attribute>
-          <xsl:attribute name="alt">Get revision history</xsl:attribute>
-          <xsl:attribute name="src">
-            <xsl:value-of select="document('insurrection.xml')/xml/images/infoicon/@src"/>
-          </xsl:attribute>
-        </xsl:element>
-      </xsl:element>
-      <xsl:element name="a">
-        <xsl:attribute name="href">
-          <xsl:value-of select="@href"/>
-        </xsl:attribute>
-        <div class="dir">
+    <div class="svn">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+      <xsl:apply-templates select="updir"/>
+      <tr class="pathrow">
+        <td class="foldspace">
           <xsl:element name="img">
             <xsl:attribute name="align">middle</xsl:attribute>
-            <xsl:attribute name="alt">A closed directory</xsl:attribute>
+            <xsl:attribute name="alt">An opened directory</xsl:attribute>
             <xsl:attribute name="src">
-              <xsl:value-of select="document('insurrection.xml')/xml/images/closedicon/@src"/>
+              <xsl:value-of select="document('insurrection.xml')/xml/images/openedicon/@src"/>
             </xsl:attribute>
           </xsl:element>
+        </td>
+        <td class="path">
           <xsl:element name="img">
             <xsl:attribute name="class">svnentryicon</xsl:attribute>
             <xsl:attribute name="align">middle</xsl:attribute>
@@ -127,35 +75,37 @@
               <xsl:value-of select="document('insurrection.xml')/xml/images/diricon/@src"/>
             </xsl:attribute>
           </xsl:element>
-          <xsl:value-of select="@name"/>
-          <xsl:text>/</xsl:text>
-        </div>
-      </xsl:element>
-    </div>
-  </xsl:template>
-
-  <xsl:template match="file">
-    <div class="svnentry">
-      <xsl:element name="a">
-        <xsl:attribute name="class">showlog</xsl:attribute>
-        <xsl:attribute name="onmouseover">
-          <xsl:text>logLink(this,'</xsl:text>
-          <xsl:value-of select="@href"/>
-          <xsl:text>');</xsl:text>
-        </xsl:attribute>
-        <xsl:element name="img">
-          <xsl:attribute name="align">middle</xsl:attribute>
-          <xsl:attribute name="alt">Get revision history</xsl:attribute>
-          <xsl:attribute name="src">
-            <xsl:value-of select="document('insurrection.xml')/xml/images/infoicon/@src"/>
-          </xsl:attribute>
-        </xsl:element>
-      </xsl:element>
-      <xsl:element name="a">
-        <xsl:attribute name="href">
-          <xsl:value-of select="@href"/>
-        </xsl:attribute>
-        <div class="file">
+          <xsl:value-of select="@path"/>
+        </td>
+        <td class="rev">
+          <xsl:if test="string-length(@name) != 0">
+            <xsl:value-of select="@name"/>
+          </xsl:if>
+          <xsl:if test="string-length(@rev) = 0">
+            <xsl:text>&#8212; </xsl:text>
+          </xsl:if>
+          <xsl:if test="string-length(@rev) != 0">
+            <xsl:text>Revision </xsl:text>
+            <xsl:value-of select="@rev"/>
+          </xsl:if>
+        </td>
+        <td class="showlog">
+          <xsl:element name="a">
+            <xsl:attribute name="onmouseover">
+              <xsl:text>logLink(this,'.');</xsl:text>
+            </xsl:attribute>
+            <xsl:element name="img">
+              <xsl:attribute name="align">middle</xsl:attribute>
+              <xsl:attribute name="alt">Get revision history</xsl:attribute>
+              <xsl:attribute name="src">
+                <xsl:value-of select="document('insurrection.xml')/xml/images/infoicon/@src"/>
+              </xsl:attribute>
+            </xsl:element>
+          </xsl:element>
+        </td>
+      </tr>
+      <tr>
+        <td>
           <xsl:element name="img">
             <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="alt">A file spacer</xsl:attribute>
@@ -163,18 +113,134 @@
               <xsl:value-of select="document('insurrection.xml')/xml/images/blankicon/@src"/>
             </xsl:attribute>
           </xsl:element>
+        </td>
+        <td colspan="3">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <xsl:apply-templates select="dir"/>
+            <xsl:apply-templates select="file"/>
+          </table>
+        </td>
+      </tr>
+    </table>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="updir">
+    <tr class="updirrow">
+      <td colspan="4">
+        <xsl:element name="a">
+          <xsl:attribute name="href">..</xsl:attribute>
+          <div class="updir">
+            <xsl:element name="img">
+              <xsl:attribute name="class">svnentryicon</xsl:attribute>
+              <xsl:attribute name="align">middle</xsl:attribute>
+              <xsl:attribute name="alt">A directory</xsl:attribute>
+              <xsl:attribute name="src">
+                <xsl:value-of select="document('insurrection.xml')/xml/images/diricon/@src"/>
+              </xsl:attribute>
+            </xsl:element>
+            <xsl:text>.. (Parent Directory)</xsl:text>
+          </div>
+        </xsl:element>
+      </td>
+    </tr>
+  </xsl:template>
+
+  <xsl:template match="dir">
+    <tr class="dirrow">
+      <td class="foldspace">
+        <xsl:element name="img">
+          <xsl:attribute name="align">middle</xsl:attribute>
+          <xsl:attribute name="alt">A closed directory</xsl:attribute>
+          <xsl:attribute name="src">
+            <xsl:value-of select="document('insurrection.xml')/xml/images/closedicon/@src"/>
+          </xsl:attribute>
+        </xsl:element>
+      </td>
+      <td>
+        <xsl:element name="a">
+          <xsl:attribute name="href">
+            <xsl:value-of select="@href"/>
+          </xsl:attribute>
+          <div class="dir">
+            <xsl:element name="img">
+              <xsl:attribute name="class">svnentryicon</xsl:attribute>
+              <xsl:attribute name="align">middle</xsl:attribute>
+              <xsl:attribute name="alt">A directory</xsl:attribute>
+              <xsl:attribute name="src">
+                <xsl:value-of select="document('insurrection.xml')/xml/images/diricon/@src"/>
+              </xsl:attribute>
+            </xsl:element>
+            <xsl:value-of select="@name"/>
+            <xsl:text>/</xsl:text>
+          </div>
+        </xsl:element>
+      </td>
+      <td class="showlog">
+        <xsl:element name="a">
+          <xsl:attribute name="onmouseover">
+            <xsl:text>logLink(this,'</xsl:text>
+            <xsl:value-of select="@href"/>
+            <xsl:text>');</xsl:text>
+          </xsl:attribute>
           <xsl:element name="img">
-            <xsl:attribute name="class">svnentryicon</xsl:attribute>
             <xsl:attribute name="align">middle</xsl:attribute>
-            <xsl:attribute name="alt">A file</xsl:attribute>
+            <xsl:attribute name="alt">Get revision history</xsl:attribute>
             <xsl:attribute name="src">
-              <xsl:value-of select="document('insurrection.xml')/xml/images/fileicon/@src"/>
+              <xsl:value-of select="document('insurrection.xml')/xml/images/infoicon/@src"/>
             </xsl:attribute>
           </xsl:element>
-          <xsl:value-of select="@name"/>
-        </div>
-      </xsl:element>
-    </div>
+        </xsl:element>
+      </td>
+    </tr>
+  </xsl:template>
+
+  <xsl:template match="file">
+    <tr class="filerow">
+      <td class="foldspace">
+        <xsl:element name="img">
+          <xsl:attribute name="align">middle</xsl:attribute>
+          <xsl:attribute name="alt">A file spacer</xsl:attribute>
+          <xsl:attribute name="src">
+            <xsl:value-of select="document('insurrection.xml')/xml/images/blankicon/@src"/>
+          </xsl:attribute>
+        </xsl:element>
+      </td>
+      <td>
+        <xsl:element name="a">
+          <xsl:attribute name="href">
+            <xsl:value-of select="@href"/>
+          </xsl:attribute>
+          <div class="file">
+            <xsl:element name="img">
+              <xsl:attribute name="class">svnentryicon</xsl:attribute>
+              <xsl:attribute name="align">middle</xsl:attribute>
+              <xsl:attribute name="alt">A file</xsl:attribute>
+              <xsl:attribute name="src">
+                <xsl:value-of select="document('insurrection.xml')/xml/images/fileicon/@src"/>
+              </xsl:attribute>
+            </xsl:element>
+            <xsl:value-of select="@name"/>
+          </div>
+        </xsl:element>
+      </td>
+      <td class="showlog">
+        <xsl:element name="a">
+          <xsl:attribute name="onmouseover">
+            <xsl:text>logLink(this,'</xsl:text>
+            <xsl:value-of select="@href"/>
+            <xsl:text>');</xsl:text>
+          </xsl:attribute>
+          <xsl:element name="img">
+            <xsl:attribute name="align">middle</xsl:attribute>
+            <xsl:attribute name="alt">Get revision history</xsl:attribute>
+            <xsl:attribute name="src">
+              <xsl:value-of select="document('insurrection.xml')/xml/images/infoicon/@src"/>
+            </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+      </td>
+    </tr>
   </xsl:template>
 
 </xsl:stylesheet>
