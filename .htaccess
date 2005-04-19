@@ -2,6 +2,18 @@ AuthUserFile /usr/subversion/authentication/passwords
 AuthName "Subversion Repository"
 AuthType Basic
 
+#RewriteEngine On
+#RewriteBase /usr/subversion/www/
+#RewriteCond %{QUERY_STRING} action=log
+#RewriteRule ^svn/(.*)  log.cgi/$1     [PT,L]
+#RewriteCond %{QUERY_STRING} action=get
+#RewriteRule ^svn/(.*)  get.cgi/$1     [PT,L]
+#RewriteCond %{QUERY_STRING} action=diff
+#RewriteRule ^svn/(.*)  diff.cgi/$1    [PT,L]
+#RewriteCond %{QUERY_STRING} action=blame
+#RewriteRule ^svn/(.*)  blame.cgi/$1   [PT,L]
+
+
 <Files ~ "password.cgi">
 	SetHandler cgi-script
 	require valid-user
@@ -31,3 +43,4 @@ AuthType Basic
 	SetHandler cgi-script
 	require valid-user
 </Files>
+

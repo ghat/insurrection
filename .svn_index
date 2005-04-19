@@ -1,6 +1,5 @@
 <center>
-<img src="InsurrectionLogo.gif"/>
-<h1>The Insurrection Web Tools for Subversion</h1>
+  <h1>The Insurrection Web Tools for Subversion</h1>
 </center>
 <p>
   This directory tree contains the Insurrection Web Tools for Subversion.&nbsp;
@@ -142,7 +141,7 @@
     </ul>
   </li>
   <br/>
-  <li>
+  <li><img align="right" src="InsurrectionLogo.gif" />
     <a href="InsurrectionLogo.gif"><code>InsurrectionLogo.gif</code></a>
     <ul>
       The Insurrection Web Tools for Subversion logo.  Special thanks to
