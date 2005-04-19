@@ -25,7 +25,7 @@ my $cmd = $SVN_CMD . ' blame -r ' . $rev . ' ' . $docURL;
 
 &svn_HEADER('blame ' . $rev . ' - ' . $cgi->path_info);
 
-print '<a class="blametitle" href="' , $SVN_URL_PATH , 'log.cgi' , $cgi->path_info , '">'
+print '<a class="blametitle" href="' , $SVN_URL_PATH , 'log.cgi' , &svn_URL_Escape($cgi->path_info) , '">'
     , 'Annotation from revision ' , $rev , ' of<br/>'
     , $cgi->path_info
     , '</a>';
@@ -52,12 +52,6 @@ if (open(GETBLAME,"$cmd |"))
          my $user = $2;
          my $txt = $3;
 
-         ## Now, escape all of the stuff we need to in order to be
-         ## safe HTML...
-         $txt =~ s/&/&amp;/sg;
-         $txt =~ s/</&lt;/sg;
-         $txt =~ s/>/&gt;/sg;
-
          if (($lastREV != $rev) || ($lastUSER ne $user))
          {
             print '</pre></td></tr>' if ($nl ne '');
@@ -72,7 +66,7 @@ if (open(GETBLAME,"$cmd |"))
             $lastUSER = $user;
             $nl = '';
          }
-         print $nl , $txt;
+         print $nl , &svn_XML_Escape($txt);
          $nl = "\n";
       }
    }

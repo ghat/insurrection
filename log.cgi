@@ -69,13 +69,13 @@ if ((defined $rpath)
       if ($_ =~ m:<log>:)
       {
          print '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'log.xsl"?>' , "\n";
-         print '<log repository="' , $rpath , '" path="' , $opath , '">' , "\n";
+         print '<log repository="' , &svn_XML_Escape($rpath) , '" path="' , &svn_XML_Escape($opath) , '">' , "\n";
 
          if ($maxEntries < $revcount)
          {
             my $nextRev = $revs[2 * ($maxEntries - 1)];
             my $nextPath = $revs[1 + (2 * ($maxEntries - 1))];
-            print '<morelog href="' , $cgi->url , '/' , $rpath , $nextPath , '?r1=' , $nextRev , '&amp;max=' , $maxEntries , '"/>'
+            print '<morelog href="' , $cgi->url , '/' , &svn_XML_Escape(&svn_URL_Escape($rpath)) , &svn_XML_Escape(&svn_URL_Escape($nextPath)) , '?r1=' , $nextRev , '&amp;max=' , $maxEntries , '"/>'
                 , "\n";
          }
       }

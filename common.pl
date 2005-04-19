@@ -15,6 +15,37 @@ if (open(INSURRECTION,'<insurrection.xml'))
 }
 
 ##
+## This function does the XML escaping for the '&', '<', '>', and '"'
+## characters.  The first 3 are absolutely required and the last one
+## enables putting the string within quoted parameters.
+sub svn_XML_Escape($str)
+{
+   my $str = shift;
+
+   $str =~ s/&/&amp;/sg;
+   $str =~ s/</&lt;/sg;
+   $str =~ s/>/&gt;/sg;
+   $str =~ s/"/&quot;/sg;
+
+   return $str;
+}
+
+##
+## This function just does the %xx escaping of a string
+## for use within URLs.  Even though it is so small, it
+## is easier to maintain in one place rather than have
+## it all over the place.
+sub svn_URL_Escape($path)
+{
+   my $path = shift;
+
+   ## Modify our path to escape some characters into URL form...
+   $path =~ s|([^-.A-Za-z0-9/_])|sprintf("%%%02X",ord($1))|seg;
+
+   return $path;
+}
+
+##
 ## This function takes a repository path from the URL
 ## and makes it into a local file:// URL.  It also
 ## makes sure that external ".." operations are not
@@ -32,8 +63,8 @@ sub svn_URL($path)
       ## Get rid of trailing '/'
       $path =~ s:/+$::;
 
-      ## Modify our docpath to match have escaped spaces
-      $path =~ s/ /%20/g;
+      ## Fix up/escape as needed...
+      $path = &svn_URL_Escape($path);
 
       ## Now, prepend the base and file:// URL construct
       $path = 'file://' . $SVN_BASE . $path;
@@ -127,6 +158,7 @@ sub svn_TRAILER($version,$AuthUser)
        , 'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
    print '</div></td></tr></table></body></html>';
 }
+
 
 return 1;
 

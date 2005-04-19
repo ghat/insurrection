@@ -179,6 +179,19 @@ function onPopup(div)
 	}
 }
 
+function addLink(div,link,text)
+{
+	var a = document.createElement('a');
+	a.href = link;
+	div.appendChild(a);
+
+	var d1 = document.createElement('div');
+	d1.className = 'pathpopupmenuitem';
+	a.appendChild(d1);
+
+	d1.appendChild(document.createTextNode(text));
+}
+
 /*
  * When we click on a detailed log entry path line,
  * we get a popup menu that lists certain actions,
@@ -192,44 +205,46 @@ function detailClick(repo,action,path,rev,current)
 
 	if (div)
 	{
-		if (!div.myHTML)
+		if (!div.done)
 		{
-			var html = '<div class="pathpopupshadow"><div class="pathpopupmenu">';
+			div.done = 1;
+
+			var d1 = document.createElement('div');
+			d1.className = 'pathpopupshadow';
+			div.appendChild(d1);
+			var d2 = document.createElement('div');
+			d2.className = 'pathpopupmenu';
+			d1.appendChild(d2);
 
 			if (action != 'D')
 			{
-				html += '<a href="' + Insurrection.blame_CGI + '/' + repo + path + '?r=' + rev + '"><div class="pathpopupmenuitem">Annotate</div></a>';
-				html += '<a href="' + Insurrection.get_CGI + '/' + repo + path + '?r=' + rev + '"><div class="pathpopupmenuitem">Download</div></a>';
+				addLink(d2,Insurrection.blame_CGI + '/' + repo + path + '?r=' + rev,'Annotate');
+				addLink(d2,Insurrection.get_CGI + '/' + repo + path + '?r=' + rev,'Download');
 
 				if (action == 'M')
 				{
-					html += '<a href="' + Insurrection.diff_CGI + '/' + repo + path + '?r2=' + rev + '&r1=' + (rev-1) + '"><div class="pathpopupmenuitem">Diff to previous</div></a>';
+					addLink(d2,Insurrection.diff_CGI + '/' + repo + path + '?r2=' + rev + '&r1=' + (rev-1),'Diff to previous');
 				}
 
 				if (rev != current)
 				{
-					html += '<a href="' + Insurrection.diff_CGI + '/' + repo + path + '?r2=' + current + '&r1=' + rev + '"><div class="pathpopupmenuitem">Diff to revision ' + current + '</div></a>';
+					addLink(d2,Insurrection.diff_CGI + '/' + repo + path + '?r2=' + current + '&r1=' + rev,'Diff to revision ' + current);
 				}
 
 			}
 			else
 			{
 				rev--;
-				html += '<a href="' + Insurrection.blame_CGI + '/' + repo + path + '?r=' + rev + '"><div class="pathpopupmenuitem">Annotate previous</div></a>';
-				html += '<a href="' + Insurrection.get_CGI + '/' + repo + path + '?r=' + rev + '"><div class="pathpopupmenuitem">Download previous</div></a>';
+				addLink(d2,Insurrection.blame_CGI + '/' + repo + path + '?r=' + rev,'Annotate previous');
+				addLink(d2,Insurrection.get_CGI + '/' + repo + path + '?r=' + rev,'Download previous');
 			}
 
-			html += '<a href="' + Insurrection.log_CGI + '/' + repo + path + '?r1=' + rev + '"><div class="pathpopupmenuitem">Revision history from ' + rev + '</div></a>';
+			addLink(d2,Insurrection.log_CGI + '/' + repo + path + '?r1=' + rev,'Revision history from ' + rev);
 
 			if (rev > 1)
 			{
-				html += '<a href="' + Insurrection.diff_CGI + '/' + repo + '?r2=' + rev + '&r1=' + (rev-1) + '"><div class="pathpopupmenuitem">All changes in revision ' + rev + '</div></a>';
+				addLink(d2,Insurrection.diff_CGI + '/' + repo + '?r2=' + rev + '&r1=' + (rev-1),'All changes in revision ' + rev);
 			}
-
-			html += '</div></div>';
-
-			div.innerHTML = html;
-			div.myHTML = 1;
 		}
 
 		showPopup(div);

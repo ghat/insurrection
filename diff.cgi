@@ -36,9 +36,7 @@ if (defined $results)
 {
    ## Now, escape all of the stuff we need to in order to be
    ## safe HTML...
-   $results =~ s/&/&amp;/sg;
-   $results =~ s/</&lt;/sg;
-   $results =~ s/>/&gt;/sg;
+   $results = &svn_XML_Escape($results);
 
    ## Wrap the whole thing in a pre tag
    $results = '<pre class="diff">' . "\n" . $results . '</pre>';
@@ -76,7 +74,7 @@ else
 
 &svn_HEADER('diff ' . $rev1 . ':' . $rev2 . ' - ' . $cgi->path_info);
 
-print '<a class="difftitle" href="' , $SVN_URL_PATH , 'log.cgi' , $cgi->path_info , '">'
+print '<a class="difftitle" href="' , $SVN_URL_PATH , 'log.cgi' , &svn_URL_Escape($cgi->path_info) , '">'
     , 'Differences from revision ' , $rev1 , ' to ' , $rev2 , '<br/>'
     , $cgi->path_info
     , '</a>';
