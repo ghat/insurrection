@@ -131,6 +131,31 @@ function loadBanner(name)
 }
 
 /*
+ * This is to support the changing of the visible state and the arrow.
+ */
+function foldDir(arrow)
+{
+	var target = document.getElementById('.' + arrow.id);
+	if (target)
+	{
+		var row = document.getElementById(target.id + '_');
+		if (row)
+		{
+			if (row.style.display == 'none')
+			{
+				row.style.display = '';
+				arrow.src = document.getElementById('openedImage').src;
+			}
+			else
+			{
+				row.style.display = 'none';
+				arrow.src = document.getElementById('closedImage').src;
+			}
+		}
+	}
+}
+
+/*
  * We dynamically generate the in-line subdirectory DOM elements.
  * We do this "a few at a time" such that the browser remains
  * responsive during the potentially long operation.  It does
@@ -295,58 +320,57 @@ var _loadTarget = null;
 function loadDirCheck()
 {
 	var target = _loadTarget;
-	if (target.xml)
+	if ((target) && (target.xml) && (target.xml.readyState == 4))
 	{
-		if (target.xml.readyState == 4)
+		// We are done with this one...
+		_loadTarget = null;
+
+		if (target.xml.status == 200)
 		{
-			if (target.xml.status == 200)
+			// Change the onclick to just fold the directory as
+			// we have completed the load...
+			target.arrow['onclick'] = function(){foldDir(this);};
+
+			// Create the table and table body for the subdirectory
+			var table = document.createElement('table');
+			target.appendChild(table);
+			table.width = '100%';
+			table.cellSpacing = 0;
+			table.cellPadding = 0;
+			var tbody = document.createElement('tbody');
+			table.appendChild(tbody);
+
+			// Keep track of the table body...
+			target.dirlist = tbody;
+
+			// build the list of directory actions...
+			var dirs = target.xml.responseXML.getElementsByTagName('dir');
+			for (var i=0; i < dirs.length; i++)
 			{
-				// Flag this directory as done and recall the loadDir
-				// to flip its display state...
-				target.done = 1;
-				loadDir(target.arrow);
-
-				// Create the table and table body for the subdirectory
-				var table = document.createElement('table');
-				target.appendChild(table);
-				table.width = '100%';
-				table.cellSpacing = 0;
-				table.cellPadding = 0;
-				var tbody = document.createElement('tbody');
-				table.appendChild(tbody);
-
-				// Keep track of the table body...
-				target.dirlist = tbody;
-
-				// build the list of directory actions...
-				var dirs = target.xml.responseXML.getElementsByTagName('dir');
-				for (var i=0; i < dirs.length; i++)
-				{
-					var action = new Object();
-					action.target = target;
-					action.type = 'dir';
-					action.name = dirs[i].getAttribute('href');
-					actionList.push(action);
-				}
-
-				// build the list of file actions...
-				var files = target.xml.responseXML.getElementsByTagName('file');
-				for (var i=0; i < files.length; i++)
-				{
-					var action = new Object();
-					action.target = target;
-					action.type = 'file';
-					action.name = files[i].getAttribute('href');
-					actionList.push(action);
-				}
-
-				// Ask the system to do the next action...
-				doNextItem();
-
-				// Remove the reference to the loaded document
-				target.xml = null;
+				var action = new Object();
+				action.target = target;
+				action.type = 'dir';
+				action.name = dirs[i].getAttribute('href');
+				actionList.push(action);
 			}
+
+			// build the list of file actions...
+			var files = target.xml.responseXML.getElementsByTagName('file');
+			for (var i=0; i < files.length; i++)
+			{
+				var action = new Object();
+				action.target = target;
+				action.type = 'file';
+				action.name = files[i].getAttribute('href');
+				actionList.push(action);
+			}
+
+			// Ask the system to do the next action...
+			doNextItem();
 		}
+
+		// Remove the reference to the loaded document
+		target.xml = null;
 	}
 }
 
@@ -354,36 +378,27 @@ function loadDirCheck()
  * In order to support in-line directory expansion, the directory
  * arrow calls us like this...
  */
-function loadDir(name)
+function loadDir(arrow)
 {
-	var target = document.getElementById('.' + name.id);
+	var target = document.getElementById('.' + arrow.id);
 	if (target)
 	{
-		if (target.done)
+		if (_loadTarget == null)
 		{
-			if (target.row.style.display == 'none')
-			{
-				target.row.style.display = '';
-				target.arrow.src = document.getElementById('openedImage').src;
-			}
-			else
-			{
-				target.row.style.display = 'none';
-				target.arrow.src = document.getElementById('closedImage').src;
-			}
-		}
-		else
-		{
-			target.arrow = name;
+			_loadTarget = target;
+			target.arrow = arrow;
 			target.row = document.getElementById(target.id + '_');
 			if (target.row)
 			{
 				target.xml = getXMLHTTP();
 				if (target.xml)
 				{
+					// Flip the arrow and start showing the rows now...
+					foldDir(arrow);
+
+					// Set up the load operation...
 					target.xml.open("GET",target.id,true);
 					target.xml.onreadystatechange = loadDirCheck;
-					_loadTarget = target;
 					target.xml.send(null);
 				}
 			}

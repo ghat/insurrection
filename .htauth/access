@@ -18,13 +18,13 @@
 [groups]
 
 ## The Admin group has access full access to the admin CGIs
-Admin = mks
+Admin = michael
 
 ## The Subversion Web base site repository, includes the administration tools and access control files<br/><b>Warning</b>! only trusted users should have write access to the Web repository as the administration CGIs and access controls are stored and managed here.
-Web = mks
+Web = michael
 
 ## Members of this group can create new user accounts
-Admin_Users = mks
+Admin_Users = michael
 
 ##
 ## Define the repository access rights

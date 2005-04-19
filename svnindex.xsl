@@ -97,6 +97,26 @@
     </html>
   </xsl:template>
 
+  <xsl:template match="updir">
+    <tr class="updirrow">
+      <td colspan="4">
+        <xsl:element name="a">
+          <xsl:attribute name="href">..</xsl:attribute>
+          <div class="updir">
+            <xsl:element name="img">
+              <xsl:attribute name="class">svnentryicon</xsl:attribute>
+              <xsl:attribute name="align">middle</xsl:attribute>
+              <xsl:attribute name="src">
+                <xsl:value-of select="document('insurrection.xml')/xml/images/diricon/@src"/>
+              </xsl:attribute>
+            </xsl:element>
+            <xsl:text>.. (Parent Directory)</xsl:text>
+          </div>
+        </xsl:element>
+      </td>
+    </tr>
+  </xsl:template>
+
   <xsl:template match="index">
     <div class="svn">
     <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -104,8 +124,12 @@
       <tr class="pathrow">
         <td class="foldspace">
           <xsl:element name="img">
+            <xsl:attribute name="class">dirarrow</xsl:attribute>
             <xsl:attribute name="align">middle</xsl:attribute>
-            <xsl:attribute name="alt">An opened directory</xsl:attribute>
+            <xsl:attribute name="onclick">foldDir(this)</xsl:attribute>
+            <xsl:attribute name="id">
+              <xsl:text>/</xsl:text>
+            </xsl:attribute>
             <xsl:attribute name="src">
               <xsl:value-of select="document('insurrection.xml')/xml/images/openedicon/@src"/>
             </xsl:attribute>
@@ -115,7 +139,6 @@
           <xsl:element name="img">
             <xsl:attribute name="class">svnentryicon</xsl:attribute>
             <xsl:attribute name="align">middle</xsl:attribute>
-            <xsl:attribute name="alt">A directory</xsl:attribute>
             <xsl:attribute name="src">
               <xsl:value-of select="document('insurrection.xml')/xml/images/diricon/@src"/>
             </xsl:attribute>
@@ -149,17 +172,16 @@
           </xsl:element>
         </td>
       </tr>
-      <tr>
+      <tr id="./_">
         <td>
           <xsl:element name="img">
             <xsl:attribute name="align">middle</xsl:attribute>
-            <xsl:attribute name="alt">A file spacer</xsl:attribute>
             <xsl:attribute name="src">
               <xsl:value-of select="document('insurrection.xml')/xml/images/blankicon/@src"/>
             </xsl:attribute>
           </xsl:element>
         </td>
-        <td colspan="3">
+        <td colspan="3" id="./">
           <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <xsl:apply-templates select="dir"/>
             <xsl:apply-templates select="file"/>
@@ -170,34 +192,12 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="updir">
-    <tr class="updirrow">
-      <td colspan="4">
-        <xsl:element name="a">
-          <xsl:attribute name="href">..</xsl:attribute>
-          <div class="updir">
-            <xsl:element name="img">
-              <xsl:attribute name="class">svnentryicon</xsl:attribute>
-              <xsl:attribute name="align">middle</xsl:attribute>
-              <xsl:attribute name="alt">A directory</xsl:attribute>
-              <xsl:attribute name="src">
-                <xsl:value-of select="document('insurrection.xml')/xml/images/diricon/@src"/>
-              </xsl:attribute>
-            </xsl:element>
-            <xsl:text>.. (Parent Directory)</xsl:text>
-          </div>
-        </xsl:element>
-      </td>
-    </tr>
-  </xsl:template>
-
   <xsl:template match="dir">
     <tr class="dirrow">
       <td class="foldspace">
         <xsl:element name="img">
           <xsl:attribute name="class">dirarrow</xsl:attribute>
           <xsl:attribute name="align">middle</xsl:attribute>
-          <xsl:attribute name="alt">A closed directory</xsl:attribute>
           <xsl:attribute name="src">
             <xsl:value-of select="document('insurrection.xml')/xml/images/closedicon/@src"/>
           </xsl:attribute>
@@ -217,7 +217,6 @@
             <xsl:element name="img">
               <xsl:attribute name="class">svnentryicon</xsl:attribute>
               <xsl:attribute name="align">middle</xsl:attribute>
-              <xsl:attribute name="alt">A directory</xsl:attribute>
               <xsl:attribute name="src">
                 <xsl:value-of select="document('insurrection.xml')/xml/images/diricon/@src"/>
               </xsl:attribute>
@@ -255,7 +254,6 @@
       <td class="foldspace">
         <xsl:element name="img">
           <xsl:attribute name="align">middle</xsl:attribute>
-          <xsl:attribute name="alt">A subdir spacer</xsl:attribute>
           <xsl:attribute name="src">
             <xsl:value-of select="document('insurrection.xml')/xml/images/blankicon/@src"/>
           </xsl:attribute>
@@ -276,7 +274,6 @@
       <td class="foldspace">
         <xsl:element name="img">
           <xsl:attribute name="align">middle</xsl:attribute>
-          <xsl:attribute name="alt">A file spacer</xsl:attribute>
           <xsl:attribute name="src">
             <xsl:value-of select="document('insurrection.xml')/xml/images/blankicon/@src"/>
           </xsl:attribute>
@@ -291,7 +288,6 @@
             <xsl:element name="img">
               <xsl:attribute name="class">svnentryicon</xsl:attribute>
               <xsl:attribute name="align">middle</xsl:attribute>
-              <xsl:attribute name="alt">A file</xsl:attribute>
               <xsl:attribute name="src">
                 <xsl:value-of select="document('insurrection.xml')/xml/images/fileicon/@src"/>
               </xsl:attribute>
