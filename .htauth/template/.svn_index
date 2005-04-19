@@ -1,0 +1,80 @@
+<!-- $Id$ -->
+<h1>Standard Repository Basics</h1>
+<p>
+  The goal of this file is to describe the way the repository is set up and the
+  processes that we are going to follow with it.
+</p>
+<p>
+  The root of the repository contains the following directories:
+</p>
+<ul>
+  <li>
+    <a href="trunk/"><code>/trunk</code></a>
+    <ul>
+      This is the trunk of the source revision tree.&nbsp; It contains the current
+      development branch.&nbsp; Most new work should happen here.
+    </ul>
+  </li>
+  <li>
+    <a href="branches/"><code>/branches</code></a>
+    <ul>
+      This tree is for the branches that we build.&nbsp;  A branch is just a special
+      "copy" of the source tree within Subversion that started at some specific
+      revision of the code.&nbsp;  A simple branch is done by just using "svn copy"
+      of the <a href="trunk/"><code>/trunk</code></a> to some named branch in
+      <code>/branch/somename_1.0</code>.&nbsp; Even more interesting branches can
+      be made by using svn copy to copy from your local checkout to the branch.&nbsp;
+      This will make sure that the exact versions in your local checkout is what
+      the branch contains.
+      <li>
+        <a href="branches/personal/"><code>/branches/personal</code></a>
+        <ul>
+          Within the <a href="branches/"><code>/branches</code></a> tree is the
+          <a href="branches/personal/"><code>/branches/personal</code></a> tree for
+          personal branches, such as when doing some in-depth work on something and
+          wish to not clutter the main tree with it until it is working enough to do so.
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="tags/"><code>/tags</code></a>
+    <ul>
+      This tree is for revision tags.&nbsp; This is the way Subversion likes to deal
+      with tags.&nbsp; You name them by the directory you create within this tree.&nbsp;
+      Thus, the tag name is the name of the directory in the tags directory.&nbsp; Note
+      that tags and branches are exactly the same from Subversion's standpoint.&nbsp;
+      It is up to us to make sure that tags are tags, and branches are branches.&nbsp;
+      That is, you should never checkin to a tag but rather first create a branch and
+      do your work there.
+      <li>
+        <a href="tags/personal/"><code>/tags/personal</code></a>
+        <ul>
+          Within the <a href="tags/"><code>/tags</code></a> tree is the
+          <a href="tags/personal/"><code>/tags/personal</code></a> tree for personal
+          tags, such as bookmarking some work in progress for future diff work or
+          passing off to someone for testing.&nbsp; (non-formal testing)
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="releases/"><code>/releases</code></a>
+    <ul>
+      This tree is where we "svn copy" a tag or branch that actually made it to
+      production.&nbsp; We should name it with something that ties it to the
+      ChangeControl process (such as using the ChangeControl number as the first
+      part of the name).&nbsp; This is here such that, while we may have multiple
+      tags for a specific project, only a few of them actually made it to
+      production and we can then easily go here to see what is in production.
+    </ul>
+  </li>
+</ul>
+<p>
+  There is a pre-commit hook that checks for and prevents incorrect use of the
+  repository base structure:&nbsp; <a href="tags/"><code>/tags</code></a> and
+  <a href="releases/"><code>/releases</code></a> can only have tags added and
+  can not be modified;&nbsp; no other base directory can be built.&nbsp; The
+  hook must be disabled before any prohibited changes can be made.
+</p>
+

@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# $Id$
+#
+# Build a new standard repository setup of the given name
+#
+SVN_PATH=/usr/subversion/svn/bin
+REPO_PATH=/usr/subversion/repositories
+AUTH_PATH=/usr/subversion/authentication
+TEMPLATE=$AUTH_PATH/template
+
+function die()
+{
+	echo ""
+	echo "*** Error: $@"
+	echo ""
+	exit 1
+}
+
+## Check to see if this already exists.
+test -d $REPO_PATH/$1	&& die "Repository '$1' already exists"
+
+## Remember where we started...
+OLD_DIR=`pwd`
+
+## Make a temp location to do our work...
+TMP_DIR=$OLD_DIR/newRepo-$$
+mkdir -p $TMP_DIR		|| die "Failed to create temp working dir $TMP_DIR"
+
+## Get the template
+cp -r $TEMPLATE/. $TMP_DIR/.	|| die "Failed to copy repository template to working dir"
+find $TMP_DIR -depth -name .svn -type d -exec rm -rf "{}" \;
+
+## Now, create the repository and set up the template in it
+cd $TMP_DIR						|| die "Failed to cd to $TMP_DIR"
+$SVN_PATH/svnadmin create $REPO_PATH/$1			|| die "Failed to create repository '$1'"
+$SVN_PATH/svn co file://$REPO_PATH/$1/. .		|| die "Failed to checkout initial repository '$1'"
+$SVN_PATH/svn add * .svn_index				|| die "Failed to add template to repository '$1'"
+$SVN_PATH/svn propset svn:keywords Id .svn_index	|| die "Failed to set keywords on .svn_index"
+$SVN_PATH/svn commit -m 'Initial Repository'		|| die "Failed to commit template to repository '$1'"
+
+## Now, set up the pre-commit rule from the auth-path
+ln -s $AUTH_PATH/pre-commit $REPO_PATH/$1/hooks/	|| die "Failed to install the pre-commit hook"
+
+## Cleanup
+cd $OLD_DIR		|| die "What?  We can't go back to where we were?!!!"
+rm -rf $TMP_DIR		|| die "Failed to remove the temp working dir $TMP_DIR"
+
+## Hey, it all worked!
+echo "Repository '$1' has been created"

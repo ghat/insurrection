@@ -1,0 +1,33 @@
+AuthUserFile /usr/subversion/authentication/passwords
+AuthName "Subversion Repository"
+AuthType Basic
+
+<Files ~ "password.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "log.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "get.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "diff.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "blame.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "admin.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>

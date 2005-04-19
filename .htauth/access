@@ -1,0 +1,39 @@
+#
+# Simple access control file for the Subversion server
+#
+# $Id$
+#
+# This file is machine generated - do not hand edit!
+#
+
+##
+## Give any valid user read-only rights if nothing else matches
+##
+[/]
+* = r
+
+##
+## Define the access groups
+##
+[groups]
+
+## The Admin group has access full access to the admin CGIs
+Admin = mks
+
+## The Subversion Web base site repository, includes the administration tools and access control files<br/><b>Warning</b>! only trusted users should have write access to the Web repository as the administration CGIs and access controls are stored and managed here.
+Web = mks
+
+## Members of this group can create new user accounts
+Admin_Users = mks
+
+##
+## Define the repository access rights
+##
+
+## The example playground to learn SVN
+[example:/]
+* = rw
+
+[Web:/]
+@Web = rw
+@Admin_Web = rw
