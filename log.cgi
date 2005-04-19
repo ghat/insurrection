@@ -24,11 +24,12 @@ my $rev = '';
 my $r1 = $cgi->param('r1');
 my $r2 = $cgi->param('r2');
 
-## Get the revision history list so we can count the ones we want...
+## Get the revision history list so we can count the ones we want
+## and we can follow renames (actually, copies) through the history
 my $hcmd = $SVNLOOK_CMD . ' history';
 $hcmd .= ' -r "' . $r1 . '"' if (defined $r1);
 $hcmd .= ' "' . $SVN_BASE . '/' . $rpath . '" "' . $opath . '"';
-my @revs = (`$hcmd` =~ m:(\d+)\s+(/[^\n]+):gs);
+my @revs = (`$hcmd` =~ m:(\d+)\s+(/[^\n]*):gs);
 my $revcount = @revs / 2;
 
 ## Check for a limit...

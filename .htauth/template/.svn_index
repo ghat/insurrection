@@ -63,8 +63,8 @@
     <ul>
       This tree is where we "svn copy" a tag or branch that actually made it to
       production.&nbsp; We should name it with something that ties it to the
-      ChangeControl process (such as using the ChangeControl number as the first
-      part of the name).&nbsp; This is here such that, while we may have multiple
+      release process (such as using the release number as part of the
+      name).&nbsp; This is here such that, while we may have multiple
       tags for a specific project, only a few of them actually made it to
       production and we can then easily go here to see what is in production.
     </ul>
