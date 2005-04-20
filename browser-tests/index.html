@@ -20,15 +20,17 @@
           </div>
           <div class="svn">
             <p>
-              The following test pages are to test if your browser is compatible with the Insurrection Web Tools for Subversion.&nbsp;
-              Where ever possible, the tests have been broken out into individual situations such that the core issues can
-              be identified.&nbsp; The tests require at least and HTML 4.0 browser in order to view the reference samples as they
-              are presented in HTML.
+              The following test pages are to test if your browser is compatible with the
+              Insurrection Web Tools for Subversion.&nbsp; Where ever possible, the tests have
+              been broken out into individual situations such that the core issues can be
+              identified.&nbsp; The tests require at least and HTML 4.0 browser in order to
+              view the reference samples as they are presented in HTML.
             </p>
             <p>
-              The reference pages are rendered using plain HTML plus style sheets.&nbsp; The test pages should render just like
-              the reference pages.&nbsp; The links below will load the two pages within frames in your browser such that you
-              can see the test page and reference page at the same time.
+              The reference pages are rendered using plain HTML plus style sheets.&nbsp; The
+              test pages should render just like the reference pages.&nbsp; The links below
+              will load the two pages within frames in your browser such that you can see the
+              test page and reference page at the same time.
             </p>
             <table class="versiontable" border="0" width="100%">
               <tr>
@@ -37,17 +39,89 @@
               </tr>
               <tr>
                 <td><a href="test1.html">Test&nbsp;#1</a></td>
-                <td>Basic Browser based XML Request loading.</td>
+                <td>
+                  Basic Browser based XML Request loading.
+                  <ul>
+                    <li>
+                      <b>Mozilla</b> - tested and working.
+                    </li>
+                    <li>
+                      <b>Windows-IE</b> - tested and working.&nbsp;
+                      Note that Windows-IE currently uses a built-in ActiveX control and may complain
+                      about scripting of the control, depending on your security settings.
+                    </li>
+                    <li>
+                      <b>Safari</b> - tested and working.
+                    </li>
+                    <li>
+                      <b>Opera</b> - tested and working.
+                    </li>
+                  </ul>
+                </td>
               </tr>
               <tr>
                 <td><a href="test2.html">Test&nbsp;#2</a></td>
-                <td>Basic Browser based XSLT transform.</td>
+                <td>
+                  Basic Browser based XSLT transform.
+                  <ul>
+                    <li>
+                      <b>Mozilla</b> - tested and working.
+                    </li>
+                    <li>
+                      <b>Windows-IE</b> - tested and working.
+                    </li>
+                    <li>
+                      <b>Safari</b> - tested and almost working.&nbsp; Some CSS styles are not correctly applied.
+                    </li>
+                    <li>
+                      <b>Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT are not
+                      supported.
+                    </li>
+                  </ul>
+                </td>
               </tr>
               <tr>
                 <td><a href="test3.html">Test&nbsp;#3</a></td>
-                <td>Browser based XSLT with XPath/document() function usage</td>
+                <td>
+                  Browser based XSLT with XPath/document() function usage
+                  <ul>
+                    <li>
+                      <b>Mozilla</b> - tested and working.
+                    </li>
+                    <li>
+                      <b>Windows-IE</b> - tested and working.
+                    </li>
+                    <li>
+                      <b>Safari</b> - tested and mostly not working.&nbsp; The XSLT/XPath document()
+                      function seems to be at fault.
+                    </li>
+                    <li>
+                      <b>Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT are not
+                      supported.
+                    </li>
+                  </ul>
+                </td>
               </tr>
             </table>
+            <p>
+              Notes on the browsers I have tested:
+            <ul>
+              <li>
+                Mozilla browsers include all Mozilla technology based browsers including Firefox,
+                Camino, etc.
+              </li>
+              <li>
+                Windows-IE is IE6.&nbsp; This is the default browser that came with Windows XP.&nbsp;
+                My Testing was done on Windows XP with Service Pack 2 installed.
+              </li>
+              <li>
+                Safari is Mac OSX 10.3.9 release since 10.4 is not out yet.
+              </li>
+              <li>
+                Opera is the Linux generic build of 8.0 beta 3.
+              </li>
+            </ul>
+            </p>
           </div>
           <div class="footer">$Id$</div>
         </td>

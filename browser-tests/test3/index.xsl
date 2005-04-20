@@ -11,8 +11,7 @@
     <html>
       <head>
         <title>Insurrection Browser Compatibility Test #2</title>
-        <link href="/favicon.ico" rel="shortcut icon"/>
-        <link href="/styles.css" rel="stylesheet" type="text/css"/>
+        <xsl:copy-of select="document('test.xml')/xml/header/*"/>
       </head>
       <body>
         <!-- Now for the real page... -->
