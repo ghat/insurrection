@@ -1,0 +1,60 @@
+<!doctype html public "-//W2C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <title>Insurrection Browser Compatibility Test #4</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="/styles.css">
+    <script type="text/javascript" language="JavaScript" src="index.js"></script>
+  </head>
+  <body>
+    <img style="display: none;" id="closedImage" src="/closed.gif">
+    <img style="display: none;" id="openedImage" src="/opened.gif">
+    <img style="display: none;" id="dirImage" src="/folder.gif">
+    <img style="display: none;" id="fileImage" src="/file.gif">
+    <img style="display: none;" id="infoImage" src="/info.gif">
+    <img style="display: none;" id="blankImage" src="/blank.gif">
+    <table id="pagetable">
+      <tr>
+        <td id="content">
+          <div style="border: 0px none ; margin: 0px; padding-top: 4px; text-align: center;">
+            <table style="border: 0px none ; margin: auto; font-family: garamond,times new roman,times,serif; font-style: italic; font-weight: bold; font-size: 18pt;">
+              <tr>
+                <td align="right" valign="top"><a target="_top" style="color: rgb(191, 191, 191);" href="..">MKSoft</a></td>
+                <td align="center" valign="middle"><a target="_top" href=".."><img alt="Logo" src="/InsurrectionLogo.gif" border="0"></a></td>
+                <td align="left" valign="bottom"><a target="_top" style="color: rgb(191, 191, 191);" href="..">Test #4</a></td>
+              </tr>
+            </table>
+          </div>
+          <p style="border-top: 1px solid black; padding-top: 0.6em;">
+            In this test, some of the HTML in the page is dynamically generated via JavaScript
+	    after the JavaScript loads and parses an XML file from the server.&nbsp; This uses
+	    the HTTP XML JavaScript object and JavaScript DOM element creation methods.
+	    <br/><br/>
+	    Please make sure that you check that arrow icons next to the folder icons are clickable
+	    that when clicked, the orientation of the arrow changes and the folder is either opened
+	    or closed as needed.&nbsp; Note that there is no data under the subdirectories as this
+	    is just a test setup.&nbsp; Both the reference and the test page should behave the same.
+          </p>
+          <div class="svn">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+              <tr class="pathrow">
+                <td class="foldspace"><img id="/index.xml" src="/opened.gif" class="dirarrow" align="middle" onclick="foldDir(this);"></td>
+                <td class="path"><img src="/folder.gif" class="svnentryicon" align="middle">/</td>
+                <td class="rev">Revision 159</td>
+                <td class="showlog"><img src="/info.gif" alt="Get revision history" align="middle"></td>
+              </tr>
+              <tr id="./index.xml_" style="">
+                <td><img src="/blank.gif" align="middle"></td>
+                <td id="./index.xml" colspan="3"><table cellpadding="0" cellspacing="0" width="100%"><tbody><tr class="dirrow"><td class="foldspace"><img src="/closed.gif" id="/index.xmltags/" class="dirarrow" align="middle" onclick="foldDir(this);"></td><td><div class="dir"><img class="svnentryicon" src="/folder.gif" align="middle">tags/</div></td><td class="showlog"><img src="/info.gif" align="middle"></td></tr><tr id="./index.xmltags/_" style="display: none;"><td class="foldspace"><img src="/blank.gif" align="middle"></td><td colspan="2" id="./index.xmltags/"></td></tr><tr class="dirrow"><td class="foldspace"><img src="/closed.gif" id="/index.xmltrunk/" class="dirarrow" align="middle" onclick="foldDir(this);"></td><td><div class="dir"><img class="svnentryicon" src="/folder.gif" align="middle">trunk/</div></td><td class="showlog"><img src="/info.gif" align="middle"></td></tr><tr id="./index.xmltrunk/_" style="display: none;"><td class="foldspace"><img src="/blank.gif" align="middle"></td><td colspan="2" id="./index.xmltrunk/"></td></tr><tr class="dirrow"><td class="foldspace"><img src="/closed.gif" id="/index.xmlbranches/" class="dirarrow" align="middle" onclick="foldDir(this);"></td><td><div class="dir"><img class="svnentryicon" src="/folder.gif" align="middle">branches/</div></td><td class="showlog"><img src="/info.gif" align="middle"></td></tr><tr id="./index.xmlbranches/_" style="display: none;"><td class="foldspace"><img src="/blank.gif" align="middle"></td><td colspan="2" id="./index.xmlbranches/"></td></tr><tr class="dirrow"><td class="foldspace"><img src="/closed.gif" id="/index.xmlreleases/" class="dirarrow" align="middle" onclick="foldDir(this);"></td><td><div class="dir"><img class="svnentryicon" src="/folder.gif" align="middle">releases/</div></td><td class="showlog"><img src="/info.gif" align="middle"></td></tr><tr id="./index.xmlreleases/_" style="display: none;"><td class="foldspace"><img src="/blank.gif" align="middle"></td><td colspan="2" id="./index.xmlreleases/"></td></tr><tr class="filerow"><td class="foldspace"><img src="/blank.gif" align="middle"></td><td><div class="file"><img class="svnentryicon" src="/file.gif" align="middle">test.txt</div></td><td class="showlog"><img src="/info.gif" align="middle"></td></tr></tbody></table></td>
+              </tr>
+            </table>
+          </div>
+          <div class="footer">
+            $Id$
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

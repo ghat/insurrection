@@ -43,18 +43,18 @@
                   Basic Browser based XML Request loading.
                   <ul>
                     <li>
-                      <b>Mozilla</b> - tested and working.
+                      <b style="color: green;">Mozilla</b> - tested and working.
                     </li>
                     <li>
-                      <b>Windows-IE</b> - tested and working.&nbsp;
-                      Note that Windows-IE currently uses a built-in ActiveX control and may complain
-                      about scripting of the control, depending on your security settings.
+                      <b style="color: green;">Windows-IE</b> - tested and working.&nbsp;
+                      Note that Windows-IE currently uses a built-in ActiveX control to load the fragment
+                      and may complain about scripting of the control, depending on your security settings.
                     </li>
                     <li>
-                      <b>Safari</b> - tested and working.
+                      <b style="color: green;">Safari</b> - tested and working.
                     </li>
                     <li>
-                      <b>Opera</b> - tested and working.
+                      <b style="color: green;">Opera</b> - tested and working.
                     </li>
                   </ul>
                 </td>
@@ -65,16 +65,16 @@
                   Basic Browser based XSLT transform.
                   <ul>
                     <li>
-                      <b>Mozilla</b> - tested and working.
+                      <b style="color: green;">Mozilla</b> - tested and working.
                     </li>
                     <li>
-                      <b>Windows-IE</b> - tested and working.
+                      <b style="color: green;">Windows-IE</b> - tested and working.
                     </li>
                     <li>
-                      <b>Safari</b> - tested and almost working.&nbsp; Some CSS styles are not correctly applied.
+                      <b style="color: green;">Safari</b> - tested and almost working.&nbsp; Some CSS styles are not correctly applied.
                     </li>
                     <li>
-                      <b>Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT are not
+                      <b style="color: red;">Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT is not
                       supported.
                     </li>
                   </ul>
@@ -86,18 +86,42 @@
                   Browser based XSLT with XPath/document() function usage
                   <ul>
                     <li>
-                      <b>Mozilla</b> - tested and working.
+                      <b style="color: green;">Mozilla</b> - tested and working.
                     </li>
                     <li>
-                      <b>Windows-IE</b> - tested and working.
+                      <b style="color: green;">Windows-IE</b> - tested and working.
                     </li>
                     <li>
-                      <b>Safari</b> - tested and mostly not working.&nbsp; The XSLT/XPath document()
+                      <b style="color: red;">Safari</b> - tested and mostly not working.&nbsp; The XSLT/XPath document()
                       function seems to be at fault.
                     </li>
                     <li>
-                      <b>Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT are not
+                      <b style="color: red;">Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT is not
                       supported.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><a href="test4.html">Test&nbsp;#4</a></td>
+                <td>
+                  JavaScript based XML loading, parsing, and DOM creation.
+                  <ul>
+                    <li>
+                      <b style="color: green;">Mozilla</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: green;">Windows-IE</b> - tested and working.&nbsp;
+                      Note that Windows-IE currently uses a built-in ActiveX control to load the XML
+                      and may complain about scripting of the control, depending on your security settings.
+                    </li>
+                    <li>
+                      <b style="color: green;">Safari</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: green;">Opera</b> - tested and mostly working.&nbsp; There are some strange layout
+                      problems as part of the clicking of the links but they are consistent between
+                      the test page and the reference page.
                     </li>
                   </ul>
                 </td>
@@ -105,22 +129,27 @@
             </table>
             <p>
               Notes on the browsers I have tested:
+            </p>
             <ul>
               <li>
-                Mozilla browsers include all Mozilla technology based browsers including Firefox,
+                <b>Mozilla</b> includes all Mozilla technology based browsers including Firefox,
                 Camino, etc.
               </li>
               <li>
-                Windows-IE is IE6.&nbsp; This is the default browser that came with Windows XP.&nbsp;
+                <b>Windows-IE</b> is IE6.&nbsp; This is the default browser that came with Windows XP.&nbsp;
                 My Testing was done on Windows XP with Service Pack 2 installed.
               </li>
               <li>
-                Safari is Mac OSX 10.3.9 release since 10.4 is not out yet.
+                <b>Safari</b> is Mac OSX 10.3.9 release since 10.4 is not out yet.
               </li>
               <li>
-                Opera is the Linux generic build of 8.0 beta 3.
+                <b>Opera</b> is the Linux generic build of 8.0 beta 3.
               </li>
             </ul>
+            <p style="font-size: 120%;">
+              What this means is that currently, only Mozilla/Firefox/etc and Windows-IE comply with the standards
+              enough to use the Insurrection tools.&nbsp; This does, however, cover over 98% of the browsers
+              in use.
             </p>
           </div>
           <div class="footer">$Id$</div>
