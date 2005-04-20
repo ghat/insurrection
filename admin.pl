@@ -13,13 +13,13 @@ require 'common.pl';
 ## into Subversion using the command line.  So where these
 ## live should be a Subversioned directory and should have
 ## full rights from the web server CGI user.
-my $PasswordFile = '.htauth/passwords';
-my $AccessFile = '.htauth/access';
+my $PasswordFile = $SVN_AUTH . '/passwords';
+my $AccessFile = $SVN_AUTH . '/access';
 
 ## Access lock files to prevent race problems.  We just flock
 ## them during execution of writes to the files...
-my $AccessFileLock = '.htauth/.lock-AccessFile';
-my $PasswordFileLock = '.htauth/.lock-PasswordFile';
+my $AccessFileLock = $SVN_AUTH . '/.lock-AccessFile';
+my $PasswordFileLock = $SVN_AUTH . '/.lock-PasswordFile';
 
 # Set up our CGI context and get some information
 use CGI;

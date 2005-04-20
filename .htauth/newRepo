@@ -7,7 +7,7 @@
 SVN_PATH=/home/equine/private/subversion/svn/bin
 REPO_PATH=/home/equine/private/subversion/repositories
 AUTH_PATH=/home/equine/private/subversion/authentication
-TEMPLATE=$AUTH_PATH/template
+TEMPLATE=/home/equine/private/subversion/www/.htauth/template
 
 function die()
 {

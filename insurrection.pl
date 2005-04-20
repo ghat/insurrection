@@ -11,6 +11,9 @@
 ## This is the base of the repositories tree.  Repositories are within
 $SVN_BASE = '/home/equine/private/subversion/repositories';
 
+## This is the base of the authentication directory.
+$SVN_AUTH = '/home/equine/private/subversion/authentication';
+
 ## This is where the svn binaries live.
 $SVN_BIN = '/home/equine/private/subversion/svn/bin/';
 
