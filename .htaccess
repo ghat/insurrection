@@ -1,5 +1,5 @@
 AuthUserFile /home/equine/private/subversion/authentication/passwords
-AuthName "Insurrection Demo Subversion Repository"
+AuthName "Subversion Repository"
 AuthType Basic
 
 <Files ~ "password.cgi">
@@ -7,27 +7,43 @@ AuthType Basic
 	require valid-user
 </Files>
 
-<Files ~ "log.cgi">
+<Files ~ "admin.cgi">
 	SetHandler cgi-script
 	require valid-user
+</Files>
+
+<Files ~ "log.cgi">
+	SetHandler cgi-script
 </Files>
 
 <Files ~ "get.cgi">
 	SetHandler cgi-script
-	require valid-user
 </Files>
 
 <Files ~ "diff.cgi">
 	SetHandler cgi-script
-	require valid-user
 </Files>
 
 <Files ~ "blame.cgi">
 	SetHandler cgi-script
+</Files>
+
+<Files ~ "auth_log.cgi">
+	SetHandler cgi-script
 	require valid-user
 </Files>
 
-<Files ~ "admin.cgi">
+<Files ~ "auth_get.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "auth_diff.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "auth_blame.cgi">
 	SetHandler cgi-script
 	require valid-user
 </Files>

@@ -5,12 +5,10 @@
 #
 # This script handles the display of SVN diff
 #
-require 'common.pl';
+require 'admin.pl';
 
-use CGI;
-
-# Set up our CGI context and get some information
-my $cgi = new CGI;
+## First, lets see if we are allowed to look here:
+&checkAuthPath($cgi->path_info);
 
 ## Get the revision
 my $rev1 = $cgi->param('r1');

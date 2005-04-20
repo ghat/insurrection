@@ -337,7 +337,7 @@ foreach my $user ('*', sort keys %userPasswords)
 
       print '<a href="?delUser=' , $user , '">' if (&canDelete($user));
       print $user;
-      print '&nbsp;Annonymous&nbsp;*' if ($user eq '*');
+      print '&nbsp;Anonymous&nbsp;*' if ($user eq '*');
       print '</a>' if (&canDelete($user));
       print '&nbsp;</td>';
 
@@ -432,7 +432,7 @@ foreach my $group (@accessGroups)
    print '<tr><td';
    print ' colspan=2' if (!defined $rSize{$group});
    print '>';
-   print '<a href="/svn/' , $group , '">' if (defined $rSize{$group});
+   print '<a href="/svn/' , $group , '/">' if (defined $rSize{$group});
    print $group;
    print '</a>' if (defined $rSize{$group});
    print '</td><td align=right>' , $rSize{$group} , 'k' if (defined $rSize{$group});

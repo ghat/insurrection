@@ -5,12 +5,10 @@
 #
 # This script handles the display of a specific version
 #
-require 'common.pl';
+require 'admin.pl';
 
-use CGI;
-
-# Set up our CGI context and get some information
-my $cgi = new CGI;
+## First, lets see if we are allowed to look here:
+&checkAuthPath($cgi->path_info);
 
 ## Get the revision
 my $rev = $cgi->param('r');

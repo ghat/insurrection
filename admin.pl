@@ -38,6 +38,51 @@ use Fcntl ':flock'; # import LOCK_* constants
 $accessVersion; ## The version of the access file
 $passwdVersion; ## The version of the password file
 
+##############################################################################
+#
+# This call will check if the given repository/path is available to the
+# authorized user.
+#
+sub checkAuthPath($path)
+{
+   my $path = shift;
+
+   ## Append a bit just in case it was not already there...
+   $path .= '/';
+
+   ## Check if we have loaded the admin stuff yet...
+   &loadAccessFile() if (!defined $groupUsers);
+
+   ## Just to make it easier, we add the ":" before the first slash
+   ## in order to match the paths....
+
+   ## NOTE!  Currently we just support repository root
+   $path =~ s|^/?([^/]+)/.*$|$1:/|;
+
+   ## Now lets check...
+   return 1 if ((defined ${groupUsers{$path}}{$AuthUser}) || (defined ${groupUsers{$path}}{'*'}));
+
+   if (!defined $AuthUser)
+   {
+      ## We are not authorized and we are not an authorized user, so
+      ## redirect to the authorization version of this script
+      my $target = $cgi->url;
+      $target =~ s:^(.*)/([^/]+)$:$1/auth_$2:;
+
+      ## just in case a double auth happened...
+      $target =~ s:/auth_auth_:/auth_:;
+
+      ## Now put the rest of the full URL together...
+      $target .= substr($cgi->self_url,length($cgi->url));
+
+      print $cgi->redirect($target);
+   }
+   else
+   {
+      print "Status: 403 Access Denied\n\n";
+   }
+   exit 0;
+}
 
 ##############################################################################
 #

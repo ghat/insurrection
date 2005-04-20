@@ -311,6 +311,11 @@ TD.showlog
   background: rgb(100%,100%,50%);
 }
 
+.editable
+{
+  cursor: pointer; cursor: hand;
+}
+
 .editable:hover
 {
   background: yellow;
