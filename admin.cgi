@@ -393,7 +393,7 @@ if (@accessGroups > 0)
 
    print '<tr bgcolor="#AAAAAA">';
    print  '<td align=left valign=middle>'
-       ,   '<input type="text" name="NewUser" value="" length=10 maxlength=12/>'
+       ,   '<input type="text" name="NewUser" value="" length=10 maxlength=32/>'
        ,  '</td>' if ($canAdminUser);
    print  '<td align=left valign=middle colspan=' , (1 - $canAdminUser + $cols + $isAdmin) , '>'
        ,   '<table width="100%" cellspacing=0 id="versions">'
