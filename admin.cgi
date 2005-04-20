@@ -36,7 +36,8 @@ my @accessGroups = sort keys %groupUsers;
 
 print '<h2 align="center">Administration</h2>'
     , '<p style="font-size: 9pt;">This page lets you administer the Subversion access rights.&nbsp;'
-    , 'The access chart below shows the users that have access to the given repositories.</p>';
+    , 'All users have read-only access to all repositories.&nbsp;'
+    , 'The access chart below shows the users that have read/write access to the given repositories.</p>';
 
 ## Now, start figuring out what happened...
 my $Operation = $cgi->param('Operation');
@@ -110,7 +111,7 @@ elsif ($Operation eq 'Update')
 
       if ($changed)
       {
-         &saveAccessFile('Access file changed via admin.cgi');
+         &saveAccessFile('admin.cgi: Access file updated');
 
          ## Reload it again (to get the new accessVersion)
          &loadAccessFile();
@@ -133,7 +134,7 @@ elsif ($Operation eq 'AddUser')
       my $user = $cgi->param('NewUser');
       chomp $user;
 
-      if ($user =~ /^[a-z][-.a-z0-9_]+$/)
+      if ($user =~ /^[a-z][-.@a-z0-9_]+$/)
       {
          ## Lock the password file...
          &lockPasswordFile();
@@ -149,14 +150,14 @@ elsif ($Operation eq 'AddUser')
          {
             my $pw = &genPassword();
             $userPasswords{$user} = crypt($pw,$pw);
-            &savePasswordFile("Added user $user");
+            &savePasswordFile("admin.cgi: Added user $user");
 
             if (open EMAIL,'| /usr/sbin/sendmail -t')
             {
-               print EMAIL 'From: <' , $AuthUser , $EMAIL_DOMAIN , '> Subversion Administrator' , "\n"
-                         , 'Return-Path: <' , $AuthUser , $EMAIL_DOMAIN , '>' , "\n"
+               print EMAIL 'From: "Subversion Administrator" <' , &emailAddress($AuthUser) , '>' , "\n"
+                         , 'Return-Path: <' , &emailAddress($AuthUser) , '>' , "\n"
                          , 'Subject: Subversion account created' , "\n"
-                         , 'To: <' , $user , $EMAIL_DOMAIN , '> New Subversion User' , "\n"
+                         , 'To: "New Subversion User" <' , &emailAddress($user) , '>' , "\n"
                          , "\n"
                          , "A user access account has been created on the Subversion Server\n"
                          , "for username $user by user $AuthUser\n"
@@ -212,7 +213,7 @@ elsif ($Operation eq 'Delete User')
       if (defined $userPasswords{$user})
       {
          delete $userPasswords{$user};
-         &savePasswordFile("Deleted user $user");
+         &savePasswordFile("admin.cgi: Deleted user $user");
 
          print '<h2 align=center><font color=green>User ' , $user , ' successfully deleted.</font></h2>';
       }
@@ -438,6 +439,18 @@ print '</form>';
 
 # all done...
 exit 0;
+
+##############################################################################
+#
+# Make an EMail address from a user name if the user name is not already in
+# an EMail form...
+#
+sub emailAddress($user)
+{
+   my $user = shift;
+   $user .= $EMAIL_DOMAIN if (!($user =~ /@/));
+   return $user;
+}
 
 ##############################################################################
 #

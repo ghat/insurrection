@@ -67,7 +67,7 @@ if ($Operation eq 'Update')
    else
    {
       $userPasswords{$AuthUser} = crypt($Password1,$AuthUser);
-      &savePasswordFile('Password changed via password.cgi');
+      &savePasswordFile('password.cgi: Password changed');
 
       print '<h2 align=center><font color=green>Password successfully changed.</font></h2>'
           , '<p>You will need to <a href="?">log in again</a> as your password has changed.</p>';
