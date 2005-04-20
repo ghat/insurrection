@@ -13,10 +13,6 @@ require 'admin.pl';
 
 use CGI;
 
-# Set up our CGI context and get some information
-my $cgi = new CGI;
-my $AuthUser = $cgi->remote_user;
-
 ## Load up the password file such that we can get the user list
 &loadPasswordFile();
 
@@ -28,9 +24,7 @@ my $AuthUser = $cgi->remote_user;
 my $isAdmin = &isAdminMember('Admin',$AuthUser);
 
 ## Build the list of repositories this user has access to.
-## This is a join of the list of the user's groups and the
-## anonymous groups;
-my %tlist = (%{$usersGroup{$AuthUser}},%{$usersGroup{'*'}});
+my %tlist = %{$usersGroup{$AuthUser}};
 
 ## Note that if the user is "root" admin, all groups are listed.
 %tlist = %groupUsers if ($isAdmin);
@@ -51,9 +45,7 @@ foreach my $group (@accessGroups)
 ## Print our standard header...
 &svn_HEADER('Admin - Subversion Server');
 
-print '<h2 align="center">Administration</h2>'
-    , '<p style="font-size: 9pt;">This page lets you administer the Subversion access rights.&nbsp;'
-    , 'The access chart below shows the users that have read/write access to the given repositories/paths.</p>';
+print '<h2 align="center">Administration</h2>';
 
 ## Now, start figuring out what happened...
 my $Operation = $cgi->param('Operation');
@@ -258,209 +250,227 @@ elsif (defined $cgi->param('delUser'))
    }
 }
 
-## Print the table...
-my $cols = scalar @accessGroups;
+print '<center>';
 
-## Order the group list such that groups the user has
-## admin rights to will be seen first.
-my @newList;
-for (my $modType = 1; $modType >= 0; $modType--)
+## If the user has any direct/specific rights, show them
+if (@accessGroups > 0)
 {
-   foreach my $group (@accessGroups)
+   print '<p style="font-size: 9pt; text-align: left;">This page lets you administer the Subversion access rights.&nbsp;'
+       , 'The access chart below shows the users that have read/write access to the given repositories/paths.</p>' if ($canAdminUser);
+
+   ## Print the table...
+   my $cols = scalar @accessGroups;
+
+   ## Order the group list such that groups the user has
+   ## admin rights to will be seen first.
+   my @newList;
+   for (my $modType = 1; $modType >= 0; $modType--)
    {
-      if ($modType == &isAdmin($group,$AuthUser))
-      {
-         push @newList,$group;
-      }
-   }
-}
-@accessGroups = @newList;
-
-## The labels for the different states
-my @buttons = ('-','ro','r/w','Adm');
-
-print '<script type="text/javascript" language="JavaScript"><!--' , "\n"
-    , 'var states = new Array();';
-
-for (my $i = 0; $i < @buttons; $i++)
-{
-   print 'states[' , $i , '] = "' , $buttons[$i] , '";';
-}
-
-print 'function bump(me,id)'
-    , '{'
-    ,   'var val = document.getElementById(id);'
-    ,   'var t = val.value;'
-    ,   't++;'
-    ,   'if (t > 3) {t = 0;}'
-    ,   'val.value = t;'
-    ,   'me.innerHTML = states[t];'
-    , '}'
-    , 'function bump0(me,id)'
-    , '{'
-    ,   'var val = document.getElementById(id);'
-    ,   'var t = val.value;'
-    ,   't++;'
-    ,   'if (t > 2) {t = 0;}'
-    ,   'val.value = t;'
-    ,   'me.innerHTML = states[t];'
-    , '}';
-
-print 'function bump1(me,id)'
-    , '{'
-    ,   'var val = document.getElementById(id);'
-    ,   'var t = val.value;'
-    ,   'if (t == 0) {t = 3;} else {t = 0}'
-    ,   'val.value = t;'
-    ,   'me.innerHTML = states[t];'
-    , '}' if ($isAdmin);
-
-print '//--></script>';
-
-print '<form action="?" method=post>'
-    , '<input type="hidden" name="AccessVersion" value="' , $accessVersion , '"/>'
-    , '<center>'
-    , '<table border=0 cellpadding=2 cellspacing=0><tr><td>'
-    , '<table class="accesstable" cellspacing=0>'
-    , '<tr><th rowspan=2>Username</th>';
-print '<th rowspan=2>Admin</th>' if ($isAdmin);
-print '<th align=center colspan=' , $cols , '>Repositories</th>'
-    , '</tr>'
-    , '<tr class="accesstitles">';
-
-foreach my $group (@accessGroups)
-{
-   print '<th>' , $group , '</th>';
-}
-print '</tr>';
-
-my $line = 0;
-my @lineColour = ('#EEEEEE' , '#DDDDDD');  ## Alternating line colours
-my @flagColour = ('#CCFFCC' , '#BBEEBB');  ## Flag what the values were before changes
-my $canMod = 0;
-
-foreach my $user ('*', sort keys %userPasswords)
-{
-   if ($canAdminUser || ($AuthUser eq $user))
-   {
-      print '<tr bgcolor="' , $lineColour[$line] , '">'
-          , '<td align=left valign=middle>&nbsp;';
-
-      print '<a href="?delUser=' , $user , '">' if (&canDelete($user));
-      print $user;
-      print '&nbsp;Anonymous&nbsp;*' if ($user eq '*');
-      print '</a>' if (&canDelete($user));
-      print '&nbsp;</td>';
-
-      my $bump = 'bump';
-      $bump = 'bump0' if ($user eq '*');
-
-      if ($isAdmin)
-      {
-         if ($user eq '*')
-         {
-            print '<td nowrap align=center valign=middle>' , $buttons[0] , '</td>';
-         }
-         else
-         {
-            my $id = "$user:Admin";
-            my $val = 0;
-            $val = 3 if (&isAdminMember('Admin',$user));
-            print '<input type="hidden" name="' , $id , '" id="' , $id , '" value="' , $val , '"/>'
-                , '<td nowrap align=center valign=middle class="editable"'
-                , ' onmousedown="bump1(this,\'' , $id , '\');"'
-                , '>' , $buttons[$val] , '</td>';
-         }
-      }
-
       foreach my $group (@accessGroups)
       {
-         my $mod = &isAdmin($group,$AuthUser);
-         $canMod = 1 if ($mod);
-         my $id = "$user:$group";
-         my $val = &typeMember($group,$user);
-
-         print '<input type="hidden" name="' , $id , '" id="' , $id , '" value="' , $val , '"/>' if ($mod);
-         print '<td nowrap align=center valign=middle';
-         print ' class="editable"'
-             , ' onmousedown="' , $bump , '(this,\'' , $id , '\');"' if ($mod);
-         print '>' , $buttons[$val] , '</td>';
+         if ($modType == &isAdmin($group,$AuthUser))
+         {
+            push @newList,$group;
+         }
       }
-      print '</tr>';
-
-      $line = 1 - $line;
    }
+   @accessGroups = @newList;
+
+   ## The labels for the different states
+   my @buttons = ('-','ro','r/w','Adm');
+
+   print '<script type="text/javascript" language="JavaScript"><!--' , "\n"
+       , 'var states = new Array();';
+
+   for (my $i = 0; $i < @buttons; $i++)
+   {
+      print 'states[' , $i , '] = "' , $buttons[$i] , '";';
+   }
+
+   print 'function bump(me,id)'
+       , '{'
+       ,   'var val = document.getElementById(id);'
+       ,   'var t = val.value;'
+       ,   't++;'
+       ,   'if (t > 3) {t = 0;}'
+       ,   'val.value = t;'
+       ,   'me.innerHTML = states[t];'
+       , '}'
+       , 'function bump0(me,id)'
+       , '{'
+       ,   'var val = document.getElementById(id);'
+       ,   'var t = val.value;'
+       ,   't++;'
+       ,   'if (t > 2) {t = 0;}'
+       ,   'val.value = t;'
+       ,   'me.innerHTML = states[t];'
+       , '}';
+
+   print 'function bump1(me,id)'
+       , '{'
+       ,   'var val = document.getElementById(id);'
+       ,   'var t = val.value;'
+       ,   'if (t == 0) {t = 3;} else {t = 0}'
+       ,   'val.value = t;'
+       ,   'me.innerHTML = states[t];'
+       , '}' if ($isAdmin);
+
+   print '//--></script>';
+
+   print '<form action="?" method=post>'
+       , '<input type="hidden" name="AccessVersion" value="' , $accessVersion , '"/>'
+       , '<table border=0 cellpadding=2 cellspacing=0><tr><td>'
+       , '<table class="accesstable" cellspacing=0>'
+       , '<tr><th rowspan=2>Username</th>';
+   print '<th rowspan=2>Admin</th>' if ($isAdmin);
+   print '<th align=center colspan=' , $cols , '>Repositories</th>'
+       , '</tr>'
+       , '<tr class="accesstitles">';
+
+   foreach my $group (@accessGroups)
+   {
+      print '<th>' , $group , '</th>';
+   }
+   print '</tr>';
+
+   my $line = 0;
+   my @lineColour = ('#EEEEEE' , '#DDDDDD');  ## Alternating line colours
+   my @flagColour = ('#CCFFCC' , '#BBEEBB');  ## Flag what the values were before changes
+   my $canMod = 0;
+
+   foreach my $user ('*', sort keys %userPasswords)
+   {
+      if ($canAdminUser || ($AuthUser eq $user))
+      {
+         print '<tr bgcolor="' , $lineColour[$line] , '">'
+             , '<td align=left valign=middle>&nbsp;';
+
+         print '<a href="?delUser=' , $user , '">' if (&canDelete($user));
+         print $user;
+         print '&nbsp;Anonymous&nbsp;*' if ($user eq '*');
+         print '</a>' if (&canDelete($user));
+         print '&nbsp;</td>';
+
+         my $bump = 'bump';
+         $bump = 'bump0' if ($user eq '*');
+
+         if ($isAdmin)
+         {
+            if ($user eq '*')
+            {
+               print '<td nowrap align=center valign=middle>' , $buttons[0] , '</td>';
+            }
+            else
+            {
+               my $id = "$user:Admin";
+               my $val = 0;
+               $val = 3 if (&isAdminMember('Admin',$user));
+               print '<input type="hidden" name="' , $id , '" id="' , $id , '" value="' , $val , '"/>'
+                   , '<td nowrap align=center valign=middle class="editable"'
+                   , ' onmousedown="bump1(this,\'' , $id , '\');"'
+                   , '>' , $buttons[$val] , '</td>';
+            }
+         }
+
+         foreach my $group (@accessGroups)
+         {
+            my $mod = &isAdmin($group,$AuthUser);
+            $canMod = 1 if ($mod);
+            my $id = "$user:$group";
+            my $val = &typeMember($group,$user);
+
+            print '<input type="hidden" name="' , $id , '" id="' , $id , '" value="' , $val , '"/>' if ($mod);
+            print '<td nowrap align=center valign=middle';
+            print ' class="editable"'
+                , ' onmousedown="' , $bump , '(this,\'' , $id , '\');"' if ($mod);
+            print '>' , $buttons[$val] , '</td>';
+         }
+         print '</tr>';
+
+         $line = 1 - $line;
+      }
+   }
+
+   print '<tr bgcolor="#AAAAAA">';
+   print  '<td align=left valign=middle>'
+       ,   '<input type="text" name="NewUser" value="" length=10 maxlength=12/>'
+       ,  '</td>' if ($canAdminUser);
+   print  '<td align=left valign=middle colspan=' , (1 - $canAdminUser + $cols + $isAdmin) , '>'
+       ,   '<table width="100%" cellspacing=0 id="versions">'
+       ,    '<tr>';
+   print     '<th rowspan=2><input type="submit" name="Operation" value="AddUser"/></th>' if ($canAdminUser);
+   print     '<td>' , $accessVersion , '</td>'
+       ,    '</tr>'
+       ,    '<tr><td width="90%">' , $passwdVersion , '</td></tr>'
+       ,   '</table>'
+       ,  '</td>'
+       , '</tr>'
+       , '</table></td></tr>';
+   print '<tr>'
+       , '<td align=right><input type="submit" name="Operation" value="Update"/></td>'
+       , '</tr>' if ($canMod);
+   print '</table>';
+
+   print '<p style="font-size: 9pt; text-align: left;">To add a user, you must use the email address of the user.&nbsp; '
+       , 'For example, <b>msinz</b>' , $EMAIL_DOMAIN , ' would need to used.&nbsp; '
+       , 'This is important as EMail is used to send the initial password to the user.</p>' if ($canAdminUser);
+
+   print '</form>'
+       , '<br/>';
 }
 
-print '<tr bgcolor="#AAAAAA">';
-print  '<td align=left valign=middle>'
-    ,   '<input type="text" name="NewUser" value="" length=10 maxlength=12/>'
-    ,  '</td>' if ($canAdminUser);
-print  '<td align=left valign=middle colspan=' , (1 - $canAdminUser + $cols + $isAdmin) , '>'
-    ,   '<table width="100%" cellspacing=0 id="versions">'
-    ,    '<tr>';
-print     '<th rowspan=2><input type="submit" name="Operation" value="AddUser"/></th>' if ($canAdminUser);
-print     '<td>' , $accessVersion , '</td>'
-    ,    '</tr>'
-    ,    '<tr><td width="90%">' , $passwdVersion , '</td></tr>'
-    ,   '</table>'
-    ,  '</td>'
-    , '</tr>'
-    , '</table></td></tr>';
-print '<tr>'
-    , '<td align=right><input type="submit" name="Operation" value="Update"/></td>'
-    , '</tr>' if ($canMod);
-print '</table>';
-
-print '<p style="font-size: 9pt; text-align: left;">To add a user, you must used the username that matches the <b>username</b>' , $EMAIL_DOMAIN , '.&nbsp; '
-    , 'For example, <b>msinz</b>' , $EMAIL_DOMAIN , ' would need to have a username of <b>msinz</b>.&nbsp; '
-    , 'This is important as EMail is used to send the initial password to the user.</p>' if ($canAdminUser);
-
-## Get the sizes of all of the repositories...
-my %rSize;
-## Only if the directory exists do we even try this...
-if (-d $SVN_BASE)
+## For the list of repositories and their sizes, we want
+## to include the anonymous access repositories...
+%tlist = (%tlist,%{$usersGroup{'*'}});
+@accessGroups = sort keys %tlist;
+if (@accessGroups > 0)
 {
-   foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
+   ## Get the sizes of all of the repositories...
+   my %rSize;
+   ## Only if the directory exists do we even try this...
+   if (-d $SVN_BASE)
    {
-      my ($size,$repo) = ($line =~ /^(\d+)\s+(\S.*)$/);
-      $rSize{$repo} = $size;
+      foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
+      {
+         my ($size,$repo) = ($line =~ /^(\d+)\s+(\S.*)$/);
+         $rSize{$repo} = $size;
+      }
    }
-}
 
-print '<br/><table class="accessinfo" cellspacing=0><tr><th>Repository</th><th>Size</th><th>Access Group Definitions</th></tr>';
+   print '<table class="accessinfo" cellspacing=0><tr><th>Repository</th><th>Size</th><th>Description</th></tr>';
 
-my $totalSize = 0;
-foreach my $group (@accessGroups)
-{
-   my $comments = $groupComments{$group};
-   $group =~ s/(^[^:]+):.*$/$1/;
-   my $size = $rSize{$group};
-   if (defined $size)
+   my $totalSize = 0;
+
+   foreach my $group (@accessGroups)
    {
-      $size += 0; ## Make sure that the size is a number...
-      $totalSize += $size;
+      my $comments = $groupComments{$group};
+      $group =~ s/(^[^:]+):.*$/$1/;
+      my $size = $rSize{$group};
+      if (defined $size)
+      {
+         $size += 0; ## Make sure that the size is a number...
+         $totalSize += $size;
 
+         ## Cute trick to get comas into the number...
+         while ($size =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+
+         print '<tr>'
+             ,  '<td><a href="/svn/' , $group , '/">' , $group , '</a></td>'
+             ,  '<td align=right>' , $size , 'k</td><td>' , $comments , '</td>'
+             , '</tr>';
+      }
+   }
+   if ($totalSize > 0)
+   {
       ## Cute trick to get comas into the number...
-      while ($size =~ s/(\d+)(\d\d\d)/$1,$2/) {}
-
-      print '<tr>'
-          ,  '<td><a href="/svn/' , $group , '/">' , $group , '</a></td>'
-          ,  '<td align=right>' , $size , 'k</td><td>' , $comments , '</td>'
-          , '</tr>';
+      while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+      print '<tr><td><b>Total:</b></td><td align=right>' , $totalSize , 'k</td><td>&nbsp;</td></tr>';
    }
+   print "</table>";
 }
-if ($totalSize > 0)
-{
-   ## Cute trick to get comas into the number...
-   while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/) {}
-   print '<tr><td><b>Total:</b></td><td align=right>' , $totalSize , 'k</td><td>&nbsp;</td></tr>';
-}
-print "</table>";
 
 print '</center>';
 
-print '</form>';
 
 &svn_TRAILER('$Id$',$AuthUser);
 
