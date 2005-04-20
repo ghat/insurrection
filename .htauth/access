@@ -18,12 +18,14 @@ Admin = mks
 
 # The Insurrection Web Tools for Subversion example repository.&nbsp; This contains an export of the Insurrection source code to play with as an example.
 [Web:/]
+* = r
 demo = r
 michael = r
 mks = rw
 
 # A second example repository.
 [example:/]
+* = r
 demo = r
 michael = rw
 mks = rw

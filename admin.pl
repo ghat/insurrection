@@ -79,7 +79,16 @@ sub checkAuthPath($path)
    }
    else
    {
-      print "Status: 403 Access Denied\n\n";
+      print "Status: 403 Access Denied\n";
+
+      &svn_HEADER('403 Access Denied');
+
+      print '<h1>Access Denied</h1>'
+          , '<p>You are not permitted access to the document '
+          , 'requested.  You may have supplied the wrong '
+          , 'credentials or selected the wrong URL</p>';
+
+      &svn_TRAILER('$Id$',$AuthUser);
    }
    exit 0;
 }
