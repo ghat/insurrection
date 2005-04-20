@@ -18,22 +18,32 @@
 [groups]
 
 ## The Admin group has access full access to the admin CGIs
-Admin = michael
+Admin = mks
 
-## The Subversion Web base site repository, includes the administration tools and access control files<br/><b>Warning</b>! only trusted users should have write access to the Web repository as the administration CGIs and access controls are stored and managed here.
-Web = michael
+## The Insurrection Web Tools for Subversion example repository.&nbsp; This contains an export of the Insurrection source code to play with as an example.
+Web = mks
+
+## A second example repository.
+example = michael, mks
+
+##
+## Administrative groups - used for the CGI management
+##
 
 ## Members of this group can create new user accounts
-Admin_Users = michael
+Admin_Users = mks
+Admin_Web = 
+Admin_example = 
 
 ##
 ## Define the repository access rights
 ##
 
-## The example playground to learn SVN
-[example:/]
-* = rw
 
 [Web:/]
 @Web = rw
 @Admin_Web = rw
+
+[example:/]
+@example = rw
+@Admin_example = rw

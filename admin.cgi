@@ -36,8 +36,7 @@ my @accessGroups = sort keys %groupUsers;
 
 print '<h2 align="center">Administration</h2>'
     , '<p style="font-size: 9pt;">This page lets you administer the Subversion access rights.&nbsp;'
-    , 'All users have read-only access to all repositories.&nbsp;'
-    , 'The access chart below shows the users that have read/write access to the given repositories.</p>';
+    , 'The access chart below shows the users that have access to the given repositories.</p>';
 
 ## Now, start figuring out what happened...
 my $Operation = $cgi->param('Operation');
@@ -417,8 +416,7 @@ if (-d $SVN_BASE)
 
 print '<br/><table id="accessinfo" cellspacing=0><tr><th>Group</th><th>Size</th><th>Access Group Definitions</th></tr>';
 
-$groupComments{'example'} = 'Example repository for learning to use Subversion';
-foreach my $group (@accessGroups,'example')
+foreach my $group (@accessGroups)
 {
    print '<tr><td';
    print ' colspan=2' if (!defined $rSize{$group});

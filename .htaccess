@@ -1,5 +1,5 @@
-AuthUserFile /usr/subversion/authentication/passwords
-AuthName "Subversion Repository"
+AuthUserFile /home/equine/private/subversion/authentication/passwords
+AuthName "Insurrection Demo Subversion Repository"
 AuthType Basic
 
 <Files ~ "password.cgi">

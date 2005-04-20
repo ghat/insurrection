@@ -6,7 +6,7 @@
 # only unique per day.
 
 ## NOTE!  This needs to be where the logs are
-cd /usr/subversion/apache/logs
+cd /home/equine/private/subversion/apache/logs
 
 OLD=`date '+%Y-%m-%d'`
 FLAG=${OLD}.flag

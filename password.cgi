@@ -14,6 +14,12 @@ require 'admin.pl';
 my $Operation = $cgi->param('Operation');
 $Operation = "" if (!defined $Operation);
 
+if ($AuthUser eq 'demo')
+{
+   print "Location: /admin.cgi\n\n";
+   exit 0;
+}
+
 if ($Operation eq 'Cancel')
 {
    print "Location: /\n\n";

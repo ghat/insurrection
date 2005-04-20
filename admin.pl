@@ -223,10 +223,7 @@ sub saveAccessFile($reason)
                , '##' , "\n"
                , '## Define the repository access rights' , "\n"
                , '##' , "\n"
-               , '' , "\n"
-               , '## The example playground to learn SVN' , "\n"
-               , '[example:/]' , "\n"
-               , '* = rw' , "\n";
+               , '' , "\n";
 
       foreach my $group (sort keys %groupUsers)
       {

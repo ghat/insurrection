@@ -4,9 +4,9 @@
 #
 # Build a new standard repository setup of the given name
 #
-SVN_PATH=/usr/subversion/svn/bin
-REPO_PATH=/usr/subversion/repositories
-AUTH_PATH=/usr/subversion/authentication
+SVN_PATH=/home/equine/private/subversion/svn/bin
+REPO_PATH=/home/equine/private/subversion/repositories
+AUTH_PATH=/home/equine/private/subversion/authentication
 TEMPLATE=$AUTH_PATH/template
 
 function die()
@@ -40,7 +40,7 @@ $SVN_PATH/svn propset svn:keywords Id .svn_index	|| die "Failed to set keywords 
 $SVN_PATH/svn commit -m 'Initial Repository'		|| die "Failed to commit template to repository '$1'"
 
 ## Now, set up the pre-commit rule from the auth-path
-ln -s $AUTH_PATH/pre-commit $REPO_PATH/$1/hooks/	|| die "Failed to install the pre-commit hook"
+ln -s ../../../authentication/pre-commit $REPO_PATH/$1/hooks/	|| die "Failed to install the pre-commit hook"
 
 ## Cleanup
 cd $OLD_DIR		|| die "What?  We can't go back to where we were?!!!"

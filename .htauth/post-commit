@@ -39,6 +39,6 @@
 ## tree (as this is what this file does)  If that ever fails,
 ## the web server would need to manually be updated
 
-cd /usr/subversion/www || exit
+cd /home/equine/private/subversion/www || exit
 
-/usr/subversion/svn/bin/svn update --non-interactive
+/home/equine/private/subversion/svn/bin/svn update --non-interactive

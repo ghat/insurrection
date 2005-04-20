@@ -9,13 +9,13 @@
 #
 
 ## This is the base of the repositories tree.  Repositories are within
-$SVN_BASE = '/usr/subversion/repositories';
+$SVN_BASE = '/home/equine/private/subversion/repositories';
 
 ## This is where the svn binaries live.
-$SVN_BIN = '/usr/subversion/svn/bin/';
+$SVN_BIN = '/home/equine/private/subversion/svn/bin/';
 
 ## The domain for the EMail addresses...
-$EMAIL_DOMAIN = '@sinz.org';
+$EMAIL_DOMAIN = '@sinz.com';
 
 ## The official URL to the this server
 $SVN_URL = 'http://svn.sinz.com:8000';
