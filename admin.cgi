@@ -24,11 +24,21 @@ my $AuthUser = $cgi->remote_user;
 ## just to get the status on this specific user...
 &loadAccessFile();
 
-## Build the list of access groups...
-my @accessGroups = sort keys %groupUsers;
-
 ## Since we check the admin status a number of times, do it once here...
 my $isAdmin = &isAdminMember('Admin',$AuthUser);
+
+## Build the list of repositories this user has access to.
+## This is a join of the list of the user's groups and the
+## anonymous groups;
+my %tlist = (%{$usersGroup{$AuthUser}},%{$usersGroup{'*'}});
+
+## Note that if the user is "root" admin, all groups are listed.
+%tlist = %groupUsers if ($isAdmin);
+
+## We like to sort the list just for display reasons...
+my @accessGroups = sort keys %tlist;
+
+## Check if this user can administrate other users
 my $canAdminUser = $isAdmin;
 foreach my $group (@accessGroups)
 {
@@ -81,7 +91,8 @@ elsif ($Operation eq 'Update')
             ## Ahh, we can change this...
             $changed = 1;
 
-            delete $groupUsers{$group};
+            my %empty;
+            %{$groupUsers{$group}} = %empty;
 
             my ($adminGroup) = ($group =~ /(^[^:]+):/);
             $adminGroup = 'Admin_' . $adminGroup;
@@ -313,7 +324,7 @@ print '<form action="?" method=post>'
     , '<table class="accesstable" cellspacing=0>'
     , '<tr><th rowspan=2>Username</th>';
 print '<th rowspan=2>Admin</th>' if ($isAdmin);
-print '<th align=center colspan=' , $cols , '>Access Groups</th>'
+print '<th align=center colspan=' , $cols , '>Repositories</th>'
     , '</tr>'
     , '<tr class="accesstitles">';
 
@@ -407,38 +418,44 @@ print '<p style="font-size: 9pt; text-align: left;">To add a user, you must used
 
 ## Get the sizes of all of the repositories...
 my %rSize;
-my $totalSize = 0;
 ## Only if the directory exists do we even try this...
 if (-d $SVN_BASE)
 {
    foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
    {
       my ($size,$repo) = ($line =~ /^(\d+)\s+(\S.*)$/);
-      $size += 0;
-      $totalSize += $size;
-
-      while ($size =~ s/(\d+)(\d\d\d)/$1,$2/) {}
       $rSize{$repo} = $size;
    }
-   while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/) {}
 }
 
 print '<br/><table class="accessinfo" cellspacing=0><tr><th>Repository</th><th>Size</th><th>Access Group Definitions</th></tr>';
 
+my $totalSize = 0;
 foreach my $group (@accessGroups)
 {
    my $comments = $groupComments{$group};
    $group =~ s/(^[^:]+):.*$/$1/;
-   print '<tr><td';
-   print ' colspan=2' if (!defined $rSize{$group});
-   print '>';
-   print '<a href="/svn/' , $group , '/">' if (defined $rSize{$group});
-   print $group;
-   print '</a>' if (defined $rSize{$group});
-   print '</td><td align=right>' , $rSize{$group} , 'k' if (defined $rSize{$group});
-   print '</td><td>' , $comments , '</td></tr>';
+   my $size = $rSize{$group};
+   if (defined $size)
+   {
+      $size += 0; ## Make sure that the size is a number...
+      $totalSize += $size;
+
+      ## Cute trick to get comas into the number...
+      while ($size =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+
+      print '<tr>'
+          ,  '<td><a href="/svn/' , $group , '/">' , $group , '</a></td>'
+          ,  '<td align=right>' , $size , 'k</td><td>' , $comments , '</td>'
+          , '</tr>';
+   }
 }
-print '<tr><td><b>Total:</b></td><td align=right>' , $totalSize , 'k</td><td>&nbsp;</td></tr>';
+if ($totalSize > 0)
+{
+   ## Cute trick to get comas into the number...
+   while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+   print '<tr><td><b>Total:</b></td><td align=right>' , $totalSize , 'k</td><td>&nbsp;</td></tr>';
+}
 print "</table>";
 
 print '</center>';

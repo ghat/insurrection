@@ -242,8 +242,8 @@ sub loadAccessFile()
          $section = $1;
          if ($section ne 'groups')
          {
-            $groupComments{$section} = $lastComment ;
-            #delete $groupUsers{$section};
+            $groupComments{$section} = $lastComment;
+            %{$groupUsers{$section}} = %empty;
          }
       }
       elsif (($line =~ /^(Admin\S*)\s+=\s*(.*)$/) && ($section eq 'groups'))
