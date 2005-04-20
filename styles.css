@@ -52,14 +52,14 @@ A:active {color: red; text-decoration: underline;}
     border-bottom: 1px gray dotted;
 }
 
-#accesstable
+.accesstable
 {
     border: 3px black solid;
     border-left: 2px black solid;
     font-size: 11pt;
 }
 
-#accesstable TH
+.accesstable TH
 {
     background-color: rgb(182,38,133);
     color: white;
@@ -72,7 +72,7 @@ A:active {color: red; text-decoration: underline;}
     border-left: 1px black solid;
 }
 
-#accesstable TD
+.accesstable TD
 {
     border: 1px black solid;
     border-bottom: 0px;
@@ -107,24 +107,24 @@ A:active {color: red; text-decoration: underline;}
     text-align: right;
 }
 
-#accesstable A {color: darkblue; text-decoration: none;}
-#accesstable A:hover {color: green;}
-#accesstable A:active {color: red;}
+.accesstable A {color: darkblue; text-decoration: none;}
+.accesstable A:hover {color: green;}
+.accesstable A:active {color: red;}
 
-#accesstitles
+.accesstitles
 {
     font-weight: normal;
     font-size: 8pt;
 }
 
-#accessinfo
+.accessinfo
 {
     border: 2px black solid;
     border-left: 1px black solid;
     font-size: 9pt;
 }
 
-#accessinfo TH
+.accessinfo TH
 {
     background-color: rgb(182,38,133);
     color: white;
@@ -137,7 +137,7 @@ A:active {color: red; text-decoration: underline;}
     border-left: 1px black solid;
 }
 
-#accessinfo TD
+.accessinfo TD
 {
     background-color: white;
     border-top: 1px gray solid;
@@ -146,6 +146,11 @@ A:active {color: red; text-decoration: underline;}
     border-right: 0px;
     padding-left: 4px;
     padding-right: 4px;
+}
+
+.accessadmin
+{
+    color: yellow;
 }
 
 .versiontable LI

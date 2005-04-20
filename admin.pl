@@ -31,12 +31,45 @@ use Fcntl ':flock'; # import LOCK_* constants
 
 ## We export these hashes for playing around with.
 %groupComments; ## Comments for groups
-%groupUsers;    ## The group users
+%groupUsers;    ## The group's users
+%usersGroup;    ## The user's groups (a pivot just to make life eaier)
 %groupAdmins;   ## The group admin users
 %userPasswords; ## The password file
 $accessVersion; ## The version of the access file
 $passwdVersion; ## The version of the password file
 
+
+##############################################################################
+#
+# A simple member type function that returns:
+#   0 if the user is not a member
+#   1 if the user is read-only
+#   2 if the user is read-write
+#   3 if the user is admin of the group.
+#
+sub typeMember($group,$user)
+{
+   my $group = shift;
+   my $user = shift;
+
+   if (defined $groupUsers{$group})
+   {
+      my $type = ${groupUsers{$group}}{$user};
+      if (defined $type)
+      {
+         return 1 if ($type eq 'r');
+
+         ## Can only be admin if the access is r/w
+         if ($type eq 'rw')
+         {
+            return 3 if (&isAdminMember($group,$user));
+            return 2;
+         }
+      }
+   }
+
+   return 0;
+}
 
 ##############################################################################
 #
@@ -48,11 +81,7 @@ sub isMember($group,$user)
    my $group = shift;
    my $user = shift;
 
-   foreach $t (@{$groupUsers{$group}})
-   {
-      return 1 if ($t eq $user);
-   }
-
+   return 1 if (&typeMember($group,$user) != 0);
    return 0;
 }
 
@@ -66,9 +95,22 @@ sub isAdminMember($group,$user)
    my $group = shift;
    my $user = shift;
 
-   foreach $t (@{$groupAdmins{$group}})
+   ## Fix up the group name...
+   if (!($group =~ /^Admin.*/))
    {
-      return 1 if ($t eq $user);
+      $group = 'Admin_' . $group;
+      if ($group =~ /(^[^:]+):/)
+      {
+         $group = $1;
+      }
+   }
+
+   if (defined $groupAdmins{$group})
+   {
+      foreach $t (@{$groupAdmins{$group}})
+      {
+         return 1 if ($t eq $user);
+      }
    }
 
    return 0;
@@ -84,7 +126,7 @@ sub isAdmin($group,$user)
    my $group = shift;
    my $user = shift;
 
-   return 1 if (&isMember("Admin",$user));
+   return 1 if (&isAdminMember('Admin',$user));
 
    return &isAdminMember($group,$user);
 }
@@ -118,6 +160,12 @@ sub loadAccessFile()
    close DATA;
    chomp @lines;
 
+   my %empty;
+   %groupComments = %empty;
+   %groupAdmins = %empty;
+   %groupUsers = %empty;
+   %usersGroup = %empty;
+
    my $lastComment;
    my $section;
    foreach my $line (@lines)
@@ -138,32 +186,30 @@ sub loadAccessFile()
       elsif ($line =~ /^\[(.+?)\]$/)
       {
          $section = $1;
+         if ($section ne 'groups')
+         {
+            $groupComments{$section} = $lastComment ;
+            #delete $groupUsers{$section};
+         }
       }
-      elsif ($line =~ /^\*/)
+      elsif (($line =~ /^(Admin\S*)\s+=\s*(.*)$/) && ($section eq 'groups'))
       {
-         ## A wildcard entry - I guess we should skip it...
-      }
-      elsif ($line =~ /^@/)
-      {
-         ## A group rights definition - just skip it (we know what they are)
-      }
-      elsif (($line =~ /^Admin_(\S+)\s+=\s*(.*)$/) && ($section eq 'groups'))
-      {
-         ## Ahh, a group admin definition - now lets deal with it...
+         ## Ahh, an admin definition - now lets deal with it...
          my $group = $1;
          my @users = split(/,\s*/,$2);
 
-         $groupComments{$group} = $lastComment if (!defined $groupUsers{$group});
          @{$groupAdmins{$group}} = @users;
       }
-      elsif (($line =~ /^(\S+)\s+=\s*(.*)$/) && ($section eq 'groups'))
+      elsif (($line =~ /^(\S+)\s+=\s*(.*)$/) && ($section ne 'groups'))
       {
-         ## Ahh, a group definition - now lets deal with it...
-         my $group = $1;
-         my @users = split(/,\s*/,$2);
+         my $user = $1;
+         my $access = $2;
 
-         $groupComments{$group} = $lastComment;
-         @{$groupUsers{$group}} = @users;
+         if ($user =~ /^[^@]/)
+         {
+            ${$groupUsers{$section}}{$user} = $access;
+            ${$usersGroup{$user}}{$section} = $access;
+         }
       }
    }
 }
@@ -186,53 +232,36 @@ sub saveAccessFile($reason)
                , '#' , "\n"
                , '# $' , 'Id: ' , $accessVersion , ' $' , "\n"
                , '#' , "\n"
-               , '# This file is machine generated - do not hand edit!' , "\n"
+               , '# This is a computer managed file - do not hand edit!' , "\n"
                , '#' , "\n"
                , "\n"
-               , '##' , "\n"
-               , '## Give any valid user read-only rights if nothing else matches' , "\n"
-               , '##' , "\n"
-               , '[/]' , "\n"
-               , '* = r' , "\n"
-               , "\n"
-               , '##' , "\n"
-               , '## Define the access groups' , "\n"
-               , '##' , "\n"
+               , '#' , "\n"
+               , '# Define the admin groups' , "\n"
+               , '#' , "\n"
                , '[groups]' , "\n";
-
-      foreach my $group (sort keys %groupUsers)
-      {
-         print DATA "\n"
-                  , '## ' , $groupComments{$group} , "\n"
-                  , $group , " = " , join(', ',sort @{$groupUsers{$group}}) , "\n";
-      }
-
-      print DATA "\n"
-               , '##' , "\n"
-               , '## Administrative groups - used for the CGI management' , "\n"
-               , '##' , "\n";
 
       foreach my $group (sort keys %groupAdmins)
       {
-         print DATA "\n"
-                  , '## ' , $groupComments{$group} , "\n" if (!defined $groupUsers{$group});
-         print DATA "Admin_" , $group , " = " , join(', ',sort @{$groupAdmins{$group}}) , "\n";
+         print DATA $group , " = " , join(', ',sort @{$groupAdmins{$group}}) , "\n";
       }
 
       print DATA "\n"
-               , '##' , "\n"
-               , '## Define the repository access rights' , "\n"
-               , '##' , "\n"
-               , '' , "\n";
+               , '#' , "\n"
+               , '# Define the repository access rights' , "\n"
+               , '#' , "\n";
+
 
       foreach my $group (sort keys %groupUsers)
       {
-         if ($group ne 'Admin')
+         print DATA "\n"
+                  , '# ' , $groupComments{$group} , "\n"
+                  , "[$group]\n";
+
+         my %users = %{$groupUsers{$group}};
+         for my $user (sort keys %users)
          {
-            print DATA "\n"
-                     , "[$group:/]\n"
-                     , '@' , $group , " = rw\n";
-            print DATA '@Admin_' , $group , " = rw\n" if (defined $groupAdmins{$group});
+            my $access = $users{$user};
+            print DATA "$user = $access\n";
          }
       }
 

@@ -3,47 +3,27 @@
 #
 # $Id$
 #
-# This file is machine generated - do not hand edit!
+# This is a computer managed file - do not hand edit!
 #
 
-##
-## Give any valid user read-only rights if nothing else matches
-##
-[/]
-* = r
-
-##
-## Define the access groups
-##
+#
+# Define the admin groups
+#
 [groups]
-
-## The Admin group has access full access to the admin CGIs
 Admin = mks
 
-## The Insurrection Web Tools for Subversion example repository.&nbsp; This contains an export of the Insurrection source code to play with as an example.
-Web = mks
+#
+# Define the repository access rights
+#
 
-## A second example repository.
-example = michael, mks
-
-##
-## Administrative groups - used for the CGI management
-##
-
-## Members of this group can create new user accounts
-Admin_Users = mks
-Admin_Web = 
-Admin_example = 
-
-##
-## Define the repository access rights
-##
-
-
+# The Insurrection Web Tools for Subversion example repository.&nbsp; This contains an export of the Insurrection source code to play with as an example.
 [Web:/]
-@Web = rw
-@Admin_Web = rw
+demo = r
+michael = r
+mks = rw
 
+# A second example repository.
 [example:/]
-@example = rw
-@Admin_example = rw
+demo = r
+michael = rw
+mks = rw

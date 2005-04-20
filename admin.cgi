@@ -24,20 +24,26 @@ my $AuthUser = $cgi->remote_user;
 ## just to get the status on this specific user...
 &loadAccessFile();
 
-## Since we check the admin status a number of times, do it once here...
-my $isAdmin = &isMember('Admin',$AuthUser);
-my $canAdminUser = &isAdmin('Users',$AuthUser);
-
 ## Build the list of access groups...
 my @accessGroups = sort keys %groupUsers;
+
+## Since we check the admin status a number of times, do it once here...
+my $isAdmin = &isAdminMember('Admin',$AuthUser);
+my $canAdminUser = $isAdmin;
+foreach my $group (@accessGroups)
+{
+   if (!$canAdminUser)
+   {
+      $canAdminUser = 1 if (&isAdmin($group,$AuthUser));
+   }
+}
 
 ## Print our standard header...
 &svn_HEADER('Admin - Subversion Server');
 
 print '<h2 align="center">Administration</h2>'
     , '<p style="font-size: 9pt;">This page lets you administer the Subversion access rights.&nbsp;'
-    , 'All users have read-only access to all repositories.&nbsp;'
-    , 'The access chart below shows the users that have read/write access to the given repositories.</p>';
+    , 'The access chart below shows the users that have read/write access to the given repositories/paths.</p>';
 
 ## Now, start figuring out what happened...
 my $Operation = $cgi->param('Operation');
@@ -62,7 +68,7 @@ elsif ($Operation eq 'Update')
    else
    {
       ## Just to make sure that someone does not remove his own admin access
-      $cgi->param("$AuthUser:Admin",2) if ($isAdmin);
+      $cgi->param("$AuthUser:Admin",3) if ($isAdmin);
 
       ## Flag if we actually did change something...
       my $changed = 0;
@@ -75,16 +81,24 @@ elsif ($Operation eq 'Update')
             ## Ahh, we can change this...
             $changed = 1;
 
-            my @users;
-            foreach my $user (keys %userPasswords)
+            delete $groupUsers{$group};
+
+            my ($adminGroup) = ($group =~ /(^[^:]+):/);
+            $adminGroup = 'Admin_' . $adminGroup;
+            delete $groupAdmins{$adminGroup};
+
+            foreach my $user ('*',keys %userPasswords)
             {
                my $id = "$user:$group";
-               if (($cgi->param($id) == 1) || ($cgi->param($id) == 2))
+               my $type = $cgi->param($id);
+               if (defined $type)
                {
-                  push @users,$user;
+                  ${$groupUsers{$group}}{$user} = 'r'  if ($type == 1);
+                  ${$groupUsers{$group}}{$user} = 'rw' if ($type > 1);
+
+                  push(@{$groupAdmins{$adminGroup}},$user) if ($type == 3);
                }
             }
-            @{$groupUsers{$group}} = @users;
          }
       }
 
@@ -92,21 +106,12 @@ elsif ($Operation eq 'Update')
       if ($isAdmin)
       {
          $changed = 1;
-         foreach my $group (@accessGroups)
+         my @users;
+         foreach my $user (keys %userPasswords)
          {
-            my $g = $group;
-            $g = 'Users' if ($g eq 'Admin');
-            my @users;
-            foreach my $user (keys %userPasswords)
-            {
-               my $id = "$user:$g";
-               if ($cgi->param($id) == 2)
-               {
-                  push @users,$user;
-               }
-            }
-            @{$groupAdmins{$g}} = @users;
+            push @users,$user if ($cgi->param("$user:Admin") == 3);
          }
+         @{$groupAdmins{'Admin'}} = @users;
       }
 
       if ($changed)
@@ -243,9 +248,6 @@ elsif (defined $cgi->param('delUser'))
 }
 
 ## Print the table...
-## But first adjust what gets shown based on rights...
-shift(@accessGroups);
-unshift(@accessGroups,('Admin','Users')) if ($isAdmin);
 my $cols = scalar @accessGroups;
 
 ## Order the group list such that groups the user has
@@ -263,8 +265,8 @@ for (my $modType = 1; $modType >= 0; $modType--)
 }
 @accessGroups = @newList;
 
-## The labels for the different states (not that #3 - the 4th one - is blank!)
-my @buttons = ('ro','r/w','Adm','&nbsp;');
+## The labels for the different states
+my @buttons = ('-','ro','r/w','Adm');
 
 print '<script type="text/javascript" language="JavaScript"><!--' , "\n"
     , 'var states = new Array();';
@@ -279,7 +281,16 @@ print 'function bump(me,id)'
     ,   'var val = document.getElementById(id);'
     ,   'var t = val.value;'
     ,   't++;'
-    ,   'if (t > ' , ($isAdmin + 1) , ') {t = 0;}'
+    ,   'if (t > 3) {t = 0;}'
+    ,   'val.value = t;'
+    ,   'me.innerHTML = states[t];'
+    , '}'
+    , 'function bump0(me,id)'
+    , '{'
+    ,   'var val = document.getElementById(id);'
+    ,   'var t = val.value;'
+    ,   't++;'
+    ,   'if (t > 2) {t = 0;}'
     ,   'val.value = t;'
     ,   'me.innerHTML = states[t];'
     , '}';
@@ -288,8 +299,7 @@ print 'function bump1(me,id)'
     , '{'
     ,   'var val = document.getElementById(id);'
     ,   'var t = val.value;'
-    ,   't++;'
-    ,   'if (t > 3) {t = 2;}'
+    ,   'if (t == 0) {t = 3;} else {t = 0}'
     ,   'val.value = t;'
     ,   'me.innerHTML = states[t];'
     , '}' if ($isAdmin);
@@ -300,11 +310,12 @@ print '<form action="?" method=post>'
     , '<input type="hidden" name="AccessVersion" value="' , $accessVersion , '"/>'
     , '<center>'
     , '<table border=0 cellpadding=2 cellspacing=0><tr><td>'
-    , '<table id="accesstable" cellspacing=0>'
-    , '<tr><th rowspan=2>Username</th>'
-    , '<th align=center colspan=' , $cols , '>Access Groups</th>'
+    , '<table class="accesstable" cellspacing=0>'
+    , '<tr><th rowspan=2>Username</th>';
+print '<th rowspan=2>Admin</th>' if ($isAdmin);
+print '<th align=center colspan=' , $cols , '>Access Groups</th>'
     , '</tr>'
-    , '<tr id="accesstitles">';
+    , '<tr class="accesstitles">';
 
 foreach my $group (@accessGroups)
 {
@@ -317,67 +328,64 @@ my @lineColour = ('#EEEEEE' , '#DDDDDD');  ## Alternating line colours
 my @flagColour = ('#CCFFCC' , '#BBEEBB');  ## Flag what the values were before changes
 my $canMod = 0;
 
-foreach my $user (sort keys %userPasswords)
+foreach my $user ('*', sort keys %userPasswords)
 {
-   print '<tr bgcolor="' , $lineColour[$line] , '">'
-       , '<td align=left valign=middle>&nbsp;';
-
-   print '<a href="?delUser=' , $user , '">' if (&canDelete($user));
-   print $user;
-   print '</a>' if (&canDelete($user));
-   print '&nbsp;</td>';
-
-   foreach my $group (@accessGroups)
+   if ($canAdminUser || ($AuthUser eq $user))
    {
-      my $mod = &isAdmin($group,$AuthUser);
-      $canMod = 1 if ($mod);
-      my $id = "$user:$group";
-      my $colour = '';
-      my $val = 0;
+      print '<tr bgcolor="' , $lineColour[$line] , '">'
+          , '<td align=left valign=middle>&nbsp;';
+
+      print '<a href="?delUser=' , $user , '">' if (&canDelete($user));
+      print $user;
+      print '&nbsp;Annonymous&nbsp;*' if ($user eq '*');
+      print '</a>' if (&canDelete($user));
+      print '&nbsp;</td>';
+
       my $bump = 'bump';
-      if ($group eq 'Users')
+      $bump = 'bump0' if ($user eq '*');
+
+      if ($isAdmin)
       {
-         $bump ='bump1';
-         $val = 3;
-         $val = 2 if (&isAdminMember($group,$user));
-         $colour = ' bgcolor="' . $flagColour[$line] . '"' if ($val == 2);
-      }
-      elsif ($group eq 'Admin')
-      {
-         $bump ='bump1';
-         $val = 3;
-         $val = 2 if (&isMember($group,$user));
-         $colour = ' bgcolor="' . $flagColour[$line] . '"' if ($val == 2);
-      }
-      elsif (&isMember($group,$user))
-      {
-         $colour = ' bgcolor="' . $flagColour[$line] . '"' if ($mod);
-         $val = 1;
-         if ($isAdmin)
+         if ($user eq '*')
          {
-            if (&isAdminMember($group,$user))
-            {
-               $val = 2;
-            }
+            print '<td nowrap align=center valign=middle>' , $buttons[0] , '</td>';
+         }
+         else
+         {
+            my $id = "$user:Admin";
+            my $val = 0;
+            $val = 3 if (&isAdminMember('Admin',$user));
+            print '<input type="hidden" name="' , $id , '" id="' , $id , '" value="' , $val , '"/>'
+                , '<td nowrap align=center valign=middle class="editable"'
+                , ' onmousedown="bump1(this,\'' , $id , '\');"'
+                , '>' , $buttons[$val] , '</td>';
          }
       }
 
-      print '<input type="hidden" name="' , $id , '" id="' , $id , '" value="' , $val , '"/>' if ($mod);
-      print '<td' , $colour , ' nowrap align=center valign=middle';
-      print ' class="editable"'
-          , ' onmousedown="' , $bump , '(this,\'' , $id , '\');"' if ($mod);
-      print '>' , $buttons[$val] , '</td>';
-   }
-   print '</tr>';
+      foreach my $group (@accessGroups)
+      {
+         my $mod = &isAdmin($group,$AuthUser);
+         $canMod = 1 if ($mod);
+         my $id = "$user:$group";
+         my $val = &typeMember($group,$user);
 
-   $line = 1 - $line;
+         print '<input type="hidden" name="' , $id , '" id="' , $id , '" value="' , $val , '"/>' if ($mod);
+         print '<td nowrap align=center valign=middle';
+         print ' class="editable"'
+             , ' onmousedown="' , $bump , '(this,\'' , $id , '\');"' if ($mod);
+         print '>' , $buttons[$val] , '</td>';
+      }
+      print '</tr>';
+
+      $line = 1 - $line;
+   }
 }
 
 print '<tr bgcolor="#AAAAAA">';
 print  '<td align=left valign=middle>'
     ,   '<input type="text" name="NewUser" value="" length=10 maxlength=12/>'
     ,  '</td>' if ($canAdminUser);
-print  '<td align=left valign=middle colspan=' , (1 - $canAdminUser + $cols) , '>'
+print  '<td align=left valign=middle colspan=' , (1 - $canAdminUser + $cols + $isAdmin) , '>'
     ,   '<table width="100%" cellspacing=0 id="versions">'
     ,    '<tr>';
 print     '<th rowspan=2><input type="submit" name="Operation" value="AddUser"/></th>' if ($canAdminUser);
@@ -415,10 +423,12 @@ if (-d $SVN_BASE)
    while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/) {}
 }
 
-print '<br/><table id="accessinfo" cellspacing=0><tr><th>Group</th><th>Size</th><th>Access Group Definitions</th></tr>';
+print '<br/><table class="accessinfo" cellspacing=0><tr><th>Repository</th><th>Size</th><th>Access Group Definitions</th></tr>';
 
 foreach my $group (@accessGroups)
 {
+   my $comments = $groupComments{$group};
+   $group =~ s/(^[^:]+):.*$/$1/;
    print '<tr><td';
    print ' colspan=2' if (!defined $rSize{$group});
    print '>';
@@ -426,7 +436,7 @@ foreach my $group (@accessGroups)
    print $group;
    print '</a>' if (defined $rSize{$group});
    print '</td><td align=right>' , $rSize{$group} , 'k' if (defined $rSize{$group});
-   print '</td><td>' , $groupComments{$group} , '</td></tr>';
+   print '</td><td>' , $comments , '</td></tr>';
 }
 print '<tr><td><b>Total:</b></td><td align=right>' , $totalSize , 'k</td><td>&nbsp;</td></tr>';
 print "</table>";
@@ -517,18 +527,9 @@ sub canDelete($user)
    {
       if ((defined $user) && (defined $userPasswords{$user}) && ($user ne $AuthUser))
       {
-         $canDel = 1;
-
          ## Check to see if this user has access anywhere else
          ## Only full admins can delete users that have other access
-         if (!$isAdmin)
-         {
-            foreach my $group (@accessGroups)
-            {
-               $canDel = 0 if (&isAdminMember($group,$user));
-               $canDel = 0 if (&isMember($group,$user));
-            }
-         }
+         $canDel = 1 if ($isAdmin || (!defined $usersGroup{$user}));
       }
    }
    return($canDel);
