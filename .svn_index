@@ -1,6 +1,4 @@
-<center>
-  <h1>The Insurrection Web Tools for Subversion</h1>
-</center>
+<center><h1>The Insurrection Web Tools for Subversion</h1></center>
 <p>
   This directory tree contains the Insurrection Web Tools for Subversion.&nbsp;
   This includes the XSLT transforms, style sheet, and JavaScript.
