@@ -261,6 +261,9 @@ if (@accessGroups > 0)
    ## Print the table...
    my $cols = scalar @accessGroups;
 
+   ## The labels for the different states
+   my @buttons = ('-','ro','r/w','Adm');
+
    ## Order the group list such that groups the user has
    ## admin rights to will be seen first.
    my @newList;
@@ -276,50 +279,50 @@ if (@accessGroups > 0)
    }
    @accessGroups = @newList;
 
-   ## The labels for the different states
-   my @buttons = ('-','ro','r/w','Adm');
-
-   print '<script type="text/javascript" language="JavaScript"><!--' , "\n"
-       , 'var states = new Array();';
-
-   for (my $i = 0; $i < @buttons; $i++)
+   if ($canAdminUser)
    {
-      print 'states[' , $i , '] = "' , $buttons[$i] , '";';
+      print '<script type="text/javascript" language="JavaScript"><!--' , "\n"
+          , 'var states = new Array();';
+
+      for (my $i = 0; $i < @buttons; $i++)
+      {
+         print 'states[' , $i , '] = "' , $buttons[$i] , '";';
+      }
+
+      print 'function bump(me,id)'
+          , '{'
+          ,   'var val = document.getElementById(id);'
+          ,   'var t = val.value;'
+          ,   't++;'
+          ,   'if (t > 3) {t = 0;}'
+          ,   'val.value = t;'
+          ,   'me.innerHTML = states[t];'
+          , '}'
+          , 'function bump0(me,id)'
+          , '{'
+          ,   'var val = document.getElementById(id);'
+          ,   'var t = val.value;'
+          ,   't++;'
+          ,   'if (t > 2) {t = 0;}'
+          ,   'val.value = t;'
+          ,   'me.innerHTML = states[t];'
+          , '}';
+
+      print 'function bump1(me,id)'
+          , '{'
+          ,   'var val = document.getElementById(id);'
+          ,   'var t = val.value;'
+          ,   'if (t == 0) {t = 3;} else {t = 0}'
+          ,   'val.value = t;'
+          ,   'me.innerHTML = states[t];'
+          , '}' if ($isAdmin);
+
+      print '//--></script>'
+          , '<form action="?" method=post>'
+          , '<input type="hidden" name="AccessVersion" value="' , $accessVersion , '"/>';
    }
 
-   print 'function bump(me,id)'
-       , '{'
-       ,   'var val = document.getElementById(id);'
-       ,   'var t = val.value;'
-       ,   't++;'
-       ,   'if (t > 3) {t = 0;}'
-       ,   'val.value = t;'
-       ,   'me.innerHTML = states[t];'
-       , '}'
-       , 'function bump0(me,id)'
-       , '{'
-       ,   'var val = document.getElementById(id);'
-       ,   'var t = val.value;'
-       ,   't++;'
-       ,   'if (t > 2) {t = 0;}'
-       ,   'val.value = t;'
-       ,   'me.innerHTML = states[t];'
-       , '}';
-
-   print 'function bump1(me,id)'
-       , '{'
-       ,   'var val = document.getElementById(id);'
-       ,   'var t = val.value;'
-       ,   'if (t == 0) {t = 3;} else {t = 0}'
-       ,   'val.value = t;'
-       ,   'me.innerHTML = states[t];'
-       , '}' if ($isAdmin);
-
-   print '//--></script>';
-
-   print '<form action="?" method=post>'
-       , '<input type="hidden" name="AccessVersion" value="' , $accessVersion , '"/>'
-       , '<table border=0 cellpadding=2 cellspacing=0><tr><td>'
+   print '<table border=0 cellpadding=2 cellspacing=0><tr><td>'
        , '<table class="accesstable" cellspacing=0>'
        , '<tr><th rowspan=2>Username</th>';
    print '<th rowspan=2>Admin</th>' if ($isAdmin);
@@ -391,21 +394,22 @@ if (@accessGroups > 0)
       }
    }
 
-   print '<tr bgcolor="#AAAAAA">';
-   print  '<td align=left valign=middle>'
-       ,   '<input type="text" name="NewUser" value="" length=10 maxlength=32/>'
-       ,  '</td>' if ($canAdminUser);
-   print  '<td align=left valign=middle colspan=' , (1 - $canAdminUser + $cols + $isAdmin) , '>'
+   print '<tr bgcolor="#AAAAAA">'
+       ,  '<td align=left valign=middle>'
+       ,   '<input type="text" name="NewUser" value="" length=10 maxlength=12/>'
+       ,  '</td>'
+       ,  '<td align=left valign=middle colspan=' , ($cols + $isAdmin) , '>'
        ,   '<table width="100%" cellspacing=0 id="versions">'
-       ,    '<tr>';
-   print     '<th rowspan=2><input type="submit" name="Operation" value="AddUser"/></th>' if ($canAdminUser);
-   print     '<td>' , $accessVersion , '</td>'
+       ,    '<tr>'
+       ,     '<th rowspan=2><input type="submit" name="Operation" value="AddUser"/></th>'
+       ,     '<td>' , $accessVersion , '</td>'
        ,    '</tr>'
        ,    '<tr><td width="90%">' , $passwdVersion , '</td></tr>'
        ,   '</table>'
        ,  '</td>'
-       , '</tr>'
-       , '</table></td></tr>';
+       , '</tr>' if ($canAdminUser);
+
+   print '</table></td></tr>';
    print '<tr>'
        , '<td align=right><input type="submit" name="Operation" value="Update"/></td>'
        , '</tr>' if ($canMod);
@@ -415,8 +419,9 @@ if (@accessGroups > 0)
        , 'For example, <b>msinz</b>' , $EMAIL_DOMAIN , ' would need to used.&nbsp; '
        , 'This is important as EMail is used to send the initial password to the user.</p>' if ($canAdminUser);
 
-   print '</form>'
-       , '<br/>';
+   print '</form>' if ($canAdminUser);
+
+   print '<br/>';
 }
 
 ## For the list of repositories and their sizes, we want
