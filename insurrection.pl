@@ -5,7 +5,7 @@
 # These are the constants that define some of the subversion configuration
 # within the system plus some common code that is best to be shared.
 #
-# Don't forget the matching insurrection.js and insurrection.xml files.
+# Don't forget the matching insurrection.js and insurrection.xsl files.
 #
 
 ## This is the base of the repositories tree.  Repositories are within

@@ -7,8 +7,11 @@
 # file such that only this code needs to know to include it.
 require 'insurrection.pl';
 
+## Read the insurrection.xsl file for configuration information.
+## The configuration is within the XSL file due to problems with
+## certain browsers not supporting the XPath document() function.
 my $insurrection_xml = '';
-if (open(INSURRECTION,'<insurrection.xml'))
+if (open(INSURRECTION,'<insurrection.xsl'))
 {
    $insurrection_xml = join('',<INSURRECTION>);
    close(INSURRECTION);
@@ -128,9 +131,8 @@ sub svn_RPATH($path)
 sub svn_HEADER($title)
 {
    my $title = shift;
-
-   my ($header) = ($insurrection_xml =~ m:<header>(.*)</header>:s);
-   my ($banner) = ($insurrection_xml =~ m:<banner>(.*)</banner>:s);
+   my ($header) = ($insurrection_xml =~ m|<xsl:template name="header">(.*?)</xsl:template>|s);
+   my ($banner) = ($insurrection_xml =~ m|<xsl:template name="banner">(.*?)</xsl:template>|s);
 
    print 'Expires: Fri Dec 31 19:00:00 1999' , "\n"
        , 'Cache-Control: no-cache' , "\n"

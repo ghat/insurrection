@@ -25,12 +25,13 @@
   </li>
   <br/>
   <li>
-    <a href="insurrection.xml"><code>insurrection.xml</code></a>
+    <a href="insurrection.xsl"><code>insurrection.xsl</code></a>
     <ul>
-      This XML file contains the HTML fragment that goes in the &lt;head&gt; section
-      of all HTML pages.&nbsp; Items include the style sheets and JavaScript files.&nbsp;
-      There are also sections for defining some of the images shown in the pages
-      along with the branding banner that is at the top of every HTML page.
+      This is the XSLT templates for the transform that takes the Subversion repository
+      browsing XML and revision history logs and generates the HTML presentation.<br/>
+      This file also contains server/install specific configuration information.&nbsp;
+      It is not in a separate file as some web browsers do not correctly support
+      the XPath document() function for external document.
     </ul>
   </li>
   <br/>
@@ -38,14 +39,6 @@
     <a href="styles.css"><code>styles.css</code></a>
     <ul>
       This is the global stylesheet used in all of the Insurrection web pages.
-    </ul>
-  </li>
-  <br/>
-  <li>
-    <a href="insurrection.xsl"><code>insurrection.xsl</code></a>
-    <ul>
-      This is the XSLT templates for the transform that takes the Subversion repository
-      browsing XML and revision history logs and generates the HTML presentation.
     </ul>
   </li>
   <br/>

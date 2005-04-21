@@ -5,7 +5,7 @@
  * Some JavaScript configuration variables.
  * Set these to match your environment.
  *
- * Don't forget the matching insurrection.pl and insurrection.xml files.
+ * Don't forget the matching insurrection.pl and insurrection.xsl files.
  */
 
 var Insurrection = new Object();
