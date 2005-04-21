@@ -35,10 +35,16 @@
                 </tr>
                 <tr class="logtitle">
                   <td colspan="3">
-                      <xsl:text>Change log of revisions </xsl:text>
+                      <xsl:text>Change log of revision</xsl:text>
+                      <xsl:if test="count(logentry) != 1">
+                        <xsl:text>s</xsl:text>
+                      </xsl:if>
+                      <xsl:text> </xsl:text>
                       <xsl:value-of select="logentry/@revision"/>
-                      <xsl:text> through </xsl:text>
-                      <xsl:value-of select="logentry[last()]/@revision"/>
+                      <xsl:if test="count(logentry) != 1">
+                        <xsl:text> through </xsl:text>
+                        <xsl:value-of select="logentry[last()]/@revision"/>
+                      </xsl:if>
                   </td>
                 </tr>
                 <tr class="logheader" onclick="toggleAll();">
