@@ -42,17 +42,17 @@
   </li>
   <br/>
   <li>
-    <a href="svnindex.xsl"><code>svnindex.xsl</code></a>
+    <a href="insurrection.xsl"><code>insurrection.xsl</code></a>
     <ul>
-      This is the XSLT transform that takes the Subversion repository browsing XML and
-      generates the HTML presentation.
+      This is the XSLT templates for the transform that takes the Subversion repository
+      browsing XML and revision history logs and generates the HTML presentation.
     </ul>
   </li>
   <br/>
   <li>
     <a href="svnindex.js"><code>svnindex.js</code></a>
     <ul>
-      This is the JavaScript used with the <a href="svnindex.xsl"><code>svnindex.xsl</code></a>
+      This is the JavaScript used with the <a href="insurrection.xsl"><code>insurrection.xsl</code></a>
       generated HTML and provides for the determination of the actual target URL with
       the repository name.&nbsp; This is something that can not be done within the
       XSLT as the XML input does not contain that information.&nbsp; This also
@@ -65,18 +65,8 @@
     <a href="log.cgi"><code>log.cgi</code></a>
     <ul>
       This CGI gets the XML formatted revision history from Subversion and returns it
-      with the request to use the <a href="log.xsl"><code>log.xsl</code></a>
+      with the request to use the <a href="insurrection.xsl"><code>insurrection.xsl</code></a>
       presentation transform.
-    </ul>
-  </li>
-  <br/>
-  <li>
-    <a href="log.xsl"><code>log.xsl</code></a>
-    <ul>
-      This is the XSLT presentation transform that takes the XML formatted revision
-      history and produces the HTML interface.&nbsp; It makes heavy used of DHTML and
-      the JavaScript in <a href="log.js"><code>log.js</code></a> in order to produce
-      its results.
     </ul>
   </li>
   <br/>
@@ -84,7 +74,8 @@
     <a href="log.js"><code>log.js</code></a>
     <ul>
       The JavaScript that implements the dynamic elements of the revision history
-      display.
+      display from the <a href="insurrection.xsl"><code>insurrection.xsl</code></a>
+      generated HTML.
     </ul>
   </li>
   <br/>

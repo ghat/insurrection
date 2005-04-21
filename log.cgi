@@ -66,7 +66,7 @@ if ((defined $rpath)
    {
       if ($_ =~ m:<log>:)
       {
-         print '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'log.xsl"?>' , "\n";
+         print '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n";
          print '<log repository="' , &svn_XML_Escape($rpath) , '" path="' , &svn_XML_Escape($opath) , '">' , "\n";
 
          if (($maxEntries < $revcount) && (!defined $cgi->param('r2')))
