@@ -28,3 +28,17 @@
 # invoke it (typically the user httpd runs as), and that user must
 # have filesystem-level permission to access the repository.
 #
+
+## This script updates the Subversion web tree from the trunk
+## whenever the repository is updated
+
+## Note that we assume we know what we are doing here ;-)
+## Thus this post-commit hook should only be in the web site
+## repository!  It is also *very* dangerous to change this
+## file as it is updated whenever a commit happens on the web
+## tree (as this is what this file does)  If that ever fails,
+## the web server would need to manually be updated
+
+cd /home/equine/private/subversion/www || exit
+
+/home/equine/private/subversion/svn/bin/svn update --non-interactive
