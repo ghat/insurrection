@@ -122,9 +122,9 @@ function loadBanner(name)
 		target.xml = getXMLHTTP();
 		if (target.xml)
 		{
-			target.xml.open("GET",name,true);
-			target.xml.onreadystatechange = loadBannerCheck;
 			_target = target;
+			target.xml.onreadystatechange = loadBannerCheck;
+			target.xml.open("GET",name,true);
 			target.xml.send(null);
 		}
 	}
@@ -313,8 +313,62 @@ function doNextItem()
 }
 
 /*
+ * Given a target object and the completed XMLHttpRequest
+ * object, this builds the job list for showing the directory.
+ */
+function loadDirTarget(target,responseXML)
+{
+	// Change the onclick to just fold the directory as
+	// we have completed the load...
+	target.arrow['onclick'] = function(){foldDir(this);};
+
+	// Clear our HTML container before we start building this.
+	target.innerHTML = '';
+
+	// Create the table and table body for the subdirectory
+	var table = document.createElement('table');
+	target.appendChild(table);
+	table.width = '100%';
+	table.cellSpacing = 0;
+	table.cellPadding = 0;
+	var tbody = document.createElement('tbody');
+	table.appendChild(tbody);
+
+	// Keep track of the table body...
+	target.dirlist = tbody;
+
+	// build the list of directory actions...
+	var dirs = responseXML.getElementsByTagName('dir');
+	for (var i=0; i < dirs.length; i++)
+	{
+		var action = new Object();
+		action.target = target;
+		action.type = 'dir';
+		action.name = dirs[i].getAttribute('href');
+		actionList.push(action);
+	}
+
+	// build the list of file actions...
+	var files = responseXML.getElementsByTagName('file');
+	for (var i=0; i < files.length; i++)
+	{
+		var action = new Object();
+		action.target = target;
+		action.type = 'file';
+		action.name = files[i].getAttribute('href');
+		actionList.push(action);
+	}
+
+	// Ask the system to do the next action...
+	doNextItem();
+}
+
+/*
  * This is the nasty part of the in-line directory loading
  * code.  When the result comes back, we expand it as needed.
+ * It is a shame that the callback does not
+ * give me the XMLHttpRequest object and thus
+ * we need to use globals.
  */
 var _loadTarget = null;
 function loadDirCheck()
@@ -325,52 +379,19 @@ function loadDirCheck()
 		// We are done with this one...
 		_loadTarget = null;
 
-		if (target.xml.status == 200)
-		{
-			// Change the onclick to just fold the directory as
-			// we have completed the load...
-			target.arrow['onclick'] = function(){foldDir(this);};
+		// Set the internal text just in case of an error:
+		target.innerHTML = target.id + ' : ' + target.xml.status + ' : ' + target.xml.statusText;
 
-			// Create the table and table body for the subdirectory
-			var table = document.createElement('table');
-			target.appendChild(table);
-			table.width = '100%';
-			table.cellSpacing = 0;
-			table.cellPadding = 0;
-			var tbody = document.createElement('tbody');
-			table.appendChild(tbody);
-
-			// Keep track of the table body...
-			target.dirlist = tbody;
-
-			// build the list of directory actions...
-			var dirs = target.xml.responseXML.getElementsByTagName('dir');
-			for (var i=0; i < dirs.length; i++)
-			{
-				var action = new Object();
-				action.target = target;
-				action.type = 'dir';
-				action.name = dirs[i].getAttribute('href');
-				actionList.push(action);
-			}
-
-			// build the list of file actions...
-			var files = target.xml.responseXML.getElementsByTagName('file');
-			for (var i=0; i < files.length; i++)
-			{
-				var action = new Object();
-				action.target = target;
-				action.type = 'file';
-				action.name = files[i].getAttribute('href');
-				actionList.push(action);
-			}
-
-			// Ask the system to do the next action...
-			doNextItem();
-		}
-
-		// Remove the reference to the loaded document
+		// Save and remove the reference to the loaded document
+		var xml = target.xml;
 		target.xml = null;
+
+		// If all is well, actually deal with the result...
+		if (xml.status == 200)
+		{
+			// All done and good - so actually load the directory.
+			loadDirTarget(target,xml.responseXML);
+		}
 	}
 }
 
@@ -380,27 +401,30 @@ function loadDirCheck()
  */
 function loadDir(arrow)
 {
+	// Find our target and make sure we are not in the middle
+	// of doing one already...
 	var target = document.getElementById('.' + arrow.id);
-	if (target)
+	if ((target) && (_loadTarget == null))
 	{
-		if (_loadTarget == null)
+		target.arrow = arrow;
+		target.row = document.getElementById(target.id + '_');
+		if (target.row)
 		{
-			_loadTarget = target;
-			target.arrow = arrow;
-			target.row = document.getElementById(target.id + '_');
-			if (target.row)
+			target.xml = getXMLHTTP();
+			if (target.xml)
 			{
-				target.xml = getXMLHTTP();
-				if (target.xml)
-				{
-					// Flip the arrow and start showing the rows now...
-					foldDir(arrow);
+				// We have to keep a global to find ourselves again...
+				_loadTarget = target;
 
-					// Set up the load operation...
-					target.xml.open("GET",target.id,true);
-					target.xml.onreadystatechange = loadDirCheck;
-					target.xml.send(null);
-				}
+				// Flip the arrow and start showing the rows now...
+				foldDir(arrow);
+
+				// Set the internal text such that we know where we are...
+				target.innerHTML = 'xml.open("GET","' + target.id + '",true);';
+
+				target.xml.onreadystatechange = loadDirCheck;
+				target.xml.open("GET",target.id,true);
+				target.xml.send(null);
 			}
 		}
 	}
