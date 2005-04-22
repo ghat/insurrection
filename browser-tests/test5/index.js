@@ -63,8 +63,8 @@ function loadBanner(name)
 		if (target.xml)
 		{
 			target.innerHTML = '<h1>We have an XML HTTP object...</h1>';
-			target.xml.open('GET',name,true);
 			target.xml.onreadystatechange = loadCheck;
+			target.xml.open('GET',name,true);
 			target.xml.send(null);
 		}
 	}
