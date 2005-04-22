@@ -21,6 +21,7 @@
        configured as needed for your system configuration.
 
        Don't forget the matching insurrection.js and insurrection.pl files. -->
+  <!-- Note: the data within this template must be literal - no XSLT tags -->
   <xsl:template name="banner">
     <div style="margin: 0px; border: 0px; padding-top: 4px; text-align: center;">
       <table style="margin: auto; border: 0px; font-family: serif; font-style: italic; font-weight: bold; font-size: 18pt;">
@@ -37,6 +38,7 @@
        pages within the Insurrection Web Tools.  This file is used by
        both the XSLT and CGI scripts so there is only one place you
        need to update. -->
+  <!-- Note: the data within this template must be literal - no XSLT tags -->
   <xsl:template name="header">
     <link href="/favicon.ico" rel="shortcut icon"/>
     <link href="/styles.css" rel="stylesheet" type="text/css"/>
@@ -48,6 +50,7 @@
   <!-- Where and what these images are.  Note that these need to be paths
        to the images and not just relative links.  The default shows
        that the images are at the "root" of the server. -->
+  <!-- Note: the data within these templates must be literal - no XSLT tags -->
   <xsl:template name="closedicon-path">/closed.gif</xsl:template>
   <xsl:template name="openedicon-path">/opened.gif</xsl:template>
   <xsl:template name="diricon-path">/folder.gif</xsl:template>
@@ -166,6 +169,48 @@
     </tr>
   </xsl:template>
 
+  <!-- Make a relative link string for the top directory given a relative path -->
+  <xsl:template name="pathlink">
+    <xsl:param name="path"/>
+    <xsl:if test="$path = '/'">.</xsl:if>
+    <xsl:if test="$path != '/'">
+      <xsl:if test="contains($path,'/')">
+        <xsl:text>../</xsl:text>
+        <xsl:call-template name="pathlink">
+          <xsl:with-param name="path" select="substring-after($path,'/')"/>
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- This builds a directory/URL path string with links for each element -->
+  <xsl:template name="pathtree">
+    <xsl:param name="path"/>
+    <xsl:if test="$path = '/'">
+      <xsl:text>/</xsl:text>
+    </xsl:if>
+    <xsl:if test="$path != '/'">
+      <xsl:if test="contains($path,'/')">
+        <xsl:element name="a">
+          <xsl:attribute name="href">
+            <xsl:call-template name="pathlink">
+              <xsl:with-param name="path" select="$path"/>
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:value-of select="substring-before($path,'/')"/>
+          <xsl:text>/</xsl:text>
+        </xsl:element>
+        <xsl:call-template name="pathtree">
+          <xsl:with-param name="path" select="substring-after($path,'/')"/>
+        </xsl:call-template>
+      </xsl:if>
+      <xsl:if test="not(contains($path,'/'))">
+        <xsl:value-of select="$path"/>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- The index node contains the path information for an SVN index XML page. -->
   <xsl:template match="index">
     <div class="svn">
     <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -192,7 +237,9 @@
               <xsl:call-template name="diricon-path"/>
             </xsl:attribute>
           </xsl:element>
-          <xsl:value-of select="@path"/>
+          <xsl:call-template name="pathtree">
+            <xsl:with-param name="path" select="@path"/>
+          </xsl:call-template>
         </td>
         <td class="rev">
           <xsl:if test="string-length(@name) != 0">
@@ -546,11 +593,12 @@
             <span class="revdate">
               <xsl:text>at </xsl:text>
               <xsl:value-of select="substring-before(substring-after($date,'T'),'.')"/>
+              <xsl:text> GMT</xsl:text>
             </span>
           </div>
           <div class="logmsg">
             <xsl:call-template name="lf2br">
-                <xsl:with-param name="StringToTransform" select="msg"/>
+              <xsl:with-param name="StringToTransform" select="msg"/>
             </xsl:call-template>
           </div>
         </xsl:element>
@@ -627,23 +675,23 @@
 
   <!-- template converts LF to <br/> - very useful for the log output -->
   <xsl:template name="lf2br">
-      <xsl:param name="StringToTransform"/>
-      <xsl:choose>
-          <!-- string contains linefeed -->
-          <xsl:when test="contains($StringToTransform,'&#xA;')">
-              <xsl:value-of select="substring-before($StringToTransform,'&#xA;')"/>
-              <br/>
-              <xsl:call-template name="lf2br">
-                  <xsl:with-param name="StringToTransform">
-                      <xsl:value-of select="substring-after($StringToTransform,'&#xA;')"/>
-                  </xsl:with-param>
-              </xsl:call-template>
-          </xsl:when>
-          <!-- string does not contain newline, so just output it -->
-          <xsl:otherwise>
-              <xsl:value-of select="$StringToTransform"/>
-          </xsl:otherwise>
-      </xsl:choose>
+    <xsl:param name="StringToTransform"/>
+    <xsl:choose>
+      <!-- string contains linefeed -->
+      <xsl:when test="contains($StringToTransform,'&#xA;')">
+        <xsl:value-of select="substring-before($StringToTransform,'&#xA;')"/>
+        <br/>
+        <xsl:call-template name="lf2br">
+          <xsl:with-param name="StringToTransform">
+            <xsl:value-of select="substring-after($StringToTransform,'&#xA;')"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <!-- string does not contain newline, so just output it -->
+      <xsl:otherwise>
+        <xsl:value-of select="$StringToTransform"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- A URL Encoding trick - makes %xx encodings of non-safe characters -->
