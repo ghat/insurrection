@@ -71,7 +71,11 @@
                       <b style="color: green;">Windows-IE</b> - tested and working.
                     </li>
                     <li>
-                      <b style="color: green;">Safari</b> - tested and almost working.&nbsp; Some CSS styles are not correctly applied.
+                      <b style="color: red;">Safari</b> - tested and almost working.&nbsp; Some CSS styles are not
+                      correctly applied and the relative links in the banner go to the wrong location.&nbsp;
+                      <i><b>Note:</b> it is the lack of correct path behavior that causes this problem.&nbsp; It
+                      seems that the base path is not that of the document/frame but of the containing document but
+                      only when the page is created via the XSLT translation.</i>
                     </li>
                     <li>
                       <b style="color: red;">Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT is not
@@ -83,7 +87,8 @@
               <tr>
                 <td><a href="test3.html">Test&nbsp;#3</a></td>
                 <td>
-                  Browser based XSLT with XPath/document() function usage
+                  Browser based XSLT with XPath/document() function usage.&nbsp; <i><b>Note:</b> Insurrection no longer
+                  depends on the XPath/document() function due to the lack of support within Safari.</i>
                   <ul>
                     <li>
                       <b style="color: green;">Mozilla</b> - tested and working.
@@ -122,6 +127,34 @@
                       <b style="color: green;">Opera</b> - tested and mostly working.&nbsp; There are some strange layout
                       problems as part of the clicking of the links but they are consistent between
                       the test page and the reference page.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><a href="test5.html">Test&nbsp;#5</a></td>
+                <td>
+                  XSLT based pages with JavaScript called within the generated page.
+                  <ul>
+                    <li>
+                      <b style="color: green;">Mozilla</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: green;">Windows-IE</b> - tested and working.&nbsp;
+                      Note that Windows-IE currently uses a built-in ActiveX control to load the XML
+                      and may complain about scripting of the control, depending on your security settings.
+                    </li>
+                    <li>
+                      <b style="color: red;">Safari</b> - tested and mostly not working.&nbsp; For the same reason
+                      that the styles don't render correctly, the JavaScript is not executed.&nbsp; Some CSS
+                      styles are not correctly applied and the relative links in the banner go to the wrong
+                      location.&nbsp; <i><b>Note:</b> it is the lack of correct path behavior that causes these
+                      problems.&nbsp; It seems that the base path is not that of the document/frame but of the
+                      containing document but only when the page is created via the XSLT translation.</i>
+                    </li>
+                    <li>
+                      <b style="color: red;">Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT is not
+                      supported.
                     </li>
                   </ul>
                 </td>
