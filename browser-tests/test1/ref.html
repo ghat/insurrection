@@ -1,37 +1,90 @@
-<!doctype HTML PUBLIC "-//W2C//DTD HTML 4.01 Transitional//EN">
+<!doctype html public "-//W2C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
     <title>Insurrection Browser Compatibility Test #1</title>
-    <link rel="stylesheet" href="/styles.css" type="text/css" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <script type="text/javascript" language="JavaScript" src="index.js"></script>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="/styles.css">
   </head>
   <body>
     <table id="pagetable">
       <tr>
         <td id="content">
-          <div style="margin: 0px; border: 0px; padding-top: 4px; text-align: center;">
-            <table style="margin: auto; border: 0px; font-family: garamond, times new roman, times, serif; font-style: italic; font-weight: bold; font-size: 18pt;">
+          <div id="banner" style="border: 0px none ; margin: 0px; padding-top: 4px; text-align: center;">
+            <table style="border: 0px none ; margin: auto; font-family: garamond,times new roman,times,serif; font-style: italic; font-weight: bold; font-size: 18pt;">
               <tr>
-                <td valign="top" align="right"><a target="_top" href=".." style="color: #bfbfbf;">MKSoft</a></td>
-                <td valign="middle" align="center"><a target="_top" href=".."><img src="/InsurrectionLogo.gif" alt="Logo" border="0"/></a></td>
-                <td valign="bottom" align="left"><a target="_top" href=".." style="color: #bfbfbf;">Test #1</a></td>
+                <td align="right" valign="top"><a target="_top" style="color: rgb(191, 191, 191);" href="..">MKSoft</a></td>
+                <td align="center" valign="middle"><a target="_top" href=".."><img alt="Logo" src="/InsurrectionLogo.gif" border="0"></a></td>
+                <td align="left" valign="bottom"><a target="_top" style="color: rgb(191, 191, 191);" href="..">Test #1</a></td>
               </tr>
             </table>
           </div>
+          <p style="border-top: 1px solid black; padding-top: 0.6em;">
+            In this test, some JavaScript will be used to load an HTML fragment into the page just above this paragraph.&nbsp;
+            This will use XML HTTP Request support plus some HTML and innerHTML updates.&nbsp; This is how dynamic extra content
+            is loaded by the browser rather than completely regenerating/reloading the whole page.
+          </p>
           <div class="svn">
-            <p>
-              In this test, some JavaScript will be used to load an HTML fragment into the page just below this paragraph.&nbsp;
-              This will use XML HTTP Request support plus some HTML and innerHTML updates.&nbsp; This is how dynamic extra content
-	      is loaded by the browser rather than completely regenerating/reloading the whole page.
-            </p>
-
-            <div id="loadbox" style="border: 2px solid black; padding: 4px;">
-              <img src="/InsurrectionLogo.gif" align="right">
-              <h1>
-                It looks like it loaded just fine!
-              </h1>
-            </div>
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+              <tr class="pathrow">
+                <td class="foldspace"><img src="/opened.gif" class="dirarrow" align="middle"></td>
+                <td class="path"><img src="/folder.gif" class="svnentryicon" align="middle">/</td>
+                <td class="rev">Revision 159</td>
+                <td class="showlog"><img src="/info.gif" alt="Get revision history" align="middle"></td>
+              </tr>
+              <tr id="./_">
+                <td><img src="/blank.gif" align="middle"></td>
+                <td id="./" colspan="3">
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr class="dirrow">
+                      <td class="foldspace"><img src="/closed.gif" class="dirarrow" align="middle"></td>
+                      <td>
+                        <div class="dir">
+                          <img src="/folder.gif" class="svnentryicon" align="middle">tags/
+                        </div>
+                      </td>
+                      <td class="showlog"><img src="/info.gif" alt="Get revision history" align="middle"></td>
+                    </tr>
+                    <tr class="dirrow">
+                      <td class="foldspace"><img src="/closed.gif" class="dirarrow" align="middle"></td>
+                      <td>
+                        <div class="dir">
+                          <img src="/folder.gif" class="svnentryicon" align="middle">trunk/
+                        </div>
+                      </td>
+                      <td class="showlog"><img src="/info.gif" alt="Get revision history" align="middle"></td>
+                    </tr>
+                    <tr class="dirrow">
+                      <td class="foldspace"><img src="/closed.gif" class="dirarrow" align="middle"></td>
+                      <td>
+                        <div class="dir">
+                          <img src="/folder.gif" class="svnentryicon" align="middle">branches/
+                        </div>
+                      </td>
+                      <td class="showlog"><img src="/info.gif" alt="Get revision history" align="middle"></td>
+                    </tr>
+                    <tr class="dirrow">
+                      <td class="foldspace"><img src="/closed.gif" class="dirarrow" align="middle"></td>
+                      <td>
+                        <div class="dir">
+                          <img src="/folder.gif" class="svnentryicon" align="middle">releases/
+                        </div>
+                      </td>
+                      <td class="showlog"><img src="/info.gif" alt="Get revision history" align="middle"></td>
+                    </tr>
+                    <tr class="filerow">
+                      <td class="foldspace"><img src="/blank.gif" align="middle"></td>
+                      <td>
+                        <div class="file">
+                          <img src="/file.gif" class="svnentryicon" align="middle">test.txt
+                        </div>
+                      </td>
+                      <td class="showlog"><img src="/info.gif" alt="Get revision history" align="middle"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
           </div>
           <div class="footer">$Id$</div>
         </td>
@@ -39,4 +92,3 @@
     </table>
   </body>
 </html>
-

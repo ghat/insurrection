@@ -28,14 +28,14 @@
           </div>
           <p style="border-top: 1px solid black; padding-top: 0.6em;">
             In this test, some of the HTML in the page is dynamically generated via JavaScript
-	    after the JavaScript loads and parses an XML file from the server.&nbsp; This uses
-	    the HTTP XML JavaScript object and JavaScript DOM element creation methods.
-	    <br/><br/>
-	    Please make sure that you check that arrow icons next to the folder icons are clickable
-	    that when clicked, the orientation of the arrow changes and the folder is either opened
-	    or closed as needed.&nbsp; Note that there is no data under the subdirectories as this
-	    is just a test setup.&nbsp; Both the reference and the test page should behave the same.
-	  </p>
+            after the JavaScript loads and parses an XML file from the server.&nbsp; This uses
+            the HTTP XML JavaScript object and JavaScript DOM element creation methods.
+            <br/><br/>
+            Please make sure that you check that arrow icons next to the folder icons are clickable
+            that when clicked, the orientation of the arrow changes and the folder is either opened
+            or closed as needed.&nbsp; Note that there is no data under the subdirectories as this
+            is just a test setup.&nbsp; Both the reference and the test page should behave the same.
+          </p>
           <div class="svn">
             <table border="0" cellpadding="0" cellspacing="0" width="100%">
               <tr class="pathrow">
@@ -56,8 +56,6 @@
         </td>
       </tr>
     </table>
-    <script type="text/javascript" language="JavaScript"><!--
-      setTimeout("loadDir(document.getElementById('/index.xml'));",900);
-    // --></script>
+    <script type="text/javascript" language="JavaScript">setTimeout("loadDir(document.getElementById('/index.xml'));",900);</script>
   </body>
 </html>

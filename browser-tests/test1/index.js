@@ -52,3 +52,36 @@ function getXMLHTTP()
 	return xml;
 }
 
+var target = null;
+function loadBanner(name)
+{
+	target = document.getElementById('banner');
+	if (target)
+	{
+		target.innerHTML = '<h1>We found the target of the load...</h1>';
+		target.xml = getXMLHTTP();
+		if (target.xml)
+		{
+			target.innerHTML = '<h1>We have an XML HTTP object...</h1>';
+			target.xml.open('GET',name,true);
+			target.xml.onreadystatechange = loadCheck;
+			target.xml.send(null);
+		}
+	}
+}
+
+function loadCheck()
+{
+	if ((target) && (target.xml) && (target.xml.readyState == 4))
+	{
+		if (target.xml.status == 200)
+		{
+			target.innerHTML = target.xml.responseText;
+		}
+		else
+		{
+			target.innerHTML = '<h1>Load error: ' + target.xml.status + '</h1>';
+		}
+	}
+}
+

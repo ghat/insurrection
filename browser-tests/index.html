@@ -146,9 +146,11 @@
                     </li>
                     <li>
                       <b style="color: red;">Safari</b> - tested and mostly not working.&nbsp; For the same reason
-                      that the styles don't render correctly, the JavaScript is not executed.&nbsp; Some CSS
-                      styles are not correctly applied and the relative links in the banner go to the wrong
-                      location.&nbsp; <i><b>Note:</b> it is the lack of correct path behavior that causes these
+                      that the styles don't render correctly in <a href="test2.html">Test&nbsp;#2</a>, the JavaScript
+                      is not executed.&nbsp; It is interesting in that the page should look just like the page
+                      in <a href="test1.html">Test&nbsp;#1</a> only this page is generated from XML via client
+                      side XSLT and this causes the URL reference problems and JavaScript execution problems.&nbsp;
+                      <i><b>Note:</b> it is the lack of correct path behavior that causes some of these
                       problems.&nbsp; It seems that the base path is not that of the document/frame but of the
                       containing document but only when the page is created via the XSLT translation.</i>
                     </li>
