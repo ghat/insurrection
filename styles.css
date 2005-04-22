@@ -222,8 +222,8 @@ A:active {color: red; text-decoration: underline;}
 
 .path A {color: black; text-decoration: none;}
 .path A:visited {color: black; text-decoration: none;}
-.path A:hover {color: black; background: rgb(100$,80%,40); text-decoration: none; padding-left: 1em; padding-right: 1em;}
-.path A:active {color: red; background: rgb(100$,80%,40); text-decoration: none; padding-left: 1em; padding-right: 1em;}
+.path A:hover {color: blue; background: rgb(100%,100%,0%); text-decoration: none; padding-left: 1em; padding-right: 1em;}
+.path A:active {color: red; background: rgb(100%,100%,0%); text-decoration: none; padding-left: 1em; padding-right: 1em;}
 
 .svnentryicon
 {
