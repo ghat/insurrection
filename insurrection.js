@@ -58,3 +58,8 @@ Insurrection.diff_CGI = Insurrection.CGI_URL + 'diff.cgi';
  */
 Insurrection.blame_CGI = Insurrection.CGI_URL + 'blame.cgi';
 
+/*
+ * This is the URL for the rss.cgi
+ */
+Insurrection.rss_CGI = Insurrection.CGI_URL + 'rss.cgi';
+

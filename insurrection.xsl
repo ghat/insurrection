@@ -57,6 +57,7 @@
   <xsl:template name="fileicon-path">/file.gif</xsl:template>
   <xsl:template name="infoicon-path">/info.gif</xsl:template>
   <xsl:template name="blankicon-path">/blank.gif</xsl:template>
+  <xsl:template name="rssicon-path">/rss.gif</xsl:template>
 
   <!-- ******************************************************************************************************************* -->
   <!-- This is the template for the SVN index browsing -->
@@ -151,7 +152,7 @@
 
   <xsl:template match="updir">
     <tr class="updirrow">
-      <td colspan="4">
+      <td colspan="5">
         <xsl:element name="a">
           <xsl:attribute name="href">..</xsl:attribute>
           <div class="updir">
@@ -262,6 +263,20 @@
         <td class="showlog">
           <xsl:element name="a">
             <xsl:attribute name="onmouseover">
+              <xsl:text>rssLink(this,'.');</xsl:text>
+            </xsl:attribute>
+            <xsl:element name="img">
+              <xsl:attribute name="align">middle</xsl:attribute>
+              <xsl:attribute name="alt">RSS Feed</xsl:attribute>
+              <xsl:attribute name="src">
+                <xsl:call-template name="rssicon-path"/>
+              </xsl:attribute>
+            </xsl:element>
+          </xsl:element>
+        </td>
+        <td class="showlog">
+          <xsl:element name="a">
+            <xsl:attribute name="onmouseover">
               <xsl:text>logLink(this,'.');</xsl:text>
             </xsl:attribute>
             <xsl:element name="img">
@@ -283,7 +298,7 @@
             </xsl:attribute>
           </xsl:element>
         </td>
-        <td colspan="3" id="./">
+        <td colspan="4" id="./">
           <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <xsl:apply-templates select="dir"/>
             <xsl:apply-templates select="file"/>

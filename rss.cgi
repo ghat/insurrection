@@ -53,9 +53,10 @@ if ((defined $rpath)
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
        , '<rss version="2.0">'
        , '<channel>' , "\n"
-       , '<title>' , &svn_XML_Escape($rpath) , '</title>' , "\n"
-       , '<description>RSS Feed for repository ' , &svn_XML_Escape($rpath)
-       ,   ': ' , &svn_XML_Escape($groupComments{$rpath . ':/'})
+       , '<title>Repository ' , &svn_XML_Escape($rpath) , '</title>' , "\n"
+       , '<description>RSS Feed of the activity in the "' , &svn_XML_Escape($rpath)
+       ,   '" repository over the last 24 hours&lt;br/&gt; '
+       ,   &svn_XML_Escape($groupComments{$rpath . ':/'})
        , '</description>' , "\n"
        , '<link>' , &svn_XML_Escape($SVN_URL . $SVN_REPOSITORIES_URL . $rpath . $opath) , '</link>' , "\n"
        , '<generator>Insurrection RSS Feeder - ' , &svn_XML_Escape('$Id$') , '</generator>' , "\n";
