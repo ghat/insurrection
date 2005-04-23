@@ -53,11 +53,11 @@ if ((defined $rpath)
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
        , '<rss version="2.0">'
        , '<channel>' , "\n"
-       , '<title>Repository ' , &svn_XML_Escape($rpath) , '</title>' , "\n"
+       , '<title>Repository: ' , &svn_XML_Escape($rpath) , '</title>' , "\n"
        , '<description>RSS Feed of the activity in the "' , &svn_XML_Escape($rpath)
-       ,   '" repository over the last 24 hours&lt;br/&gt; '
-       ,   &svn_XML_Escape($groupComments{$rpath . ':/'})
-       , '</description>' , "\n"
+       ,   '" repository over the last 24 hours';
+   print '&lt;br/&gt; ' , &svn_XML_Escape($groupComments{$rpath . ':/'}) if (defined $groupComments{$rpath . ':/'});
+   print '</description>' , "\n"
        , '<link>' , &svn_XML_Escape($SVN_URL . $SVN_REPOSITORIES_URL . $rpath . $opath) , '</link>' , "\n"
        , '<generator>Insurrection RSS Feeder - ' , &svn_XML_Escape('$Id$') , '</generator>' , "\n";
 
@@ -87,18 +87,14 @@ if ((defined $rpath)
       my @delFiles = ($entry =~ m:<path\s+action="D">(.*?)</path>:sg);
 
       my $tmsg = '';
-      $tmsg .= '<div>Added: '    . scalar(@addFiles) . '</div>' if (scalar(@addFiles) > 0);
-      $tmsg .= '<div>Modified: ' . scalar(@modFiles) . '</div>' if (scalar(@modFiles) > 0);
-      $tmsg .= '<div>Replaced: ' . scalar(@rplFiles) . '</div>' if (scalar(@rplFiles) > 0);
-      $tmsg .= '<div>Deleted: '  . scalar(@delFiles) . '</div>' if (scalar(@delFiles) > 0);
-      $tmsg .= '<div>';
+      $tmsg .= &listFiles('Added',\@addFiles);
+      $tmsg .= &listFiles('Modified',\@modFiles);
+      $tmsg .= &listFiles('Replaced',\@rplFiles);
+      $tmsg .= &listFiles('Deleted',\@delFiles);
 
-      $logmsg = &svn_XML_Escape($tmsg) . $logmsg;
+      $logmsg = &svn_XML_Escape('<div>') . $logmsg . &svn_XML_Escape($tmsg) . &svn_XML_Escape('</div>');
 
-      $tmsg = '</div>';
-
-      $logmsg .= &svn_XML_Escape($tmsg);
-
+      ## Output this item...
       print '<item>' , "\n"
           , '<title>Revision ' , $revision , '</title>'
           , '<pubDate>' , &dateFormat($date) , '</pubDate>'
@@ -108,7 +104,7 @@ if ((defined $rpath)
           , '</item>' , "\n";
    }
    print '</channel>'
-       , '</rss>';
+       , "</rss>\n";
 
 }
 else
@@ -122,6 +118,27 @@ else
    &svn_TRAILER('$Id$',$cgi->remote_user);
 }
 
+## Build the list of files modified/updated/etc by the revision...
+sub listFiles($msg,@$files)
+{
+   my $msg = $_[0];
+   my @files = @{$_[1]};
+   my $result = '';
+
+   if (scalar(@files) > 0)
+   {
+      $result .= '<hr/>' . $msg . ': ' . scalar(@files) . '<ul>';
+      foreach my $file (sort @files)
+      {
+         $result .= '<li>' . $file . '</li>';
+      }
+      $result .= '</ul>';
+   }
+   return $result;
+}
+
+## Convert the Subversion log date format into RFC822 format.
+## Note that I do not include the optional "day of week"
 sub dateFormat($isodate)
 {
    my $isodate = shift;
