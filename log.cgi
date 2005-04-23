@@ -66,8 +66,11 @@ if ((defined $rpath)
    {
       if ($_ =~ m:<log>:)
       {
-         print '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n";
-         print '<log repository="' , &svn_XML_Escape($rpath) , '" path="' , &svn_XML_Escape($opath) , '">' , "\n";
+         print '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
+             , "<!-- Insurrection Web Tools for Subversion: History -->\n"
+             , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
+             , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
+             , '<log repository="' , &svn_XML_Escape($rpath) , '" path="' , &svn_XML_Escape($opath) , '">' , "\n";
 
          if (($maxEntries < $revcount) && (!defined $cgi->param('r2')))
          {

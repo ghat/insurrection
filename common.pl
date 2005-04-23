@@ -139,6 +139,9 @@ sub svn_HEADER($title)
        , 'Content-type: text/html' , "\n"
        , "\n"
        , '<!doctype HTML PUBLIC "-//W2C//DTD HTML 4.01 Transitional//EN">' , "\n"
+       , "<!-- Insurrection Web Tools for Subversion          -->\n"
+       , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
+       , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
        , '<html>'
        ,  '<head>'
        ,   '<title>' , $title , '</title>'

@@ -197,6 +197,9 @@
               <xsl:with-param name="path" select="$path"/>
             </xsl:call-template>
           </xsl:attribute>
+          <xsl:if test="substring-before($path,'/') = ''">
+            <xsl:text>&lt;root&gt;</xsl:text>
+          </xsl:if>
           <xsl:value-of select="substring-before($path,'/')"/>
           <xsl:text>/</xsl:text>
         </xsl:element>
@@ -205,7 +208,10 @@
         </xsl:call-template>
       </xsl:if>
       <xsl:if test="not(contains($path,'/'))">
-        <xsl:value-of select="$path"/>
+        <xsl:element name="a">
+          <xsl:attribute name="href"/>
+          <xsl:value-of select="$path"/>
+        </xsl:element>
       </xsl:if>
     </xsl:if>
   </xsl:template>
