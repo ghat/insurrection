@@ -16,6 +16,10 @@ AuthType Basic
 	SetHandler cgi-script
 </Files>
 
+<Files ~ "rss.cgi">
+	SetHandler cgi-script
+</Files>
+
 <Files ~ "get.cgi">
 	SetHandler cgi-script
 </Files>
@@ -29,6 +33,11 @@ AuthType Basic
 </Files>
 
 <Files ~ "auth_log.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "auth_rss.cgi">
 	SetHandler cgi-script
 	require valid-user
 </Files>

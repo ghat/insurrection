@@ -33,6 +33,12 @@ $SVN_LOG_ENTRIES = 20;  ## Default to the last 20 entries...
 ## (Or, just be "/" which means the tree starts are root
 $SVN_URL_PATH = '/';
 
+## The server relative path to the subversion repositories
+## This path should start with "/" and end with one.
+## Note that this should match the same setting in the
+## insurrection.js file.
+$SVN_REPOSITORIES_URL = '/svn/';
+
 ## The specific binaries we use
 $SVN_CMD = $SVN_BIN . 'svn';
 $SVNLOOK_CMD = $SVN_BIN . 'svnlook';
