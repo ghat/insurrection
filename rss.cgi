@@ -10,11 +10,14 @@ require 'admin.pl';
 ## First, lets see if we are allowed to look here:
 &checkAuthPath($cgi->path_info);
 
-## For the RSS data we will show up to 1 day ago
+## For the RSS data we will show up to 2 days ago
 ## (you can change that here to be something else)
 ## Thus you will always get at least 1 entry
-## and no more than 24 hours worth of entries.
-my $endDate = `date "+%FT%T" -d "1 day ago"`;
+## and no more than 2 days worth of entries.
+my $RSS_RANGE = '2 days';
+
+## Build the end date of the log request...
+my $endDate = `date "+%FT%T" -d "$RSS_RANGE ago"`;
 chomp $endDate;
 my $rev = "-r 'HEAD:{" . $endDate . "}' ";
 
@@ -55,7 +58,7 @@ if ((defined $rpath)
        , '<channel>' , "\n"
        , '<title>Repository: ' , &svn_XML_Escape($rpath) , '</title>' , "\n"
        , '<description>RSS Feed of the activity in the "' , &svn_XML_Escape($rpath)
-       ,   '" repository over the last 24 hours';
+       ,   '" repository over the last ' , $RSS_RANGE;
    print '&lt;br/&gt; ' , &svn_XML_Escape($groupComments{$rpath . ':/'}) if (defined $groupComments{$rpath . ':/'});
    print '</description>' , "\n"
        , '<link>' , &svn_XML_Escape($SVN_URL . $SVN_REPOSITORIES_URL . $rpath . $opath) , '</link>' , "\n"
