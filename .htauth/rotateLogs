@@ -1,5 +1,7 @@
 #!/bin/sh
 #
+# $Id$
+#
 # A simple apache log file rotate script - note that we
 # can not rotate any more often than once a day.  The script
 # specifically prevents this as the file names generated are
@@ -10,6 +12,19 @@ cd /home/equine/private/subversion/apache/logs
 
 OLD=`date '+%Y-%m-%d'`
 FLAG=${OLD}.flag
+
+# Get an array of the existing files in date order
+filelist=( `ls -t *_log.gz` )
+
+# Delete all old files over n-ago (see value below)
+# This means that, for example, 60 would be 30 days
+# ago since each day has 2 files.
+index=60
+while [ "$index" -lt "${#filelist[@]}" ]
+do
+	echo ${filelist[$index]}
+	let "index = $index + 1"
+done
 
 # Check if we have already run today
 if [ ! -f $FLAG.gz ]; then
