@@ -83,21 +83,15 @@ if ((defined $rpath)
       ## Make the link to this individual log message.
       my $link = $SVN_URL . $SVN_URL_PATH . 'log.cgi/' . $rpath . $opath . '?r1=' . $revision . '&r2=' . $revision;
 
-      ## Now, lets build the whole log message...
-      my @addFiles = ($entry =~ m:<path\s+action="A">(.*?)</path>:sg);
-      my @modFiles = ($entry =~ m:<path\s+action="M">(.*?)</path>:sg);
-      my @rplFiles = ($entry =~ m:<path\s+action="R">(.*?)</path>:sg);
-      my @delFiles = ($entry =~ m:<path\s+action="D">(.*?)</path>:sg);
-
-      my $tmsg = '';
-      $tmsg .= &listFiles('Added',\@addFiles);
-      $tmsg .= &listFiles('Modified',\@modFiles);
-      $tmsg .= &listFiles('Replaced',\@rplFiles);
-      $tmsg .= &listFiles('Deleted',\@delFiles);
-
       ## Now finish building the log message...
       ## (It get escaped below)
-      $logmsg = '<div>' . $logmsg . $tmsg . '</div>';
+      $logmsg = '<div>'
+                . $logmsg
+                . &listFiles('Added','A',$entry)
+                . &listFiles('Modified','M',$entry)
+                . &listFiles('Replaced','R',$entry)
+                . &listFiles('Deleted','D',$entry)
+                . '</div>';
 
       ## Output this item...
       print '<item>' , "\n"
@@ -124,10 +118,14 @@ else
 }
 
 ## Build the list of files modified/updated/etc by the revision...
-sub listFiles($msg,@$files)
+sub listFiles($msg,$tag,$entry)
 {
-   my $msg = $_[0];
-   my @files = @{$_[1]};
+   my $msg = shift;
+   my $tag = shift;
+   my $entry = shift;
+
+   my @files = ($entry =~ m:<path\s+action="$tag">(.*?)</path>:sg);
+
    my $result = '';
 
    if (scalar(@files) > 0)
