@@ -8,13 +8,13 @@
 # only unique per day.
 
 ## NOTE!  This needs to be where the logs are
-cd /home/equine/private/subversion/apache/logs
+cd /home/equine/private/subversion/apache/logs	|| exit
 
 OLD=`date '+%Y-%m-%d'`
 FLAG=${OLD}.flag
 
 # Get an array of the existing files in date order
-filelist=( `ls -t *_log.gz` )
+filelist=( `ls -t *_log.gz 2>/dev/null` )
 
 # Delete all old files over n-ago (see value below)
 # This means that, for example, 60 would be 30 days
