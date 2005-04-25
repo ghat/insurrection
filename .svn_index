@@ -55,6 +55,26 @@
   </li>
   <br/>
   <li>
+    <a href="common.pl"><code>common.pl</code></a>
+    <ul>
+      A bit of common code used by all the code here to provide some consistent behaviors.&nbsp;
+      It is this code that knows how to get the configuration information from the
+      <a href="insurrection.xsl"><code>insurrection.xsl</code></a> and
+      <a href="insurrection.pl"><code>insurrection.pl</code></a> files.
+    </ul>
+  </li>
+  <br/>
+  <li>
+    <a href="admin.pl"><code>admin.pl</code></a>
+    <ul>
+      A bit of common code used to read/validate/update authentication information.&nbsp;
+      This is used not only by the <a href="password.cgi"><code>password.cgi</code></a>
+      and <a href="admin.cgi"><code>admin.cgi</code></a> pages but also by all of the
+      repository access pages to validate the access rights.
+    </ul>
+  </li>
+  <br/>
+  <li>
     <a href="log.cgi"><code>log.cgi</code></a>
     <ul>
       This CGI gets the XML formatted revision history from Subversion and returns it
@@ -69,6 +89,14 @@
       The JavaScript that implements the dynamic elements of the revision history
       display from the <a href="insurrection.xsl"><code>insurrection.xsl</code></a>
       generated HTML.
+    </ul>
+  </li>
+  <br/>
+  <li>
+    <a href="rss.cgi"><code>rss.cgi</code></a>
+    <ul>
+      This CGI produces an RSS 2.0 news feed about the specific repository &amp; path
+      selected.&nbsp; The RSS feed contains the log entries of the changes to the repository.
     </ul>
   </li>
   <br/>
@@ -91,10 +119,10 @@
     <a href=".svn_index"><code>.svn_index</code></a>
     <ul>
       This is an example <a href=".svn_index"><code>.svn_index</code></a> file that
-      the repository browsing feature supports.&nbsp; Any directory that contains a <a href=".svn_index">
-      <code>.svn_index</code></a> file in the repository will have that file shown as
-      a secondary banner in the web page, just like this file.&nbsp; The file should
-      be a HTML fragment in order to correctly render.
+      the repository browsing feature supports.&nbsp; Any directory that contains a
+      <a href=".svn_index"><code>.svn_index</code></a> file in the repository will
+      have that file shown as a secondary banner in the web page, just like this
+      file.&nbsp; The file should be a HTML fragment in order to correctly render.
     </ul>
   </li>
   <br/>
@@ -111,8 +139,8 @@
   <li>
     <a href="password.cgi"><code>password.cgi</code></a>
     <ul>
-      A simple web-based password change feature for Subversion servers that use the <code>mod_authz_svn</code>
-      plugin to Apache and Subversion.
+      A simple web-based password change feature for Subversion servers that use the
+      <code>mod_authz_svn</code> plugin to Apache and Subversion.
     </ul>
   </li>
   <br/>

@@ -35,19 +35,25 @@ my $opath = &svn_RPATH($cgi->path_info);
 my $cmd = $SVN_CMD . ' log -v --stop-on-copy --xml ' . $rev . $rssURL;
 
 my $log;
+my $top;
+my $topDate;
 if ((defined $rpath)
    && (defined $opath)
    && (open(LOGXML,"$cmd |")))
 {
-   my $log = join('',<LOGXML>);
+   $log = join('',<LOGXML>);
    close(LOGXML);
 
-   my ($top) = ($log =~ m:(<\?.*?\?>):s);
-   $top = '<?xml version="1.0"?>' if (!defined $top);
+   ($top) = ($log =~ m:(<\?.*?\?>):s);
 
    ## Get the first date I can find...
-   my ($topDate) = ($log =~ m:<date>(.*?)</date>:s);
+   ($topDate) = ($log =~ m:<date>(.*?)</date>:s);
+}
 
+if ((defined $log)
+    && (defined $top)
+    && (defined $topDate))
+{
    print "Content-type: text/xml\n"
        , "\n"
        , $top , "\n"
@@ -62,10 +68,11 @@ if ((defined $rpath)
    print '&lt;br/&gt; ' , &svn_XML_Escape($groupComments{$rpath . ':/'}) if (defined $groupComments{$rpath . ':/'});
    print '</description>' , "\n"
        , '<link>' , &svn_XML_Escape($SVN_URL . $SVN_REPOSITORIES_URL . $rpath . $opath) , '</link>' , "\n"
-       , '<generator>Insurrection RSS Feeder - ' , &svn_XML_Escape('$Id$') , '</generator>' , "\n";
-
-   print '<pubDate>' , &dateFormat($topDate) , '</pubDate>'
-       , '<lastBuildDate>' , &dateFormat($topDate) , '</lastBuildDate>' , "\n" if (defined $topDate);
+       , '<generator>Insurrection RSS Feeder - '
+       ,   &svn_XML_Escape('$Id$')
+       , '</generator>' , "\n"
+       , '<pubDate>' , &dateFormat($topDate) , '</pubDate>'
+       , '<lastBuildDate>' , &dateFormat($topDate) , '</lastBuildDate>' , "\n";
 
    foreach my $entry ($log =~ m|(<logentry\s.*?</logentry>)|sg)
    {
@@ -104,7 +111,6 @@ if ((defined $rpath)
    }
    print '</channel>'
        , "</rss>\n";
-
 }
 else
 {
