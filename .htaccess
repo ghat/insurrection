@@ -32,6 +32,9 @@ AuthType Basic
 	SetHandler cgi-script
 </Files>
 
+## In case access to a repository is not public/anonymous
+## the above CGIs will redirect to these that require
+## authentication and thus get Apache to do that for us.
 <Files ~ "auth_log.cgi">
 	SetHandler cgi-script
 	require valid-user
@@ -57,19 +60,35 @@ AuthType Basic
 	require valid-user
 </Files>
 
-## If you have mod-rewrite and proxy enabled in apache
+## If you have mod-rewrite enabled in apache
 ## you can have all of the URLs being rewritten using
 ## this trick which makes all of the URLs consistant
-## with the normal Subversion HTTP URLs.  Note that there
-## currently is no direct support for generating these
-## URLs in the Insurrection tools.
+## with the normal Subversion HTTP URLs.
+## Note that we use the LOG & RSS version for
+## handling the redirect to the LOG & RSS feeds
+## from the SVN Index pages.  The reason for this is
+## that there is no way to find the actual repository
+## name in the SVN Index XML so we need to use some
+## trick that plays with the full URL.  I used to
+## use some JavaScript tricks but this is better.
+## We don't currently use any of the others as they
+## are not currently needed but are here just for
+## completeness and future support.
+##
+## NOTE - Currently a bug in Apache/mod_rewrite
+## prevents this from working if the file or path
+## contains a '?' character.  See Apache bug report
+## http://issues.apache.org/bugzilla/show_bug.cgi?id=34602
+##
 RewriteEngine On
+RewriteCond %{QUERY_STRING} Insurrection=rss
+RewriteRule	^svn/(.*)$	/rss.cgi/$1	[R,L]
 RewriteCond %{QUERY_STRING} Insurrection=log
-RewriteRule	^svn/(.*)$	/log.cgi/$1	[P,L]
+RewriteRule	^svn/(.*)$	/log.cgi/$1	[R,L]
 RewriteCond %{QUERY_STRING} Insurrection=get
-RewriteRule	^svn/(.*)$	/get.cgi/$1	[P,L]
+RewriteRule	^svn/(.*)$	/get.cgi/$1	[R,L]
 RewriteCond %{QUERY_STRING} Insurrection=diff
-RewriteRule	^svn/(.*)$	/diff.cgi/$1	[P,L]
+RewriteRule	^svn/(.*)$	/diff.cgi/$1	[R,L]
 RewriteCond %{QUERY_STRING} Insurrection=blame
-RewriteRule	^svn/(.*)$	/blame.cgi/$1	[P,L]
+RewriteRule	^svn/(.*)$	/blame.cgi/$1	[R,L]
 

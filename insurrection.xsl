@@ -71,6 +71,7 @@
           </xsl:if>
           <xsl:value-of select="index/@path"/>
         </title>
+        <link rel="alternate" type="application/rss+xml" href="?Insurrection=rss" title="RSS feed for this directory in the repository"/>
         <xsl:call-template name="header"/>
       </head>
       <body>
@@ -262,8 +263,8 @@
         </td>
         <td class="showlog">
           <xsl:element name="a">
-            <xsl:attribute name="onmouseover">
-              <xsl:text>rssLink(this,'.');</xsl:text>
+            <xsl:attribute name="href">
+              <xsl:text>?Insurrection=rss</xsl:text>
             </xsl:attribute>
             <xsl:element name="img">
               <xsl:attribute name="align">middle</xsl:attribute>
@@ -276,8 +277,8 @@
         </td>
         <td class="showlog">
           <xsl:element name="a">
-            <xsl:attribute name="onmouseover">
-              <xsl:text>logLink(this,'.');</xsl:text>
+            <xsl:attribute name="href">
+              <xsl:text>?Insurrection=log</xsl:text>
             </xsl:attribute>
             <xsl:element name="img">
               <xsl:attribute name="align">middle</xsl:attribute>
@@ -292,7 +293,6 @@
       <tr id="./_">
         <td>
           <xsl:element name="img">
-            <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="src">
               <xsl:call-template name="blankicon-path"/>
             </xsl:attribute>
@@ -345,10 +345,9 @@
       </td>
       <td class="showlog">
         <xsl:element name="a">
-          <xsl:attribute name="onmouseover">
-            <xsl:text>logLink(this,'</xsl:text>
+          <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
-            <xsl:text>');</xsl:text>
+            <xsl:text>?Insurrection=log</xsl:text>
           </xsl:attribute>
           <xsl:element name="img">
             <xsl:attribute name="align">middle</xsl:attribute>
@@ -370,7 +369,6 @@
       </xsl:attribute>
       <td class="foldspace">
         <xsl:element name="img">
-          <xsl:attribute name="align">middle</xsl:attribute>
           <xsl:attribute name="src">
             <xsl:call-template name="blankicon-path"/>
           </xsl:attribute>
@@ -390,7 +388,6 @@
     <tr class="filerow">
       <td class="foldspace">
         <xsl:element name="img">
-          <xsl:attribute name="align">middle</xsl:attribute>
           <xsl:attribute name="src">
             <xsl:call-template name="blankicon-path"/>
           </xsl:attribute>
@@ -415,10 +412,9 @@
       </td>
       <td class="showlog">
         <xsl:element name="a">
-          <xsl:attribute name="onmouseover">
-            <xsl:text>logLink(this,'</xsl:text>
+          <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
-            <xsl:text>');</xsl:text>
+            <xsl:text>?Insurrection=log</xsl:text>
           </xsl:attribute>
           <xsl:element name="img">
             <xsl:attribute name="align">middle</xsl:attribute>

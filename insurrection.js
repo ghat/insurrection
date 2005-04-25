@@ -11,16 +11,6 @@
 var Insurrection = new Object();
 
 /*
- * This is the URL to the base of the repositories.
- * The form of the URL should be <base>/<repository>/<repofiles>
- *
- * For example, /svn/Web/trunk/... would be '/svn/' for the
- * base path, 'Web' for the repository name, and '/trunk/...' for
- * the files in the repository.
- */
-Insurrection.Repositories_URL = '/svn/';
-
-/*
  * This is the base URL for where the Insurrection CGIs live
  * This should include a leading and trailing '/' character.
  * (or just a single '/' if the CGIs are at the root.)

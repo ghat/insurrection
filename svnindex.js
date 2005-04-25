@@ -6,54 +6,6 @@
  */
 
 /*
- * logLink is used to provide the link from the SVN INDEX
- * into the log CGI - this is needed since the SVN INDEX
- * XML does not provide the repository information, just
- * the local path information.  By implementing the feature
- * in this way, I can figure that out by looking at the
- * client's document.location to find the path to the
- * repository.  What happens is that the returned URL is
- * placed into the a.href in the onmouseover event and
- * thus updating the a.href to be the correct URL.
- */
-function logLink(link,file)
-{
-	// We need to know the actual full path to the
-	// URL since the Subversion index XML does not
-	// provide the repository information.  Here
-	// we get that by knowing where that lives in
-	// the document.location.
-	var path = document.location.toString();
-	path = path.substring(path.indexOf(Insurrection.Repositories_URL) - 1 + Insurrection.Repositories_URL.length);
-
-	link.href = Insurrection.log_CGI + path + file;
-}
-
-/*
- * rssLink is used to provide the link from the SVN INDEX
- * into the rss CGI - this is needed since the SVN INDEX
- * XML does not provide the repository information, just
- * the local path information.  By implementing the feature
- * in this way, I can figure that out by looking at the
- * client's document.location to find the path to the
- * repository.  What happens is that the returned URL is
- * placed into the a.href in the onmouseover event and
- * thus updating the a.href to be the correct URL.
- */
-function rssLink(link,file)
-{
-	// We need to know the actual full path to the
-	// URL since the Subversion index XML does not
-	// provide the repository information.  Here
-	// we get that by knowing where that lives in
-	// the document.location.
-	var path = document.location.toString();
-	path = path.substring(path.indexOf(Insurrection.Repositories_URL) - 1 + Insurrection.Repositories_URL.length);
-
-	link.href = Insurrection.rss_CGI + path + file;
-}
-
-/*
  * Yuck!  I hate doing browser-specific stuff.
  * But at least by doing it in this way we can
  * support the older IE-specific XMLHttpRequest
@@ -298,7 +250,7 @@ function doNextItem()
 			a = document.createElement('a');
 			td.appendChild(a);
 
-			logLink(a,t);
+			a.href = t + '?Insurrection=log';
 			img = document.createElement('img');
 			img.src = document.getElementById('infoImage').src;
 			img.align = 'middle';
