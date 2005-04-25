@@ -74,8 +74,8 @@ if ((defined $rpath)
       my ($logmsg) = ($entry =~ m:<msg>(.*?)</msg>:s);
       my ($date) = ($entry =~ m:<date>(.*?)</date>:s);
 
-      ## Convert line enders into escaped <br/>
-      $logmsg =~ s:\n:&lt;br/&gt;:sg;
+      ## Convert line enders into <br/>
+      $logmsg =~ s:\n:<br/>:sg;
 
       ## If the author does not have a domain, add the default one
       $author .= $EMAIL_DOMAIN if (!($author =~ m/@/));
@@ -95,7 +95,9 @@ if ((defined $rpath)
       $tmsg .= &listFiles('Replaced',\@rplFiles);
       $tmsg .= &listFiles('Deleted',\@delFiles);
 
-      $logmsg = &svn_XML_Escape('<div>') . $logmsg . &svn_XML_Escape($tmsg) . &svn_XML_Escape('</div>');
+      ## Now finish building the log message...
+      ## (It get escaped below)
+      $logmsg = '<div>' . $logmsg . $tmsg . '</div>';
 
       ## Output this item...
       print '<item>' , "\n"
@@ -103,7 +105,7 @@ if ((defined $rpath)
           , '<pubDate>' , &dateFormat($date) , '</pubDate>'
           , '<author>' , $author , '</author>' , "\n"
           , '<link>' , &svn_XML_Escape($link) , '</link>' , "\n"
-          , '<description>' , $logmsg , '</description>' , "\n"
+          , '<description>' , &svn_XML_Escape($logmsg) , '</description>' , "\n"
           , '</item>' , "\n";
    }
    print '</channel>'
