@@ -21,7 +21,7 @@ my $repoTable = &repositoryTable($AuthUser);
 
 $index =~ s:<repos/>:$repoTable:sge;
 
-&svn_HEADER('MKSoft Subversion Server');
+&svn_HEADER('MKSoft Demo Insurrection Server');
 
 print $index;
 
