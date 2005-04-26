@@ -130,7 +130,7 @@ sub listFiles($msg,$tag,$entry)
    my $tag = shift;
    my $entry = shift;
 
-   my @files = ($entry =~ m:<path\s+action="$tag">(.*?)</path>:sg);
+   my @files = ($entry =~ m:<path\s[^>]*action="$tag"[^>]*>(.*?)</path>:sg);
 
    my $result = '';
 

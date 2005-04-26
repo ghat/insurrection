@@ -664,6 +664,20 @@
           <xsl:element name="div">
             <xsl:attribute name="class">pathfile</xsl:attribute>
             <xsl:value-of select="."/>
+            <xsl:if test="@copyfrom-path">
+              <xsl:element name="span">
+                <xsl:attribute name="class">copyfrom</xsl:attribute>
+                <xsl:text>from: </xsl:text>
+                <xsl:value-of select="@copyfrom-path"/>
+                <xsl:if test="@copyfrom-rev">
+                  <xsl:element name="span">
+                    <xsl:attribute name="class">copyfromrev</xsl:attribute>
+                    <xsl:text> - revision </xsl:text>
+                    <xsl:value-of select="@copyfrom-rev"/>
+                  </xsl:element>
+                </xsl:if>
+              </xsl:element>
+            </xsl:if>
             <br/>
             <xsl:element name="div">
               <xsl:attribute name="class">pathpopup</xsl:attribute>

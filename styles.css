@@ -516,6 +516,17 @@ TD.details
   padding-left: 2em;
 }
 
+.copyfrom
+{
+  padding-left: 3em;
+  color: rgb(40%,40%,40%);
+}
+
+.copyfromrev
+{
+  color: rgb(60%,60%,60%);
+}
+
 /* We use this to hide/show the popup menu and to make the shaddow for it */
 .pathpopup
 {
