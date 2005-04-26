@@ -75,6 +75,24 @@
   </li>
   <br/>
   <li>
+    <a href="index.cgi"><code>index.cgi</code></a>
+    <ul>
+      This CGI produces the main welcome page for the server.&nbsp; It uses the
+      <a href="index.template">index.template</a> file and replaces the &lt;repos/&gt;
+      tag with the generated table of repositories.&nbsp; It also adds the standard
+      header and footer to the page.
+    </ul>
+  </li>
+  <br/>
+  <li>
+    <a href="index.template"><code>index.template</code></a>
+    <ul>
+      This is the HTML fragment template file used by <a href="index.cgi"><code>index.cgi</code></a>
+      to build the main server pages.
+    </ul>
+  </li>
+  <br/>
+  <li>
     <a href="log.cgi"><code>log.cgi</code></a>
     <ul>
       This CGI gets the XML formatted revision history from Subversion and returns it
