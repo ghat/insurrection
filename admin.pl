@@ -35,6 +35,7 @@ use Fcntl ':flock'; # import LOCK_* constants
 %usersGroup;    ## The user's groups (a pivot just to make life eaier)
 %groupAdmins;   ## The group admin users
 %userPasswords; ## The password file
+%userCreators;  ## The users who "created" this user
 $accessVersion; ## The version of the access file
 $passwdVersion; ## The version of the password file
 
@@ -363,8 +364,14 @@ sub loadPasswordFile()
          chomp($passwdVersion);
       }
       $line =~ s/#.*//;  ## Remove comments...
-      my ($user,$pass,$junk) = split(/:/,$line,3);
-      $userPasswords{$user} = $pass if (defined $pass);
+      my @creators = split(/:/,$line);
+      my $user = shift @creators;
+      my $pass = shift @creators;
+      if (defined $pass)
+      {
+         $userPasswords{$user} = $pass;
+         @{$userCreators{$user}} = @creators;
+      }
    }
    close DATA;
 }
@@ -395,7 +402,9 @@ sub savePasswordFile($reason)
 
       foreach my $user (sort keys %userPasswords)
       {
-         print DATA $user , ':' , $userPasswords{$user} , "\n";
+         print DATA $user , ':' , $userPasswords{$user};
+         print DATA ':' , join(':',@{$userCreators{$user}}) if (@{$userCreators{$user}} > 0);
+         print DATA "\n";
       }
 
       flock(DATA,LOCK_UN);
@@ -404,5 +413,84 @@ sub savePasswordFile($reason)
       system($SVN_CMD,'commit','--username',$AuthUser,'-m',$reason,$PasswordFile);
    }
 }
+
+##############################################################################
+#
+# Build and return an HTML table that contains the repositories that the
+# given user has access to via some mechanism.
+#
+# Note, if no given user, the anonymous user access group will be used.
+#
+sub repositoryTable($user)
+{
+   my $user = shift;
+   my $result = '';
+
+   ## Check if we have loaded the admin stuff yet...
+   &loadAccessFile() if (!defined $groupUsers);
+
+   ## For the list of repositories and their sizes, we want
+   ## to include the anonymous access repositories...
+   %tlist = (%{$usersGroup{$user}},%{$usersGroup{'*'}});
+   @accessGroups = sort keys %tlist;
+   if (@accessGroups > 0)
+   {
+      ## Get the sizes of all of the repositories...
+      my %rSize;
+      ## Only if the directory exists do we even try this...
+      if (-d $SVN_BASE)
+      {
+         foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
+         {
+            my ($size,$repo) = ($line =~ /^(\d+)\s+(\S.*)$/);
+            $rSize{$repo} = $size;
+         }
+      }
+
+      $result .= '<table class="accessinfo" cellspacing="0"><tr><th>Repository</th><th>Size</th><th>Description</th></tr>';
+
+      my $totalSize = 0;
+
+      foreach my $group (@accessGroups)
+      {
+         my $comments = $groupComments{$group};
+         $group =~ s/(^[^:]+):.*$/$1/;
+         my $size = $rSize{$group};
+         if (defined $size)
+         {
+            $size += 0; ## Make sure that the size is a number...
+            $totalSize += $size;
+
+            ## Cute trick to get comas into the number...
+            while ($size =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+
+            $result .= '<tr>'
+                     .  '<td><a href="' . $SVN_REPOSITORIES_URL . $group . '/">' . $group . '</a></td>'
+                     .  '<td align="right">' . $size . 'k</td>'
+                     .  '<td>'
+                     .   '<a href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
+                     .    '<img src="rss.gif" alt="RSS Feed" border="0" align="right"/>'
+                     .   '</a>'
+                     .   $comments
+                     .  '</td>'
+                     . '</tr>';
+         }
+      }
+      if ($totalSize > 0)
+      {
+         ## Cute trick to get comas into the number...
+         while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+         $result .= '<tr class="accessinfototal">'
+                  .  '<td><b>Total:</b></td>'
+                  .  '<td align="right">' . $totalSize . 'k</td>'
+                  .  '<th>&nbsp;</th>'
+                  . '</tr>';
+      }
+      $result .= "</table>";
+   }
+
+   return $result;
+}
+
 
 return 1;

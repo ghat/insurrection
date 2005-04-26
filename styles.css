@@ -121,6 +121,7 @@ A:active {color: red; text-decoration: underline;}
 {
     border: 2px black solid;
     border-left: 1px black solid;
+    width: 100%;
     font-size: 9pt;
 }
 

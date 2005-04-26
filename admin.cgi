@@ -424,58 +424,9 @@ if (@accessGroups > 0)
    print '<br/>';
 }
 
-## For the list of repositories and their sizes, we want
-## to include the anonymous access repositories...
-%tlist = (%tlist,%{$usersGroup{'*'}});
-@accessGroups = sort keys %tlist;
-if (@accessGroups > 0)
-{
-   ## Get the sizes of all of the repositories...
-   my %rSize;
-   ## Only if the directory exists do we even try this...
-   if (-d $SVN_BASE)
-   {
-      foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
-      {
-         my ($size,$repo) = ($line =~ /^(\d+)\s+(\S.*)$/);
-         $rSize{$repo} = $size;
-      }
-   }
-
-   print '<table class="accessinfo" cellspacing=0><tr><th>Repository</th><th>Size</th><th>Description</th></tr>';
-
-   my $totalSize = 0;
-
-   foreach my $group (@accessGroups)
-   {
-      my $comments = $groupComments{$group};
-      $group =~ s/(^[^:]+):.*$/$1/;
-      my $size = $rSize{$group};
-      if (defined $size)
-      {
-         $size += 0; ## Make sure that the size is a number...
-         $totalSize += $size;
-
-         ## Cute trick to get comas into the number...
-         while ($size =~ s/(\d+)(\d\d\d)/$1,$2/) {}
-
-         print '<tr>'
-             ,  '<td><a href="/svn/' , $group , '/">' , $group , '</a></td>'
-             ,  '<td align=right>' , $size , 'k</td><td>' , $comments , '</td>'
-             , '</tr>';
-      }
-   }
-   if ($totalSize > 0)
-   {
-      ## Cute trick to get comas into the number...
-      while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/) {}
-      print '<tr><td><b>Total:</b></td><td align=right>' , $totalSize , 'k</td><td>&nbsp;</td></tr>';
-   }
-   print "</table>";
-}
+print &repositoryTable($AuthUser);
 
 print '</center>';
-
 
 &svn_TRAILER('$Id$',$AuthUser);
 

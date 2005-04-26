@@ -2,6 +2,9 @@ AuthUserFile /home/equine/private/subversion/authentication/passwords
 AuthName "Subversion Repository"
 AuthType Basic
 
+## We want the index.cgi to handle the directory by default...
+DirectoryIndex index.cgi
+
 <Files ~ "password.cgi">
 	SetHandler cgi-script
 	require valid-user
@@ -10,6 +13,10 @@ AuthType Basic
 <Files ~ "admin.cgi">
 	SetHandler cgi-script
 	require valid-user
+</Files>
+
+<Files ~ "index.cgi">
+	SetHandler cgi-script
 </Files>
 
 <Files ~ "log.cgi">
@@ -35,6 +42,11 @@ AuthType Basic
 ## In case access to a repository is not public/anonymous
 ## the above CGIs will redirect to these that require
 ## authentication and thus get Apache to do that for us.
+<Files ~ "auth_index.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
 <Files ~ "auth_log.cgi">
 	SetHandler cgi-script
 	require valid-user
@@ -81,6 +93,7 @@ AuthType Basic
 ## http://issues.apache.org/bugzilla/show_bug.cgi?id=34602
 ##
 RewriteEngine On
+RewriteRule	^index.html$	/index.cgi	[R,L]
 RewriteCond %{QUERY_STRING} Insurrection=rss
 RewriteRule	^svn/(.*)$	/rss.cgi/$1	[R,L]
 RewriteCond %{QUERY_STRING} Insurrection=log
