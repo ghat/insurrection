@@ -64,9 +64,9 @@ if ((defined $log)
        , '<channel>' , "\n"
        , '<title>Repository: ' , &svn_XML_Escape($rpath) , '</title>' , "\n"
        , '<description>RSS Feed of the activity in the "' , &svn_XML_Escape($rpath)
-       ,   '" repository over the last ' , $RSS_RANGE;
-   print '&lt;br/&gt; ' , &svn_XML_Escape($groupComments{$rpath . ':/'}) if (defined $groupComments{$rpath . ':/'});
-   print '</description>' , "\n"
+       ,   '" repository over the last ' , $RSS_RANGE , '.&amp;nbsp; '
+       ,   '&lt;br/&gt; ' , &svn_XML_Escape($groupComments{$rpath . ':/'})
+       , '</description>' , "\n"
        , '<link>' , &svn_XML_Escape($SVN_URL . $SVN_REPOSITORIES_URL . $rpath . $opath) , '</link>' , "\n"
        , '<generator>Insurrection RSS Feeder - '
        ,   &svn_XML_Escape('$Id$')
