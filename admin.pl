@@ -432,6 +432,10 @@ sub repositoryTable($user)
    ## For the list of repositories and their sizes, we want
    ## to include the anonymous access repositories...
    %tlist = (%{$usersGroup{$user}},%{$usersGroup{'*'}});
+
+   ## If the user is admin, get all groups.
+   %tlist = %groupComments if (&isAdminMember('Admin',$AuthUser));
+
    @accessGroups = sort keys %tlist;
    if (@accessGroups > 0)
    {
