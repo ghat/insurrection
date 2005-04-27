@@ -667,12 +667,15 @@
             <xsl:if test="@copyfrom-path">
               <xsl:element name="span">
                 <xsl:attribute name="class">copyfrom</xsl:attribute>
-                <xsl:text>from: </xsl:text>
+                <xsl:element name="span">
+                  <xsl:attribute name="class">copyfromnote</xsl:attribute>
+                  <xsl:text>from: </xsl:text>
+                </xsl:element>
                 <xsl:value-of select="@copyfrom-path"/>
                 <xsl:if test="@copyfrom-rev">
                   <xsl:element name="span">
-                    <xsl:attribute name="class">copyfromrev</xsl:attribute>
-                    <xsl:text> - revision </xsl:text>
+                    <xsl:attribute name="class">copyfromnote</xsl:attribute>
+                    <xsl:text> rev </xsl:text>
                     <xsl:value-of select="@copyfrom-rev"/>
                   </xsl:element>
                 </xsl:if>

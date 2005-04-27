@@ -514,17 +514,18 @@ TD.details
 .pathfile
 {
   padding-left: 2em;
+  white-space: nowrap;
 }
 
 .copyfrom
 {
-  padding-left: 3em;
-  color: rgb(40%,40%,40%);
+  padding-left: 2em;
+  color: rgb(40%,50%,40%);
 }
 
-.copyfromrev
+.copyfromnote
 {
-  color: rgb(60%,60%,60%);
+  color: rgb(60%,70%,60%);
 }
 
 /* We use this to hide/show the popup menu and to make the shaddow for it */
