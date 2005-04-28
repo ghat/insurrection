@@ -92,16 +92,20 @@ function loadBannerCheck()
  */
 function loadBanner(name)
 {
-	var target = document.getElementById('localbanner');
-	if (target)
+	// Check if the load is already in progress...
+	if (_target == null)
 	{
-		target.xml = getXMLHTTP();
-		if (target.xml)
+		var target = document.getElementById('localbanner');
+		if (target)
 		{
-			_target = target;
-			target.xml.onreadystatechange = loadBannerCheck;
-			target.xml.open("GET",name,true);
-			target.xml.send(null);
+			target.xml = getXMLHTTP();
+			if (target.xml)
+			{
+				_target = target;
+				target.xml.onreadystatechange = loadBannerCheck;
+				target.xml.open("GET",name,true);
+				target.xml.send(null);
+			}
 		}
 	}
 }

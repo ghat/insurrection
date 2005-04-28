@@ -72,7 +72,7 @@ if ((defined $rpath)
              , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
              , '<log repository="' , &svn_XML_Escape($rpath) , '" path="' , &svn_XML_Escape($opath) , '">' , "\n";
 
-         if (($maxEntries < $revcount) && (!defined $cgi->param('r2')))
+         if (($maxEntries < $revcount) && (!defined $cgi->param('r2')) && ($maxEntries > 1))
          {
             my $nextRev = $revs[2 * ($maxEntries - 1)];
             my $nextPath = $revs[1 + (2 * ($maxEntries - 1))];

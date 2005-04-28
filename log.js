@@ -179,6 +179,64 @@ function onPopup(div)
 	}
 }
 
+// Get the initial state of the diff selection from the
+// cookies such that a selection can live across pages.
+var diffPath = GetCookie('diffPath');
+var diffRev = GetCookie('diffRev');
+if ((diffPath == null) || (diffPath == '') || (diffRev == null) || (diffRev == 0))
+{
+	diffPath = '';
+	diffRev = 0;
+}
+
+/*
+ * Set the browser status bar with the diff selection info
+ * if there is a selected file for diff.
+ */
+function setSelectMessage()
+{
+	if ((diffPath != '') && (diffRev != 0))
+	{
+		// Set a message about the fact that a revision was selected...
+		var msg = diffPath + ' revision ' + diffRev + ' selected for diff';
+		window.defaultStatus = msg;
+		window.status = msg;
+	}
+}
+
+// Set status at load time (in case there is a cookie already)
+setSelectMessage();
+
+/*
+ * Select a given path and revision for future diff operation
+ */
+function selectForDiff(path,rev)
+{
+	diffPath = path;
+	diffRev = rev;
+	SetTempCookie('diffPath',path);
+	SetTempCookie('diffRev',rev);
+	setSelectMessage();
+}
+
+/*
+ * Add a popup menu item line to the given element.
+ * This is used by the addLink() function and directly
+ * to add text without a link.
+ */
+function addPopupLine(el,text)
+{
+	var d1 = document.createElement('div');
+	d1.className = 'pathpopupmenuitem';
+	el.appendChild(d1);
+
+	d1.appendChild(document.createTextNode(text));
+}
+
+/*
+ * A simple function to build a link with a given URL
+ * and link text for the popup menu.
+ */
 function addLink(div,link,text)
 {
 	var a = document.createElement('a');
@@ -205,9 +263,11 @@ function detailClick(repo,action,path,rev,current)
 
 	if (div)
 	{
-		if (!div.done)
+		if ((div.diffPath != diffPath) || (div.diffRev != diffRev))
 		{
-			div.done = 1;
+			div.diffPath = diffPath;
+			div.diffRev = diffRev;
+			div.innerHTML = '';
 
 			var d1 = document.createElement('div');
 			d1.className = 'pathpopupshadow';
@@ -216,37 +276,79 @@ function detailClick(repo,action,path,rev,current)
 			d2.className = 'pathpopupmenu';
 			d1.appendChild(d2);
 
+			var fullpath = repo + path;
+
 			if (action != 'D')
 			{
-				addLink(d2,Insurrection.blame_CGI + '/' + repo + path + '?r=' + rev,'Annotate');
-				addLink(d2,Insurrection.get_CGI + '/' + repo + path + '?r=' + rev,'Download');
+				addLink(d2,Insurrection.blame_CGI + '/' + fullpath + '?r=' + rev,'Annotate');
+				addLink(d2,Insurrection.get_CGI + '/' + fullpath + '?r=' + rev,'Download');
 
 				if (action == 'M')
 				{
-					addLink(d2,Insurrection.diff_CGI + '/' + repo + path + '?r2=' + rev + '&r1=' + (rev-1),'Diff to previous');
+					addLink(d2,Insurrection.diff_CGI + '/' + fullpath + '?r2=' + rev + '&r1=' + (rev-1),'Diff to previous');
 				}
 
-				if (rev != current)
+				if (diffPath == fullpath)
 				{
-					addLink(d2,Insurrection.diff_CGI + '/' + repo + path + '?r2=' + current + '&r1=' + rev,'Diff to revision ' + current);
+					if (diffRev < rev)
+					{
+						addLink(d2,Insurrection.diff_CGI + '/' + fullpath + '?r1=' + diffRev + '&r2=' + rev,'Diff to selected revision: ' + diffRev);
+					}
+
+					if (diffRev > rev)
+					{
+						addLink(d2,Insurrection.diff_CGI + '/' + fullpath + '?r2=' + diffRev + '&r1=' + rev,'Diff to selected revision: ' + diffRev);
+					}
 				}
 
+				if ((rev != current) && ((diffPath != fullpath) || (diffRev != current)))
+				{
+					addLink(d2,Insurrection.diff_CGI + '/' + fullpath + '?r2=' + current + '&r1=' + rev,'Diff to revision ' + current);
+				}
+
+				if ((diffPath == fullpath) && (diffRev == rev))
+				{
+					var d1 = document.createElement('div');
+					d1.className = 'pathpopupmenutext';
+					d2.appendChild(d1);
+
+					d1.appendChild(document.createTextNode('-- Selected for diff --'));
+				}
+				else
+				{
+					var a = document.createElement('a');
+					d2.appendChild(a);
+
+					a.href='javascript:;';
+					a['onclick'] = function() { eval('selectForDiff("' + fullpath + '","' + rev + '");'); }
+
+					var d1 = document.createElement('div');
+					d1.className = 'pathpopupmenuitem';
+					a.appendChild(d1);
+
+					d1.appendChild(document.createTextNode('Select for diff...'));
+				}
+
+				if (action == 'M')
+				{
+					addLink(d2,Insurrection.log_CGI + '/' + fullpath + '?r1=' + rev,'Revision history starting at ' + rev);
+				}
 			}
 			else
 			{
 				rev--;
-				addLink(d2,Insurrection.blame_CGI + '/' + repo + path + '?r=' + rev,'Annotate previous');
-				addLink(d2,Insurrection.get_CGI + '/' + repo + path + '?r=' + rev,'Download previous');
+				addLink(d2,Insurrection.blame_CGI + '/' + fullpath + '?r=' + rev,'Annotate previous');
+				addLink(d2,Insurrection.get_CGI + '/' + fullpath + '?r=' + rev,'Download previous');
+				addLink(d2,Insurrection.log_CGI + '/' + fullpath + '?r1=' + rev,'Revision history starting at ' + rev);
+				rev++;
 			}
-
-			addLink(d2,Insurrection.log_CGI + '/' + repo + path + '?r1=' + rev,'Revision history from ' + rev);
 
 			if (rev > 1)
 			{
 				addLink(d2,Insurrection.diff_CGI + '/' + repo + '?r2=' + rev + '&r1=' + (rev-1),'All changes in revision ' + rev);
 			}
-		}
 
+		}
 		showPopup(div);
 	}
 
@@ -288,8 +390,20 @@ function addDetail(id)
 		if (details)
 		{
 			revs.push(div);
-			details.innerHTML = 'click to show details';
-			details.showhide = 'show';
+
+			// For the first details entry, show it by default
+			if (revs.length == 1)
+			{
+				div.style.display = "";
+			}
+
+			// If there is more than one details entry, show the
+			// "click to show" text.
+			if (revs.length > 1)
+			{
+				details.innerHTML = 'click to show details';
+				details.showhide = 'show';
+			}
 		}
 	}
 }
@@ -303,7 +417,7 @@ function showDetails(i)
 {
 	if (i < revs.length)
 	{
-		revs[i].style.display="";
+		revs[i].style.display = "";
 		i++;
 		setTimeout('showDetails(' + i + ')',50);
 		details.innerHTML = '...showing ' + i;
@@ -325,7 +439,7 @@ function hideDetails(i)
 	if (i > 0)
 	{
 		i--;
-		revs[i].style.display="none";
+		revs[i].style.display = "none";
 		setTimeout('hideDetails(' + i + ')',50);
 		details.innerHTML = '...hiding ' + i;
 	}
@@ -342,7 +456,10 @@ function hideDetails(i)
  */
 function toggleAll()
 {
-	if (details)
+	// Only if we have the details feature and
+	// we have more than 1 revision do we support
+	// the toggle feature.
+	if ((details) && (revs.length > 1))
 	{
 		if (details.showhide != 'working')
 		{
@@ -358,5 +475,66 @@ function toggleAll()
 			details.showhide = 'working';
 		}
 	}
+}
+
+/*
+ * Get the value of a named cookie.  We use
+ * these cookies to get/set configuration like
+ * elements without the need for server interaction.
+ */
+function GetCookie(name)
+{
+    var arg = name + "=";
+    var alen = arg.length;
+    var clen = document.cookie.length;
+    var i = 0;
+
+    while (i < clen)
+    {
+        var j = i + alen;
+        if (document.cookie.substring(i, j) == arg)
+        {
+            var endstr = document.cookie.indexOf (";", j);
+            if (endstr == -1)
+            {
+                endstr = document.cookie.length;
+            }
+            return unescape(document.cookie.substring(j, endstr));
+        }
+
+        i = document.cookie.indexOf(" ", i) + 1;
+
+        if (i == 0)
+        {
+            return null;
+        }
+    }
+    return null;
+}
+
+/*
+ * Set a session-temporary cookie...
+ * Setting a cookie is just too easy...  Too bad getting the
+ * cookie is not as easy.
+ */
+function SetTempCookie(name, value)
+{
+    document.cookie = name + '=' + escape(value) + '; path=/';
+}
+
+/*
+ * Setting a cookie is just too easy...  Too bad getting the
+ * cookie is not as easy.
+ */
+function SetCookie(name, value)
+{
+	// Ugly trick - we build a cookie expires string
+	// that is set for 1 year from "now" such that the
+	// cookies remain valid for more than a single session.
+	var Expires = new Date();
+	Expires.setYear(Expires.getYear() + 1901);
+	var CookieExpires = '; expires=' + Expires.toGMTString();
+
+    document.cookie = name + '=' + escape(value) + CookieExpires + '; path=/';
 }
 

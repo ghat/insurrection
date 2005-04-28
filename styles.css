@@ -577,6 +577,13 @@ TD.details
   background: rgb(90%,100%,0%);
 }
 
+.pathpopupmenutext
+{
+  color: rgb(10%,10%,10%);
+  padding-left: 1em;
+  padding-right: 3px;
+}
+
 .blametitle
 {
   font-size: 16pt;
