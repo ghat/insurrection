@@ -32,12 +32,12 @@ cp -r $TEMPLATE/. $TMP_DIR/.	|| die "Failed to copy repository template to worki
 find $TMP_DIR -depth -name .svn -type d -exec rm -rf "{}" \;
 
 ## Now, create the repository and set up the template in it
-cd $TMP_DIR						|| die "Failed to cd to $TMP_DIR"
-$SVN_PATH/svnadmin create --fs-type fsfs $REPO_PATH/$1	|| die "Failed to create repository '$1'"
-$SVN_PATH/svn co file://$REPO_PATH/$1/. .		|| die "Failed to checkout initial repository '$1'"
-$SVN_PATH/svn add * .svn_index				|| die "Failed to add template to repository '$1'"
-$SVN_PATH/svn propset svn:keywords Id .svn_index	|| die "Failed to set keywords on .svn_index"
-$SVN_PATH/svn commit -m 'Initial Repository'		|| die "Failed to commit template to repository '$1'"
+cd $TMP_DIR										|| die "Failed to cd to $TMP_DIR"
+$SVN_PATH/svnadmin create --fs-type fsfs $REPO_PATH/$1					|| die "Failed to create repository '$1'"
+$SVN_PATH/svn co --non-interactive --no-auth-cache file://$REPO_PATH/$1/. .		|| die "Failed to checkout initial repository '$1'"
+$SVN_PATH/svn add --non-interactive --no-auth-cache * .svn_index			|| die "Failed to add template to repository '$1'"
+$SVN_PATH/svn propset --non-interactive --no-auth-cache svn:keywords Id .svn_index	|| die "Failed to set keywords on .svn_index"
+$SVN_PATH/svn commit --non-interactive --no-auth-cache -m 'Initial Repository'		|| die "Failed to commit template to repository '$1'"
 
 ## Now, set up the pre-commit rule from the auth-path
 ln -s ../../../authentication/pre-commit $REPO_PATH/$1/hooks/	|| die "Failed to install the pre-commit hook"

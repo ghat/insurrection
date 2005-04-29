@@ -49,7 +49,7 @@ if ($revcount)
 }
 
 ## Now, lets build the correct command to run...
-my $cmd = $SVN_CMD . ' log -v --xml ' . $rev . $logURL;
+my $cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache -v --xml ' . $rev . $logURL;
 
 my $log;
 if ((defined $rpath)

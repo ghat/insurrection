@@ -323,7 +323,7 @@ sub saveAccessFile($reason)
       flock(DATA,LOCK_UN);
       close DATA;
 
-      system($SVN_CMD,'commit','--username',$AuthUser,'-m',$reason,$AccessFile);
+      system($SVN_CMD,'commit','--non-interactive','--no-auth-cache','--username',$AuthUser,'-m',$reason,$AccessFile);
    }
 }
 
@@ -410,7 +410,7 @@ sub savePasswordFile($reason)
       flock(DATA,LOCK_UN);
       close DATA;
 
-      system($SVN_CMD,'commit','--username',$AuthUser,'-m',$reason,$PasswordFile);
+      system($SVN_CMD,'commit','--non-interactive','--no-auth-cache','--username',$AuthUser,'-m',$reason,$PasswordFile);
    }
 }
 

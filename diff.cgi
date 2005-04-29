@@ -15,13 +15,13 @@ my $rev1 = $cgi->param('r1');
 $rev1 = 'HEAD' if (!defined $rev1);
 
 my $rev2 = $cgi->param('r2');
-$rev2 = "PREV" if (!defined $rev2);
+$rev2 = "HEAD" if (!defined $rev2);
 
 ## Get the real document info
 my $docURL = &svn_URL($cgi->path_info);
 
 ## Now, lets get the diff (or at least try to)
-my $cmd = $SVN_CMD . ' diff --notice-ancestry "' . $docURL . '@' . $rev1 . '" "' . $docURL . '@' . $rev2 . '"';
+my $cmd = $SVN_CMD . ' diff --non-interactive --no-auth-cache --notice-ancestry "' . $docURL . '@' . $rev1 . '" "' . $docURL . '@' . $rev2 . '"';
 
 my $results;
 if (open(GETDIFF,"$cmd |"))

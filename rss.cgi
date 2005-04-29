@@ -32,7 +32,7 @@ my $rpath = &svn_REPO($cgi->path_info);
 my $opath = &svn_RPATH($cgi->path_info);
 
 ## Now, lets build the correct command to run...
-my $cmd = $SVN_CMD . ' log -v --stop-on-copy --xml ' . $rev . $rssURL;
+my $cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache -v --stop-on-copy --xml ' . $rev . $rssURL;
 
 my $log;
 my $top;

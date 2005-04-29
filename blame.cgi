@@ -19,7 +19,7 @@ $rev = 'HEAD' if (!defined $rev);
 my $docURL = &svn_URL($cgi->path_info);
 
 ## Now, lets build the correct command to run...
-my $cmd = $SVN_CMD . ' blame -r ' . $rev . ' ' . $docURL;
+my $cmd = $SVN_CMD . ' blame --non-interactive --no-auth-cache -r ' . $rev . ' ' . $docURL;
 
 &svn_HEADER('blame ' . $rev . ' - ' . $cgi->path_info);
 

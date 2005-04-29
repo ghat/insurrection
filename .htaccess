@@ -1,5 +1,5 @@
 AuthUserFile /home/equine/private/subversion/authentication/passwords
-AuthName "Subversion Repository"
+AuthName "Insurrection Repository"
 AuthType Basic
 
 ## We want the index.cgi to handle the directory by default...
