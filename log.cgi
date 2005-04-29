@@ -76,8 +76,7 @@ if ((defined $rpath)
          {
             my $nextRev = $revs[2 * ($maxEntries - 1)];
             my $nextPath = $revs[1 + (2 * ($maxEntries - 1))];
-            print '<morelog href="' , $cgi->url , '/' , &svn_XML_Escape(&svn_URL_Escape($rpath)) , &svn_XML_Escape(&svn_URL_Escape($nextPath)) , '?r1=' , $nextRev , '&amp;max=' , $maxEntries , '"/>'
-                , "\n";
+            print '<morelog href="?r1=' , $nextRev , '&amp;max=' , $maxEntries , '"/>' , "\n";
          }
       }
       else

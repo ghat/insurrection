@@ -12,10 +12,10 @@ require 'admin.pl';
 
 ## Get the revision
 my $rev1 = $cgi->param('r1');
-$rev = 'HEAD' if (!defined $rev1);
+$rev1 = 'HEAD' if (!defined $rev1);
 
 my $rev2 = $cgi->param('r2');
-$rev = "PREV" if (!defined $rev2);
+$rev2 = "PREV" if (!defined $rev2);
 
 ## Get the real document info
 my $docURL = &svn_URL($cgi->path_info);
@@ -32,6 +32,31 @@ if (open(GETDIFF,"$cmd |"))
 
 if (defined $results)
 {
+   ## Ugly - if there was a request to get diff as a patch, we
+   ## short-curcuit all of this and just output the headers as
+   ## needed.
+   if ($cgi->param('getpatch') eq '1')
+   {
+      my $patchName = $cgi->path_info . '-r.' . $rev1 . '-r.' . $rev2 . '.patch';
+
+      ## Get rid of leading '/'
+      $patchName =~ s|^/*||;
+
+      ## Change '/' to '_'
+      $patchName =~ s|/|_|g;
+
+      print 'Expires: Fri Dec 31 19:00:00 1999' , "\n"
+          , 'Cache-Control: no-cache' , "\n"
+          , 'Content-Length: ' , length($results) , "\n"
+          , 'Content-Type: text/patch' , "\n"
+          , 'Content-Disposition: attachment; filename=' , $patchName , "\n"
+          , 'Content-Description: Insurrection/Subversion generated patch' , "\n"
+          , "\n"
+          , $results;
+
+      exit 0;
+   }
+
    ## Now, escape all of the stuff we need to in order to be
    ## safe HTML...
    $results = &svn_XML_Escape($results);
@@ -63,6 +88,9 @@ if (defined $results)
 
    ## Clean up extra line enders
    $results =~ s|</div>\n|</div>|sg;
+
+   ## Finally, add a link at the top to get the results as a diff/patch
+
 }
 else
 {
@@ -72,9 +100,9 @@ else
 
 &svn_HEADER('diff ' . $rev1 . ':' . $rev2 . ' - ' . $cgi->path_info);
 
-print '<a class="difftitle" href="' , $SVN_URL_PATH , 'log.cgi' , &svn_URL_Escape($cgi->path_info) , '">'
-    , 'Differences from revision ' , $rev1 , ' to ' , $rev2 , '<br/>'
-    , $cgi->path_info
+print '<a class="difftitle" href="?getpatch=1&amp;r1=' , $rev1 , '&amp;r2=' , $rev2 , '">'
+    , 'Download patch file for revision ' , $rev1 , ' to ' , $rev2 , '<br/>'
+    , 'of ' , &svn_XML_Escape($cgi->path_info)
     , '</a>';
 
 print $results;
