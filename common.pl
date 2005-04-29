@@ -164,6 +164,21 @@ sub svn_TRAILER($version,$AuthUser)
    print '</div></td></tr></table></body></html>';
 }
 
+##
+## This function returns only the number part of the
+## parameter.  We use this to filter incoming parameters
+## to only include numbers (when needed)
+sub getNumParam($param)
+{
+   my $result;
+   my $param = shift;
+   if ($param =~ m/(\d+)/)
+   {
+      $result = $1;
+   }
+
+   return $result;
+}
 
 return 1;
 

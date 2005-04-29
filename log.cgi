@@ -19,8 +19,8 @@ my $opath = &svn_RPATH($cgi->path_info);
 
 ## Check if someone asked for a revision number
 my $rev = '';
-my $r1 = $cgi->param('r1');
-my $r2 = $cgi->param('r2');
+my $r1 = &getNumParam($cgi->param('r1'));
+my $r2 = &getNumParam($cgi->param('r2'));
 
 ## Get the revision history list so we can count the ones we want
 ## and we can follow renames (actually, copies) through the history
@@ -31,7 +31,7 @@ my @revs = (`$hcmd` =~ m:(\d+)\s+(/[^\n]*):gs);
 my $revcount = @revs / 2;
 
 ## Check for a limit...
-my $maxEntries = $cgi->param('max');
+my $maxEntries = &getNumParam($cgi->param('max'));
 $maxEntries = $SVN_LOG_ENTRIES if (!defined $maxEntries);
 $maxEntries = $revcount if (!defined $maxEntries);
 $maxEntries = $revcount if (($maxEntries > $revcount) || ($maxEntries < 1));

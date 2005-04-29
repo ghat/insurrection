@@ -11,7 +11,7 @@ require 'admin.pl';
 &checkAuthPath($cgi->path_info);
 
 ## Get the revision
-my $rev = $cgi->param('r');
+my $rev = &getNumParam($cgi->param('r'));
 $rev = 'HEAD' if (!defined $rev);
 
 ## Get the real document info
