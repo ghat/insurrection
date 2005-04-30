@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: index.cgi 215 2005-04-26 05:05:10Z svn $
+# $Id$
 # Copyright 2004,2005 - Michael Sinz
 #
 # This script takes the index.html template and inserts some
@@ -23,5 +23,5 @@ $index =~ s:<repos/>:$repoTable:sge;
 
 print $index;
 
-&svn_TRAILER('$Id: index.cgi 215 2005-04-26 05:05:10Z svn $');
+&svn_TRAILER('$Id$');
 
