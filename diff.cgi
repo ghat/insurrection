@@ -45,14 +45,15 @@ if (defined $results)
       ## Change '/' to '_'
       $patchName =~ s|/|_|g;
 
-      print 'Expires: Fri Dec 31 19:00:00 1999' , "\n"
-          , 'Cache-Control: no-cache' , "\n"
-          , 'Content-Length: ' , length($results) , "\n"
-          , 'Content-Type: text/patch' , "\n"
-          , 'Content-Disposition: attachment; filename=' , $patchName , "\n"
-          , 'Content-Description: Insurrection/Subversion generated patch' , "\n"
-          , "\n"
-          , $results;
+      ## A patch does not expire easily since they are always
+      ## to specific revisions and thus should not change...
+      print $cgi->header('-expires' => '+1d' ,
+                         '-type' => 'text/patch' ,
+                         '-Content-Disposition' => 'attachment; filename=' . $patchName ,
+                         '-Content-Description' => 'Insurrection/Subversion generated patch' ,
+                         '-Content-Length' => length($results));
+
+      print $results;
 
       exit 0;
    }
@@ -97,7 +98,6 @@ else
    $results = '<h1>No difference returned</h1>';
 }
 
-
 &svn_HEADER('diff ' . $rev1 . ':' . $rev2 . ' - ' . $cgi->path_info);
 
 print '<a class="difftitle" href="?getpatch=1&amp;r1=' , $rev1 , '&amp;r2=' , $rev2 , '">'
@@ -107,5 +107,5 @@ print '<a class="difftitle" href="?getpatch=1&amp;r1=' , $rev1 , '&amp;r2=' , $r
 
 print $results;
 
-&svn_TRAILER('$Id$',$cgi->remote_user);
+&svn_TRAILER('$Id$');
 

@@ -55,21 +55,15 @@
   </li>
   <br/>
   <li>
-    <a href="common.pl"><code>common.pl</code></a>
+    <a href="admin.pl"><code>admin.pl</code></a>
     <ul>
       A bit of common code used by all the code here to provide some consistent behaviors.&nbsp;
       It is this code that knows how to get the configuration information from the
       <a href="insurrection.xsl"><code>insurrection.xsl</code></a> and
-      <a href="insurrection.pl"><code>insurrection.pl</code></a> files.
-    </ul>
-  </li>
-  <br/>
-  <li>
-    <a href="admin.pl"><code>admin.pl</code></a>
-    <ul>
-      A bit of common code used to read/validate/update authentication information.&nbsp;
+      <a href="insurrection.pl"><code>insurrection.pl</code></a> files.&nbsp;
+      Also used to read/validate/update authentication information.&nbsp;
       This is used not only by the <a href="password.cgi"><code>password.cgi</code></a>
-      and <a href="admin.cgi"><code>admin.cgi</code></a> pages but also by all of the
+      and <a href="admin.cgi"><code>admin.cgi</code></a> pages but by all of the
       repository access pages to validate the access rights.
     </ul>
   </li>

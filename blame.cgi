@@ -21,7 +21,7 @@ my $docURL = &svn_URL($cgi->path_info);
 ## Now, lets build the correct command to run...
 my $cmd = $SVN_CMD . ' blame --non-interactive --no-auth-cache -r ' . $rev . ' ' . $docURL;
 
-&svn_HEADER('blame ' . $rev . ' - ' . $cgi->path_info);
+&svn_HEADER('Annotate ' . $rev . ' - ' . $cgi->path_info);
 
 print '<a class="blametitle" href="' , $SVN_URL_PATH , 'log.cgi' , &svn_URL_Escape($cgi->path_info) , '">'
     , 'Annotation from revision ' , $rev , ' of<br/>'
@@ -73,5 +73,5 @@ if (open(GETBLAME,"$cmd |"))
    print '</table>';
 }
 
-&svn_TRAILER('$Id$',$cgi->remote_user);
+&svn_TRAILER('$Id$');
 

@@ -2,11 +2,14 @@
 # $Id$
 # Copyright 2004,2005 - Michael Sinz
 #
+# This is some common code that all of the Perl code
+# needs.  Note that this includes the default configuration
+# file such that only this code needs to know to include it.
+require 'insurrection.pl';
+
 # These are the constants that define some of the subversion configuration
 # within the system plus some common code that is best to be shared for
 # the admin functions.
-#
-require 'common.pl';
 
 ## Where the password and access files live
 ## Note that we read/write these files and then check them
@@ -21,11 +24,6 @@ my $AccessFile = $SVN_AUTH . '/access';
 my $AccessFileLock = $SVN_AUTH . '/.lock-AccessFile';
 my $PasswordFileLock = $SVN_AUTH . '/.lock-PasswordFile';
 
-# Set up our CGI context and get some information
-use CGI;
-$cgi = new CGI;
-$AuthUser = $cgi->remote_user;
-
 ## We use file locks to protect the changes to our control files
 use Fcntl ':flock'; # import LOCK_* constants
 
@@ -38,6 +36,197 @@ use Fcntl ':flock'; # import LOCK_* constants
 %userCreators;  ## The users who "created" this user
 $accessVersion; ## The version of the access file
 $passwdVersion; ## The version of the password file
+
+# Set up our CGI context and get some information
+use CGI;
+$cgi = new CGI;
+$AuthUser = $cgi->remote_user;
+
+## Read the insurrection.xsl file for configuration information.
+## The configuration is within the XSL file due to problems with
+## certain browsers not supporting the XPath document() function.
+my $insurrection_xml = '';
+if (open(INSURRECTION,'<insurrection.xsl'))
+{
+   $insurrection_xml = join('',<INSURRECTION>);
+   close(INSURRECTION);
+}
+
+##
+## This function does the XML escaping for the '&', '<', '>', and '"'
+## characters.  The first 3 are absolutely required and the last one
+## enables putting the string within quoted parameters.
+sub svn_XML_Escape($str)
+{
+   my $str = shift;
+
+   $str =~ s/&/&amp;/sg;
+   $str =~ s/</&lt;/sg;
+   $str =~ s/>/&gt;/sg;
+   $str =~ s/"/&quot;/sg;
+
+   return $str;
+}
+
+##
+## This function just does the %xx escaping of a string
+## for use within URLs.  Even though it is so small, it
+## is easier to maintain in one place rather than have
+## it all over the place.
+sub svn_URL_Escape($path)
+{
+   my $path = shift;
+
+   ## Modify our path to escape some characters into URL form...
+   $path =~ s|([^-.A-Za-z0-9/_])|sprintf("%%%02X",ord($1))|seg;
+
+   return $path;
+}
+
+##
+## This function takes a repository path from the URL
+## and makes it into a local file:// URL.  It also
+## makes sure that external ".." operations are not
+## allowed to reach outside of the repository.
+sub svn_URL($path)
+{
+   my $path = shift;
+
+   if (defined $path)
+   {
+      ## Prevent ugly hacks from getting into my pathinfo...
+      ## (The only one I care about is the '..')
+      $path =~ s:(\.\./)|(/\.\.)|(^\.\.$)::g;
+
+      ## Get rid of trailing '/'
+      $path =~ s:/+$::;
+
+      ## Fix up/escape as needed...
+      $path = &svn_URL_Escape($path);
+
+      ## Now, prepend the base and file:// URL construct
+      $path = 'file://' . $SVN_BASE . $path;
+   }
+
+   return $path;
+}
+
+##
+## This function takes a repository path from the URL
+## and returns the local repository name information
+sub svn_REPO($path)
+{
+   my $path = shift;
+
+   if (defined $path)
+   {
+      ## Prevent ugly hacks from getting into my pathinfo...
+      ## (The only one I care about is the '..')
+      $path =~ s:(\.\./)|(/\.\.)|(^\.\.$)::g;
+
+      ## Note that only the first element is used, so
+      ## get rid of anything after the first element.
+      $path =~ s:^/([^/]+).*$:$1:;
+   }
+
+   return $path;
+}
+
+##
+## This function takes a repository path from the URL
+## and returns the relative path from within the repository
+sub svn_RPATH($path)
+{
+   my $path = shift;
+
+   if (defined $path)
+   {
+      ## Prevent ugly hacks from getting into my pathinfo...
+      ## (The only one I care about is the '..')
+      $path =~ s:(\.\./)|(/\.\.)|(^\.\.$)::g;
+
+      ## Get rid of trailing '/'
+      $path =~ s:/+$::;
+
+      ## Note that only the first element is used, so
+      ## get rid of anything after the first element.
+      if ($path =~ m:^/[^/]+(/.*)$:)
+      {
+         $path = $1;
+      }
+      else
+      {
+         $path = '/';
+      }
+   }
+
+   return $path;
+}
+
+##
+## This put up the default header for every CGI generated HTML page
+## Note that the expires parameter is optional and will default to
+## a 1 day expire.
+sub svn_HEADER($title,$expires)
+{
+   my $title = shift;
+   my $expires = shift;
+
+   ## Expires is optional and thus we default it to 1 day if not given.
+   $expires = '+1d' if (!defined $expires);
+
+   my ($header) = ($insurrection_xml =~ m|<xsl:template name="header">(.*?)</xsl:template>|s);
+   my ($banner) = ($insurrection_xml =~ m|<xsl:template name="banner">(.*?)</xsl:template>|s);
+
+   print $cgi->header('-expires' => $expires ,
+                      '-type' => 'text/html');
+
+   print '<!doctype HTML PUBLIC "-//W2C//DTD HTML 4.01 Transitional//EN">' , "\n"
+       , "<!-- Insurrection Web Tools for Subversion          -->\n"
+       , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
+       , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
+       , '<html>'
+       ,  '<head>'
+       ,   '<title>' , $title , '</title>'
+       ,   $header
+       ,  '</head>' , "\n"
+       ,  '<body>'
+       ,   '<table id="pagetable"><tr><td id="content">'
+       ,    $banner
+       ,    '<div class="svn">' , "\n";
+}
+
+##
+## This put up the default tail for all of the pages that use
+## the svn_HEADER() function above.
+sub svn_TRAILER($version)
+{
+   my $version = shift;
+
+   ## Use the version of this file if there was no version passed.
+   $version = '$Id$' if (!defined $version);
+
+   print '</div><div class="footer">' , $version;
+   print '&nbsp;&nbsp;--&nbsp;&nbsp;'
+       , 'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
+   print '</div></td></tr></table></body></html>';
+}
+
+##
+## This function returns only the number part of the
+## parameter.  We use this to filter incoming parameters
+## to only include numbers (when needed)
+sub getNumParam($param)
+{
+   my $result;
+   my $param = shift;
+   if ($param =~ m/(\d+)/)
+   {
+      $result = $1;
+   }
+
+   return $result;
+}
 
 ##############################################################################
 #
@@ -89,7 +278,7 @@ sub checkAuthPath($path)
           , 'requested.  You may have supplied the wrong '
           , 'credentials or selected the wrong URL</p>';
 
-      &svn_TRAILER('$Id$',$AuthUser);
+      &svn_TRAILER('$Id$');
    }
    exit 0;
 }
@@ -283,7 +472,7 @@ sub saveAccessFile($reason)
       flock(DATA,LOCK_EX);
 
       print DATA '#' , "\n"
-               , '# Simple access control file for the Subversion server' , "\n"
+               , '# Simple access control file for the Insurrection server' , "\n"
                , '#' , "\n"
                , '# $' , 'Id: ' , $accessVersion , ' $' , "\n"
                , '#' , "\n"
@@ -419,11 +608,13 @@ sub savePasswordFile($reason)
 # Build and return an HTML table that contains the repositories that the
 # given user has access to via some mechanism.
 #
-# Note, if no given user, the anonymous user access group will be used.
+# Note, if no authenticated user, the anonymous user access will be used.
 #
-sub repositoryTable($user)
+sub repositoryTable()
 {
-   my $user = shift;
+   my $user = '*';
+   $user = $AuthUser if (defined $AuthUser);
+
    my $result = '';
 
    ## Check if we have loaded the admin stuff yet...

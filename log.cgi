@@ -57,10 +57,8 @@ if ((defined $rpath)
    && (@revs > 0)
    && (open(LOGXML,"$cmd |")))
 {
-   print "Expires: Fri Dec 31 19:00:00 1999\n"
-       , "Cache-Control: no-cache\n"
-       , "Content-type: text/xml\n"
-       , "\n";
+   print $cgi->header('-expires' => '+1m' ,
+                      '-type' => 'text/xml');
 
    while (<LOGXML>)
    {
@@ -88,12 +86,13 @@ if ((defined $rpath)
 }
 else
 {
-   &svn_HEADER('SVN LOG - Subversion Server');
+   print "Status: 404 Log Not Available\n";
+   &svn_HEADER('SVN LOG - Insurrection Server');
 
    print '<h1>Failed to access the log</h1>'
        , '<h3>Log command:</h3>'
        , '<pre>' , $cmd , '</pre>';
 
-   &svn_TRAILER('$Id$',$cgi->remote_user);
+   &svn_TRAILER('$Id$');
 }
 

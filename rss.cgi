@@ -44,7 +44,7 @@ if ((defined $rpath)
    $log = join('',<LOGXML>);
    close(LOGXML);
 
-   ($top) = ($log =~ m:(<\?.*?\?>):s);
+   ($top) = ($log =~ m:(<\?xml.*?\?>):s);
 
    ## Get the first date I can find...
    ($topDate) = ($log =~ m:<date>(.*?)</date>:s);
@@ -54,9 +54,11 @@ if ((defined $log)
     && (defined $top)
     && (defined $topDate))
 {
-   print "Content-type: text/xml\n"
-       , "\n"
-       , $top , "\n"
+   ## Note that RSS feeds expire after 30 minutes...
+   print $cgi->header('-expires' => '+30m' ,
+                      '-type' => 'text/xml');
+
+   print $top , "\n"
        , "<!-- Insurrection Web Tools for Subversion RSS Feed -->\n"
        , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
@@ -114,13 +116,14 @@ if ((defined $log)
 }
 else
 {
-   &svn_HEADER('SVN RSS - Subversion Server');
+   print "Status: 404 Log Not Available\n";
+   &svn_HEADER('SVN RSS - Insurrection Server');
 
    print '<h1>Failed to access the log</h1>'
        , '<h3>Log command:</h3>'
        , '<pre>' , $cmd , '</pre>';
 
-   &svn_TRAILER('$Id$',$cgi->remote_user);
+   &svn_TRAILER('$Id$');
 }
 
 ## Build the list of files modified/updated/etc by the revision...

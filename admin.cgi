@@ -42,8 +42,8 @@ foreach my $group (@accessGroups)
    }
 }
 
-## Print our standard header...
-&svn_HEADER('Admin - Subversion Server');
+## Print our standard header...   (Note the 0-minute expires!)
+&svn_HEADER('Admin - Insurrection Server','+0m');
 
 print '<h2 align="center">Administration</h2>';
 
@@ -162,12 +162,12 @@ elsif ($Operation eq 'AddUser')
 
             if (open EMAIL,'| /usr/sbin/sendmail -t')
             {
-               print EMAIL 'From: "Subversion Administrator" <' , &emailAddress($AuthUser) , '>' , "\n"
+               print EMAIL 'From: "Insurrection Administrator" <' , &emailAddress($AuthUser) , '>' , "\n"
                          , 'Return-Path: <' , &emailAddress($AuthUser) , '>' , "\n"
-                         , 'Subject: Subversion account created' , "\n"
-                         , 'To: "New Subversion User" <' , &emailAddress($user) , '>' , "\n"
+                         , 'Subject: Insurrection account created' , "\n"
+                         , 'To: "New Insurrection User" <' , &emailAddress($user) , '>' , "\n"
                          , "\n"
-                         , "A user access account has been created on the Subversion Server\n"
+                         , "A user access account has been created on the Insurrection Server\n"
                          , "for username $user by user $AuthUser\n"
                          , "\n"
                          , "Your initial random password is: $pw\n"
@@ -175,14 +175,14 @@ elsif ($Operation eq 'AddUser')
                          , "You can change your password via " , $SVN_URL , $SVN_URL_PATH , "password.cgi\n"
                          , "\n"
                          , "Please go to $SVN_URL$SVN_URL_PATH for information and documentation\n"
-                         , "about the Subversion server.\n"
+                         , "about the Insurrection server.\n"
                          , "\n"
                          , 'This EMail was produced on ' , &niceTime(time) , "\n"
                          , 'The request was done from ' , $cgi->remote_host() , "\n"
                          , 'The user agent was ' , $cgi->user_agent() , "\n"
                          , "\n"
                          , "-- \n"
-                         , "Subversion Server - $SVN_URL$SVN_URL_PATH\n";
+                         , "Insurrection Server - $SVN_URL$SVN_URL_PATH\n";
 
                close EMAIL;
             }
@@ -255,7 +255,7 @@ print '<center>';
 ## If the user has any direct/specific rights, show them
 if (@accessGroups > 0)
 {
-   print '<p style="font-size: 9pt; text-align: left;">This page lets you administer the Subversion access rights.&nbsp;'
+   print '<p style="font-size: 9pt; text-align: left;">This page lets you administer the Insurrection access rights.&nbsp;'
        , 'The access chart below shows the users that have read/write access to the given repositories/paths.</p>' if ($canAdminUser);
 
    ## Print the table...
@@ -424,11 +424,11 @@ if (@accessGroups > 0)
    print '<br/>';
 }
 
-print &repositoryTable($AuthUser);
+print &repositoryTable();
 
 print '</center>';
 
-&svn_TRAILER('$Id$',$AuthUser);
+&svn_TRAILER('$Id$');
 
 # all done...
 exit 0;

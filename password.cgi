@@ -16,20 +16,20 @@ $Operation = "" if (!defined $Operation);
 
 if ($AuthUser eq 'demo')
 {
-   print "Location: /admin.cgi\n\n";
+   print $cgi->redirect($SVN_URL_PATH . 'admin.cgi');
    exit 0;
 }
 
 if ($Operation eq 'Cancel')
 {
-   print "Location: /\n\n";
+   print $cgi->redirect($SVN_URL_PATH);
    exit 0;
 }
 
-&svn_HEADER('Change Password - Subversion Server');
+&svn_HEADER('Change Password - Insurrection Server');
 
 print '<h2 align="center">Change Password</h2>'
-    , '<p>This page lets you change your password for the Subversion server.</p>'
+    , '<p>This page lets you change your password for the Insurrection server.</p>'
     , '<p>You are logged on as: <font size="+1"><b>' , $AuthUser , '</b></font></p>';
 
 my $changed = 0;
@@ -88,7 +88,7 @@ print q(<center><form method=post>
 </form></center>
 ) if (!$changed);
 
-&svn_TRAILER('$Id$',$AuthUser);
+&svn_TRAILER('$Id$');
 
 # all done...
 exit 0;

@@ -11,19 +11,17 @@
 #
 require 'admin.pl';
 
-use CGI;
-
 open INDEX,"<index.template" || die "Where is index.template?";
 my $index = join('',<INDEX>);
 close INDEX;
 
-my $repoTable = &repositoryTable($AuthUser);
+my $repoTable = &repositoryTable();
 
 $index =~ s:<repos/>:$repoTable:sge;
 
-&svn_HEADER('MKSoft Demo Insurrection Server');
+&svn_HEADER('MKSoft Insurrection Server');
 
 print $index;
 
-&svn_TRAILER('$Id: index.cgi 215 2005-04-26 05:05:10Z svn $',$AuthUser);
+&svn_TRAILER('$Id: index.cgi 215 2005-04-26 05:05:10Z svn $');
 

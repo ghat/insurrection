@@ -27,7 +27,7 @@
       <table style="margin: auto; border: 0px; font-family: serif; font-style: italic; font-weight: bold; font-size: 18pt;">
         <tr>
           <td valign="top" align="right"><a href="/" style="color: #bfbfbf;">Demo</a></td>
-          <td valign="middle" align="center"><a href="/"><img src="/InsurrectionLogo.gif" alt="Logo" border="0"/></a></td>
+          <td valign="middle" align="center"><a href="/"><img src="/InsurrectionLogo.gif" alt="Insurrection with Subversion" border="0"/></a></td>
           <td valign="bottom" align="left"><a href="/" style="color: #bfbfbf;">Server</a></td>
         </tr>
       </table>
