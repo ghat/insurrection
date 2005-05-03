@@ -27,8 +27,7 @@ $mime = 'text/plain' if ((!defined $mime) || ($mime eq ''));
 my $cmd = $SVN_CMD . ' cat --non-interactive --no-auth-cache -r ' . $rev . ' ' . $docURL;
 
 print $cgi->header('-expires' => '+1m' ,
-                   '-type' => $mime ,
-                   '-Cache-Control' => 'no-cache');
+                   '-type' => $mime);
 
 print `$cmd`;
 

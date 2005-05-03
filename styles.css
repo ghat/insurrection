@@ -584,6 +584,14 @@ TD.details
   padding-right: 3px;
 }
 
+.menusegment
+{
+  margin: 0px;
+  margin-top: 1px;
+  border: 0px;
+  border-top: 1px solid rgb(70%,70%,70%);
+}
+
 .blametitle
 {
   font-size: 16pt;

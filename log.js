@@ -251,6 +251,21 @@ function addLink(div,link,text)
 }
 
 /*
+ * Create a menu segment element and, optionally,
+ * add it to the provided parent element.
+ */
+function newSegment(parent)
+{
+	var div = document.createElement('div');
+	div.className = 'menusegment';
+	if (parent)
+	{
+		parent.appendChild(div);
+	}
+	return(div);
+}
+
+/*
  * When we click on a detailed log entry path line,
  * we get a popup menu that lists certain actions,
  * depending on the commit event for the line.
@@ -283,36 +298,13 @@ function detailClick(repo,action,path,rev,current)
 				addLink(d2,Insurrection.blame_CGI + '/' + fullpath + '?r=' + rev,'Annotate');
 				addLink(d2,Insurrection.get_CGI + '/' + fullpath + '?r=' + rev,'Download');
 
-				if (action == 'M')
-				{
-					addLink(d2,Insurrection.diff_CGI + '/' + fullpath + '?r2=' + rev + '&r1=' + (rev-1),'Diff to previous');
-				}
-
-				if (diffPath == fullpath)
-				{
-					if (diffRev < rev)
-					{
-						addLink(d2,Insurrection.diff_CGI + '/' + fullpath + '?r1=' + diffRev + '&r2=' + rev,'Diff to selected revision: ' + diffRev);
-					}
-
-					if (diffRev > rev)
-					{
-						addLink(d2,Insurrection.diff_CGI + '/' + fullpath + '?r2=' + diffRev + '&r1=' + rev,'Diff to selected revision: ' + diffRev);
-					}
-				}
-
-				if ((rev != current) && ((diffPath != fullpath) || (diffRev != current)))
-				{
-					addLink(d2,Insurrection.diff_CGI + '/' + fullpath + '?r2=' + current + '&r1=' + rev,'Diff to revision ' + current);
-				}
-
 				if ((diffPath == fullpath) && (diffRev == rev))
 				{
-					var d1 = document.createElement('div');
+					d1 = document.createElement('div');
 					d1.className = 'pathpopupmenutext';
-					d2.appendChild(d1);
+					d1.appendChild(document.createTextNode('-- Selected/Marked revision --'));
 
-					d1.appendChild(document.createTextNode('-- Selected for diff --'));
+					d2.appendChild(d1);
 				}
 				else
 				{
@@ -322,16 +314,56 @@ function detailClick(repo,action,path,rev,current)
 					a.href='javascript:;';
 					a['onclick'] = function() { eval('selectForDiff("' + fullpath + '","' + rev + '");'); }
 
-					var d1 = document.createElement('div');
+					d1 = document.createElement('div');
 					d1.className = 'pathpopupmenuitem';
 					a.appendChild(d1);
 
-					d1.appendChild(document.createTextNode('Select for diff...'));
+					d1.appendChild(document.createTextNode('Select/Mark revision...'));
+				}
+
+				var dDiff = newSegment();
+				var dPatch = newSegment();
+
+				if (action == 'M')
+				{
+					addLink(dDiff,Insurrection.diff_CGI + '/' + fullpath + '?r2=' + rev + '&r1=' + (rev-1),'Diff from previous');
+					addLink(dPatch,Insurrection.diff_CGI + '/' + fullpath + '?getpatch=1&r2=' + rev + '&r1=' + (rev-1),'Patch from previous');
+				}
+
+				if (diffPath == fullpath)
+				{
+					if (diffRev < rev)
+					{
+						addLink(dDiff,Insurrection.diff_CGI + '/' + fullpath + '?r1=' + diffRev + '&r2=' + rev,'Diff from selected revision: ' + diffRev);
+						addLink(dPatch,Insurrection.diff_CGI + '/' + fullpath + '?getpatch=1&r1=' + diffRev + '&r2=' + rev,'Patch from selected revision: ' + diffRev);
+					}
+
+					if (diffRev > rev)
+					{
+						addLink(dDiff,Insurrection.diff_CGI + '/' + fullpath + '?r2=' + diffRev + '&r1=' + rev,'Diff to selected revision: ' + diffRev);
+						addLink(dPatch,Insurrection.diff_CGI + '/' + fullpath + '?r2=' + diffRev + '&getpatch=1&r1=' + rev,'Patch to selected revision: ' + diffRev);
+					}
+				}
+
+				if ((rev != current) && ((diffPath != fullpath) || (diffRev != current)))
+				{
+					addLink(dDiff,Insurrection.diff_CGI + '/' + fullpath + '?r2=' + current + '&r1=' + rev,'Diff to revision ' + current);
+					addLink(dPatch,Insurrection.diff_CGI + '/' + fullpath + '?getpatch=1&r2=' + current + '&r1=' + rev,'Patch to revision ' + current);
+				}
+
+				if (dDiff.childNodes.length > 0)
+				{
+					d2.appendChild(dDiff);
+				}
+
+				if (dPatch.childNodes.length > 0)
+				{
+					d2.appendChild(dPatch);
 				}
 
 				if (action == 'M')
 				{
-					addLink(d2,Insurrection.log_CGI + '/' + fullpath + '?r1=' + rev,'Revision history starting at ' + rev);
+					addLink(newSegment(d2),Insurrection.log_CGI + '/' + fullpath + '?r1=' + rev,'Revision history from ' + rev);
 				}
 			}
 			else
@@ -339,13 +371,15 @@ function detailClick(repo,action,path,rev,current)
 				rev--;
 				addLink(d2,Insurrection.blame_CGI + '/' + fullpath + '?r=' + rev,'Annotate previous');
 				addLink(d2,Insurrection.get_CGI + '/' + fullpath + '?r=' + rev,'Download previous');
-				addLink(d2,Insurrection.log_CGI + '/' + fullpath + '?r1=' + rev,'Revision history starting at ' + rev);
+				addLink(d2,Insurrection.log_CGI + '/' + fullpath + '?r1=' + rev,'Revision history from ' + rev);
 				rev++;
 			}
 
 			if (rev > 1)
 			{
-				addLink(d2,Insurrection.diff_CGI + '/' + repo + '?r2=' + rev + '&r1=' + (rev-1),'All changes in revision ' + rev);
+				d1 = newSegment(d2);
+				addLink(d1,Insurrection.diff_CGI + '/' + repo + '?r2=' + rev + '&r1=' + (rev-1),'Changeset for this revision');
+				addLink(d1,Insurrection.diff_CGI + '/' + repo + '?getpatch=1&r2=' + rev + '&r1=' + (rev-1),'Patchset for this revision');
 			}
 
 		}
