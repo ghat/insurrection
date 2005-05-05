@@ -52,6 +52,26 @@ if (open(INSURRECTION,'<insurrection.xsl'))
    close(INSURRECTION);
 }
 
+## Get the blank icon path (we always need it)
+my $blankIcon = &svn_IconPath('blank');
+
+##
+## Get the path of a given icon/graphic file
+sub svn_IconPath($name)
+{
+   my $name = shift;
+   my $result = '';
+   $name .= 'icon-path';
+
+   ## Figure out what the blank icon path is...
+   if ($insurrection_xml =~ m|<xsl:template name="$name">([^<]*?)</xsl:template>|s)
+   {
+      $result = $1;
+   }
+
+   return $result;
+}
+
 ##
 ## This function does the XML escaping for the '&', '<', '>', and '"'
 ## characters.  The first 3 are absolutely required and the last one
@@ -181,7 +201,7 @@ sub svn_HEADER($title,$expires)
    print $cgi->header('-expires' => $expires ,
                       '-type' => 'text/html');
 
-   print '<!doctype HTML PUBLIC "-//W2C//DTD HTML 4.01 Transitional//EN">' , "\n"
+   print '<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' , "\n"
        , "<!-- Insurrection Web Tools for Subversion          -->\n"
        , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
@@ -191,9 +211,17 @@ sub svn_HEADER($title,$expires)
        ,   $header
        ,  '</head>' , "\n"
        ,  '<body>'
-       ,   '<table id="pagetable"><tr><td id="content">'
-       ,    $banner
-       ,    '<div class="svn">' , "\n";
+       ,   '<table id="pagetable" cellpadding="0" cellspacing="0">'
+       ,    '<tr>'
+       ,     '<td id="top-left"><img src="' , $blankIcon , '"/></td>'
+       ,     '<td id="top"><img src="' , $blankIcon , '"/></td>'
+       ,     '<td id="top-right"><img src="' , $blankIcon , '"/></td>'
+       ,    '</tr>'
+       ,    '<tr>'
+       ,     '<td id="left"><img src="' , $blankIcon , '"/></td>'
+       ,     '<td id="content">'
+       ,      $banner
+       ,      '<div class="svn">' , "\n";
 }
 
 ##
@@ -206,10 +234,21 @@ sub svn_TRAILER($version)
    ## Use the version of this file if there was no version passed.
    $version = '$Id$' if (!defined $version);
 
-   print '</div><div class="footer">' , $version;
-   print '&nbsp;&nbsp;--&nbsp;&nbsp;'
-       , 'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
-   print '</div></td></tr></table></body></html>';
+   print      '</div><div class="footer">' , $version;
+   print      '&nbsp;&nbsp;--&nbsp;&nbsp;'
+       ,      'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
+   print      '</div>'
+       ,     '</td>'
+       ,     '<td id="right"><img src="' , $blankIcon , '"/></td>'
+       ,    '</tr>'
+       ,    '<tr>'
+       ,     '<td id="bottom-left"><img src="' , $blankIcon , '"/></td>'
+       ,     '<td id="bottom"><img src="' , $blankIcon , '"/></td>'
+       ,     '<td id="bottom-right"><img src="' , $blankIcon , '"/></td>'
+       ,    '</tr>'
+       ,   '</table>'
+       ,  '</body>'
+       , '</html>';
 }
 
 ##
@@ -630,6 +669,8 @@ sub repositoryTable()
    @accessGroups = sort keys %tlist;
    if (@accessGroups > 0)
    {
+      my $rssIcon = &svn_IconPath('rss');
+
       ## Get the sizes of all of the repositories...
       my %rSize;
       ## Only if the directory exists do we even try this...
@@ -664,7 +705,7 @@ sub repositoryTable()
                      .  '<td align="right">' . $size . 'k</td>'
                      .  '<td>'
                      .   '<a href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
-                     .    '<img src="rss.gif" alt="RSS Feed" border="0" align="right"/>'
+                     .    '<img src="' . $rssIcon . '" alt="RSS Feed" border="0" style="padding-left: 2px;" align="right"/>'
                      .   '</a>'
                      .   $comments
                      .  '</td>'

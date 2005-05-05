@@ -79,10 +79,10 @@ if ($Operation eq 'Update')
 }
 
 print q(<center><form method=post>
-<table border=0 cellpadding=1 cellspacing=3>
-<tr><td align=right>Old password:</td><td align=left>&nbsp;<input type=password size=16 maxlength=16 name=Password0></td></tr>
-<tr><td align=right>New password:</td><td align=left>&nbsp;<input type=password size=16 maxlength=16 name=Password1></td></tr>
-<tr><td align=right>&nbsp;&nbsp;again:</td><td align=left>&nbsp;<input type=password size=16 maxlength=16 name=Password2></td></tr>
+<table border="0" cellpadding="1" cellspacing="3">
+<tr><td align=right>Old password:</td><td align=left>&nbsp;<input type=password size="16" maxlength="16" name=Password0></td></tr>
+<tr><td align=right>New password:</td><td align=left>&nbsp;<input type=password size="16" maxlength="16" name=Password1></td></tr>
+<tr><td align=right>&nbsp;&nbsp;again:</td><td align=left>&nbsp;<input type=password size="16" maxlength="16" name=Password2></td></tr>
 <tr><td align=right><input type=submit name="Operation" value="Cancel">&nbsp;</td><td align=left>&nbsp;<input type=submit name="Operation" value="Update"></td></tr>
 </table>
 </form></center>

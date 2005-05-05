@@ -23,12 +23,12 @@
        Don't forget the matching insurrection.js and insurrection.pl files. -->
   <!-- Note: the data within this template must be literal - no XSLT tags -->
   <xsl:template name="banner">
-    <div style="margin: 0px; border: 0px; padding-top: 4px; text-align: center;">
-      <table style="margin: auto; border: 0px; font-family: serif; font-style: italic; font-weight: bold; font-size: 18pt;">
+    <div style="margin: 0px; border: 0px; padding: 0px; text-align: center;">
+      <table style="margin: auto; border: 0px; font-family: serif; font-style: italic; font-weight: bold; font-size: 18pt;" cellpadding="0" cellspacing="0">
         <tr>
-          <td valign="top" align="right"><a href="/" style="color: #bfbfbf;">Demo</a></td>
+          <td valign="top" align="right"><a href="/" style="padding-right: 4px; color: #bfbfbf;">Demo</a></td>
           <td valign="middle" align="center"><a href="/"><img src="/InsurrectionLogo.gif" alt="Insurrection with Subversion" border="0"/></a></td>
-          <td valign="bottom" align="left"><a href="/" style="color: #bfbfbf;">Server</a></td>
+          <td valign="bottom" align="left"><a href="/" style="padding-left: 4px; color: #bfbfbf;">Server</a></td>
         </tr>
       </table>
     </div>
@@ -120,8 +120,38 @@
         </xsl:element>
 
         <!-- Now for the real page... -->
-        <table id="pagetable">
+        <table id="pagetable" cellpadding="0" cellspacing="0">
           <tr>
+            <td id="top-left">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+            <td id="top">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+            <td id="top-right">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+           </tr>
+           <tr>
+            <td id="left">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
             <td id="content">
               <xsl:call-template name="banner"/>
 
@@ -144,6 +174,36 @@
                 <xsl:value-of select="@version"/>
                 <xsl:text> -- $Id$</xsl:text>
               </div>
+            </td>
+            <td id="right">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+           </tr>
+           <tr>
+            <td id="bottom-left">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+            <td id="bottom">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+            <td id="bottom-right">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
             </td>
           </tr>
         </table>
@@ -444,8 +504,38 @@
         <xsl:call-template name="header"/>
       </head>
       <body>
-        <table id="pagetable">
+        <table id="pagetable" cellpadding="0" cellspacing="0">
           <tr>
+            <td id="top-left">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+            <td id="top">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+            <td id="top-right">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+           </tr>
+           <tr>
+            <td id="left">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
             <td id="content">
               <xsl:call-template name="banner"/>
               <table class="revision" width="100%" cellspacing="0">
@@ -505,6 +595,36 @@
               <div class="footer">
                 <xsl:text>$Id$</xsl:text>
               </div>
+            </td>
+            <td id="right">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+           </tr>
+           <tr>
+            <td id="bottom-left">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+            <td id="bottom">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </td>
+            <td id="bottom-right">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="blankicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
             </td>
           </tr>
         </table>

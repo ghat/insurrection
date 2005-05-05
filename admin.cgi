@@ -322,10 +322,10 @@ if (@accessGroups > 0)
           , '<input type="hidden" name="AccessVersion" value="' , $accessVersion , '"/>';
    }
 
-   print '<table border=0 cellpadding=2 cellspacing=0><tr><td>'
-       , '<table class="accesstable" cellspacing=0>'
-       , '<tr><th rowspan=2>Username</th>';
-   print '<th rowspan=2>Admin</th>' if ($isAdmin);
+   print '<table border="0" cellpadding="2" cellspacing="0"><tr><td>'
+       , '<table class="accesstable" cellspacing="0">'
+       , '<tr><th rowspan="2">Username</th>';
+   print '<th rowspan="2">Admin</th>' if ($isAdmin);
    print '<th align=center colspan=' , $cols , '>Repositories</th>'
        , '</tr>'
        , '<tr class="accesstitles">';
@@ -396,12 +396,12 @@ if (@accessGroups > 0)
 
    print '<tr bgcolor="#AAAAAA">'
        ,  '<td align=left valign=middle>'
-       ,   '<input type="text" name="NewUser" value="" length=10 maxlength=12/>'
+       ,   '<input type="text" name="NewUser" value="" length="10" maxlength="32"/>'
        ,  '</td>'
        ,  '<td align=left valign=middle colspan=' , ($cols + $isAdmin) , '>'
-       ,   '<table width="100%" cellspacing=0 id="versions">'
+       ,   '<table width="100%" cellspacing="0" id="versions">'
        ,    '<tr>'
-       ,     '<th rowspan=2><input type="submit" name="Operation" value="AddUser"/></th>'
+       ,     '<th rowspan="2"><input type="submit" name="Operation" value="AddUser"/></th>'
        ,     '<td>' , $accessVersion , '</td>'
        ,    '</tr>'
        ,    '<tr><td width="90%">' , $passwdVersion , '</td></tr>'

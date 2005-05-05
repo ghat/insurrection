@@ -3,10 +3,11 @@
 BODY
 {
     color: black;
-    background: rgb(140,120,120);
+    background: #d4d5d6;
     font-family: helvetica, ariel, sansserif;
     font-size: 10pt;
     text-align: center;
+    margin: 0px;
 }
 
 IMG
@@ -21,18 +22,69 @@ A:active {color: red; text-decoration: underline;}
 
 #pagetable
 {
+    /* Remove the width style if you want it to be more dynamic */
     width: 680px;
     text-align: left;
     margin-left: auto;
     margin-right: auto;
 }
 
+#top-left
+{
+    background: white url('/top-left.gif');
+    width: 18px;
+    height: 18px;
+}
+
+#top
+{
+    background: white url('/top.gif') repeat-x;
+    height: 18px;
+}
+
+#top-right
+{
+    background: white url('/top-right.gif');
+    height: 18px;
+    width: 18px;
+}
+
+#left
+{
+    background: white url('/left.gif') repeat-y;
+    width: 18px;
+}
+
+#right
+{
+    background: white url('/right.gif') repeat-y;
+    width: 18px;
+}
+
+#bottom-left
+{
+    background: white url('/bottom-left.gif');
+    width: 18px;
+    height: 18px;
+}
+
+#bottom
+{
+    background: white url('/bottom.gif') repeat-x;
+    height: 18px;
+}
+
+#bottom-right
+{
+    background: white url('/bottom-right.gif');
+    height: 18px;
+    width: 18px;
+}
+
 #content
 {
     color: black;
-    background: white url('/turtles.jpg') repeat-y;
-    padding: 0px 20px 20px 20px;
-    border: solid 1px black;
+    background: white url('/turtles.jpg') repeat-y top center;
 }
 
 .versiontable TH
