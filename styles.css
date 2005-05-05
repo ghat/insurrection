@@ -20,10 +20,19 @@ A:visited {color: darkblue; text-decoration: none;}
 A:hover {color: green; text-decoration: underline;}
 A:active {color: red; text-decoration: underline;}
 
-#pagetable
+#content
 {
     /* Remove the width style if you want it to be more dynamic */
-    width: 680px;
+    width: 672px;
+    color: black;
+    background: white;
+    background-image: url('/turtles.jpg');
+    background-repeat: repeat-y;
+    background-position: top center;
+}
+
+#pagetable
+{
     text-align: left;
     margin-left: auto;
     margin-right: auto;
@@ -31,60 +40,71 @@ A:active {color: red; text-decoration: underline;}
 
 #top-left
 {
-    background: white url('/top-left.gif');
-    width: 15px;
-    height: 15px;
+    background-image: url('/top-left.gif');
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    width: 14px;
+    height: 14px;
 }
 
 #top
 {
-    background: white url('/top.gif') repeat-x;
-    height: 15px;
+    background-image: url('/top.gif');
+    background-repeat: repeat-x;
+    background-position: bottom left;
+    height: 14px;
 }
 
 #top-right
 {
-    background: white url('/top-right.gif');
-    height: 15px;
-    width: 15px;
+    background-image: url('/top-right.gif');
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    height: 14px;
+    width: 14px;
 }
 
 #left
 {
-    background: white url('/left.gif') repeat-y;
-    width: 15px;
+    background-image: url('/left.gif');
+    background-repeat: repeat-y;
+    background-position: top right;
+    width: 14px;
 }
 
 #right
 {
-    background: white url('/right.gif') repeat-y;
-    width: 15px;
+    background-image: url('/right.gif');
+    background-repeat: repeat-y;
+    background-position: top left;
+    width: 14px;
 }
 
 #bottom-left
 {
-    background: white url('/bottom-left.gif');
-    width: 15px;
-    height: 15px;
+    background-image: url('/bottom-left.gif');
+    background-repeat: no-repeat;
+    background-position: top right;
+    width: 14px;
+    height: 14px;
 }
 
 #bottom
 {
-    background: white url('/bottom.gif') repeat-x;
-    height: 15px;
+    background-image: url('/bottom.gif');
+    background-repeat: repeat-x;
+    background-position: top left;
+    height: 14px;
+    height: 14px;
 }
 
 #bottom-right
 {
-    background: white url('/bottom-right.gif');
-    height: 15px;
-    width: 15px;
-}
-
-#content
-{
-    color: black;
-    background: white url('/turtles.jpg') repeat-y top center;
+    background-image: url('/bottom-right.gif');
+    background-repeat: no-repeat;
+    background-position: top left;
+    height: 14px;
+    width: 14px;
 }
 
 .versiontable TH
