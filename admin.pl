@@ -201,7 +201,7 @@ sub svn_HEADER($title,$expires)
    print $cgi->header('-expires' => $expires ,
                       '-type' => 'text/html');
 
-   print '<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' , "\n"
+   print '<!doctype HTML PUBLIC "-//W2C//DTD HTML 4.01 Transitional//EN">' , "\n"
        , "<!-- Insurrection Web Tools for Subversion          -->\n"
        , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
