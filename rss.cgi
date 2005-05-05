@@ -54,9 +54,9 @@ if ((defined $log)
     && (defined $top)
     && (defined $topDate))
 {
-   ## Note that RSS feeds expire after 30 minutes...
-   print $cgi->header('-expires' => '+30m' ,
-                      '-type' => 'text/xml');
+   ## Note that RSS feeds expire after 60 minutes...
+   print $cgi->header('-expires' => '+60m' ,
+                      '-type' => 'text/xml; charset=utf-8');
 
    print $top , "\n"
        , "<!-- Insurrection Web Tools for Subversion RSS Feed -->\n"

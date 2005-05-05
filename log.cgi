@@ -58,7 +58,8 @@ if ((defined $rpath)
    && (open(LOGXML,"$cmd |")))
 {
    print $cgi->header('-expires' => '+1m' ,
-                      '-type' => 'text/xml');
+                      '-Cache-Control' => 'no-cache',
+                      '-type' => 'text/xml; charset=utf-8');
 
    while (<LOGXML>)
    {

@@ -26,7 +26,7 @@ $mime = 'text/plain' if ((!defined $mime) || ($mime eq ''));
 ## Now, lets build the correct command to run...
 my $cmd = $SVN_CMD . ' cat --non-interactive --no-auth-cache -r ' . $rev . ' ' . $docURL;
 
-print $cgi->header('-expires' => '+1m' ,
+print $cgi->header('-expires' => '+1d' ,
                    '-type' => $mime);
 
 print `$cmd`;
