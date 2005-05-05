@@ -198,10 +198,13 @@ sub svn_HEADER($title,$expires)
    my ($header) = ($insurrection_xml =~ m|<xsl:template name="header">(.*?)</xsl:template>|s);
    my ($banner) = ($insurrection_xml =~ m|<xsl:template name="banner">(.*?)</xsl:template>|s);
 
+   ## Darn HTML 4 does not let <link> tags be closed!  How annoying!
+   $header =~ s|(<link\s[^>]*)/>|$1>|gs;
+
    print $cgi->header('-expires' => $expires ,
                       '-type' => 'text/html');
 
-   print '<!doctype HTML PUBLIC "-//W2C//DTD HTML 4.01 Transitional//EN">' , "\n"
+   print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' , "\n"
        , "<!-- Insurrection Web Tools for Subversion          -->\n"
        , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
@@ -213,12 +216,12 @@ sub svn_HEADER($title,$expires)
        ,  '<body>'
        ,   '<table id="pagetable" cellpadding="0" cellspacing="0">'
        ,    '<tr>'
-       ,     '<td id="top-left"><img width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,     '<td id="top"><img width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,     '<td id="top-right"><img width="1" height="1" src="' , $blankIcon , '"/></td>'
+       ,     '<td id="top-left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
+       ,     '<td id="top"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
+       ,     '<td id="top-right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
        ,    '</tr>'
        ,    '<tr>'
-       ,     '<td id="left"><img width="1" height="1" src="' , $blankIcon , '"/></td>'
+       ,     '<td id="left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
        ,     '<td id="content">'
        ,      $banner
        ,      '<div class="svn">' , "\n";
@@ -239,12 +242,12 @@ sub svn_TRAILER($version)
        ,      'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
    print      '</div>'
        ,     '</td>'
-       ,     '<td id="right"><img width="1" height="1" src="' , $blankIcon , '"/></td>'
+       ,     '<td id="right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
        ,    '</tr>'
        ,    '<tr>'
-       ,     '<td id="bottom-left"><img width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,     '<td id="bottom"><img width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,     '<td id="bottom-right"><img width="1" height="1" src="' , $blankIcon , '"/></td>'
+       ,     '<td id="bottom-left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
+       ,     '<td id="bottom"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
+       ,     '<td id="bottom-right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
        ,    '</tr>'
        ,   '</table>'
        ,  '</body>'

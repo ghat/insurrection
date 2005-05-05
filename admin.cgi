@@ -65,7 +65,7 @@ elsif ($Operation eq 'Update')
 
    if ($accessVersion ne $cgi->param('AccessVersion'))
    {
-      print '<h2 align=center><font color=red>Concurrent modification attempted - please recheck</font></h2>'
+      print '<h2 align="center"><font color="red">Concurrent modification attempted - please recheck</font></h2>'
    }
    else
    {
@@ -127,7 +127,7 @@ elsif ($Operation eq 'Update')
          ## Only print that there were changes if there really were
          if ($accessVersion ne $cgi->param('AccessVersion'))
          {
-            print '<h2 align=center><font color=green>Access controls successfully changed.</font></h2>';
+            print '<h2 align="center"><font color="green">Access controls successfully changed.</font></h2>';
          }
       }
    }
@@ -152,7 +152,7 @@ elsif ($Operation eq 'AddUser')
 
          if (defined $userPasswords{$user})
          {
-            print '<h2 align=center><font color=red>User already exists.</font></h2>'
+            print '<h2 align="center"><font color="red">User already exists.</font></h2>'
          }
          else
          {
@@ -188,17 +188,17 @@ elsif ($Operation eq 'AddUser')
             }
             else
             {
-               print '<h2 align=center><font color=red>Failed to send EMail to ' , $user , $EMAIL_DOMAIN , '</font></h2>';
+               print '<h2 align="center"><font color="red">Failed to send EMail to ' , $user , $EMAIL_DOMAIN , '</font></h2>';
             }
 
-            print '<h2 align=center><font color=green>User successfully added.</font></h2>';
+            print '<h2 align="center"><font color="green">User successfully added.</font></h2>';
          }
 
          &unlockPasswordFile();
       }
       else
       {
-         print '<h2 align=center><font color=red>Invalid characters in username.</font></h2>'
+         print '<h2 align="center"><font color="red">Invalid characters in username.</font></h2>'
       }
    }
 }
@@ -223,14 +223,14 @@ elsif ($Operation eq 'Delete User')
          delete $userPasswords{$user};
          &savePasswordFile("admin.cgi: Deleted user $user");
 
-         print '<h2 align=center><font color=green>User ' , $user , ' successfully deleted.</font></h2>';
+         print '<h2 align="center"><font color="green">User ' , $user , ' successfully deleted.</font></h2>';
       }
 
       &unlockPasswordFile();
    }
    else
    {
-      print '<h2 align=center><font color=red>User ' , $user , ' can not be deleted.</font></h2>';
+      print '<h2 align="center"><font color="red">User ' , $user , ' can not be deleted.</font></h2>';
    }
 }
 elsif (defined $cgi->param('delUser'))
@@ -238,14 +238,14 @@ elsif (defined $cgi->param('delUser'))
    my $user = $cgi->param('delUser');
    if (&canDelete($user))
    {
-      print '<form action="?" method=post>'
-          , '<input type=hidden name="delUsername" value="' , $user , '"/>'
-          , '<h2 align=center>Delete user ' , $user , '?&nbsp; <input type="submit" name="Operation" value="Delete User"/>&nbsp;<input type="submit" name="Operation" value="Cencel"/></h2>'
+      print '<form action="?" method="post">'
+          , '<input type="hidden" name="delUsername" value="' , $user , '"/>'
+          , '<h2 align="center">Delete user ' , $user , '?&nbsp; <input type="submit" name="Operation" value="Delete User"/>&nbsp;<input type="submit" name="Operation" value="Cencel"/></h2>'
           , '</form><hr>';
    }
    else
    {
-      print '<h2 align=center><font color=red>User ' , $user , ' can not be deleted.</font></h2>'
+      print '<h2 align="center"><font color="red">User ' , $user , ' can not be deleted.</font></h2>'
           , '<p>In order to delete the user, all access rights must be removed from the user first.</p>';
    }
 }
@@ -318,7 +318,7 @@ if (@accessGroups > 0)
           , '}' if ($isAdmin);
 
       print '//--></script>'
-          , '<form action="?" method=post>'
+          , '<form action="?" method="post">'
           , '<input type="hidden" name="AccessVersion" value="' , $accessVersion , '"/>';
    }
 
@@ -326,7 +326,7 @@ if (@accessGroups > 0)
        , '<table class="accesstable" cellspacing="0">'
        , '<tr><th rowspan="2">Username</th>';
    print '<th rowspan="2">Admin</th>' if ($isAdmin);
-   print '<th align=center colspan=' , $cols , '>Repositories</th>'
+   print '<th align="center" colspan="' , $cols , '">Repositories</th>'
        , '</tr>'
        , '<tr class="accesstitles">';
 
@@ -346,7 +346,7 @@ if (@accessGroups > 0)
       if ($canAdminUser || ($AuthUser eq $user))
       {
          print '<tr bgcolor="' , $lineColour[$line] , '">'
-             , '<td align=left valign=middle>&nbsp;';
+             , '<td align="left" valign="middle">&nbsp;';
 
          print '<a href="?delUser=' , $user , '">' if (&canDelete($user));
          print $user;
@@ -361,7 +361,7 @@ if (@accessGroups > 0)
          {
             if ($user eq '*')
             {
-               print '<td nowrap align=center valign=middle>' , $buttons[0] , '</td>';
+               print '<td nowrap align="center" valign="middle">' , $buttons[0] , '</td>';
             }
             else
             {
@@ -369,7 +369,7 @@ if (@accessGroups > 0)
                my $val = 0;
                $val = 3 if (&isAdminMember('Admin',$user));
                print '<input type="hidden" name="' , $id , '" id="' , $id , '" value="' , $val , '"/>'
-                   , '<td nowrap align=center valign=middle class="editable"'
+                   , '<td nowrap align="center" valign="middle" class="editable"'
                    , ' onmousedown="bump1(this,\'' , $id , '\');"'
                    , '>' , $buttons[$val] , '</td>';
             }
@@ -383,7 +383,7 @@ if (@accessGroups > 0)
             my $val = &typeMember($group,$user);
 
             print '<input type="hidden" name="' , $id , '" id="' , $id , '" value="' , $val , '"/>' if ($mod);
-            print '<td nowrap align=center valign=middle';
+            print '<td nowrap align="center" valign="middle"';
             print ' class="editable"'
                 , ' onmousedown="' , $bump , '(this,\'' , $id , '\');"' if ($mod);
             print '>' , $buttons[$val] , '</td>';
@@ -395,10 +395,10 @@ if (@accessGroups > 0)
    }
 
    print '<tr bgcolor="#AAAAAA">'
-       ,  '<td align=left valign=middle>'
-       ,   '<input type="text" name="NewUser" value="" length="10" maxlength="32"/>'
+       ,  '<td align="left" valign="middle">'
+       ,   '<input type="text" name="NewUser" value="" size="16" maxlength="32"/>'
        ,  '</td>'
-       ,  '<td align=left valign=middle colspan=' , ($cols + $isAdmin) , '>'
+       ,  '<td align="left" valign="middle" colspan="' , ($cols + $isAdmin) , '">'
        ,   '<table width="100%" cellspacing="0" id="versions">'
        ,    '<tr>'
        ,     '<th rowspan="2"><input type="submit" name="Operation" value="AddUser"/></th>'
