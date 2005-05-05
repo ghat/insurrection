@@ -10,7 +10,7 @@
   -->
   <header>
     <link href="/favicon.ico" rel="shortcut icon"/>
-    <link href="/styles.css" rel="stylesheet" type="text/css"/>
+    <link href="../styles.css" rel="stylesheet" type="text/css"/>
   </header>
 
   <!--

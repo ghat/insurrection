@@ -12,7 +12,7 @@
       <head>
         <title>Insurrection Browser Compatibility Test #5</title>
         <link href="/favicon.ico" rel="shortcut icon"/>
-        <link href="/styles.css" rel="stylesheet" type="text/css"/>
+        <link href="../styles.css" rel="stylesheet" type="text/css"/>
         <script type="text/javascript" language="JavaScript" src="index.js"></script>
       </head>
       <body>
