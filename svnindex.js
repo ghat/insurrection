@@ -125,11 +125,13 @@ function foldDir(arrow)
 			{
 				row.style.display = '';
 				arrow.src = document.getElementById('openedImage').src;
+				arrow.title = 'Collapse directory';
 			}
 			else
 			{
 				row.style.display = 'none';
 				arrow.src = document.getElementById('closedImage').src;
+				arrow.title = 'Expand directory';
 			}
 		}
 	}
@@ -189,6 +191,7 @@ function doNextItem()
 				td.className = 'foldspace';
 				img = document.createElement('img');
 				img.className = 'dirarrow';
+				img.title = 'Expand directory';
 				img.id = t.substring(1);
 				img.src = document.getElementById('closedImage').src;
 				img.align = 'middle';
@@ -205,6 +208,7 @@ function doNextItem()
 
 				a = document.createElement('a');
 				a.href = t;
+				a.title = 'Go to directory "' + action.name + '"';
 				td.appendChild(a);
 				div = document.createElement('div');
 				div.className = 'dir';
@@ -230,8 +234,10 @@ function doNextItem()
 
 				td = document.createElement('td');
 				tr.appendChild(td);
+
 				a = document.createElement('a');
 				a.href = t;
+				a.title = 'Get current version of "' + action.name + '"';
 				td.appendChild(a);
 				div = document.createElement('div');
 				div.className = 'file';
@@ -259,6 +265,14 @@ function doNextItem()
 			img.src = document.getElementById('infoImage').src;
 			img.align = 'middle';
 			a.appendChild(img);
+			if (action.type == 'dir')
+			{
+				a.title = 'Show revision history for directory "' + action.name + '"';
+			}
+			else
+			{
+				a.title = 'Show revision history for file "' + action.name + '"';
+			}
 
 			// Directories also have a hidden second row where the
 			// in-line sub-directory expansion happens.  Fun stuff

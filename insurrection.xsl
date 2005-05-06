@@ -26,9 +26,9 @@
     <div style="margin: 0px; border: 0px; padding: 0px; text-align: center;">
       <table style="margin: auto; border: 0px; font-family: serif; font-style: italic; font-weight: bold; font-size: 18pt;" cellpadding="0" cellspacing="0">
         <tr>
-          <td valign="top" align="right"><a href="/" style="padding-right: 4px; color: #bfbfbf;">Demo</a></td>
-          <td valign="middle" align="center"><a href="/"><img src="/InsurrectionLogo.gif" alt="Insurrection with Subversion" border="0"/></a></td>
-          <td valign="bottom" align="left"><a href="/" style="padding-left: 4px; color: #bfbfbf;">Server</a></td>
+          <td valign="top" align="right"><a href="/" title="Home" style="padding-right: 4px; color: #bfbfbf;">Demo</a></td>
+          <td valign="middle" align="center"><a href="/" title="Home"><img src="/InsurrectionLogo.gif" alt="Insurrection with Subversion" border="0"/></a></td>
+          <td valign="bottom" align="left"><a href="/" title="Home" style="padding-left: 4px; color: #bfbfbf;">Server</a></td>
         </tr>
       </table>
     </div>
@@ -210,6 +210,7 @@
     <tr class="updirrow">
       <td colspan="5">
         <xsl:element name="a">
+          <xsl:attribute name="title">Go to parent directory</xsl:attribute>
           <xsl:attribute name="href">..</xsl:attribute>
           <div class="updir">
             <xsl:element name="img">
@@ -290,6 +291,7 @@
             <xsl:attribute name="src">
               <xsl:call-template name="openedicon-path"/>
             </xsl:attribute>
+            <xsl:attribute name="title">Collapse directory</xsl:attribute>
           </xsl:element>
         </td>
         <td class="path">
@@ -318,6 +320,7 @@
         </td>
         <td class="showlog">
           <xsl:element name="a">
+            <xsl:attribute name="title">RSS Feed of activity in this directory</xsl:attribute>
             <xsl:attribute name="href">
               <xsl:text>?Insurrection=rss</xsl:text>
             </xsl:attribute>
@@ -332,6 +335,7 @@
         </td>
         <td class="showlog">
           <xsl:element name="a">
+            <xsl:attribute name="title">Show revision history for this directory</xsl:attribute>
             <xsl:attribute name="href">
               <xsl:text>?Insurrection=log</xsl:text>
             </xsl:attribute>
@@ -373,6 +377,7 @@
           <xsl:attribute name="src">
             <xsl:call-template name="closedicon-path"/>
           </xsl:attribute>
+          <xsl:attribute name="title">Expand directory</xsl:attribute>
           <xsl:attribute name="onclick">loadDir(this)</xsl:attribute>
           <xsl:attribute name="id">
             <xsl:text>/</xsl:text>
@@ -382,6 +387,11 @@
       </td>
       <td>
         <xsl:element name="a">
+          <xsl:attribute name="title">
+            <xsl:text>Go to directory "</xsl:text>
+            <xsl:value-of select="@href"/>
+            <xsl:text>"</xsl:text>
+          </xsl:attribute>
           <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
           </xsl:attribute>
@@ -400,6 +410,11 @@
       </td>
       <td class="showlog">
         <xsl:element name="a">
+          <xsl:attribute name="title">
+            <xsl:text>Show revision history for directory "</xsl:text>
+            <xsl:value-of select="@href"/>
+            <xsl:text>"</xsl:text>
+          </xsl:attribute>
           <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
             <xsl:text>?Insurrection=log</xsl:text>
@@ -450,6 +465,11 @@
       </td>
       <td>
         <xsl:element name="a">
+          <xsl:attribute name="title">
+            <xsl:text>Get current version of "</xsl:text>
+            <xsl:value-of select="@href"/>
+            <xsl:text>"</xsl:text>
+          </xsl:attribute>
           <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
           </xsl:attribute>
@@ -467,6 +487,11 @@
       </td>
       <td class="showlog">
         <xsl:element name="a">
+          <xsl:attribute name="title">
+            <xsl:text>Show revision history for file "</xsl:text>
+            <xsl:value-of select="@href"/>
+            <xsl:text>"</xsl:text>
+          </xsl:attribute>
           <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
             <xsl:text>?Insurrection=log</xsl:text>
@@ -593,6 +618,7 @@
       <xsl:attribute name="class">revision</xsl:attribute>
       <xsl:element name="th">
         <xsl:attribute name="class">revision</xsl:attribute>
+        <xsl:attribute name="title">Show / hide details</xsl:attribute>
         <xsl:attribute name="onclick">
           <xsl:text>toggle(</xsl:text>
           <xsl:value-of select="@revision"/>
@@ -602,6 +628,7 @@
       </xsl:element>
       <xsl:element name="td">
         <xsl:attribute name="class">user</xsl:attribute>
+        <xsl:attribute name="title">Show / hide details</xsl:attribute>
         <xsl:attribute name="onclick">
           <xsl:text>toggle(</xsl:text>
           <xsl:value-of select="@revision"/>
@@ -612,6 +639,7 @@
       <xsl:element name="td">
         <xsl:attribute name="class">details</xsl:attribute>
         <xsl:element name="span">
+          <xsl:attribute name="title">Show / hide details</xsl:attribute>
           <xsl:attribute name="onclick">
             <xsl:text>toggle(</xsl:text>
             <xsl:value-of select="@revision"/>
@@ -701,6 +729,7 @@
         <xsl:sort select="."/>
         <xsl:element name="div">
           <xsl:attribute name="class">pathline</xsl:attribute>
+          <xsl:attribute name="title">Show menu of operations</xsl:attribute>
           <xsl:attribute name="onclick">
             <xsl:text>detailClick('</xsl:text>
             <xsl:value-of select="../../../@repository"/>

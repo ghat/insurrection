@@ -704,10 +704,10 @@ sub repositoryTable()
             while ($size =~ s/(\d+)(\d\d\d)/$1,$2/) {}
 
             $result .= '<tr>'
-                     .  '<td><a href="' . $SVN_REPOSITORIES_URL . $group . '/">' . $group . '</a></td>'
+                     .  '<td><a title="Explore repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/">' . $group . '</a></td>'
                      .  '<td align="right">' . $size . 'k</td>'
                      .  '<td>'
-                     .   '<a href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
+                     .   '<a title="RSS Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
                      .    '<img src="' . $rssIcon . '" alt="RSS Feed" border="0" style="padding-left: 2px;" align="right"/>'
                      .   '</a>'
                      .   $comments

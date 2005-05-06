@@ -19,6 +19,10 @@ DirectoryIndex index.cgi
 	SetHandler cgi-script
 </Files>
 
+<Files ~ "project.cgi">
+	SetHandler cgi-script
+</Files>
+
 <Files ~ "log.cgi">
 	SetHandler cgi-script
 </Files>
@@ -94,6 +98,7 @@ DirectoryIndex index.cgi
 ##
 RewriteEngine On
 RewriteRule	^index.html$	/index.cgi	[R,L]
+RewriteRule	^project.html$	/project.cgi	[R,L]
 RewriteCond %{QUERY_STRING} Insurrection=rss
 RewriteRule	^svn/(.*)$	/rss.cgi/$1	[R,L]
 RewriteCond %{QUERY_STRING} Insurrection=log

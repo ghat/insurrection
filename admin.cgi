@@ -341,6 +341,8 @@ if (@accessGroups > 0)
    my @flagColour = ('#CCFFCC' , '#BBEEBB');  ## Flag what the values were before changes
    my $canMod = 0;
 
+   my $formEntries = '';
+
    foreach my $user ('*', sort keys %userPasswords)
    {
       if ($canAdminUser || ($AuthUser eq $user))
@@ -368,9 +370,9 @@ if (@accessGroups > 0)
                my $id = "$user:Admin";
                my $val = 0;
                $val = 3 if (&isAdminMember('Admin',$user));
-               print '<input type="hidden" name="' , $id , '" id="' , $id , '" value="' , $val , '"/>'
-                   , '<td nowrap align="center" valign="middle" class="editable"'
-                   , ' onmousedown="bump1(this,\'' , $id , '\');"'
+               $formEntries .= '<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $val . '"/>';
+               print '<td nowrap align="center" valign="middle" class="editable"'
+                   , ' title="Change access" onmousedown="bump1(this,\'' , $id , '\');"'
                    , '>' , $buttons[$val] , '</td>';
             }
          }
@@ -382,10 +384,10 @@ if (@accessGroups > 0)
             my $id = "$user:$group";
             my $val = &typeMember($group,$user);
 
-            print '<input type="hidden" name="' , $id , '" id="' , $id , '" value="' , $val , '"/>' if ($mod);
+            $formEntries .= '<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $val . '"/>' if ($mod);
             print '<td nowrap align="center" valign="middle"';
             print ' class="editable"'
-                , ' onmousedown="' , $bump , '(this,\'' , $id , '\');"' if ($mod);
+                , ' title="Change access" onmousedown="' , $bump , '(this,\'' , $id , '\');"' if ($mod);
             print '>' , $buttons[$val] , '</td>';
          }
          print '</tr>';
@@ -419,7 +421,7 @@ if (@accessGroups > 0)
        , 'For example, <b>msinz</b>' , $EMAIL_DOMAIN , ' would need to used.&nbsp; '
        , 'This is important as EMail is used to send the initial password to the user.</p>' if ($canAdminUser);
 
-   print '</form>' if ($canAdminUser);
+   print $formEntries , '</form>' if ($canAdminUser);
 
    print '<br/>';
 }
