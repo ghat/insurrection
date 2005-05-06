@@ -747,14 +747,24 @@ TD.details
   background: rgb(95%,95%,95%);
 }
 
+.diff0
+{
+  white-space: pre;
+  font-family: monospace;
+}
+
 .diff1
 {
   background: rgb(100%,75%,75%);
+  white-space: pre;
+  font-family: monospace;
 }
 
 .diff2
 {
   background: rgb(75%,100%,75%);
+  white-space: pre;
+  font-family: monospace;
 }
 
 .diff3

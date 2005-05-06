@@ -63,7 +63,7 @@ if (defined $results)
    $results = &svn_XML_Escape($results);
 
    ## Wrap the whole thing in a pre tag
-   $results = '<pre class="diff">' . "\n" . $results . '</pre>';
+   $results = '<div class="diff">' . "\n" . $results . '</div>';
 
    ## Next, lets style the diff "Index:" section
    $results =~ s|\nIndex(:.*?)\n\=+\n|<div class="diffindex">diff$1</div>|sg;
@@ -80,18 +80,16 @@ if (defined $results)
    $results =~ s|(?<=[\n>])(   \+ [^<\n]+)|<div class="diff2">$1</div>|g;
    $results =~ s|</div>\n+</div>|</div></div>|sg;
 
-   ## Finally, lets style the line delete/add lines
-   $results =~ s|(?<=[\n>])(\-[^<\n]*)|<div class="diff1">$1</div>|g;
-   $results =~ s|(?<=[\n>])(\+[^<\n]*)|<div class="diff2">$1</div>|g;
+   ## Finally, lets style the line context/delete/add lines
+   ## Note, that while we do style the div correctly for monospaced
+   ## characters, this does not always take so we add the <tt></tt> tag
+   ## to work around the "don't override fonts" option in many browsers.
+   $results =~ s|(?<=[\n>])(\s[^<\n]*)|<div class="diff0"><tt>$1</tt></div>|g;
+   $results =~ s|(?<=[\n>])(\-[^<\n]*)|<div class="diff1"><tt>$1</tt></div>|g;
+   $results =~ s|(?<=[\n>])(\+[^<\n]*)|<div class="diff2"><tt>$1</tt></div>|g;
 
    ## Style the diff line add/delete sections
    $results =~ s|(?<=[\n>])(\@\@[^<\n]*)|<div class="diff3">$1</div>|g;
-
-   ## Clean up extra line enders
-   $results =~ s|</div>\n|</div>|sg;
-
-   ## Finally, add a link at the top to get the results as a diff/patch
-
 }
 else
 {
@@ -100,6 +98,7 @@ else
 
 &svn_HEADER('diff ' . $rev1 . ':' . $rev2 . ' - ' . $cgi->path_info);
 
+## Put a link at the top to get the results as a patch
 print '<a class="difftitle" href="?getpatch=1&amp;r1=' , $rev1 , '&amp;r2=' , $rev2 , '">'
     , 'Download patch file for revision ' , $rev1 , ' to ' , $rev2 , '<br/>'
     , 'of ' , &svn_XML_Escape($cgi->path_info)
