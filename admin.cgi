@@ -63,14 +63,14 @@ elsif ($Operation eq 'Update')
    ## Reload the access file, just in case...
    &loadAccessFile();
 
-   if ($accessVersion ne $cgi->param('AccessVersion'))
+   if ($accessVersion ne $cgi->param('Access_Version'))
    {
       print '<h2 align="center"><font color="red">Concurrent modification attempted - please recheck</font></h2>'
    }
    else
    {
       ## Just to make sure that someone does not remove his own admin access
-      $cgi->param("$AuthUser:Admin",3) if ($isAdmin);
+      $cgi->param(&makeID($AuthUser,'Admin'),3) if ($isAdmin);
 
       ## Flag if we actually did change something...
       my $changed = 0;
@@ -92,7 +92,7 @@ elsif ($Operation eq 'Update')
 
             foreach my $user ('*',keys %userPasswords)
             {
-               my $id = "$user:$group";
+               my $id = &makeID($user,$group);
                my $type = $cgi->param($id);
                if (defined $type)
                {
@@ -112,7 +112,7 @@ elsif ($Operation eq 'Update')
          my @users;
          foreach my $user (keys %userPasswords)
          {
-            push @users,$user if ($cgi->param("$user:Admin") == 3);
+            push @users,$user if ($cgi->param(&makeID($user,'Admin')) == 3);
          }
          @{$groupAdmins{'Admin'}} = @users;
       }
@@ -125,7 +125,7 @@ elsif ($Operation eq 'Update')
          &loadAccessFile();
 
          ## Only print that there were changes if there really were
-         if ($accessVersion ne $cgi->param('AccessVersion'))
+         if ($accessVersion ne $cgi->param('Access_Version'))
          {
             print '<h2 align="center"><font color="green">Access controls successfully changed.</font></h2>';
          }
@@ -319,7 +319,7 @@ if (@accessGroups > 0)
 
       print '//--></script>'
           , '<form action="?" method="post">'
-          , '<input type="hidden" name="AccessVersion" value="' , $accessVersion , '"/>';
+          , '<input type="hidden" name="Access_Version" value="' , $accessVersion , '"/>';
    }
 
    print '<table border="0" cellpadding="2" cellspacing="0"><tr><td>'
@@ -367,7 +367,7 @@ if (@accessGroups > 0)
             }
             else
             {
-               my $id = "$user:Admin";
+               my $id = &makeID($user,'Admin');
                my $val = 0;
                $val = 3 if (&isAdminMember('Admin',$user));
                $formEntries .= '<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $val . '"/>';
@@ -381,7 +381,7 @@ if (@accessGroups > 0)
          {
             my $mod = &isAdmin($group,$AuthUser);
             $canMod = 1 if ($mod);
-            my $id = "$user:$group";
+            my $id = &makeID($user,$group);
             my $val = &typeMember($group,$user);
 
             $formEntries .= '<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $val . '"/>' if ($mod);
@@ -518,5 +518,22 @@ sub canDelete($user)
       }
    }
    return($canDel);
+}
+
+##############################################################################
+#
+# Make a safe ID string for the given user and group combination.
+#
+sub makeID($user,$group)
+{
+   my $user = shift;
+   my $group = shift;
+
+   my $id = "ID_$user:$group";
+
+   ## Modify our path to escape some characters into URL form...
+   $id =~ s|([^a-zA-Z:_])|sprintf("%03o",ord($1))|seg;
+
+   return($id);
 }
 

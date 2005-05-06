@@ -708,7 +708,7 @@ sub repositoryTable()
                      .  '<td align="right">' . $size . 'k</td>'
                      .  '<td>'
                      .   '<a title="RSS Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
-                     .    '<img src="' . $rssIcon . '" alt="RSS Feed" border="0" style="padding-left: 2px;" align="right"/>'
+                     .    '<img src="' . $rssIcon . '" alt="RSS Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
                      .   '</a>'
                      .   $comments
                      .  '</td>'

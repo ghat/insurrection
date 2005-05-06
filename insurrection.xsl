@@ -341,7 +341,7 @@
             </xsl:attribute>
             <xsl:element name="img">
               <xsl:attribute name="align">middle</xsl:attribute>
-              <xsl:attribute name="alt">Get revision history</xsl:attribute>
+              <xsl:attribute name="alt">Show revision history for this directory</xsl:attribute>
               <xsl:attribute name="src">
                 <xsl:call-template name="infoicon-path"/>
               </xsl:attribute>
@@ -421,7 +421,11 @@
           </xsl:attribute>
           <xsl:element name="img">
             <xsl:attribute name="align">middle</xsl:attribute>
-            <xsl:attribute name="alt">Get revision history</xsl:attribute>
+            <xsl:attribute name="alt">
+              <xsl:text>Show revision history for directory "</xsl:text>
+              <xsl:value-of select="@href"/>
+              <xsl:text>"</xsl:text>
+            </xsl:attribute>
             <xsl:attribute name="src">
               <xsl:call-template name="infoicon-path"/>
             </xsl:attribute>
@@ -498,7 +502,11 @@
           </xsl:attribute>
           <xsl:element name="img">
             <xsl:attribute name="align">middle</xsl:attribute>
-            <xsl:attribute name="alt">Get revision history</xsl:attribute>
+            <xsl:attribute name="alt">
+              <xsl:text>Show revision history for file "</xsl:text>
+              <xsl:value-of select="@href"/>
+              <xsl:text>"</xsl:text>
+            </xsl:attribute>
             <xsl:attribute name="src">
               <xsl:call-template name="infoicon-path"/>
             </xsl:attribute>
