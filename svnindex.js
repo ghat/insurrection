@@ -237,7 +237,7 @@ function doNextItem()
 
 				a = document.createElement('a');
 				a.href = t;
-				a.title = 'Get current version of "' + action.name + '"';
+				a.title = 'Get latest version of "' + action.name + '"';
 				td.appendChild(a);
 				div = document.createElement('div');
 				div.className = 'file';

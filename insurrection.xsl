@@ -466,7 +466,7 @@
       <td>
         <xsl:element name="a">
           <xsl:attribute name="title">
-            <xsl:text>Get current version of "</xsl:text>
+            <xsl:text>Get latest version of "</xsl:text>
             <xsl:value-of select="@href"/>
             <xsl:text>"</xsl:text>
           </xsl:attribute>
