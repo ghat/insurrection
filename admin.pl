@@ -237,10 +237,16 @@ sub svn_TRAILER($version)
    ## Use the version of this file if there was no version passed.
    $version = '$Id$' if (!defined $version);
 
-   print      '</div><div class="footer">' , $version;
-   print      '&nbsp;&nbsp;--&nbsp;&nbsp;'
-       ,      'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
    print      '</div>'
+       ,      '<div class="footer">'
+       ,       $version;
+   print       '&nbsp;&nbsp;--&nbsp;&nbsp;'
+       ,       'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
+   print       '&nbsp;&nbsp;&nbsp;'
+       ,       '<a title="Valid HTML 4.01!" href="http://validator.w3.org/check?uri=referer">'
+       ,        '<img align="middle" border="0" src="/valid-html401.png" alt="Valid HTML 4.01!">'
+       ,       '</a>'
+       ,      '</div>'
        ,     '</td>'
        ,     '<td id="right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
        ,    '</tr>'
