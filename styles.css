@@ -16,7 +16,7 @@ IMG
 }
 
 A {color: blue; text-decoration: none;}
-A:visited {color: darkblue; text-decoration: none;}
+A:visited {color: blue; text-decoration: none;}
 A:hover {color: green; text-decoration: underline;}
 A:active {color: red; text-decoration: underline;}
 
@@ -178,10 +178,6 @@ A:active {color: red; text-decoration: underline;}
     background-color: transparent;
     text-align: right;
 }
-
-.accesstable A {color: darkblue; text-decoration: none;}
-.accesstable A:hover {color: green;}
-.accesstable A:active {color: red;}
 
 .accesstitles
 {
@@ -381,7 +377,7 @@ TD.showlog
 
 .dirarrow
 {
-  cursor: pointer; cursor: hand;
+  cursor: pointer;
 }
 
 .dirarrow:hover
@@ -391,7 +387,7 @@ TD.showlog
 
 .editable
 {
-  cursor: pointer; cursor: hand;
+  cursor: pointer;
 }
 
 .editable:hover
@@ -425,7 +421,7 @@ TD.showlog
 
 TR.revision
 {
-  cursor: pointer; cursor: hand;
+  cursor: pointer;
 }
 
 TR.revision:hover
@@ -488,7 +484,7 @@ SPAN.revdate
   font-size: 12pt;
   font-weight: bold;
   padding: 4px;
-  cursor: pointer; cursor: hand;
+  cursor: pointer;
 }
 
 .logheader:hover
