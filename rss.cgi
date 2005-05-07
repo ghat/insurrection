@@ -138,7 +138,7 @@ if ((defined $top) && (defined $topDate))
        , '<channel>' , "\n"
        , '<title>Repository: ' , &svn_XML_Escape($rpath) , '</title>' , "\n"
        , '<description>RSS Feed of the activity in the "' , &svn_XML_Escape($rpath)
-       ,   '" repository from ' , &dateFormat($topDate) , ' to ' , &dateFormat($endDate) , '.&lt;br/&gt; '
+       ,   '" repository from ' , &dateFormat($topDate) , ' to ' , &dateFormat($endDate) , '.&lt;hr/&gt; '
        ,   &svn_XML_Escape($groupComments{$rpath . ':/'})
        , '</description>' , "\n"
        , '<link>' , &svn_XML_Escape($SVN_URL . $SVN_REPOSITORIES_URL . $rpath . $opath) , '</link>' , "\n"
