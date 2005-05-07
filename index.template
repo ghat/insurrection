@@ -6,7 +6,7 @@
 <repos/>
 <ul>
   <li>
-    <a style="margin-left: 2px;" href="http://feedvalidator.org/check.cgi?url=http://svn.sinz.com:8000/rss.cgi/Web/"><img src="valid-rss.png" alt="[Valid RSS]" title="Validate my RSS feed" width="88" height="31" align="right" border="0"/></a>
+    <a style="margin-left: 2px;" href="http://feedvalidator.org/check.cgi?url=http://svn.sinz.com:8000/rss.cgi/Web/"><img src="valid-rss.png" alt="[Valid RSS]" title="Validate my RSS feed" align="right" border="0"/></a>
     To access the repositories above via a web browser, just click on the links
     above.&nbsp; You may be asked to enter your username and password to get access
     to the repository.<br>

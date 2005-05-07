@@ -239,14 +239,13 @@ sub svn_TRAILER($version)
 
    print      '</div>'
        ,      '<div class="footer">'
+       ,       '<a title="Valid HTML 4.01!" href="http://validator.w3.org/check?uri=referer">'
+       ,        '<img style="margin-left: 1em;" align="right" border="0" src="/valid-html401.png" alt="Valid HTML 4.01!">'
+       ,       '</a>'
        ,       $version;
    print       '&nbsp;&nbsp;--&nbsp;&nbsp;'
        ,       'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
-   print       '&nbsp;&nbsp;&nbsp;'
-       ,       '<a title="Valid HTML 4.01!" href="http://validator.w3.org/check?uri=referer">'
-       ,        '<img align="middle" border="0" src="/valid-html401.png" alt="Valid HTML 4.01!">'
-       ,       '</a>'
-       ,      '</div>'
+   print      '</div>'
        ,     '</td>'
        ,     '<td id="right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
        ,    '</tr>'
