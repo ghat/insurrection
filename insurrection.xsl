@@ -354,7 +354,7 @@
           </xsl:element>
         </td>
       </tr>
-      <tr id="./_">
+      <tr id=".//">
         <td>
           <xsl:element name="img">
             <xsl:attribute name="src">
@@ -394,7 +394,7 @@
         <xsl:element name="a">
           <xsl:attribute name="title">
             <xsl:text>Go to directory "</xsl:text>
-            <xsl:value-of select="@href"/>
+            <xsl:value-of select="@name"/>
             <xsl:text>"</xsl:text>
           </xsl:attribute>
           <xsl:attribute name="href">
@@ -417,7 +417,7 @@
         <xsl:element name="a">
           <xsl:attribute name="title">
             <xsl:text>Show revision history for directory "</xsl:text>
-            <xsl:value-of select="@href"/>
+            <xsl:value-of select="@name"/>
             <xsl:text>"</xsl:text>
           </xsl:attribute>
           <xsl:attribute name="href">
@@ -428,7 +428,7 @@
             <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="alt">
               <xsl:text>Show revision history for directory "</xsl:text>
-              <xsl:value-of select="@href"/>
+              <xsl:value-of select="@name"/>
               <xsl:text>"</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="src">
@@ -444,7 +444,7 @@
       <xsl:attribute name="id">
         <xsl:text>./</xsl:text>
         <xsl:value-of select="@href"/>
-        <xsl:text>_</xsl:text>
+        <xsl:text>/</xsl:text>
       </xsl:attribute>
       <td class="foldspace">
         <xsl:element name="img">
@@ -476,7 +476,7 @@
         <xsl:element name="a">
           <xsl:attribute name="title">
             <xsl:text>Get latest version of "</xsl:text>
-            <xsl:value-of select="@href"/>
+            <xsl:value-of select="@name"/>
             <xsl:text>"</xsl:text>
           </xsl:attribute>
           <xsl:attribute name="href">
@@ -498,7 +498,7 @@
         <xsl:element name="a">
           <xsl:attribute name="title">
             <xsl:text>Show revision history for file "</xsl:text>
-            <xsl:value-of select="@href"/>
+            <xsl:value-of select="@name"/>
             <xsl:text>"</xsl:text>
           </xsl:attribute>
           <xsl:attribute name="href">
@@ -509,7 +509,7 @@
             <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="alt">
               <xsl:text>Show revision history for file "</xsl:text>
-              <xsl:value-of select="@href"/>
+              <xsl:value-of select="@name"/>
               <xsl:text>"</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="src">

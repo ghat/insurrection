@@ -118,7 +118,7 @@ function foldDir(arrow)
 	var target = document.getElementById('.' + arrow.id);
 	if (target)
 	{
-		var row = document.getElementById(target.id + '_');
+		var row = document.getElementById(target.id + '/');
 		if (row)
 		{
 			if (row.style.display == 'none')
@@ -176,11 +176,11 @@ function doNextItem()
 		{
 			bunchCount--;
 			var action = actionList.shift();
-			var t = action.target.id + action.name;
+			var tgt = action.target.id + action.href;
 
 			// Check if this is the root index, and if so, load it...
 			// This is here to support the broken XSLT browsers.
-			if (t == './.svn_index')
+			if (tgt == './.svn_index')
 			{
 				loadBanner('.svn_index');
 			}
@@ -199,7 +199,7 @@ function doNextItem()
 				img = document.createElement('img');
 				img.className = 'dirarrow';
 				img.title = 'Expand directory';
-				img.id = t.substring(1);
+				img.id = tgt.substring(1);
 				img.src = document.getElementById('closedImage').src;
 				img.align = 'middle';
 				td.appendChild(img);
@@ -215,7 +215,7 @@ function doNextItem()
 				tr.appendChild(td);
 
 				a = document.createElement('a');
-				a.href = t;
+				a.href = tgt;
 				a.title = 'Go to directory "' + action.name + '"';
 				td.appendChild(a);
 				div = document.createElement('div');
@@ -226,7 +226,7 @@ function doNextItem()
 				img.src = document.getElementById('dirImage').src;
 				img.className = 'svnentryicon';
 				img.align = 'middle';
-				div.appendChild(document.createTextNode(action.name));
+				div.appendChild(document.createTextNode(action.name + '/'));
 			}
 			else
 			{
@@ -245,7 +245,7 @@ function doNextItem()
 				tr.appendChild(td);
 
 				a = document.createElement('a');
-				a.href = t;
+				a.href = tgt;
 				a.title = 'Get latest version of "' + action.name + '"';
 				td.appendChild(a);
 				div = document.createElement('div');
@@ -269,7 +269,7 @@ function doNextItem()
 			a = document.createElement('a');
 			td.appendChild(a);
 
-			a.href = t + '?Insurrection=log';
+			a.href = tgt + '?Insurrection=log';
 			img = document.createElement('img');
 			img.src = document.getElementById('infoImage').src;
 			img.align = 'middle';
@@ -289,7 +289,7 @@ function doNextItem()
 			{
 				tr = document.createElement('tr');
 				tr.style.display = 'none';
-				tr.id = t + '_';
+				tr.id = tgt + '/';
 				action.target.dirlist.appendChild(tr);
 
 				td = document.createElement('td');
@@ -302,7 +302,7 @@ function doNextItem()
 
 				td = document.createElement('td');
 				tr.appendChild(td);
-				td.id = t;
+				td.id = tgt;
 				td.colSpan = 2;
 			}
 		}
@@ -347,7 +347,8 @@ function loadDirTarget(target,responseXML)
 		var action = new Object();
 		action.target = target;
 		action.type = 'dir';
-		action.name = dirs[i].getAttribute('href');
+		action.name = dirs[i].getAttribute('name');
+		action.href = dirs[i].getAttribute('href');
 		actionList.push(action);
 	}
 
@@ -358,7 +359,8 @@ function loadDirTarget(target,responseXML)
 		var action = new Object();
 		action.target = target;
 		action.type = 'file';
-		action.name = files[i].getAttribute('href');
+		action.name = files[i].getAttribute('name');
+		//action.href = files[i].getAttribute('href');
 		actionList.push(action);
 	}
 
@@ -410,7 +412,7 @@ function loadDir(arrow)
 	if ((target) && (_loadTarget == null))
 	{
 		target.arrow = arrow;
-		target.row = document.getElementById(target.id + '_');
+		target.row = document.getElementById(target.id + '/');
 		if (target.row)
 		{
 			target.xml = getXMLHTTP();
