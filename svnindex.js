@@ -360,7 +360,7 @@ function loadDirTarget(target,responseXML)
 		action.target = target;
 		action.type = 'file';
 		action.name = files[i].getAttribute('name');
-		//action.href = files[i].getAttribute('href');
+		action.href = files[i].getAttribute('href');
 		actionList.push(action);
 	}
 
