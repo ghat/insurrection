@@ -1,10 +1,14 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
 <!-- Copyright 2004,2005 - Michael Sinz -->
-<!-- This is my magic Subversion index XSLT transform to HTML -->
+<!-- This is my magic Insurrection XSLT transform to HTML -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-  <xsl:output method="html"/>
+  <xsl:output
+    method="html"
+    doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
+    doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+    indent="no"/>
 
   <xsl:template match="*"/>
 
@@ -309,6 +313,7 @@
         <td class="rev">
           <xsl:if test="string-length(@name) != 0">
             <xsl:value-of select="@name"/>
+            <xsl:text> - </xsl:text>
           </xsl:if>
           <xsl:if test="string-length(@rev) = 0">
             <xsl:text>&#8212; </xsl:text>
@@ -326,7 +331,7 @@
             </xsl:attribute>
             <xsl:element name="img">
               <xsl:attribute name="align">middle</xsl:attribute>
-              <xsl:attribute name="alt">RSS Feed</xsl:attribute>
+              <xsl:attribute name="alt">RSS Feed of activity in this directory</xsl:attribute>
               <xsl:attribute name="src">
                 <xsl:call-template name="rssicon-path"/>
               </xsl:attribute>

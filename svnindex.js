@@ -178,6 +178,13 @@ function doNextItem()
 			var action = actionList.shift();
 			var t = action.target.id + action.name;
 
+			// Check if this is the root index, and if so, load it...
+			// This is here to support the broken XSLT browsers.
+			if (t == './.svn_index')
+			{
+				loadBanner('.svn_index');
+			}
+
 			tr = document.createElement('tr');
 			action.target.dirlist.appendChild(tr);
 
@@ -204,6 +211,7 @@ function doNextItem()
 				img['onclick'] = function(){loadDir(this);};
 
 				td = document.createElement('td');
+				td.width = '99%';
 				tr.appendChild(td);
 
 				a = document.createElement('a');
@@ -233,6 +241,7 @@ function doNextItem()
 				td.appendChild(img);
 
 				td = document.createElement('td');
+				td.width = '99%';
 				tr.appendChild(td);
 
 				a = document.createElement('a');
@@ -417,7 +426,7 @@ function loadDir(arrow)
 				target.innerHTML = 'xml.open("GET","' + target.id + '",true);';
 
 				target.xml.onreadystatechange = loadDirCheck;
-				target.xml.open("GET",target.id,true);
+				target.xml.open("GET",target.id + '?XMLHttp=1',true);
 				target.xml.send(null);
 			}
 		}

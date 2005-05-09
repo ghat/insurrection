@@ -51,6 +51,31 @@ if ($revcount)
 ## Now, lets build the correct command to run...
 my $cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache -v --xml ' . $rev . $logURL;
 
+## What a trick - to get the broken browsers to work.
+## Removes the need for XSLT...
+##
+## Note that the XSLT of Safari is almost working but
+## not quite.  So it is listed here.
+##
+## What we do here is redirect the output of this
+## CGI into a server-side XSLT processor when the
+## client user-agent string seems to match known
+## broken clients.
+##
+## Note that if someone expressly wants XML, the
+## XMLHttp=1 attribute is needed.
+##
+## Note that we would like to have the real XSLT working
+## as there are some things that are not available
+## without it *and* the bandwidth and server load are
+## much lower.  The good thing is that the top two
+## browser technologies do work correctly enough to
+## not need this hack.  That ends up covering 98% of
+## all wed users.  (That is Mozilla/Firefox and IE)
+my $needsXSLT = 1 if ((!defined $cgi->param('XMLHttp')) && ($cgi->user_agent =~ m/(Opera)|(Safari)|(Konqueror)/));
+my $sendType = 'text/xml; charset=utf-8';
+$sendType = 'text/html' if ($needsXSLT);
+
 my $log;
 if ((defined $rpath)
    && (defined $opath)
@@ -59,8 +84,18 @@ if ((defined $rpath)
 {
    print $cgi->header('-expires' => '+1m' ,
                       '-Cache-Control' => 'no-cache',
-                      '-type' => 'text/xml; charset=utf-8');
+                      '-type' => $sendType);
 
+   ## Note, we can just fall-through if this fails.  We would
+   ## end up getting XML where we wanted HTML but if we needed
+   ## HTML and the xsltproc does not exist, this is no worse
+   ## than not even trying.  (And, well, what else could I do?)
+   open(STDOUT,'| xsltproc insurrection.xsl -') if ($needsXSLT);
+
+   ## We need to do a bit of processing here in order to
+   ## add in our insurrection.xsl xml-stylesheet tag and to
+   ## add in some attributes are not generated as part of the
+   ## svn log command.
    while (<LOGXML>)
    {
       if ($_ =~ m:<log>:)
@@ -83,6 +118,7 @@ if ((defined $rpath)
          print $_;
       }
    }
+
    close(LOGXML);
 }
 else

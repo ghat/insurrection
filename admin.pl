@@ -210,7 +210,7 @@ sub svn_HEADER($title,$expires)
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
        , '<html>'
        ,  '<head>'
-       ,   '<title>' , $title , '</title>'
+       ,   '<title>' , &svn_XML_Escape($title) , '</title>'
        ,   $header
        ,  '</head>' , "\n"
        ,  '<body>'
@@ -224,6 +224,7 @@ sub svn_HEADER($title,$expires)
        ,     '<td id="left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
        ,     '<td id="content">'
        ,      $banner
+       ,      '<div id="localbanner"></div>'
        ,      '<div class="svn">' , "\n";
 }
 

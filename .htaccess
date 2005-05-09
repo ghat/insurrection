@@ -43,6 +43,10 @@ DirectoryIndex index.cgi
 	SetHandler cgi-script
 </Files>
 
+<Files ~ "broken_xslt.cgi">
+	SetHandler cgi-script
+</Files>
+
 ## In case access to a repository is not public/anonymous
 ## the above CGIs will redirect to these that require
 ## authentication and thus get Apache to do that for us.
@@ -109,4 +113,35 @@ RewriteCond %{QUERY_STRING} Insurrection=diff
 RewriteRule	^svn/(.*)$	/diff.cgi/$1	[R,L]
 RewriteCond %{QUERY_STRING} Insurrection=blame
 RewriteRule	^svn/(.*)$	/blame.cgi/$1	[R,L]
+
+## What a trick - to get the broken browsers to work.
+## Now the need XMLHttp, but the don't need the XSLT
+## to work.
+##
+## Note that the XSLT of Safari is almost working but
+## not quite.  So it is listed here.
+##
+## What we do here is proxy the request to a simple
+## CGI the makes the base HTML framework and kicks off
+## a client side script that does the rest.
+##
+## Note that if someone expressly wants XML, the
+## XMLHttp=1 attribute is needed.  This is used by the
+## XMLHttp object in the JavaScript to make sure that
+## it does get the XML version even when the browser
+## does not support XML/XSLT.
+##
+## Note that we would like to have the real XSLT working
+## as there are some things that are not available
+## without it *and* the bandwidth and server load are
+## much lower.  The good thing is that the top two
+## browser technologies do work correctly enough to
+## not need this hack.  That ends up covering 98% of
+## all wed users.  (That is Mozilla/Firefox and IE)
+RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{QUERY_STRING} !XMLHttp=1
+RewriteCond %{HTTP_USER_AGENT} Opera		[OR]
+RewriteCond %{HTTP_USER_AGENT} Safari		[OR]
+RewriteCond %{HTTP_USER_AGENT} Konqueror
+RewriteRule	^svn/(.*/)$	/broken_xslt.cgi/$1	[P,L]
 
