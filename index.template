@@ -57,5 +57,9 @@
     Project Links</a></td>
     <td>The Subversion related links page from the Subversion Project</td>
   </tr>
+  <tr>
+    <td><a href="rewrite-test/index.html">Apache mod_rewrite Tests</a></td>
+    <td>It seems that certain URL patterns do not get processed correctly within mod_rewrite in Apache 2.0.54</td>
+  </tr>
 </table>
 

@@ -1,0 +1,24 @@
+<!doctype html public "-//W2C//DTD HTML 4.01 Transitional//EN">
+<!-- $Id$ -->
+<html>
+  <head>
+    <title>Apache mod_rewrite Tests</title>
+  </head>
+  <frameset rows="100,33%,33%,33%" border="3">
+    <noframes><body><p>This page uses frames</p></body></noframes>
+    <frame src="control.html" name="control" scrolling="no"/>
+    <frameset cols="25,*" border="2">
+      <frame src="direct.gif" marginwidth="0" scrolling="no"/>
+      <frame src="test.cgi" name="direct" scrolling="auto"/>
+    </frameset>
+    <frameset cols="25,*" border="2">
+      <frame src="redirect.gif" marginwidth="0" scrolling="no"/>
+      <frame src="redirect/" name="redirect" scrolling="auto"/>
+    </frameset>
+    <frameset cols="25,*" border="2">
+      <frame src="proxy.gif" marginwidth="0" scrolling="no"/>
+      <frame src="proxy/" name="proxy" scrolling="auto"/>
+    </frameset>
+  </frameset>
+</html>
+
