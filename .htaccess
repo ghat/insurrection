@@ -94,16 +94,11 @@ RewriteRule	^project.html$	/project.cgi	[R,L]
 ## contains a '?' character.  See Apache bug report
 ## http://issues.apache.org/bugzilla/show_bug.cgi?id=34602
 ##
-RewriteCond %{QUERY_STRING} Insurrection=rss
-RewriteRule	^svn/(.*)$	/rss.cgi/$1	[P,L]
-RewriteCond %{QUERY_STRING} Insurrection=log
-RewriteRule	^svn/(.*)$	/log.cgi/$1	[P,L]
-RewriteCond %{QUERY_STRING} Insurrection=get
-RewriteRule	^svn/(.*)$	/get.cgi/$1	[P,L]
-RewriteCond %{QUERY_STRING} Insurrection=diff
-RewriteRule	^svn/(.*)$	/diff.cgi/$1	[P,L]
-RewriteCond %{QUERY_STRING} Insurrection=blame
-RewriteRule	^svn/(.*)$	/blame.cgi/$1	[P,L]
+## Note that we only look at GET access methods.
+## All other methods are reserver for mod_dav_svn.
+RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{QUERY_STRING} Insurrection=(blame|diff|get|log|rss)
+RewriteRule	^svn/(.*)$	"/%1.cgi/$1"	[P,L]
 
 ## What a trick - to get the broken browsers to work.
 ## Now the need XMLHttp, but the don't need the XSLT
