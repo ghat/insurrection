@@ -30,6 +30,10 @@
     <td>Some simple browser compatibility test pages for the Insurrection Web Tools.</td>
   </tr>
   <tr>
+    <td><a href="rewrite-test/index.html">Apache mod_rewrite Tests</a></td>
+    <td>It seems that certain URL patterns do not get processed correctly within mod_rewrite in Apache 2.0.54</td>
+  </tr>
+  <tr>
     <td><a href="best-practices.html">My Subversion Quick-Start</a></td>
     <td>Some introductory documentation about Subversion and the
     revision control rules and procedures that I follow.</td>
@@ -56,10 +60,6 @@
     <td><a href="http://subversion.tigris.org/project_links.html">The Subversion
     Project Links</a></td>
     <td>The Subversion related links page from the Subversion Project</td>
-  </tr>
-  <tr>
-    <td><a href="rewrite-test/index.html">Apache mod_rewrite Tests</a></td>
-    <td>It seems that certain URL patterns do not get processed correctly within mod_rewrite in Apache 2.0.54</td>
   </tr>
 </table>
 
