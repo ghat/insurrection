@@ -66,6 +66,7 @@
   <!-- ******************************************************************************************************************* -->
   <xsl:template name="blank">
     <xsl:element name="img">
+      <xsl:attribute name="alt"></xsl:attribute>
       <xsl:attribute name="width">1</xsl:attribute>
       <xsl:attribute name="height">1</xsl:attribute>
       <xsl:attribute name="src">
@@ -137,6 +138,7 @@
           </xsl:attribute>
           <xsl:attribute name="id">closedImage</xsl:attribute>
           <xsl:attribute name="style">display: none</xsl:attribute>
+          <xsl:attribute name="alt"></xsl:attribute>
         </xsl:element>
         <xsl:element name="img">
           <xsl:attribute name="src">
@@ -144,6 +146,7 @@
           </xsl:attribute>
           <xsl:attribute name="id">openedImage</xsl:attribute>
           <xsl:attribute name="style">display: none</xsl:attribute>
+          <xsl:attribute name="alt"></xsl:attribute>
         </xsl:element>
         <xsl:element name="img">
           <xsl:attribute name="src">
@@ -151,6 +154,7 @@
           </xsl:attribute>
           <xsl:attribute name="id">dirImage</xsl:attribute>
           <xsl:attribute name="style">display: none</xsl:attribute>
+          <xsl:attribute name="alt"></xsl:attribute>
         </xsl:element>
         <xsl:element name="img">
           <xsl:attribute name="src">
@@ -158,6 +162,7 @@
           </xsl:attribute>
           <xsl:attribute name="id">fileImage</xsl:attribute>
           <xsl:attribute name="style">display: none</xsl:attribute>
+          <xsl:attribute name="alt"></xsl:attribute>
         </xsl:element>
         <xsl:element name="img">
           <xsl:attribute name="src">
@@ -165,6 +170,7 @@
           </xsl:attribute>
           <xsl:attribute name="id">infoImage</xsl:attribute>
           <xsl:attribute name="style">display: none</xsl:attribute>
+          <xsl:attribute name="alt"></xsl:attribute>
         </xsl:element>
         <xsl:element name="img">
           <xsl:attribute name="src">
@@ -172,6 +178,7 @@
           </xsl:attribute>
           <xsl:attribute name="id">blankImage</xsl:attribute>
           <xsl:attribute name="style">display: none</xsl:attribute>
+          <xsl:attribute name="alt"></xsl:attribute>
         </xsl:element>
 
         <!-- Now for the real page... -->
@@ -218,6 +225,7 @@
           <xsl:attribute name="href">..</xsl:attribute>
           <div class="updir">
             <xsl:element name="img">
+              <xsl:attribute name="alt">Folder</xsl:attribute>
               <xsl:attribute name="class">svnentryicon</xsl:attribute>
               <xsl:attribute name="align">middle</xsl:attribute>
               <xsl:attribute name="src">
@@ -296,10 +304,12 @@
               <xsl:call-template name="openedicon-path"/>
             </xsl:attribute>
             <xsl:attribute name="title">Collapse directory</xsl:attribute>
+            <xsl:attribute name="alt">Collapse directory</xsl:attribute>
           </xsl:element>
         </td>
         <td class="path">
           <xsl:element name="img">
+            <xsl:attribute name="alt">Folder</xsl:attribute>
             <xsl:attribute name="class">svnentryicon</xsl:attribute>
             <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="src">
@@ -357,6 +367,7 @@
       <tr id=".//">
         <td>
           <xsl:element name="img">
+            <xsl:attribute name="alt"></xsl:attribute>
             <xsl:attribute name="src">
               <xsl:call-template name="blankicon-path"/>
             </xsl:attribute>
@@ -377,6 +388,7 @@
     <tr class="dirrow">
       <td class="foldspace">
         <xsl:element name="img">
+          <xsl:attribute name="alt"></xsl:attribute>
           <xsl:attribute name="class">dirarrow</xsl:attribute>
           <xsl:attribute name="align">middle</xsl:attribute>
           <xsl:attribute name="src">
@@ -402,6 +414,7 @@
           </xsl:attribute>
           <div class="dir">
             <xsl:element name="img">
+              <xsl:attribute name="alt">Folder</xsl:attribute>
               <xsl:attribute name="class">svnentryicon</xsl:attribute>
               <xsl:attribute name="align">middle</xsl:attribute>
               <xsl:attribute name="src">
@@ -448,6 +461,7 @@
       </xsl:attribute>
       <td class="foldspace">
         <xsl:element name="img">
+          <xsl:attribute name="alt"></xsl:attribute>
           <xsl:attribute name="src">
             <xsl:call-template name="blankicon-path"/>
           </xsl:attribute>
@@ -467,6 +481,7 @@
     <tr class="filerow">
       <td class="foldspace">
         <xsl:element name="img">
+          <xsl:attribute name="alt"></xsl:attribute>
           <xsl:attribute name="src">
             <xsl:call-template name="blankicon-path"/>
           </xsl:attribute>
@@ -484,6 +499,7 @@
           </xsl:attribute>
           <div class="file">
             <xsl:element name="img">
+              <xsl:attribute name="alt">File</xsl:attribute>
               <xsl:attribute name="class">svnentryicon</xsl:attribute>
               <xsl:attribute name="align">middle</xsl:attribute>
               <xsl:attribute name="src">

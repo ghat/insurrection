@@ -7,8 +7,8 @@
 #
 require 'admin.pl';
 
-## First, lets see if we are allowed to look here:
-&checkAuthPath($cgi->path_info);
+## First, lets see if we in good standing...
+&checkAuthMode();
 
 ## Get the revision
 my $rev1 = &getNumParam($cgi->param('r1'));
@@ -99,7 +99,7 @@ else
 &svn_HEADER('diff ' . $rev1 . ':' . $rev2 . ' - ' . $cgi->path_info);
 
 ## Put a link at the top to get the results as a patch
-print '<a class="difftitle" href="?getpatch=1&amp;r1=' , $rev1 , '&amp;r2=' , $rev2 , '">'
+print '<a class="difftitle" href="?Insurrection=diff&amp;getpatch=1&amp;r1=' , $rev1 , '&amp;r2=' , $rev2 , '">'
     , 'Download patch file for revision ' , $rev1 , ' to ' , $rev2 , '<br/>'
     , 'of ' , &svn_XML_Escape($cgi->path_info)
     , '</a>';

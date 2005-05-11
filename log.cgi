@@ -7,8 +7,8 @@
 #
 require 'admin.pl';
 
-## First, lets see if we are allowed to look here:
-&checkAuthPath($cgi->path_info);
+## First, lets see if we in good standing...
+&checkAuthMode();
 
 ## Get the local document URL
 my $logURL = &svn_URL($cgi->path_info);
@@ -17,35 +17,65 @@ my $logURL = &svn_URL($cgi->path_info);
 my $rpath = &svn_REPO($cgi->path_info);
 my $opath = &svn_RPATH($cgi->path_info);
 
+## Get the limit of revisions to show in one request
+my $maxEntries = &getNumParam($cgi->param('max'));
+$maxEntries = $SVN_LOG_ENTRIES if (!defined $maxEntries);
+my $revcount = 1;
+my @revs;
+
 ## Check if someone asked for a revision number
 my $rev = '';
 my $r1 = &getNumParam($cgi->param('r1'));
 my $r2 = &getNumParam($cgi->param('r2'));
 
-## Get the revision history list so we can count the ones we want
-## and we can follow renames (actually, copies) through the history
-my $hcmd = $SVNLOOK_CMD . ' history';
-$hcmd .= ' -r "' . $r1 . '"' if (defined $r1);
-$hcmd .= ' "' . $SVN_BASE . '/' . $rpath . '" "' . $opath . '"';
-my @revs = (`$hcmd` =~ m:(\d+)\s+(/[^\n]*):gs);
-my $revcount = @revs / 2;
+## If the single rev parameter is given, this means show only it
+my $r0 = &getNumParam($cgi->param('r'));
 
-## Check for a limit...
-my $maxEntries = &getNumParam($cgi->param('max'));
-$maxEntries = $SVN_LOG_ENTRIES if (!defined $maxEntries);
-$maxEntries = $revcount if (!defined $maxEntries);
-$maxEntries = $revcount if (($maxEntries > $revcount) || ($maxEntries < 1));
-
-## Figure out what revisions to show...
-if ($revcount)
+## To help reduce overhead, we do not need to use svnlook to
+## trace history if we were given a specific range.  This can
+## significantly reduce the overhead for the request of the
+## revision log in large repositories.  (Since --limit is
+## not here yet and we would need it for the svnlook command
+## as well.)  This has become more noticable due to the
+## RSS feeds making links directly to the revision history
+## of that commit.  (A good thing but it does increase
+## the number of hits on the revision history display)
+## Even better would be if svn log supported looking at
+## past revisions based on a peg revision in the URI
+## such that it would "follow" the copy automatically
+## for us.  In stead, we do it manually within here
+## but only when we would provide multi-page output.
+if (defined $r0)
 {
-   ## Figure out the range we need to use for the SVN LOG command.
-   $r1 = $revs[0];
-   if (!defined $r2)
-   {
-      $r2 = $revs[2 * ($maxEntries - 1)];
-   }
+   $rev = "-r '$r0:$r0' ";
+   $maxEntries = 1;
+}
+elsif (defined $r2)
+{
+   $r1 = 'HEAD' if (!defined $r1);
    $rev = "-r '$r1:$r2' ";
+   $maxEntries = 1;
+}
+else
+{
+   ## Get the revision history list so we can count the ones we want
+   ## and we can follow renames (actually, copies) through the history
+   my $hcmd = $SVNLOOK_CMD . ' history';
+   $hcmd .= ' -r "' . $r1 . '"' if (defined $r1);
+   $hcmd .= ' "' . $SVN_BASE . '/' . $rpath . '" "' . $opath . '"';
+   @revs = (`$hcmd` =~ m:(\d+)\s+(/[^\n]*):gs);
+   $revcount = @revs / 2;
+   $maxEntries = $revcount if (!defined $maxEntries);
+   $maxEntries = $revcount if (($maxEntries > $revcount) || ($maxEntries < 1));
+
+   ## Figure out what revisions to show...
+   if ($revcount)
+   {
+      ## Figure out the range we need to use for the SVN LOG command.
+      $r1 = $revs[0];
+      $r2 = $revs[2 * ($maxEntries - 1)];
+      $rev = "-r '$r1:$r2' ";
+   }
 }
 
 ## Now, lets build the correct command to run...
@@ -72,14 +102,14 @@ my $cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache -v --xml ' . $rev .
 ## browser technologies do work correctly enough to
 ## not need this hack.  That ends up covering 98% of
 ## all wed users.  (That is Mozilla/Firefox and IE)
-my $needsXSLT = 1 if ((!defined $cgi->param('XMLHttp')) && ($cgi->user_agent =~ m/(Opera)|(Safari)|(Konqueror)/));
+my $needsXSLT = 1 if (&isBrokenBrowser());
 my $sendType = 'text/xml; charset=utf-8';
 $sendType = 'text/html' if ($needsXSLT);
 
 my $log;
 if ((defined $rpath)
    && (defined $opath)
-   && (@revs > 0)
+   && ($revcount)
    && (open(LOGXML,"$cmd |")))
 {
    print $cgi->header('-expires' => '+1m' ,
@@ -106,11 +136,27 @@ if ((defined $rpath)
              , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
              , '<log repository="' , &svn_XML_Escape($rpath) , '" path="' , &svn_XML_Escape($opath) , '">' , "\n";
 
-         if (($maxEntries < $revcount) && (!defined $cgi->param('r2')) && ($maxEntries > 1))
+         ## Since we always include the last entry as the first entry on the
+         ## next page, we can not support next pages with $maxEntries == 1
+         ## We also do not provide "morelog" if the request was for a specific
+         ## range or a single entry.
+         if (($maxEntries < $revcount) && (@revs > 0) && ($maxEntries > 1))
          {
             my $nextRev = $revs[2 * ($maxEntries - 1)];
             my $nextPath = $revs[1 + (2 * ($maxEntries - 1))];
-            print '<morelog href="?r1=' , $nextRev , '&amp;max=' , $maxEntries , '"/>' , "\n";
+
+            ## Note - the complexity here is that we need to follow the revision
+            ## history in case the file was copied/renamed from elsewhere.
+            ## Thus, we need to take the last entry and use its path for the
+            ## next log request.  If the 'svn log' took a peg revision as
+            ## the URI to the repository/path and then supported the
+            ## revision rage arguments, then the following of history
+            ## would be oh so much easier.
+            print '<morelog href="'
+                ,   &svn_XML_Escape($SVN_REPOSITORIES_URL . &svn_URL_Escape($rpath . $nextPath))
+                ,   '?Insurrection=log&amp;r1=' , $nextRev;
+            print   '&amp;max=' , $maxEntries if ($maxEntries != $SVN_LOG_ENTRIES);
+            print  '"/>' , "\n";
          }
       }
       else

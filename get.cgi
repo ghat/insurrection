@@ -7,8 +7,8 @@
 #
 require 'admin.pl';
 
-## First, lets see if we are allowed to look here:
-&checkAuthPath($cgi->path_info);
+## First, lets see if we in good standing...
+&checkAuthMode();
 
 ## Get the revision
 my $rev = &getNumParam($cgi->param('r'));

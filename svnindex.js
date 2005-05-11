@@ -133,6 +133,7 @@ function foldDir(arrow)
 				arrow.src = document.getElementById('closedImage').src;
 				arrow.title = 'Expand directory';
 			}
+			arrow.alt = arrow.title;
 		}
 	}
 }
@@ -199,6 +200,7 @@ function doNextItem()
 				img = document.createElement('img');
 				img.className = 'dirarrow';
 				img.title = 'Expand directory';
+				img.alt = img.title;
 				img.id = tgt.substring(1);
 				img.src = document.getElementById('closedImage').src;
 				img.align = 'middle';
@@ -224,8 +226,10 @@ function doNextItem()
 				img = document.createElement('img');
 				div.appendChild(img);
 				img.src = document.getElementById('dirImage').src;
+				img.alt = 'Folder';
 				img.className = 'svnentryicon';
 				img.align = 'middle';
+				img.alt = a.title;
 				div.appendChild(document.createTextNode(action.name + '/'));
 			}
 			else
@@ -237,6 +241,7 @@ function doNextItem()
 				td.className = 'foldspace';
 				img = document.createElement('img');
 				img.src = document.getElementById('blankImage').src;
+				img.alt = '';
 				img.align = 'middle';
 				td.appendChild(img);
 
@@ -254,8 +259,10 @@ function doNextItem()
 				img = document.createElement('img');
 				div.appendChild(img);
 				img.src = document.getElementById('fileImage').src;
+				img.alt = 'File';
 				img.className = 'svnentryicon';
 				img.align = 'middle';
+				img.alt = a.title;
 				div.appendChild(document.createTextNode(action.name));
 			}
 
@@ -269,11 +276,6 @@ function doNextItem()
 			a = document.createElement('a');
 			td.appendChild(a);
 
-			a.href = tgt + '?Insurrection=log';
-			img = document.createElement('img');
-			img.src = document.getElementById('infoImage').src;
-			img.align = 'middle';
-			a.appendChild(img);
 			if (action.type == 'dir')
 			{
 				a.title = 'Show revision history for directory "' + action.name + '"';
@@ -282,6 +284,13 @@ function doNextItem()
 			{
 				a.title = 'Show revision history for file "' + action.name + '"';
 			}
+
+			a.href = tgt + '?Insurrection=log';
+			img = document.createElement('img');
+			img.src = document.getElementById('infoImage').src;
+			img.align = 'middle';
+			img.alt = a.title;
+			a.appendChild(img);
 
 			// Directories also have a hidden second row where the
 			// in-line sub-directory expansion happens.  Fun stuff
@@ -297,6 +306,7 @@ function doNextItem()
 				td.className = 'foldspace';
 				img = document.createElement('img');
 				img.src = document.getElementById('blankImage').src;
+				img.alt = '';
 				img.align = 'middle';
 				td.appendChild(img);
 

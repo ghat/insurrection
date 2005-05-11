@@ -276,58 +276,80 @@ sub getNumParam($param)
    return $result;
 }
 
+
 ##############################################################################
 #
-# This call will check if the given repository/path is available to the
-# authorized user.
+# Returns true if the browser is known to be broken with respect to XSLT.
+# The rest of the code will then figure out what to do to address this.
 #
-sub checkAuthPath($path)
+# What a trick - to get the broken browsers to work.
+#
+# Note that the XSLT of Safari is almost working but
+# not quite.  So it is listed here.
+#
+# Note that if someone expressly wants XML, the
+# XMLHttp=1 attribute is needed.
+#
+# Note that we would like to have the real XSLT working
+# as there are some things that are not available
+# without it *and* the bandwidth and server load are
+# much lower.  The good thing is that the top two
+# browser technologies do work correctly enough to
+# not need this hack.  That ends up covering 98% of
+# all wed users.  (That is Mozilla/Firefox and IE)
+#
+sub isBrokenBrowser()
 {
-   my $path = shift;
+   return ((!defined $cgi->param('XMLHttp')) && ($cgi->user_agent =~ m/(Opera)|(Safari)|(Konqueror)/));
+}
 
-   ## Append a bit just in case it was not already there...
-   $path .= '/';
+##############################################################################
+#
+# This call will check if the CGI was executed within the Insurrection proxy
+# environment.  If not, it redirects into that environment.
+#
+sub checkAuthMode()
+{
+   ## Get the base CGI name such that we can be sure to use it...
+   my ($type) = ($cgi->url =~ m|^.*?/(?:auth_)?([^/]+)\.cgi$|);
 
-   ## Check if we have loaded the admin stuff yet...
-   &loadAccessFile() if (!defined $groupUsers);
+   my $path = substr($cgi->path_info(),1);
 
-   ## Just to make it easier, we add the ":" before the first slash
-   ## in order to match the paths....
-
-   ## NOTE!  Currently we just support repository root
-   $path =~ s|^/?([^/]+)/.*$|$1:/|;
-
-   ## Now lets check...
-   return 1 if ((defined ${groupUsers{$path}}{$AuthUser}) || (defined ${groupUsers{$path}}{'*'}));
-
-   if (!defined $AuthUser)
+   ## Lets check if this happened to come through the internal
+   ## proxy request.  The reason this is important is that the
+   ## mod_authz_svn will have already authenticated the request
+   ## and now all we need to do is trust it.  In all other cases
+   ## Note: This security can be broken if someone else puts in
+   ## a proxy on the same server and sets it up just right...
+   if (($ENV{'REMOTE_ADDR'} eq $ENV{'SERVER_ADDR'})
+      && ($ENV{'HTTP_HOST'} eq $ENV{'HTTP_X_FORWARDED_HOST'})
+      && (length($path) > 2)
+      && (defined $cgi->param('Insurrection'))
+      && ($cgi->param('Insurrection') eq $type))
    {
-      ## We are not authorized and we are not an authorized user, so
-      ## redirect to the authorization version of this script
-      my $target = $cgi->url;
-      $target =~ s:^(.*)/([^/]+)$:$1/auth_$2:;
-
-      ## just in case a double auth happened...
-      $target =~ s:/auth_auth_:/auth_:;
-
-      ## Now put the rest of the full URL together...
-      $target .= substr($cgi->self_url,length($cgi->url));
-
-      print $cgi->redirect($target);
+      return 1;
    }
-   else
+
+   ## If we can not figure out what is to be done, we just punt...
+   my $target = $SVN_URL_PATH;
+
+   ## Ok, so how did we get here?  It was not via the proxy rules
+   ## in the .htaccess file so we don't want it.  Lets redirect
+   ## back through the proxy rule URL (if we can make it.)
+   ## The goal here is to be sure that things are really as they
+   ## should be.
+   if ((defined $type) && (length($path) > 2))
    {
-      print "Status: 403 Access Denied\n";
-
-      &svn_HEADER('403 Access Denied');
-
-      print '<h1>Access Denied</h1>'
-          , '<p>You are not permitted access to the document '
-          , 'requested.  You may have supplied the wrong '
-          , 'credentials or selected the wrong URL</p>';
-
-      &svn_TRAILER('$Id$');
+      ## Make sure we strip out any "old" Insurrection=xxx elements
+      ## from the qwery string before we go adding a specific one...
+      my $qstring = $ENV{'QUERY_STRING'};
+      $qstring =~ s/Insurrection=((.*?&)|(.*$))//;
+      $qstring = '&' . $qstring if (length($qstring) > 0);
+      $target = $SVN_REPOSITORIES_URL . $path . '?Insurrection=' . $type . $qstring;
    }
+
+   print $cgi->redirect('-location' => $target,
+                        '-status' => '301 Moved Permanently');
    exit 0;
 }
 

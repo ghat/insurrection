@@ -7,8 +7,8 @@
 #
 require 'admin.pl';
 
-## First, lets see if we are allowed to look here:
-&checkAuthPath($cgi->path_info);
+## First, lets see if we in good standing...
+&checkAuthMode();
 
 ## The maximum number of entries to be returned in
 ## the RSS Feed.  This is just in case there was
@@ -130,6 +130,8 @@ if ((defined $top) && (defined $topDate))
    print $cgi->header('-expires' => '+120m' ,
                       '-type' => 'text/xml; charset=' . $encoding);
 
+   my $rLink = $SVN_URL . &svn_URL_Escape($SVN_REPOSITORIES_URL . $rpath . $opath) . '?Insurrection=log';
+
    print $top , "\n"
        , "<!-- Insurrection Web Tools for Subversion RSS Feed -->\n"
        , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
@@ -141,7 +143,7 @@ if ((defined $top) && (defined $topDate))
        ,   '" repository from ' , &dateFormat($topDate) , ' to ' , &dateFormat($endDate) , '.&lt;hr/&gt; '
        ,   &svn_XML_Escape($groupComments{$rpath . ':/'})
        , '</description>' , "\n"
-       , '<link>' , &svn_XML_Escape($SVN_URL . $SVN_REPOSITORIES_URL . $rpath . $opath) , '</link>' , "\n"
+       , '<link>' , &svn_XML_Escape($rLink) , '</link>' , "\n"
        , '<generator>Insurrection RSS Feeder - '
        ,   &svn_XML_Escape('$Id$')
        , '</generator>' , "\n"
@@ -162,7 +164,7 @@ if ((defined $top) && (defined $topDate))
       $author .= $EMAIL_DOMAIN if (!($author =~ m/@/));
 
       ## Make the link to this individual log message.
-      my $link = $SVN_URL . $SVN_URL_PATH . 'log.cgi/' . $rpath . $opath . '?r1=' . $revision . '&r2=' . $revision;
+      my $link = $rLink . '&r=' . $revision;
 
       ## Now finish building the log message...
       ## (It get escaped below)

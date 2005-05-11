@@ -35,6 +35,14 @@
     </ul>
   </li>
   <br/>
+  <li><img align="right" src="InsurrectionLogo.gif" />
+    <a href="InsurrectionLogo.gif"><code>InsurrectionLogo.gif</code></a>
+    <ul>
+      The Insurrection Web Tools for Subversion logo.  Special thanks to
+      Dan Case from Carroll College for his design input for the logo.
+    </ul>
+  </li>
+  <br/>
   <li>
     <a href="styles.css"><code>styles.css</code></a>
     <ul>
@@ -128,6 +136,14 @@
   </li>
   <br/>
   <li>
+    <a href="broken_xslt.cgi"><code>broken_xslt.cgi</code></a>
+    <ul>
+      This CGI is used for the Subversion repository browsing when the user agent
+      identifies the browser as a browser with non-working or broken XSLT support.
+    </ul>
+  </li>
+  <br/>
+  <li>
     <a href=".svn_index"><code>.svn_index</code></a>
     <ul>
       This is an example <a href=".svn_index"><code>.svn_index</code></a> file that
@@ -162,14 +178,6 @@
       A simple web-based user admin and repository access control manager for
       Subversion servers that use the <code>mod_authz_svn</code> plugin to Apache and
       Subversion.
-    </ul>
-  </li>
-  <br/>
-  <li><img align="right" src="InsurrectionLogo.gif" />
-    <a href="InsurrectionLogo.gif"><code>InsurrectionLogo.gif</code></a>
-    <ul>
-      The Insurrection Web Tools for Subversion logo.  Special thanks to
-      Dan Case from Carroll College for his design input for the logo.
     </ul>
   </li>
 </ul>

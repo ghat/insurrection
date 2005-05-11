@@ -5,114 +5,105 @@ AuthType Basic
 ## We want the index.cgi to handle the directory by default...
 DirectoryIndex index.cgi
 
-<Files ~ "password.cgi">
+## Note that I list each file specifically such that
+## there is less chance of running a CGI that was not
+## placed here on purpose.  Also, there is nothing that
+## requires that the CGI scripts end in ".cgi" - I
+## am just doing that to make it easy to see where the
+## CGIs are vs non-CGIs.  This is most noticeable in the
+## CGIs that deal with log processing, etc.
+
+## The main index file is generally available and will
+## show only elements that are available without login.
+<Files ~ "^index\.cgi$">
+	SetHandler cgi-script
+</Files>
+
+## This is exactly the same as the index.cgi but it
+## requires login and shows all elements that are
+## available to that specific user.
+<Files ~ "^auth_index\.cgi$">
 	SetHandler cgi-script
 	require valid-user
 </Files>
 
-<Files ~ "admin.cgi">
+<Files ~ "^password\.cgi$">
 	SetHandler cgi-script
 	require valid-user
 </Files>
 
-<Files ~ "index.cgi">
-	SetHandler cgi-script
-</Files>
-
-<Files ~ "project.cgi">
-	SetHandler cgi-script
-</Files>
-
-<Files ~ "log.cgi">
-	SetHandler cgi-script
-</Files>
-
-<Files ~ "rss.cgi">
-	SetHandler cgi-script
-</Files>
-
-<Files ~ "get.cgi">
-	SetHandler cgi-script
-</Files>
-
-<Files ~ "diff.cgi">
-	SetHandler cgi-script
-</Files>
-
-<Files ~ "blame.cgi">
-	SetHandler cgi-script
-</Files>
-
-<Files ~ "broken_xslt.cgi">
-	SetHandler cgi-script
-</Files>
-
-## In case access to a repository is not public/anonymous
-## the above CGIs will redirect to these that require
-## authentication and thus get Apache to do that for us.
-<Files ~ "auth_index.cgi">
+<Files ~ "^admin\.cgi$">
 	SetHandler cgi-script
 	require valid-user
 </Files>
 
-<Files ~ "auth_log.cgi">
+## This is a CGI just to fill in some information into
+## the template.  It is only called from the index template
+## and thus really is just a site-specific thing.  I
+## use it to make the project page work for both
+## the local test server and the public servers.
+<Files ~ "^project\.cgi$">
 	SetHandler cgi-script
-	require valid-user
 </Files>
 
-<Files ~ "auth_rss.cgi">
+## These CGIs can be used without login depending on
+## the repository being requested in the path extra
+## and the access rights defined.  So, we default to
+## letting anyone use these forms of the CGIs.  When
+## the CGI notices an authentication requirement,
+## it forces the use of the auth_* version below.
+<Files ~ "^(blame|diff|get|log|rss)\.cgi$">
 	SetHandler cgi-script
-	require valid-user
 </Files>
 
-<Files ~ "auth_get.cgi">
+## For some browsers, XSLT support is either not working
+## correctly or not working at all.  What this CGI does
+## is to generate the SVN Index base page as HTML and then
+## let the browser and JavaScript via XMLHttp do the
+## real work.  Note that this does not need to check
+## authentication as no actual data shows up in the HTML
+## but via the XMLHttp and those operations are fully
+## authenticated.  This works in conjunction with the
+## rewrite rule below that does the user agent checking.
+<Files ~ "^broken_xslt\.cgi$">
 	SetHandler cgi-script
-	require valid-user
 </Files>
 
-<Files ~ "auth_diff.cgi">
-	SetHandler cgi-script
-	require valid-user
-</Files>
+## You need to have mod-rewrite enabled in apache
+RewriteEngine On
+RewriteRule	^index.html$	/index.cgi	[R,L]
+RewriteRule	^project.html$	/project.cgi	[R,L]
 
-<Files ~ "auth_blame.cgi">
-	SetHandler cgi-script
-	require valid-user
-</Files>
-
-## If you have mod-rewrite enabled in apache
-## you can have all of the URLs being rewritten using
-## this trick which makes all of the URLs consistant
-## with the normal Subversion HTTP URLs.
-## Note that we use the LOG & RSS version for
-## handling the redirect to the LOG & RSS feeds
-## from the SVN Index pages.  The reason for this is
-## that there is no way to find the actual repository
-## name in the SVN Index XML so we need to use some
-## trick that plays with the full URL.  I used to
-## use some JavaScript tricks but this is better.
-## We don't currently use any of the others as they
-## are not currently needed but are here just for
-## completeness and future support.
+## We use a local proxy operation such that we can
+## publicly expose only the normal Subversion paths
+## with the only difference being CGI query strings.
+## We also depend on the rewrites to provide the
+## full path to the repository.  Thus, all of the
+## ^svn/ bits would need to contain the prefix path
+## from this directory into the base of the repositories.
+## Note that we also require proxy support to
+## make this work reasonably transparently.  A
+## redirect would have worked but then would not get
+## the benefit of the authentication from mod_authz_svn
+## that was already done.  The CGIs try to notice this
+## proxy behavior and when proxied to via this mechanism
+## do not do their own authentication.
 ##
 ## NOTE - Currently a bug in Apache/mod_rewrite
 ## prevents this from working if the file or path
 ## contains a '?' character.  See Apache bug report
 ## http://issues.apache.org/bugzilla/show_bug.cgi?id=34602
 ##
-RewriteEngine On
-RewriteRule	^index.html$	/index.cgi	[R,L]
-RewriteRule	^project.html$	/project.cgi	[R,L]
 RewriteCond %{QUERY_STRING} Insurrection=rss
-RewriteRule	^svn/(.*)$	/rss.cgi/$1	[R,L]
+RewriteRule	^svn/(.*)$	/rss.cgi/$1	[P,L]
 RewriteCond %{QUERY_STRING} Insurrection=log
-RewriteRule	^svn/(.*)$	/log.cgi/$1	[R,L]
+RewriteRule	^svn/(.*)$	/log.cgi/$1	[P,L]
 RewriteCond %{QUERY_STRING} Insurrection=get
-RewriteRule	^svn/(.*)$	/get.cgi/$1	[R,L]
+RewriteRule	^svn/(.*)$	/get.cgi/$1	[P,L]
 RewriteCond %{QUERY_STRING} Insurrection=diff
-RewriteRule	^svn/(.*)$	/diff.cgi/$1	[R,L]
+RewriteRule	^svn/(.*)$	/diff.cgi/$1	[P,L]
 RewriteCond %{QUERY_STRING} Insurrection=blame
-RewriteRule	^svn/(.*)$	/blame.cgi/$1	[R,L]
+RewriteRule	^svn/(.*)$	/blame.cgi/$1	[P,L]
 
 ## What a trick - to get the broken browsers to work.
 ## Now the need XMLHttp, but the don't need the XSLT

@@ -11,45 +11,14 @@
 var Insurrection = new Object();
 
 /*
- * This is the base URL for where the Insurrection CGIs live
+ * This is the base URL for all of the repositories.
  * This should include a leading and trailing '/' character.
- * (or just a single '/' if the CGIs are at the root.)
  */
-Insurrection.CGI_URL = '/';
+Insurrection.SVN_URL = '/svn/';
 
 /*
  * Number of animation steps in the unfolding of the popups
  * To have things happen instantly then set this value to 1.
  */
 Insurrection.SliderSteps = 12;
-
-/*
- * Note - you should not need to change these unless you named
- * the CGIs differently from the default names.
- */
-
-/*
- * This is the URL for the log.cgi
- */
-Insurrection.log_CGI = Insurrection.CGI_URL + 'log.cgi';
-
-/*
- * This is the URL for the get.cgi
- */
-Insurrection.get_CGI = Insurrection.CGI_URL + 'get.cgi';
-
-/*
- * This is the URL for the diff.cgi
- */
-Insurrection.diff_CGI = Insurrection.CGI_URL + 'diff.cgi';
-
-/*
- * This is the URL for the blame.cgi
- */
-Insurrection.blame_CGI = Insurrection.CGI_URL + 'blame.cgi';
-
-/*
- * This is the URL for the rss.cgi
- */
-Insurrection.rss_CGI = Insurrection.CGI_URL + 'rss.cgi';
 

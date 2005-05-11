@@ -677,11 +677,23 @@ TD.details
 .blameline0
 {
   background: rgb(95%,100%,95%);
+  cursor: pointer;
+}
+
+.blameline0 :hover
+{
+  background: rgb(85%,100%,85%);
 }
 
 .blameline1
 {
   background: rgb(95%,95%,100%);
+  cursor: pointer;
+}
+
+.blameline1 :hover
+{
+  background: rgb(85%,85%,100%);
 }
 
 .blamerev
@@ -712,12 +724,7 @@ TD.details
   text-align: left;
   vertical-align: top;
   width: 99%;
-}
-
-.blamelines PRE
-{
-  margin: 0px;
-  padding: 0px;
+  white-space: pre;
 }
 
 .difftitle

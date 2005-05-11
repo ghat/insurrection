@@ -8,8 +8,8 @@
 #
 require 'admin.pl';
 
-## First, lets see if we are allowed to look here:
-&checkAuthPath($cgi->path_info);
+## First, lets see if we in good standing...
+&checkAuthMode();
 
 ## Get the revision
 my $rev = &getNumParam($cgi->param('r'));
@@ -18,12 +18,15 @@ $rev = 'HEAD' if (!defined $rev);
 ## Get the real document info
 my $docURL = &svn_URL($cgi->path_info);
 
+## The URL to get a history log entry.
+my $getLog = &svn_URL_Escape($SVN_REPOSITORIES_URL . &svn_REPO($cgi->path_info) . &svn_RPATH($cgi->path_info)) . '?Insurrection=log';
+
 ## Now, lets build the correct command to run...
 my $cmd = $SVN_CMD . ' blame --non-interactive --no-auth-cache -r ' . $rev . ' ' . $docURL;
 
 &svn_HEADER('Annotate ' . $rev . ' - ' . $cgi->path_info);
 
-print '<a class="blametitle" href="' , $SVN_URL_PATH , 'log.cgi' , &svn_URL_Escape($cgi->path_info) , '">'
+print '<a class="blametitle" href="' , $getLog , '">'
     , 'Annotation from revision ' , $rev , ' of<br/>'
     , $cgi->path_info
     , '</a>';
@@ -52,14 +55,17 @@ if (open(GETBLAME,"$cmd |"))
 
          if (($lastREV != $rev) || ($lastUSER ne $user))
          {
-            print '</pre></td></tr>' if ($nl ne '');
+            print '</tt></td></tr>' if ($nl ne '');
 
             $count++;
 
-            print '<tr class="blameline' , ($count & 1) , '">'
+            print '<tr class="blameline' , ($count & 1) , '"'
+                ,     ' title="Show commit log for revision ' , $rev , '"'
+                ,     ' onclick="window.open(\'' , $getLog , '&amp;r=' , $rev , '\')"'
+                ,     '>'
                 ,  '<td class="blamerev">' , $rev , '</td>'
-                ,  '<td class="blameuser">' , $user , '</td>'
-                ,  '<td class="blamelines"><pre>';
+                ,  '<td class="blameuser">' , &svn_XML_Escape($user) , '</td>'
+                ,  '<td class="blamelines"><tt>';
             $lastREV = $rev;
             $lastUSER = $user;
             $nl = '';
@@ -69,7 +75,7 @@ if (open(GETBLAME,"$cmd |"))
       }
    }
 
-   print '</pre></td></tr>' if ($nl ne '');
+   print '</tt></td></tr>' if ($nl ne '');
    print '</table>';
 }
 
