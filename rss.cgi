@@ -148,7 +148,8 @@ if ((defined $top) && (defined $topDate))
        ,   &svn_XML_Escape('$Id$')
        , '</generator>' , "\n"
        , '<pubDate>' , &dateFormat($topDate) , '</pubDate>'
-       , '<lastBuildDate>' , &dateFormat($topDate) , '</lastBuildDate>' , "\n";
+       , '<lastBuildDate>' , &dateFormat($topDate) , '</lastBuildDate>'
+       , '<ttl>120</ttl>' , "\n";
 
    foreach my $entry (@entries)
    {
