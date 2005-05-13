@@ -1,0 +1,3 @@
+# Do not let any access to this directory tree
+Order deny,allow
+Deny from all

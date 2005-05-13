@@ -1,0 +1,66 @@
+AuthUserFile /home/equine/private/subversion/authentication/passwords
+AuthName "Subversion Repository"
+AuthType Basic
+
+<Files ~ "password.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "admin.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "log.cgi">
+	SetHandler cgi-script
+</Files>
+
+<Files ~ "get.cgi">
+	SetHandler cgi-script
+</Files>
+
+<Files ~ "diff.cgi">
+	SetHandler cgi-script
+</Files>
+
+<Files ~ "blame.cgi">
+	SetHandler cgi-script
+</Files>
+
+<Files ~ "auth_log.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "auth_get.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "auth_diff.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "auth_blame.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+## If you have mod-rewrite and proxy enabled in apache
+## you can have all of the URLs being rewritten using
+## this trick which makes all of the URLs consistant
+## with the normal Subversion HTTP URLs.  Note that there
+## currently is no direct support for generating these
+## URLs in the Insurrection tools.
+RewriteEngine On
+RewriteCond %{QUERY_STRING} Insurrection=log
+RewriteRule	^svn/(.*)$	/log.cgi/$1	[P,L]
+RewriteCond %{QUERY_STRING} Insurrection=get
+RewriteRule	^svn/(.*)$	/get.cgi/$1	[P,L]
+RewriteCond %{QUERY_STRING} Insurrection=diff
+RewriteRule	^svn/(.*)$	/diff.cgi/$1	[P,L]
+RewriteCond %{QUERY_STRING} Insurrection=blame
+RewriteRule	^svn/(.*)$	/blame.cgi/$1	[P,L]
+

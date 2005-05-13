@@ -1,0 +1,68 @@
+<!doctype HTML PUBLIC "-//W2C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Insurrection Browser Compatibility Test #1</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <script type="text/javascript" language="JavaScript" src="index.js"></script>
+  </head>
+  <body>
+    <table id="pagetable">
+      <tr>
+        <td id="content">
+          <div style="margin: 0px; border: 0px; padding-top: 4px; text-align: center;">
+            <table style="margin: auto; border: 0px; font-family: garamond, times new roman, times, serif; font-style: italic; font-weight: bold; font-size: 18pt;">
+              <tr>
+                <td valign="top" align="right"><a target="_top" href=".." style="color: #bfbfbf;">MKSoft</a></td>
+                <td valign="middle" align="center"><a target="_top" href=".."><img src="/InsurrectionLogo.gif" alt="Logo" border="0"/></a></td>
+                <td valign="bottom" align="left"><a target="_top" href=".." style="color: #bfbfbf;">Test #1</a></td>
+              </tr>
+            </table>
+          </div>
+          <div class="svn">
+            <p>
+              In this test, some JavaScript will be used to load an HTML fragment into the page just below this paragraph.&nbsp;
+              This will use XML HTTP Request support plus some HTML and innerHTML updates.&nbsp; This is how dynamic extra content
+	      is loaded by the browser rather than completely regenerating/reloading the whole page.
+            </p>
+
+            <div id="loadbox" style="border: 2px solid black; padding: 4px;">
+              <h1>It did not start loading...</h1>
+            </div>
+            <script type="text/javascript" language="JavaScript"><!--
+	      var target = document.getElementById('loadbox');
+	      if (target)
+	      {
+		  target.innerHTML = '<h1>We found the target of the load...</h1>';
+		  target.xml = getXMLHTTP();
+		  if (target.xml)
+		  {
+		      target.innerHTML = '<h1>We have an XML HTTP object...</h1>';
+		      target.xml.open('GET','insert.html',true);
+		      target.xml.onreadystatechange = loadCheck;
+		      target.xml.send(null);
+		  }
+	      }
+
+	      function loadCheck()
+	      {
+		  if ((target) && (target.xml) && (target.xml.readyState == 4))
+		  {
+		      if (target.xml.status == 200)
+		      {
+			  target.innerHTML = target.xml.responseText;
+		      }
+		      else
+		      {
+			  target.innerHTML = '<h1>Load error: ' + target.xml.status + '</h1>';
+		      }
+		  }
+	      }
+            // --></script>
+          </div>
+          <div class="footer">$Id$</div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

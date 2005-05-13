@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# A simple apache log file rotate script - note that we
+# can not rotate any more often than once a day.  The script
+# specifically prevents this as the file names generated are
+# only unique per day.
+
+## NOTE!  This needs to be where the logs are
+cd /usr/subversion/apache/logs
+
+OLD=`date '+%Y-%m-%d'`
+FLAG=${OLD}.flag
+
+# Check if we have already run today
+if [ ! -f $FLAG.gz ]; then
+	# Delete any old flags
+	rm -f *.flag.gz junk
+
+	# Flag that we are running / have run today
+	echo >$FLAG
+
+	# Compress any older logs that have not
+	# been compressed yet and the flag (not that it helps)
+	gzip -9 *.access_log *.error_log $FLAG
+
+	# Now, move the current logs into the current date
+	# "old" file.
+	mv access_log ${OLD}.access_log
+	mv error_log ${OLD}.error_log
+
+	# Tell apache to gracefully restart itself.  This
+	# causes it to reload its configuration and to reopen
+	# the log files (which will then be new)
+	../bin/apachectl graceful
+fi

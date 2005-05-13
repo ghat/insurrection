@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="index.xsl"?>
+<!DOCTYPE svn [
+  <!ELEMENT svn   (index)>
+  <!ATTLIST svn   version CDATA #REQUIRED
+                  href    CDATA #REQUIRED>
+  <!ELEMENT index (updir?, (file | dir)*)>
+  <!ATTLIST index name    CDATA #IMPLIED
+                  path    CDATA #IMPLIED
+                  rev     CDATA #IMPLIED>
+  <!ELEMENT updir EMPTY>
+  <!ELEMENT file  (prop)*>
+  <!ATTLIST file  name    CDATA #REQUIRED
+                  href    CDATA #REQUIRED>
+  <!ELEMENT dir   (prop)*>
+
+  <!ATTLIST dir   name    CDATA #REQUIRED
+                  href    CDATA #REQUIRED>
+  <!ELEMENT prop  (#PCDATA)>
+  <!ATTLIST prop  name    CDATA #REQUIRED>
+]>
+<svn version="1.1.4 (r13838)"
+     href="http://subversion.tigris.org/">
+  <index rev="159" path="/">
+    <dir name="tags" href="tags/"></dir>
+    <dir name="trunk" href="trunk/"></dir>
+    <file name="test.txt" href="test.txt"></file>
+    <dir name="branches" href="branches/"></dir>
+    <dir name="releases" href="releases/"></dir>
+  </index>
+</svn>

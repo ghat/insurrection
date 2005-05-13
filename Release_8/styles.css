@@ -1,0 +1,780 @@
+/* $Id$ */
+
+BODY
+{
+    color: black;
+    background: #7e7e7e;
+    font-family: helvetica, ariel, sansserif;
+    font-size: 10pt;
+    text-align: center;
+    margin: 0px;
+}
+
+IMG
+{
+    border: none;
+}
+
+A {color: blue; text-decoration: none;}
+A:visited {color: blue; text-decoration: none;}
+A:hover {color: green; text-decoration: underline;}
+A:active {color: red; text-decoration: underline;}
+
+#content
+{
+    /* Remove the width style if you want it to be more dynamic */
+    width: 672px;
+    color: black;
+    background: white;
+    background-image: url('/turtles.jpg');
+    background-repeat: repeat-y;
+    background-position: top center;
+}
+
+#pagetable
+{
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#top-left
+{
+    background-image: url('/top-left.gif');
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    width: 14px;
+    height: 14px;
+}
+
+#top
+{
+    background-image: url('/top.gif');
+    background-repeat: repeat-x;
+    background-position: bottom left;
+    height: 14px;
+}
+
+#top-right
+{
+    background-image: url('/top-right.gif');
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    height: 14px;
+    width: 14px;
+}
+
+#left
+{
+    background-image: url('/left.gif');
+    background-repeat: repeat-y;
+    background-position: top right;
+    width: 14px;
+}
+
+#right
+{
+    background-image: url('/right.gif');
+    background-repeat: repeat-y;
+    background-position: top left;
+    width: 14px;
+}
+
+#bottom-left
+{
+    background-image: url('/bottom-left.gif');
+    background-repeat: no-repeat;
+    background-position: top right;
+    width: 14px;
+    height: 14px;
+}
+
+#bottom
+{
+    background-image: url('/bottom.gif');
+    background-repeat: repeat-x;
+    background-position: top left;
+    height: 14px;
+    height: 14px;
+}
+
+#bottom-right
+{
+    background-image: url('/bottom-right.gif');
+    background-repeat: no-repeat;
+    background-position: top left;
+    height: 14px;
+    width: 14px;
+}
+
+.versiontable TH
+{
+    background-color: rgb(182,38,133);
+    color: white;
+    border-right: 1px black dotted;
+    border-bottom: 1px black dotted;
+    padding-left: 1em;
+    padding-top: 2px;
+}
+
+.versiontable TD
+{
+    font-size: 90%;
+    border-right: 1px gray dotted;
+    border-bottom: 1px gray dotted;
+}
+
+.accesstable
+{
+    border: 3px black solid;
+    border-left: 2px black solid;
+    font-size: 11pt;
+}
+
+.accesstable TH
+{
+    background-color: rgb(182,38,133);
+    color: white;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-bottom: 2px;
+    font-weight: bold;
+    text-align: center;
+    border: 0px;
+    border-left: 1px black solid;
+}
+
+.accesstable TD
+{
+    border: 1px black solid;
+    border-bottom: 0px;
+    border-right: 0px;
+}
+
+#versions
+{
+    color: rgb(182,38,133);
+    font-family: helvetica, ariel, sansserif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 8pt;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+}
+
+#versions TH
+{
+    border: 0px;
+    padding: 2px;
+    background-color: transparent;
+    text-align: left;
+}
+
+#versions TD
+{
+    border: 0px;
+    padding: 0px;
+    background-color: transparent;
+    text-align: right;
+}
+
+.accesstitles
+{
+    font-weight: normal;
+    font-size: 8pt;
+}
+
+.accessinfo
+{
+    border: 2px black solid;
+    border-left: 1px black solid;
+    width: 100%;
+    font-size: 9pt;
+}
+
+.accessinfo TH
+{
+    background-color: rgb(182,38,133);
+    color: white;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-bottom: 2px;
+    font-weight: bold;
+    text-align: center;
+    border: 0px;
+    border-left: 1px black solid;
+}
+
+.accessinfo TD
+{
+    background-color: white;
+    border-top: 1px gray solid;
+    border-left: 1px black solid;
+    border-bottom: 0px;
+    border-right: 0px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.accessadmin
+{
+    color: yellow;
+}
+
+.versiontable LI
+{
+    margin-left: -0.25in;
+}
+
+.footer
+{
+  padding: 0.5em 1em 0.5em 1em;
+  background: rgb(88%,90%,92%);
+  font-size: 80%;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.svn
+{
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+#localbanner
+{
+  margin: 0.3em;
+  padding: 0.5em;
+  border: 1px solid rgb(20%,20%,20%);
+  color: rgb(20%,20%,20%);
+  background: rgb(95%,95%,95%);
+  display: none;
+}
+
+.rev
+{
+  padding-right: 5px;
+  text-align: right;
+}
+
+.updirrow
+{
+  padding: 0px;
+  background: rgb(100%,90%,70%);
+}
+
+.updir
+{
+  padding: 2px;
+}
+
+.pathrow
+{
+  padding: 0px;
+  background: rgb(100%,80%,40%);
+}
+
+.pathrow TD
+{
+  border-top: 1px solid rgb(90%,70%,30%);
+}
+
+.path
+{
+  padding: 2px;
+}
+
+.path A {color: black; text-decoration: none;}
+.path A:visited {color: black; text-decoration: none;}
+.path A:hover {color: blue; background: rgb(100%,100%,0%); text-decoration: none; padding-left: 0.5em; padding-right: 0.5em;}
+.path A:active {color: red; background: rgb(100%,100%,0%); text-decoration: none; padding-left: 0.5em; padding-right: 0.5em;}
+
+.svnentryicon
+{
+  margin-right: 0.5em;
+}
+
+.dirrow
+{
+  padding: 0px;
+  background: rgb(80%,80%,70%);
+}
+
+.dirrow TD
+{
+  border-top: 1px solid rgb(70%,70%,60%);
+}
+
+.dir
+{
+  padding: 2px;
+}
+
+.filerow
+{
+  padding: 0px;
+  background: rgb(95%,95%,95%);
+}
+
+.filerow TD
+{
+  border-top: 1px solid rgb(85%,85%,85%);
+}
+
+.file
+{
+  padding: 2px;
+}
+
+.showlog
+{
+  padding: 0px;
+  padding-left: 1px;
+  padding-right: 1px;
+  opacity: 0.6;
+}
+
+TD.showlog
+{
+  width: 1%;
+}
+
+.foldspace
+{
+  width: 1%;
+  padding: 0px;
+}
+
+.showlog:hover
+{
+  opacity: 1.00;
+}
+
+.showlog A:hover
+{
+  background: rgb(100%,100%,50%);
+}
+
+.updir:hover
+{
+  background: rgb(100%,90%,90%);
+}
+
+.dir:hover
+{
+  background: rgb(100%,100%,80%);
+}
+
+.file:hover
+{
+  background: rgb(100%,100%,90%);
+}
+
+.dirarrow
+{
+  cursor: pointer;
+}
+
+.dirarrow:hover
+{
+  background: rgb(100%,100%,50%);
+}
+
+.editable
+{
+  cursor: pointer;
+}
+
+.editable:hover
+{
+  background: yellow;
+}
+
+.example
+{
+  margin-left: 2em;
+}
+
+.commandLine
+{
+}
+
+.commandOutput
+{
+  font-size: 90%;
+  color: blue;
+}
+
+.revision
+{
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  font-size: 12pt;
+}
+
+TR.revision
+{
+  cursor: pointer;
+}
+
+TR.revision:hover
+{
+  background: rgb(100%,100%,75%);
+}
+
+TH.revision
+{
+  border: 0px;
+  padding-right: 4px;
+  text-align: right;
+  line-height: 16pt;
+  vertical-align: baseline;
+  font-size: 14pt;
+}
+
+TD.user
+{
+  padding-right: 4px;
+  text-align: left;
+  line-height: 16pt;
+  vertical-align: baseline;
+  font-size: 11pt;
+}
+
+.revdate
+{
+  line-height: 16pt;
+  font-size: 14pt;
+  vertical-align: baseline;
+}
+
+SPAN.revdate
+{
+  margin-left: 1em;
+  font-size: 8pt;
+}
+
+.revstat
+{
+  float: right;
+  margin-right: 4px;
+  color: rgb(10%,10%,10%);
+  font-size: 9pt;
+}
+
+.revstatdetails
+{
+  margin-right: 1em;
+  color: rgb(50%,50%,50%);
+}
+
+.logheader
+{
+  margin: 0px;
+  padding-top: 2px;
+  padding: 0px;
+  background: rgb(100%,90%,90%);
+  font-size: 12pt;
+  font-weight: bold;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.logheader:hover
+{
+  background: rgb(100%,80%,80%);
+}
+
+.logheader1
+{
+  padding-right: 4px;
+}
+
+#details
+{
+  font-weight: normal;
+  font-size: 10pt;
+  text-align: right;
+}
+
+TD.details
+{
+  width: 99%;
+}
+
+.logtitle
+{
+  margin: 0px;
+  padding: 0px;
+  background: rgb(100%,90%,90%);
+  text-align: center;
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+.revcount
+{
+  font-size: 10pt;
+  padding-left: 2em;
+  font-weight: normal;
+}
+
+.spacer
+{
+  height: 1px;
+  background: rgb(50%,50%,50%);
+  padding: 0px;
+}
+
+.logmsg
+{
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  font-size: 9pt;
+}
+
+.morelog
+{
+  text-align: right;
+  padding-bottom: 0.3em;
+  margin-bottom: 0.3em;
+  border-bottom: 1px solid black;
+  font-size: 12pt;
+}
+
+.paths
+{
+  background: rgb(95%,95%,95%);
+  border: 1px solid rgb(70%,70%,70%);
+  padding: 1px;
+  margin: 3px;
+}
+
+.pathline
+{
+  margin: 0px;
+  padding: 0px;
+  font-size: 8pt;
+  clear: left;
+}
+
+.pathline:hover
+{
+  background: rgb(90%,90%,90%);
+}
+
+.pathaction
+{
+  float: left;
+  font-weight: bold;
+  text-align: center;
+  color: rgb(0%,50%,0%);
+  width: 2em;
+}
+
+.pathfile
+{
+  padding-left: 2em;
+  white-space: nowrap;
+}
+
+.copyfrom
+{
+  padding-left: 2em;
+  color: rgb(40%,50%,40%);
+}
+
+.copyfromnote
+{
+  color: rgb(60%,70%,60%);
+}
+
+/* We use this to hide/show the popup menu and to make the shaddow for it */
+.pathpopup
+{
+  position: absolute;
+  z-index: 1;
+  visibility: hidden;
+}
+
+/* The dropshadow for the menu is here. */
+.pathpopupshadow
+{
+  background: rgb(50%,50%,40%);
+  position: relative;
+  /* Note that this offset for the shadow must be matched in the menu */
+  top: 4px;
+  left: 4px;
+}
+
+/* The actual menu section begins here... */
+.pathpopupmenu
+{
+  background: rgb(100%,100%,75%);
+  position: relative;
+  /* Note that this offset for the menu must be matched in the shadow */
+  top: -4px;
+  left: -4px;
+  padding-bottom: 1px;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  text-align: left;
+}
+
+.pathpopupmenu A         {color: black; text-decoration: none;}
+.pathpopupmenu A:visited {color: black; text-decoration: none;}
+.pathpopupmenu A:hover   {color: blue; text-decoration: underline;}
+.pathpopupmenu A:active  {color: red; text-decoration: underline;}
+
+.pathpopupmenuitem
+{
+  padding-left: 1em;
+  padding-right: 3px;
+}
+
+.pathpopupmenuitem:hover
+{
+  background: rgb(90%,100%,0%);
+}
+
+.pathpopupmenutext
+{
+  color: rgb(10%,10%,10%);
+  padding-left: 1em;
+  padding-right: 3px;
+}
+
+.menusegment
+{
+  margin: 0px;
+  margin-top: 1px;
+  border: 0px;
+  border-top: 1px solid rgb(70%,70%,70%);
+}
+
+.blametitle
+{
+  font-size: 16pt;
+  margin: 0px;
+}
+
+.blame
+{
+  border-top: 3px solid black;
+  margin-top: 4px;
+  padding-top: 2px;
+  width: 100%;
+}
+
+.blameline0
+{
+  background: rgb(95%,100%,95%);
+}
+
+.blameline1
+{
+  background: rgb(95%,95%,100%);
+}
+
+.blamerev
+{
+  margin: 0px;
+  padding: 0px;
+  text-align: right;
+  vertical-align: top;
+  padding-left: 0.5em;
+}
+
+.blameuser
+{
+  margin: 0px;
+  padding: 0px;
+  text-align: left;
+  vertical-align: top;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+.blamelines
+{
+  margin: 0px;
+  padding: 0px;
+  padding-left: 0.5em;
+  border-left: 1px solid rgb(0%,0%,70%);
+  text-align: left;
+  vertical-align: top;
+  width: 99%;
+}
+
+.blamelines PRE
+{
+  margin: 0px;
+  padding: 0px;
+}
+
+.difftitle
+{
+  font-size: 16pt;
+  margin: 0px;
+}
+
+.diffindex
+{
+  background: white;
+  font-size: 16pt;
+  border-top: 3px solid black;
+  margin-top: 4px;
+  padding-top: 2px;
+}
+
+.diff
+{
+  border-bottom: 1px solid rgb(75%,75%,75%);
+  padding-top: 3px;
+  padding-bottom: 3px;
+  background: rgb(95%,95%,95%);
+}
+
+.diff0
+{
+  white-space: pre;
+  font-family: monospace;
+}
+
+.diff1
+{
+  background: rgb(100%,75%,75%);
+  white-space: pre;
+  font-family: monospace;
+}
+
+.diff2
+{
+  background: rgb(75%,100%,75%);
+  white-space: pre;
+  font-family: monospace;
+}
+
+.diff3
+{
+  border-top: 1px solid rgb(50%,50%,50%);
+  background: rgb(85%,85%,85%);
+  padding-top: 1px;
+}
+
+.diffprop
+{
+  border-top: 1px solid rgb(50%,50%,50%);
+  background: rgb(100%,100%,85%);
+  font-size: 12pt;
+  padding: 1em;
+}
+

@@ -1,0 +1,147 @@
+AuthUserFile /home/equine/private/subversion/authentication/passwords
+AuthName "Insurrection Repository"
+AuthType Basic
+
+## We want the index.cgi to handle the directory by default...
+DirectoryIndex index.cgi
+
+<Files ~ "password.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "admin.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "index.cgi">
+	SetHandler cgi-script
+</Files>
+
+<Files ~ "project.cgi">
+	SetHandler cgi-script
+</Files>
+
+<Files ~ "log.cgi">
+	SetHandler cgi-script
+</Files>
+
+<Files ~ "rss.cgi">
+	SetHandler cgi-script
+</Files>
+
+<Files ~ "get.cgi">
+	SetHandler cgi-script
+</Files>
+
+<Files ~ "diff.cgi">
+	SetHandler cgi-script
+</Files>
+
+<Files ~ "blame.cgi">
+	SetHandler cgi-script
+</Files>
+
+<Files ~ "broken_xslt.cgi">
+	SetHandler cgi-script
+</Files>
+
+## In case access to a repository is not public/anonymous
+## the above CGIs will redirect to these that require
+## authentication and thus get Apache to do that for us.
+<Files ~ "auth_index.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "auth_log.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "auth_rss.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "auth_get.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "auth_diff.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+<Files ~ "auth_blame.cgi">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+## If you have mod-rewrite enabled in apache
+## you can have all of the URLs being rewritten using
+## this trick which makes all of the URLs consistant
+## with the normal Subversion HTTP URLs.
+## Note that we use the LOG & RSS version for
+## handling the redirect to the LOG & RSS feeds
+## from the SVN Index pages.  The reason for this is
+## that there is no way to find the actual repository
+## name in the SVN Index XML so we need to use some
+## trick that plays with the full URL.  I used to
+## use some JavaScript tricks but this is better.
+## We don't currently use any of the others as they
+## are not currently needed but are here just for
+## completeness and future support.
+##
+## NOTE - Currently a bug in Apache/mod_rewrite
+## prevents this from working if the file or path
+## contains a '?' character.  See Apache bug report
+## http://issues.apache.org/bugzilla/show_bug.cgi?id=34602
+##
+RewriteEngine On
+RewriteRule	^index.html$	/index.cgi	[R,L]
+RewriteRule	^project.html$	/project.cgi	[R,L]
+RewriteCond %{QUERY_STRING} Insurrection=rss
+RewriteRule	^svn/(.*)$	/rss.cgi/$1	[R,L]
+RewriteCond %{QUERY_STRING} Insurrection=log
+RewriteRule	^svn/(.*)$	/log.cgi/$1	[R,L]
+RewriteCond %{QUERY_STRING} Insurrection=get
+RewriteRule	^svn/(.*)$	/get.cgi/$1	[R,L]
+RewriteCond %{QUERY_STRING} Insurrection=diff
+RewriteRule	^svn/(.*)$	/diff.cgi/$1	[R,L]
+RewriteCond %{QUERY_STRING} Insurrection=blame
+RewriteRule	^svn/(.*)$	/blame.cgi/$1	[R,L]
+
+## What a trick - to get the broken browsers to work.
+## Now the need XMLHttp, but the don't need the XSLT
+## to work.
+##
+## Note that the XSLT of Safari is almost working but
+## not quite.  So it is listed here.
+##
+## What we do here is proxy the request to a simple
+## CGI the makes the base HTML framework and kicks off
+## a client side script that does the rest.
+##
+## Note that if someone expressly wants XML, the
+## XMLHttp=1 attribute is needed.  This is used by the
+## XMLHttp object in the JavaScript to make sure that
+## it does get the XML version even when the browser
+## does not support XML/XSLT.
+##
+## Note that we would like to have the real XSLT working
+## as there are some things that are not available
+## without it *and* the bandwidth and server load are
+## much lower.  The good thing is that the top two
+## browser technologies do work correctly enough to
+## not need this hack.  That ends up covering 98% of
+## all wed users.  (That is Mozilla/Firefox and IE)
+RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{QUERY_STRING} !XMLHttp=1
+RewriteCond %{HTTP_USER_AGENT} Opera		[OR]
+RewriteCond %{HTTP_USER_AGENT} Safari		[OR]
+RewriteCond %{HTTP_USER_AGENT} Konqueror
+RewriteRule	^svn/(.*/)$	/broken_xslt.cgi/$1	[P,L]
+
