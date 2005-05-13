@@ -20,6 +20,7 @@
   <li>View differences at various revisions</li>
   <li>Annotate files with respect to author and revision</li>
   <li>Get a RSS feed of changes in a repository or part of a repository</li>
+  <li>All repository features are via repository consistent URLs</li>
   <li>Administrate user access to repositories</li>
 </ul>
 <h3>Design Goals</h3>
