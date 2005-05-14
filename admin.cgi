@@ -96,6 +96,8 @@ elsif ($Operation eq 'Update')
                my $type = $cgi->param($id);
                if (defined $type)
                {
+                  ## The "*" user can only be 0 or 1
+                  $type = 1 if (($type > 1) && ($user eq '*'));
                   ${$groupUsers{$group}}{$user} = 'r'  if ($type == 1);
                   ${$groupUsers{$group}}{$user} = 'rw' if ($type > 1);
 
@@ -303,7 +305,7 @@ if (@accessGroups > 0)
           ,   'var val = document.getElementById(id);'
           ,   'var t = val.value;'
           ,   't++;'
-          ,   'if (t > 2) {t = 0;}'
+          ,   'if (t > 1) {t = 0;}'
           ,   'val.value = t;'
           ,   'me.innerHTML = states[t];'
           , '}';
