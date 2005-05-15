@@ -45,8 +45,38 @@ my $opath = &svn_RPATH($cgi->path_info);
 ## This gives us useful RSS feeds even for repositories that
 ## have been quiet.
 
+## We first look for the HEAD revision to find out the time
+## of the newest revision...
 my $rev = '-r HEAD ';
-my $cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache --xml ' . $rev . $rssURL;
+
+## Arg - svn log -r HEAD does not really work if there are no
+## current changes in this part of the tree.  So, we need to
+## find the most current revision first, using svn ls -v
+## and looking for the largest revision almost works except
+## that the directory may be newer than any of its contents
+## so we then need to get all revisions from the HEAD to
+## that highest revision (without copies).  Usually this
+## will result in 1 or 2 entries at most, but it requires
+## that "svn ls -v" run first, which is extra overhead.
+## Since this is not needed at the root of the repository
+## we don't do it unless we are not at the root.
+## (The root always has every revision since it is all paths)
+if ($opath ne '/')
+{
+   my $cmd = $SVN_CMD . ' ls -v ' . $rssURL;
+   my $lastR = 0;
+   foreach my $rline (split("\n",`$cmd`))
+   {
+      if ($rline =~ m/^\s*(\d+)\s+/)
+      {
+         my $r = 0 + $1;
+         $lastR = $r if ($r > $lastR);
+      }
+   }
+   $rev = "-r HEAD:$lastR ";
+}
+
+my $cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache --xml --stop-on-copy ' . $rev . $rssURL;
 my $hdata = `$cmd`;
 if ($hdata =~ m:<date>\s*(.*?)\s*</date>:s)
 {
@@ -126,6 +156,9 @@ if ((defined $rpath) && (defined $opath))
 
 if ((defined $top) && (defined $topDate))
 {
+   ## Check if we have loaded the admin stuff yet...
+   &loadAccessFile() if (!defined $groupUsers);
+
    ## Note that RSS feeds expire after 120 minutes...
    print $cgi->header('-expires' => '+120m' ,
                       '-type' => 'text/xml; charset=' . $encoding);
@@ -139,8 +172,10 @@ if ((defined $top) && (defined $topDate))
        , '<rss version="2.0">'
        , '<channel>' , "\n"
        , '<title>Repository: ' , &svn_XML_Escape($rpath) , '</title>' , "\n"
-       , '<description>RSS Feed of the activity in the "' , &svn_XML_Escape($rpath)
-       ,   '" repository from ' , &dateFormat($topDate) , ' to ' , &dateFormat($endDate) , '.&lt;hr/&gt; '
+       , '<description>RSS Feed of the activity in "' , &svn_XML_Escape($opath)
+       ,   '" of the "' , &svn_XML_Escape($rpath)
+       ,   '" repository from ' , &dateFormat($topDate)
+       ,   ' to ' , &dateFormat($endDate) , '. &lt;hr/&gt;'
        ,   &svn_XML_Escape($groupComments{$rpath . ':/'})
        , '</description>' , "\n"
        , '<link>' , &svn_XML_Escape($rLink) , '</link>' , "\n"
