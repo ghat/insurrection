@@ -16,9 +16,9 @@
 </ul>
 <table width="100%" cellpadding="6" cellspacing="0" border="0">
   <tr>
-    <td nowrap width="33%" align="left"><a style="background: rgb(100%,100%,80%); border: 1px solid black; padding: 3px;" href="password.cgi">Change your password</a></td>
-    <td nowrap width="34%" align="center"><a style="background: rgb(100%,100%,80%); border: 1px solid black; padding: 3px;" href="admin.cgi">Manage users</a></td>
-    <td nowrap width="33%" align="right"><a style="background: rgb(100%,100%,80%); border: 1px solid black; padding: 3px;" href="auth_index.cgi">Login</a></td>
+    <td nowrap width="33%" align="left"><a class="linkbutton" href="password.cgi">Change your password</a></td>
+    <td nowrap width="34%" align="center"><a class="linkbutton" href="admin.cgi">Manage users</a></td>
+    <td nowrap width="33%" align="right"><a class="linkbutton" href="auth_index.cgi">Login</a></td>
   </tr>
 </table>
 <table class="versiontable" border="0" width="100%">
