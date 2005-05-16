@@ -183,8 +183,12 @@
             </ul>
             <p style="font-size: 120%;">
               What this means is that currently, only Mozilla/Firefox/etc and Windows-IE comply with the standards
-              enough to use the Insurrection tools.&nbsp; This does, however, cover over 98% of the browsers
-              in use.
+              enough to use the Insurrection tools without some help.&nbsp; This does, however, cover over 98% of
+              the browsers in use.&nbsp; Insurrection now has some browser compatibility checks that does
+              check for Konqueror, Safari, and Opera and does the XSLT server-side, thus getting those browsers to
+              work.&nbsp; Insurrection specifically checks for those only browsers (via the USER_AGENT header)
+              in order to enable the workaround so as to not reduce the performance of browsers that do
+              support the standards.
             </p>
           </div>
           <div class="footer">$Id$</div>
