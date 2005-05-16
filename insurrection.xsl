@@ -75,7 +75,7 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template name="top-side">
+  <xsl:template name="top-bottom">
     <thead>
       <tr>
         <th id="top-left">
@@ -89,21 +89,6 @@
         </th>
       </tr>
     </thead>
-  </xsl:template>
-
-  <xsl:template name="left-side">
-    <th id="left">
-      <xsl:call-template name="blank"/>
-    </th>
-  </xsl:template>
-
-  <xsl:template name="right-side">
-    <th id="right">
-      <xsl:call-template name="blank"/>
-    </th>
-  </xsl:template>
-
-  <xsl:template name="bottom-side">
     <tfoot>
       <tr>
         <th id="bottom-left">
@@ -117,6 +102,18 @@
         </th>
       </tr>
     </tfoot>
+  </xsl:template>
+
+  <xsl:template name="left-side">
+    <th id="left">
+      <xsl:call-template name="blank"/>
+    </th>
+  </xsl:template>
+
+  <xsl:template name="right-side">
+    <th id="right">
+      <xsl:call-template name="blank"/>
+    </th>
   </xsl:template>
 
   <!-- ******************************************************************************************************************* -->
@@ -136,7 +133,7 @@
       </head>
       <body>
         <table id="pagetable" cellpadding="0" cellspacing="0">
-          <xsl:call-template name="top-side"/>
+          <xsl:call-template name="top-bottom"/>
           <tbody>
             <tr>
               <xsl:call-template name="left-side"/>
@@ -152,7 +149,6 @@
               <xsl:call-template name="right-side"/>
             </tr>
           </tbody>
-          <xsl:call-template name="bottom-side"/>
         </table>
 
         <!-- Some hidden images for the Javascript to access by Id -->
@@ -561,7 +557,7 @@
       </head>
       <body>
         <table id="pagetable" cellpadding="0" cellspacing="0">
-          <xsl:call-template name="top-side"/>
+          <xsl:call-template name="top-bottom"/>
           <tbody>
             <tr>
               <xsl:call-template name="left-side"/>
@@ -632,7 +628,6 @@
               <xsl:call-template name="right-side"/>
             </tr>
           </tbody>
-          <xsl:call-template name="bottom-side"/>
         </table>
       </body>
     </html>
