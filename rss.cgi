@@ -171,7 +171,7 @@ if ((defined $top) && (defined $topDate))
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
        , '<rss version="2.0">'
        , '<channel>' , "\n"
-       , '<title>Repository: ' , &svn_XML_Escape($rpath) , '</title>' , "\n"
+       , '<title>Repository: ' , &svn_XML_Escape($rpath . ': ' . $opath) , '</title>' , "\n"
        , '<description>RSS Feed of the activity in "' , &svn_XML_Escape($opath)
        ,   '" of the "' , &svn_XML_Escape($rpath)
        ,   '" repository from ' , &dateFormat($topDate)
