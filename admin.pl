@@ -215,17 +215,19 @@ sub svn_HEADER($title,$expires)
        ,  '</head>' , "\n"
        ,  '<body>'
        ,   '<table id="pagetable" cellpadding="0" cellspacing="0">'
-       ,    '<tr>'
-       ,     '<td id="top-left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,     '<td id="top"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,     '<td id="top-right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,    '</tr>'
-       ,    '<tr>'
-       ,     '<td id="left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,     '<td id="content">'
-       ,      $banner
-       ,      '<div id="localbanner"></div>'
-       ,      '<div class="svn">' , "\n";
+       ,    '<thead>'
+       ,     '<tr>'
+       ,      '<th id="top-left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,      '<th id="top"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,      '<th id="top-right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,     '</tr>'
+       ,    '</thead>'
+       ,    '<tbody>'
+       ,     '<tr>'
+       ,      '<th id="left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,      '<td id="content">'
+       ,       $banner
+       ,       '<div class="svn"><div id="localbanner"></div>' , "\n";
 }
 
 ##
@@ -238,23 +240,26 @@ sub svn_TRAILER($version)
    ## Use the version of this file if there was no version passed.
    $version = '$Id$' if (!defined $version);
 
-   print      '</div>'
-       ,      '<div class="footer">'
-       ,       '<a title="Valid HTML 4.01!" href="http://validator.w3.org/check?uri=referer">'
-       ,        '<img style="margin-left: 1em;" align="right" border="0" src="/valid-html401.png" alt="Valid HTML 4.01!">'
-       ,       '</a>'
-       ,       $version;
-   print       '&nbsp;&nbsp;--&nbsp;&nbsp;'
-       ,       'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
-   print      '</div>'
-       ,     '</td>'
-       ,     '<td id="right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,    '</tr>'
-       ,    '<tr>'
-       ,     '<td id="bottom-left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,     '<td id="bottom"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,     '<td id="bottom-right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></td>'
-       ,    '</tr>'
+   print       '</div>'
+       ,       '<div class="footer">'
+       ,        '<a title="Valid HTML 4.01!" href="http://validator.w3.org/check?uri=referer">'
+       ,         '<img style="margin-left: 1em;" align="right" border="0" src="/valid-html401.png" alt="Valid HTML 4.01!">'
+       ,        '</a>'
+       ,        $version;
+   print        '&nbsp;&nbsp;--&nbsp;&nbsp;'
+       ,        'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
+   print       '</div>'
+       ,      '</td>'
+       ,      '<th id="right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,     '</tr>'
+       ,    '</tbody>'
+       ,    '<tfoot>'
+       ,     '<tr>'
+       ,      '<th id="bottom-left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,      '<th id="bottom"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,      '<th id="bottom-right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,     '</tr>'
+       ,    '</tfoot>'
        ,   '</table>'
        ,  '</body>'
        , '</html>';
@@ -321,8 +326,8 @@ sub checkAuthMode()
    ## and now all we need to do is trust it.  In all other cases
    ## Note: This security can be broken if someone else puts in
    ## a proxy on the same server and sets it up just right...
-   if (($ENV{'REMOTE_ADDR'} eq $ENV{'SERVER_ADDR'})
-      && ($ENV{'HTTP_HOST'} eq $ENV{'HTTP_X_FORWARDED_HOST'})
+   if ((($ENV{'REMOTE_ADDR'} eq $ENV{'SERVER_ADDR'})
+      && ($ENV{'HTTP_HOST'} eq $ENV{'HTTP_X_FORWARDED_HOST'}))
       && (length($path) > 2)
       && (defined $cgi->param('Insurrection'))
       && ($cgi->param('Insurrection') eq $type))

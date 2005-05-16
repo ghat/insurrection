@@ -321,7 +321,7 @@ if (@accessGroups > 0)
 
       print '//--></script>'
           , '<form action="?" method="post">'
-          , '<input type="hidden" name="Access_Version" value="' , $accessVersion , '"/>';
+          , '<input type="hidden" name="Access_Version" value="' , &svn_XML_Escape($accessVersion) , '"/>';
    }
 
    print '<table border="0" cellpadding="2" cellspacing="0"><tr><td>'
@@ -352,8 +352,8 @@ if (@accessGroups > 0)
          print '<tr bgcolor="' , $lineColour[$line] , '">'
              , '<td align="left" valign="middle">&nbsp;';
 
-         print '<a href="?delUser=' , $user , '">' if (&canDelete($user));
-         print $user;
+         print '<a href="?delUser=' , &svn_XML_Escape($user) , '">' if (&canDelete($user));
+         print &svn_XML_Escape($user);
          print '&nbsp;Anonymous&nbsp;*' if ($user eq '*');
          print '</a>' if (&canDelete($user));
          print '&nbsp;</td>';
@@ -406,9 +406,9 @@ if (@accessGroups > 0)
        ,   '<table width="100%" cellspacing="0" id="versions">'
        ,    '<tr>'
        ,     '<th rowspan="2"><input type="submit" name="Operation" value="AddUser"/></th>'
-       ,     '<td>' , $accessVersion , '</td>'
+       ,     '<td>' , &svn_XML_Escape($accessVersion) , '</td>'
        ,    '</tr>'
-       ,    '<tr><td width="90%">' , $passwdVersion , '</td></tr>'
+       ,    '<tr><td width="90%">' , &svn_XML_Escape($passwdVersion) , '</td></tr>'
        ,   '</table>'
        ,  '</td>'
        , '</tr>' if ($canAdminUser);

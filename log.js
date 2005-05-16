@@ -78,7 +78,7 @@ function hidePopup(force)
 
 		clearTimeouts(div);
 		div.showing = 0;
-		div.style.visibility = 'hidden';
+		div.style.display = 'none';
 		div.parentNode.style.background = 'transparent';
 	}
 }
@@ -149,7 +149,7 @@ function slideOpen()
 		}
 	}
 
-	div.style.visibility = 'visible';
+	div.style.display = 'block';
 }
 
 /*
@@ -245,6 +245,7 @@ function addLink(div,link,text)
 
 	var d1 = document.createElement('div');
 	d1.className = 'pathpopupmenuitem';
+	d1.title = text;
 	a.appendChild(d1);
 
 	d1.appendChild(document.createTextNode(text));
@@ -303,6 +304,7 @@ function detailClick(repo,action,path,rev,current)
 					d1 = document.createElement('div');
 					d1.className = 'pathpopupmenutext';
 					d1.appendChild(document.createTextNode('-- Selected/Marked revision --'));
+					d1.title = 'Selected/Marked revision';
 
 					d2.appendChild(d1);
 				}
@@ -318,7 +320,8 @@ function detailClick(repo,action,path,rev,current)
 					d1.className = 'pathpopupmenuitem';
 					a.appendChild(d1);
 
-					d1.appendChild(document.createTextNode('Select/Mark revision...'));
+					d1.appendChild(document.createTextNode('Select/Mark this revision'));
+					d1.title = 'Select/Mark this revision';
 				}
 
 				var dDiff = newSegment();

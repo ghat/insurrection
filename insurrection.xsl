@@ -76,43 +76,47 @@
   </xsl:template>
 
   <xsl:template name="top-side">
-    <tr>
-      <td id="top-left">
-        <xsl:call-template name="blank"/>
-      </td>
-      <td id="top">
-        <xsl:call-template name="blank"/>
-      </td>
-      <td id="top-right">
-        <xsl:call-template name="blank"/>
-      </td>
-    </tr>
+    <thead>
+      <tr>
+        <th id="top-left">
+          <xsl:call-template name="blank"/>
+        </th>
+        <th id="top">
+          <xsl:call-template name="blank"/>
+        </th>
+        <th id="top-right">
+          <xsl:call-template name="blank"/>
+        </th>
+      </tr>
+    </thead>
   </xsl:template>
 
   <xsl:template name="left-side">
-    <td id="left">
+    <th id="left">
       <xsl:call-template name="blank"/>
-    </td>
+    </th>
   </xsl:template>
 
   <xsl:template name="right-side">
-    <td id="right">
+    <th id="right">
       <xsl:call-template name="blank"/>
-    </td>
+    </th>
   </xsl:template>
 
   <xsl:template name="bottom-side">
-    <tr>
-      <td id="bottom-left">
-        <xsl:call-template name="blank"/>
-      </td>
-      <td id="bottom">
-        <xsl:call-template name="blank"/>
-      </td>
-      <td id="bottom-right">
-        <xsl:call-template name="blank"/>
-      </td>
-    </tr>
+    <tfoot>
+      <tr>
+        <th id="bottom-left">
+          <xsl:call-template name="blank"/>
+        </th>
+        <th id="bottom">
+          <xsl:call-template name="blank"/>
+        </th>
+        <th id="bottom-right">
+          <xsl:call-template name="blank"/>
+        </th>
+      </tr>
+    </tfoot>
   </xsl:template>
 
   <!-- ******************************************************************************************************************* -->
@@ -184,35 +188,32 @@
         <!-- Now for the real page... -->
         <table id="pagetable" cellpadding="0" cellspacing="0">
           <xsl:call-template name="top-side"/>
-          <tr>
-            <xsl:call-template name="left-side"/>
-            <td id="content">
-              <xsl:call-template name="banner"/>
-
-              <!-- If there is a local banner defined, have the JS load it -->
-              <xsl:if test="index/file[@href = '.svn_index']">
-                <xsl:element name="div">
-                  <xsl:attribute name="id">localbanner</xsl:attribute>
-                </xsl:element>
-                <xsl:element name="script">
-                  <xsl:attribute name="type">text/javascript</xsl:attribute>
-                  <xsl:attribute name="language">JavaScript</xsl:attribute>
-                  <xsl:text>loadBanner('.svn_index');</xsl:text>
-                </xsl:element>
-              </xsl:if>
-
-              <xsl:apply-templates/>
-
-              <div class="footer">
-                <xsl:text>Powered by Subversion </xsl:text>
-                <xsl:value-of select="@version"/>
-                <xsl:text> -- $Id$</xsl:text>
-              </div>
-            </td>
-            <xsl:call-template name="right-side"/>
-          </tr>
+          <tbody>
+            <tr>
+              <xsl:call-template name="left-side"/>
+              <td id="content">
+                <xsl:call-template name="banner"/>
+                <xsl:apply-templates select="index"/>
+                <div class="footer">
+                  <xsl:text>Powered by Subversion </xsl:text>
+                  <xsl:value-of select="@version"/>
+                  <xsl:text> -- $Id$</xsl:text>
+                </div>
+              </td>
+              <xsl:call-template name="right-side"/>
+            </tr>
+          </tbody>
           <xsl:call-template name="bottom-side"/>
         </table>
+
+        <xsl:if test="index/file[@href = '.svn_index']">
+          <xsl:element name="script">
+            <xsl:attribute name="type">text/javascript</xsl:attribute>
+            <xsl:attribute name="language">JavaScript</xsl:attribute>
+            <xsl:text>loadBanner('.svn_index');</xsl:text>
+          </xsl:element>
+        </xsl:if>
+
       </body>
     </html>
   </xsl:template>
@@ -289,98 +290,104 @@
   <!-- The index node contains the path information for an SVN index XML page. -->
   <xsl:template match="index">
     <div class="svn">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-      <xsl:apply-templates select="updir"/>
-      <tr class="pathrow">
-        <td class="foldspace">
-          <xsl:element name="img">
-            <xsl:attribute name="class">dirarrow</xsl:attribute>
-            <xsl:attribute name="align">middle</xsl:attribute>
-            <xsl:attribute name="onclick">foldDir(this)</xsl:attribute>
-            <xsl:attribute name="id">
-              <xsl:text>/</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="src">
-              <xsl:call-template name="openedicon-path"/>
-            </xsl:attribute>
-            <xsl:attribute name="title">Collapse directory</xsl:attribute>
-            <xsl:attribute name="alt">Collapse directory</xsl:attribute>
-          </xsl:element>
-        </td>
-        <td class="path">
-          <xsl:element name="img">
-            <xsl:attribute name="alt">Folder</xsl:attribute>
-            <xsl:attribute name="class">svnentryicon</xsl:attribute>
-            <xsl:attribute name="align">middle</xsl:attribute>
-            <xsl:attribute name="src">
-              <xsl:call-template name="diricon-path"/>
-            </xsl:attribute>
-          </xsl:element>
-          <xsl:call-template name="pathtree">
-            <xsl:with-param name="path" select="@path"/>
-          </xsl:call-template>
-        </td>
-        <td class="rev">
-          <xsl:if test="string-length(@name) != 0">
-            <xsl:value-of select="@name"/>
-            <xsl:text> - </xsl:text>
-          </xsl:if>
-          <xsl:if test="string-length(@rev) = 0">
-            <xsl:text>&#8212; </xsl:text>
-          </xsl:if>
-          <xsl:if test="string-length(@rev) != 0">
-            <xsl:text>Revision </xsl:text>
-            <xsl:value-of select="@rev"/>
-          </xsl:if>
-        </td>
-        <td class="showlog">
-          <xsl:element name="a">
-            <xsl:attribute name="title">RSS Feed of activity in this directory</xsl:attribute>
-            <xsl:attribute name="href">
-              <xsl:text>?Insurrection=rss</xsl:text>
-            </xsl:attribute>
+
+      <!-- If there is a local banner defined, have the JS load it here and make it visible -->
+      <div id="localbanner"/>
+
+      <!-- I could not come up with a non-table way to render this the way I wanted -->
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <xsl:apply-templates select="updir"/>
+        <tr class="pathrow">
+          <td class="foldspace">
             <xsl:element name="img">
+              <xsl:attribute name="class">dirarrow</xsl:attribute>
               <xsl:attribute name="align">middle</xsl:attribute>
-              <xsl:attribute name="alt">RSS Feed of activity in this directory</xsl:attribute>
+              <xsl:attribute name="onclick">foldDir(this)</xsl:attribute>
+              <xsl:attribute name="id">
+                <xsl:text>/</xsl:text>
+              </xsl:attribute>
               <xsl:attribute name="src">
-                <xsl:call-template name="rssicon-path"/>
+                <xsl:call-template name="openedicon-path"/>
+              </xsl:attribute>
+              <xsl:attribute name="title">Collapse directory</xsl:attribute>
+              <xsl:attribute name="alt">Collapse directory</xsl:attribute>
+            </xsl:element>
+          </td>
+          <td class="path">
+            <xsl:element name="img">
+              <xsl:attribute name="alt">Folder</xsl:attribute>
+              <xsl:attribute name="class">svnentryicon</xsl:attribute>
+              <xsl:attribute name="align">middle</xsl:attribute>
+              <xsl:attribute name="src">
+                <xsl:call-template name="diricon-path"/>
               </xsl:attribute>
             </xsl:element>
-          </xsl:element>
-        </td>
-        <td class="showlog">
-          <xsl:element name="a">
-            <xsl:attribute name="title">Show revision history for this directory</xsl:attribute>
-            <xsl:attribute name="href">
-              <xsl:text>?Insurrection=log</xsl:text>
-            </xsl:attribute>
+            <xsl:call-template name="pathtree">
+              <xsl:with-param name="path" select="@path"/>
+            </xsl:call-template>
+          </td>
+          <td class="rev">
+            <xsl:if test="string-length(@name) != 0">
+              <xsl:value-of select="@name"/>
+              <xsl:text> - </xsl:text>
+            </xsl:if>
+            <xsl:if test="string-length(@rev) = 0">
+              <xsl:text>&#8212; </xsl:text>
+            </xsl:if>
+            <xsl:if test="string-length(@rev) != 0">
+              <xsl:text>Revision </xsl:text>
+              <xsl:value-of select="@rev"/>
+            </xsl:if>
+          </td>
+          <td class="showlog">
+            <xsl:element name="a">
+              <xsl:attribute name="title">RSS Feed of activity in this directory</xsl:attribute>
+              <xsl:attribute name="href">
+                <xsl:text>?Insurrection=rss</xsl:text>
+              </xsl:attribute>
+              <xsl:element name="img">
+                <xsl:attribute name="align">middle</xsl:attribute>
+                <xsl:attribute name="alt">RSS Feed of activity in this directory</xsl:attribute>
+                <xsl:attribute name="src">
+                  <xsl:call-template name="rssicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </xsl:element>
+          </td>
+          <td class="showlog">
+            <xsl:element name="a">
+              <xsl:attribute name="title">Show revision history for this directory</xsl:attribute>
+              <xsl:attribute name="href">
+                <xsl:text>?Insurrection=log</xsl:text>
+              </xsl:attribute>
+              <xsl:element name="img">
+                <xsl:attribute name="align">middle</xsl:attribute>
+                <xsl:attribute name="alt">Show revision history for this directory</xsl:attribute>
+                <xsl:attribute name="src">
+                  <xsl:call-template name="infoicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </xsl:element>
+          </td>
+        </tr>
+        <tr id=".//">
+          <td>
             <xsl:element name="img">
-              <xsl:attribute name="align">middle</xsl:attribute>
-              <xsl:attribute name="alt">Show revision history for this directory</xsl:attribute>
+              <xsl:attribute name="alt"></xsl:attribute>
               <xsl:attribute name="src">
-                <xsl:call-template name="infoicon-path"/>
+                <xsl:call-template name="blankicon-path"/>
               </xsl:attribute>
             </xsl:element>
-          </xsl:element>
-        </td>
-      </tr>
-      <tr id=".//">
-        <td>
-          <xsl:element name="img">
-            <xsl:attribute name="alt"></xsl:attribute>
-            <xsl:attribute name="src">
-              <xsl:call-template name="blankicon-path"/>
-            </xsl:attribute>
-          </xsl:element>
-        </td>
-        <td colspan="4" id="./">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0">
-            <xsl:apply-templates select="dir"/>
-            <xsl:apply-templates select="file"/>
-          </table>
-        </td>
-      </tr>
-    </table>
+          </td>
+          <td colspan="4" id="./">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              <!-- I want directories displayed before files -->
+              <xsl:apply-templates select="dir"/>
+              <xsl:apply-templates select="file"/>
+            </table>
+          </td>
+        </tr>
+      </table>
     </div>
   </xsl:template>
 
@@ -555,70 +562,76 @@
       <body>
         <table id="pagetable" cellpadding="0" cellspacing="0">
           <xsl:call-template name="top-side"/>
-          <tr>
-            <xsl:call-template name="left-side"/>
-            <td id="content">
-              <xsl:call-template name="banner"/>
-              <table class="revision" width="100%" cellspacing="0">
-                <tr class="logtitle">
-                  <td colspan="3">
-                    <xsl:value-of select="@repository"/>
-                    <xsl:text> - </xsl:text>
-                    <xsl:value-of select="@path"/>
-                  </td>
-                </tr>
-                <tr class="logtitle">
-                  <td colspan="3">
-                      <xsl:text>Change log of revision</xsl:text>
-                      <xsl:if test="count(logentry) != 1">
-                        <xsl:text>s</xsl:text>
-                      </xsl:if>
-                      <xsl:text> </xsl:text>
-                      <xsl:value-of select="logentry/@revision"/>
-                      <xsl:if test="count(logentry) != 1">
-                        <xsl:text> through </xsl:text>
-                        <xsl:value-of select="logentry[last()]/@revision"/>
-                      </xsl:if>
-                  </td>
-                </tr>
-                <tr class="logheader" onclick="toggleAll();">
-                  <th class="logheader1">Rev</th>
-                  <th class="logheader1">Author</th>
-                  <th class="logheader1" width="99%">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <th class="logheader1">Details</th>
-                        <th class="revcount" nowrap="1">
-                          <xsl:text>(</xsl:text>
-                          <xsl:value-of select="count(logentry)"/>
-                          <xsl:text> revision</xsl:text>
+          <tbody>
+            <tr>
+              <xsl:call-template name="left-side"/>
+              <td id="content">
+                <xsl:call-template name="banner"/>
+                <table class="revision" width="100%" cellspacing="0">
+                  <thead>
+                    <tr class="logtitle">
+                      <th colspan="3">
+                        <xsl:value-of select="@repository"/>
+                        <xsl:text> - </xsl:text>
+                        <xsl:value-of select="@path"/>
+                      </th>
+                    </tr>
+                    <tr class="logtitle">
+                      <th colspan="3">
+                          <xsl:text>Change log of revision</xsl:text>
                           <xsl:if test="count(logentry) != 1">
                             <xsl:text>s</xsl:text>
                           </xsl:if>
-                          <xsl:text>)</xsl:text>
-                        </th>
-                        <th id="details" width="99%">
-                        </th>
-                      </tr>
-                    </table>
-                  </th>
-                </tr>
+                          <xsl:text> </xsl:text>
+                          <xsl:value-of select="logentry/@revision"/>
+                          <xsl:if test="count(logentry) != 1">
+                            <xsl:text> through </xsl:text>
+                            <xsl:value-of select="logentry[last()]/@revision"/>
+                          </xsl:if>
+                      </th>
+                    </tr>
+                    <tr class="logheader" onclick="toggleAll();">
+                      <th class="logheader1">Rev</th>
+                      <th class="logheader1">Author</th>
+                      <th class="logheader1" width="99%">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <th class="logheader1">Details</th>
+                            <th class="revcount" nowrap="1">
+                              <xsl:text>(</xsl:text>
+                              <xsl:value-of select="count(logentry)"/>
+                              <xsl:text> revision</xsl:text>
+                              <xsl:if test="count(logentry) != 1">
+                                <xsl:text>s</xsl:text>
+                              </xsl:if>
+                              <xsl:text>)</xsl:text>
+                            </th>
+                            <th id="details" width="99%">
+                            </th>
+                          </tr>
+                        </table>
+                      </th>
+                    </tr>
+                  </thead>
 
-                <!-- We pull of of the log entries here    -->
-                <!-- Note that the table format must match -->
-                <xsl:apply-templates select="logentry"/>
+                  <tbody>
+                    <!-- We pull of of the log entries here    -->
+                    <!-- Note that the table format must match -->
+                    <xsl:apply-templates select="logentry"/>
+                  </tbody>
 
-              </table>
+                </table>
 
-              <!-- If we have a morelog tag, we need to provide a way to get it -->
-              <xsl:apply-templates select="morelog"/>
+                <!-- If we have a morelog tag, we need to provide a way to get it -->
+                <xsl:apply-templates select="morelog"/>
 
-              <div class="footer">
-                <xsl:text>$Id$</xsl:text>
-              </div>
-            </td>
-            <xsl:call-template name="right-side"/>
-          </tr>
+                <div class="footer">
+                  <xsl:text>$Id$</xsl:text>
+                </div>
+              </td>
+              <xsl:call-template name="right-side"/>
+            </tr>
+          </tbody>
           <xsl:call-template name="bottom-side"/>
         </table>
       </body>

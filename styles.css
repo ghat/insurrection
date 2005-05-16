@@ -1,230 +1,232 @@
 /* $Id$ */
 
-BODY
+html, body
 {
-    color: black;
-    background: #7e7e7e;
-    font-family: helvetica, ariel, sansserif;
-    font-size: 10pt;
-    text-align: center;
-    margin: 0px;
+  color: black;
+  background: #7e7e7e;
+  font-family: helvetica, ariel, sansserif;
+  font-size: 10pt;
+  text-align: center;
+  margin: 0px;
+  height: 100%;
 }
 
-IMG
-{
-    border: none;
-}
+img { border: none; }
 
-A {color: blue; text-decoration: none;}
-A:visited {color: blue; text-decoration: none;}
-A:hover {color: green; text-decoration: underline;}
-A:active {color: red; text-decoration: underline;}
-
-#content
-{
-    /* Remove the width style if you want it to be more dynamic */
-    width: 672px;
-    color: black;
-    background: white;
-    background-image: url('/turtles.jpg');
-    background-repeat: repeat-y;
-    background-position: top center;
-}
+a {color: blue; text-decoration: none;}
+a:visited {color: blue; text-decoration: none;}
+a:hover {color: green; text-decoration: underline;}
+a:active {color: red; text-decoration: underline;}
 
 #pagetable
 {
-    text-align: left;
-    margin-left: auto;
-    margin-right: auto;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#top-left, #top, #top-right, #bottom-left, #bottom, #bottom-right
+{
+  height: 14px;
+}
+
+#top-left, #left, #bottom-left, #top-right, #right, #bottom-right
+{
+  width: 14px;
+}
+
+#top-left, #top-right, #bottom-left, #bottom-right
+{
+  background-repeat: no-repeat;
+}
+
+#top, #bottom
+{
+  background-repeat: repeat-x;
+}
+
+#left, #right
+{
+  background-repeat: repeat-y;
 }
 
 #top-left
 {
-    background-image: url('/top-left.gif');
-    background-repeat: no-repeat;
-    background-position: bottom right;
-    width: 14px;
-    height: 14px;
+  background-image: url('/top-left.gif');
+  background-position: bottom right;
 }
 
 #top
 {
-    background-image: url('/top.gif');
-    background-repeat: repeat-x;
-    background-position: bottom left;
-    height: 14px;
+  background-image: url('/top.gif');
+  background-position: bottom left;
 }
 
 #top-right
 {
-    background-image: url('/top-right.gif');
-    background-repeat: no-repeat;
-    background-position: bottom left;
-    height: 14px;
-    width: 14px;
+  background-image: url('/top-right.gif');
+  background-position: bottom left;
 }
 
 #left
 {
-    background-image: url('/left.gif');
-    background-repeat: repeat-y;
-    background-position: top right;
-    width: 14px;
+  background-image: url('/left.gif');
+  background-position: top right;
 }
 
 #right
 {
-    background-image: url('/right.gif');
-    background-repeat: repeat-y;
-    background-position: top left;
-    width: 14px;
+  background-image: url('/right.gif');
+  background-position: top left;
 }
 
 #bottom-left
 {
-    background-image: url('/bottom-left.gif');
-    background-repeat: no-repeat;
-    background-position: top right;
-    width: 14px;
-    height: 14px;
+  background-image: url('/bottom-left.gif');
+  background-position: top right;
 }
 
 #bottom
 {
-    background-image: url('/bottom.gif');
-    background-repeat: repeat-x;
-    background-position: top left;
-    height: 14px;
-    height: 14px;
+  background-image: url('/bottom.gif');
+  background-position: top left;
 }
 
 #bottom-right
 {
-    background-image: url('/bottom-right.gif');
-    background-repeat: no-repeat;
-    background-position: top left;
-    height: 14px;
-    width: 14px;
+  background-image: url('/bottom-right.gif');
+  background-position: top left;
 }
 
-.versiontable TH
+#content
 {
-    background-color: rgb(182,38,133);
-    color: white;
-    border-right: 1px black dotted;
-    border-bottom: 1px black dotted;
-    padding-left: 1em;
-    padding-top: 2px;
+  /* Remove the width style if you want it to be more dynamic */
+  width: 672px;
+  color: black;
+  background: white;
+  background-image: url('/turtles.jpg');
+  background-repeat: repeat-y;
+  background-position: top center;
 }
 
-.versiontable TD
+.versiontable th
 {
-    font-size: 90%;
-    border-right: 1px gray dotted;
-    border-bottom: 1px gray dotted;
+  background-color: rgb(182,38,133);
+  color: white;
+  border-right: 1px black dotted;
+  border-bottom: 1px black dotted;
+  padding-left: 1em;
+  padding-top: 2px;
+}
+
+.versiontable td
+{
+  font-size: 90%;
+  border-right: 1px gray dotted;
+  border-bottom: 1px gray dotted;
 }
 
 .accesstable
 {
-    border: 3px black solid;
-    border-left: 2px black solid;
-    font-size: 11pt;
+  border: 3px black solid;
+  border-left: 2px black solid;
+  font-size: 11pt;
 }
 
-.accesstable TH
+.accesstable th
 {
-    background-color: rgb(182,38,133);
-    color: white;
-    padding-left: 4px;
-    padding-right: 4px;
-    padding-bottom: 2px;
-    font-weight: bold;
-    text-align: center;
-    border: 0px;
-    border-left: 1px black solid;
+  background-color: rgb(182,38,133);
+  color: white;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 2px;
+  font-weight: bold;
+  text-align: center;
+  border: 0px;
+  border-left: 1px black solid;
 }
 
-.accesstable TD
+.accesstable td
 {
-    border: 1px black solid;
-    border-bottom: 0px;
-    border-right: 0px;
+  border: 1px black solid;
+  border-bottom: 0px;
+  border-right: 0px;
 }
 
 #versions
 {
-    color: rgb(182,38,133);
-    font-family: helvetica, ariel, sansserif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 8pt;
-    padding: 0px;
-    margin: 0px;
-    border: 0px;
+  color: rgb(182,38,133);
+  font-family: helvetica, ariel, sansserif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 8pt;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
 }
 
-#versions TH
+#versions th
 {
-    border: 0px;
-    padding: 2px;
-    background-color: transparent;
-    text-align: left;
+  border: 0px;
+  padding: 2px;
+  background-color: transparent;
+  text-align: left;
 }
 
-#versions TD
+#versions td
 {
-    border: 0px;
-    padding: 0px;
-    background-color: transparent;
-    text-align: right;
+  border: 0px;
+  padding: 0px;
+  background-color: transparent;
+  text-align: right;
 }
 
 .accesstitles
 {
-    font-weight: normal;
-    font-size: 8pt;
+  font-weight: normal;
+  font-size: 8pt;
 }
 
 .accessinfo
 {
-    border: 2px black solid;
-    border-left: 1px black solid;
-    width: 100%;
-    font-size: 9pt;
+  border: 2px black solid;
+  border-left: 1px black solid;
+  width: 100%;
+  font-size: 9pt;
 }
 
-.accessinfo TH
+.accessinfo th
 {
-    background-color: rgb(182,38,133);
-    color: white;
-    padding-left: 4px;
-    padding-right: 4px;
-    padding-bottom: 2px;
-    font-weight: bold;
-    text-align: center;
-    border: 0px;
-    border-left: 1px black solid;
+  background-color: rgb(182,38,133);
+  color: white;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 2px;
+  font-weight: bold;
+  text-align: center;
+  border: 0px;
+  border-left: 1px black solid;
 }
 
-.accessinfo TD
+.accessinfo td
 {
-    background-color: white;
-    border-top: 1px gray solid;
-    border-left: 1px black solid;
-    border-bottom: 0px;
-    border-right: 0px;
-    padding-left: 4px;
-    padding-right: 4px;
+  background-color: white;
+  border-top: 1px gray solid;
+  border-left: 1px black solid;
+  border-bottom: 0px;
+  border-right: 0px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .accessadmin
 {
-    color: yellow;
+  color: yellow;
 }
 
-.versiontable LI
+.versiontable li
 {
-    margin-left: -0.25in;
+  margin-left: -0.25in;
 }
 
 .footer
@@ -242,18 +244,19 @@ A:active {color: red; text-decoration: underline;}
   margin-bottom: 0.3em;
   padding-top: 0.3em;
   padding-bottom: 0.3em;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  border-top: 1px black solid;
+  border-bottom: 1px black solid;
 }
 
 #localbanner
 {
   margin: 0.3em;
   padding: 0.5em;
-  border: 1px solid rgb(20%,20%,20%);
+  border: 1px rgb(20%,20%,20%) solid;
   color: rgb(20%,20%,20%);
   background: rgb(95%,95%,95%);
   display: none;
+  overflow: auto;
 }
 
 .rev
@@ -279,9 +282,9 @@ A:active {color: red; text-decoration: underline;}
   background: rgb(100%,80%,40%);
 }
 
-.pathrow TD
+.pathrow td
 {
-  border-top: 1px solid rgb(90%,70%,30%);
+  border-top: 1px rgb(90%,70%,30%) solid;
 }
 
 .path
@@ -289,10 +292,27 @@ A:active {color: red; text-decoration: underline;}
   padding: 2px;
 }
 
-.path A {color: black; text-decoration: none;}
-.path A:visited {color: black; text-decoration: none;}
-.path A:hover {color: blue; background: rgb(100%,100%,0%); text-decoration: none; padding-left: 0.5em; padding-right: 0.5em;}
-.path A:active {color: red; background: rgb(100%,100%,0%); text-decoration: none; padding-left: 0.5em; padding-right: 0.5em;}
+.path a, .path a:visited
+{
+  color: black;
+  text-decoration: none;
+  padding-left: 0.1em;
+  padding-right: 0.1em;
+}
+
+.path a:hover, .path a:active
+{
+  background: rgb(100%,100%,0%);
+  text-decoration: none;
+  font-weight: bold;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+.path a:active
+{
+  background: rgb(0%,100%,0%);
+}
 
 .svnentryicon
 {
@@ -305,9 +325,9 @@ A:active {color: red; text-decoration: underline;}
   background: rgb(80%,80%,70%);
 }
 
-.dirrow TD
+.dirrow td
 {
-  border-top: 1px solid rgb(70%,70%,60%);
+  border-top: 1px rgb(70%,70%,60%) solid;
 }
 
 .dir
@@ -321,9 +341,9 @@ A:active {color: red; text-decoration: underline;}
   background: rgb(95%,95%,95%);
 }
 
-.filerow TD
+.filerow td
 {
-  border-top: 1px solid rgb(85%,85%,85%);
+  border-top: 1px rgb(85%,85%,85%) solid;
 }
 
 .file
@@ -339,7 +359,7 @@ A:active {color: red; text-decoration: underline;}
   opacity: 0.6;
 }
 
-TD.showlog
+td.showlog
 {
   width: 1%;
 }
@@ -350,14 +370,9 @@ TD.showlog
   padding: 0px;
 }
 
-.showlog:hover
+.dirarrow, .editable, .logheader, .blameline0, .blameline1, tr.revision
 {
-  opacity: 1.00;
-}
-
-.showlog A:hover
-{
-  background: rgb(100%,100%,50%);
+  cursor: pointer;
 }
 
 .updir:hover
@@ -375,19 +390,10 @@ TD.showlog
   background: rgb(100%,100%,90%);
 }
 
-.dirarrow
-{
-  cursor: pointer;
-}
-
-.dirarrow:hover
+.dirarrow:hover, .showlog a:hover, .showlog:hover
 {
   background: rgb(100%,100%,50%);
-}
-
-.editable
-{
-  cursor: pointer;
+  opacity: 1.00;
 }
 
 .editable:hover
@@ -414,22 +420,17 @@ TD.showlog
 {
   margin-top: 0.3em;
   margin-bottom: 0.3em;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  border-top: 1px black solid;
+  border-bottom: 1px black solid;
   font-size: 12pt;
 }
 
-TR.revision
-{
-  cursor: pointer;
-}
-
-TR.revision:hover
+tr.revision:hover
 {
   background: rgb(100%,100%,75%);
 }
 
-TH.revision
+th.revision
 {
   border: 0px;
   padding-right: 4px;
@@ -439,7 +440,7 @@ TH.revision
   font-size: 14pt;
 }
 
-TD.user
+td.user
 {
   padding-right: 4px;
   text-align: left;
@@ -455,7 +456,7 @@ TD.user
   vertical-align: baseline;
 }
 
-SPAN.revdate
+span.revdate
 {
   margin-left: 1em;
   font-size: 8pt;
@@ -484,7 +485,6 @@ SPAN.revdate
   font-size: 12pt;
   font-weight: bold;
   padding: 4px;
-  cursor: pointer;
 }
 
 .logheader:hover
@@ -504,7 +504,7 @@ SPAN.revdate
   text-align: right;
 }
 
-TD.details
+td.details
 {
   width: 99%;
 }
@@ -545,14 +545,14 @@ TD.details
   text-align: right;
   padding-bottom: 0.3em;
   margin-bottom: 0.3em;
-  border-bottom: 1px solid black;
+  border-bottom: 1px black solid;
   font-size: 12pt;
 }
 
 .paths
 {
   background: rgb(95%,95%,95%);
-  border: 1px solid rgb(70%,70%,70%);
+  border: 1px rgb(70%,70%,70%) solid;
   padding: 1px;
   margin: 3px;
 }
@@ -601,7 +601,7 @@ TD.details
 {
   position: absolute;
   z-index: 1;
-  visibility: hidden;
+  display: none;
 }
 
 /* The dropshadow for the menu is here. */
@@ -623,33 +623,34 @@ TD.details
   top: -4px;
   left: -4px;
   padding-bottom: 1px;
-  border-left: 2px solid black;
-  border-right: 2px solid black;
-  border-bottom: 2px solid black;
+  border-left: 2px black solid;
+  border-right: 2px black solid;
+  border-bottom: 2px black solid;
   text-align: left;
 }
 
-.pathpopupmenu A         {color: black; text-decoration: none;}
-.pathpopupmenu A:visited {color: black; text-decoration: none;}
-.pathpopupmenu A:hover   {color: blue; text-decoration: underline;}
-.pathpopupmenu A:active  {color: red; text-decoration: underline;}
-
-.pathpopupmenuitem
+.pathpopupmenuitem, .pathpopupmenutext
 {
-  padding-left: 1em;
-  padding-right: 3px;
+  color: rgb(0%,0%,0%);
+  padding-left: 0.3em;
+  padding-right: 0.3em;
 }
 
-.pathpopupmenuitem:hover
+.pathpopupmenu a, .pathpopupmenu a:visited, .pathpopupmenu a:hover, .pathpopupmenu a:active
+{
+  color: black;
+  text-decoration: none;
+  width: 100%;
+}
+
+.pathpopupmenu a:hover, .pathpopupmenuitem:hover
 {
   background: rgb(90%,100%,0%);
 }
 
-.pathpopupmenutext
+.pathpopupmenu a:active
 {
-  color: rgb(10%,10%,10%);
-  padding-left: 1em;
-  padding-right: 3px;
+  background: rgb(0%,100%,0%);
 }
 
 .menusegment
@@ -657,7 +658,7 @@ TD.details
   margin: 0px;
   margin-top: 1px;
   border: 0px;
-  border-top: 1px solid rgb(70%,70%,70%);
+  border-top: 1px rgb(70%,70%,70%) solid;
 }
 
 .blametitle
@@ -668,7 +669,7 @@ TD.details
 
 .blame
 {
-  border-top: 3px solid black;
+  border-top: 3px black solid;
   margin-top: 4px;
   padding-top: 2px;
   width: 100%;
@@ -677,7 +678,6 @@ TD.details
 .blameline0
 {
   background: rgb(95%,100%,95%);
-  cursor: pointer;
 }
 
 .blameline0 :hover
@@ -688,7 +688,6 @@ TD.details
 .blameline1
 {
   background: rgb(95%,95%,100%);
-  cursor: pointer;
 }
 
 .blameline1 :hover
@@ -720,7 +719,7 @@ TD.details
   margin: 0px;
   padding: 0px;
   padding-left: 0.5em;
-  border-left: 1px solid rgb(0%,0%,70%);
+  border-left: 1px rgb(0%,0%,70%) solid;
   text-align: left;
   vertical-align: top;
   width: 99%;
@@ -737,20 +736,20 @@ TD.details
 {
   background: white;
   font-size: 16pt;
-  border-top: 3px solid black;
+  border-top: 3px black solid;
   margin-top: 4px;
   padding-top: 2px;
 }
 
 .diff
 {
-  border-bottom: 1px solid rgb(75%,75%,75%);
+  border-bottom: 1px rgb(75%,75%,75%) solid;
   padding-top: 3px;
   padding-bottom: 3px;
   background: rgb(95%,95%,95%);
 }
 
-.diff0
+.diff0, .diff1, .diff2
 {
   white-space: pre;
   font-family: monospace;
@@ -759,27 +758,23 @@ TD.details
 .diff1
 {
   background: rgb(100%,75%,75%);
-  white-space: pre;
-  font-family: monospace;
 }
 
 .diff2
 {
   background: rgb(75%,100%,75%);
-  white-space: pre;
-  font-family: monospace;
 }
 
 .diff3
 {
-  border-top: 1px solid rgb(50%,50%,50%);
+  border-top: 1px rgb(50%,50%,50%) solid;
   background: rgb(85%,85%,85%);
   padding-top: 1px;
 }
 
 .diffprop
 {
-  border-top: 1px solid rgb(50%,50%,50%);
+  border-top: 1px rgb(50%,50%,50%) solid;
   background: rgb(100%,100%,85%);
   font-size: 12pt;
   padding: 1em;
