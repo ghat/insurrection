@@ -16,13 +16,6 @@ $repo_path = '/' if (!($repo_path =~ m|^/|));
 ## Print our standard header...   (Note the 0-minute expires!)
 &svn_HEADER($repo_path . ' (non-XSLT)','+0m');
 
-print '<img style="display: none;" alt="" id="closedImage" src="' , &svn_IconPath('closed') , '"/>'
-    , '<img style="display: none;" alt="" id="openedImage" src="' , &svn_IconPath('opened') , '"/>'
-    , '<img style="display: none;" alt="" id="dirImage" src="' , &svn_IconPath('dir') , '"/>'
-    , '<img style="display: none;" alt="" id="fileImage" src="' , &svn_IconPath('file') , '"/>'
-    , '<img style="display: none;" alt="" id="infoImage" src="' , &svn_IconPath('info') , '"/>'
-    , '<img style="display: none;" alt="" id="blankImage" src="' , &svn_IconPath('blank') , '"/>';
-
 print '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
 
 print '<tr class="updirrow">'
@@ -59,7 +52,13 @@ print  '<tr class="pathrow">'
     ,  '</tr>'
     , '</table>';
 
-print '<script language="JavaScript" type="text/javascript">'
+print '<img style="display: none;" alt="" id="closedImage" src="' , &svn_IconPath('closed') , '"/>'
+    , '<img style="display: none;" alt="" id="openedImage" src="' , &svn_IconPath('opened') , '"/>'
+    , '<img style="display: none;" alt="" id="dirImage" src="' , &svn_IconPath('dir') , '"/>'
+    , '<img style="display: none;" alt="" id="fileImage" src="' , &svn_IconPath('file') , '"/>'
+    , '<img style="display: none;" alt="" id="infoImage" src="' , &svn_IconPath('info') , '"/>'
+    , '<img style="display: none;" alt="" id="blankImage" src="' , &svn_IconPath('blank') , '"/>'
+    , '<script language="JavaScript" type="text/javascript">'
     ,  'setTimeout(\'loadDir(document.getElementById("/"));\',100);'
     , '</script>';
 

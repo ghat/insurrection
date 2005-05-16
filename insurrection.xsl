@@ -135,6 +135,26 @@
         <xsl:call-template name="header"/>
       </head>
       <body>
+        <table id="pagetable" cellpadding="0" cellspacing="0">
+          <xsl:call-template name="top-side"/>
+          <tbody>
+            <tr>
+              <xsl:call-template name="left-side"/>
+              <td id="content">
+                <xsl:call-template name="banner"/>
+                <xsl:apply-templates select="index"/>
+                <div class="footer">
+                  <xsl:text>Powered by Subversion </xsl:text>
+                  <xsl:value-of select="@version"/>
+                  <xsl:text> -- $Id$</xsl:text>
+                </div>
+              </td>
+              <xsl:call-template name="right-side"/>
+            </tr>
+          </tbody>
+          <xsl:call-template name="bottom-side"/>
+        </table>
+
         <!-- Some hidden images for the Javascript to access by Id -->
         <xsl:element name="img">
           <xsl:attribute name="src">
@@ -185,27 +205,7 @@
           <xsl:attribute name="alt"></xsl:attribute>
         </xsl:element>
 
-        <!-- Now for the real page... -->
-        <table id="pagetable" cellpadding="0" cellspacing="0">
-          <xsl:call-template name="top-side"/>
-          <tbody>
-            <tr>
-              <xsl:call-template name="left-side"/>
-              <td id="content">
-                <xsl:call-template name="banner"/>
-                <xsl:apply-templates select="index"/>
-                <div class="footer">
-                  <xsl:text>Powered by Subversion </xsl:text>
-                  <xsl:value-of select="@version"/>
-                  <xsl:text> -- $Id$</xsl:text>
-                </div>
-              </td>
-              <xsl:call-template name="right-side"/>
-            </tr>
-          </tbody>
-          <xsl:call-template name="bottom-side"/>
-        </table>
-
+        <!-- If there is a local banner defined, have the JS load it -->
         <xsl:if test="index/file[@href = '.svn_index']">
           <xsl:element name="script">
             <xsl:attribute name="type">text/javascript</xsl:attribute>
