@@ -184,7 +184,7 @@ elsif ($Operation eq 'AddUser')
                          , 'The user agent was ' , $cgi->user_agent() , "\n"
                          , "\n"
                          , "-- \n"
-                         , 'Insurrection Server - ' , $svn_HTTP() , $SVN_URL_PATH , "\n";
+                         , 'Insurrection Server - ' , &svn_HTTP() , $SVN_URL_PATH , "\n";
 
                close EMAIL;
             }
