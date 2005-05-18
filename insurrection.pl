@@ -9,23 +9,20 @@
 #
 
 ## This is the base of the repositories tree.  Repositories are within
-$SVN_BASE = '/home/equine/private/subversion/repositories';
+$SVN_BASE = '/home/subversion/repositories';
 
-## This is the base of the authentication directory.
-$SVN_AUTH = '/home/equine/private/subversion/authentication';
+## This is the base of the authentication directory.  All of the authentication stuff lives here.
+$SVN_AUTH = '/home/subversion/authentication';
 
 ## This is where the svn binaries live.
-$SVN_BIN = '/home/equine/private/subversion/svn/bin/';
+$SVN_BIN = '/home/subversion/svn/bin/';
 
 ## The domain for the EMail addresses...
-$EMAIL_DOMAIN = '@sinz.com';
-
-## The official URL to the this server
-$SVN_URL = 'http://svn.sinz.com:8000';
+$EMAIL_DOMAIN = '@sinz.org';
 
 ## The default number of log entries to provide in the
 ## history.  If this is undef then we don't limit the
-## entries.
+## entries.  (That would be bad)
 $SVN_LOG_ENTRIES = 20;  ## Default to the last 20 entries...
 
 ## The base path to the Subversion area on the server

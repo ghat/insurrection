@@ -15,7 +15,8 @@ open INDEX,"<project.template" || die "Where is project.template?";
 my $index = join('',<INDEX>);
 close INDEX;
 
-$index =~ s|http://server:port|$SVN_URL|gs;
+my $svn_server = &svn_HTTP();
+$index =~ s|http://server:port|$svn_server|gs;
 
 &svn_HEADER('MKSoft Insurrection Project');
 

@@ -174,9 +174,9 @@ elsif ($Operation eq 'AddUser')
                          , "\n"
                          , "Your initial random password is: $pw\n"
                          , "\n"
-                         , "You can change your password via " , $SVN_URL , $SVN_URL_PATH , "password.cgi\n"
+                         , "You can change your password via " , &svn_HTTP() , $SVN_URL_PATH , "password.cgi\n"
                          , "\n"
-                         , "Please go to $SVN_URL$SVN_URL_PATH for information and documentation\n"
+                         , 'Please go to ' , &svn_HTTP() , $SVN_URL_PATH , "for information and documentation\n"
                          , "about the Insurrection server.\n"
                          , "\n"
                          , 'This EMail was produced on ' , &niceTime(time) , "\n"
@@ -184,7 +184,7 @@ elsif ($Operation eq 'AddUser')
                          , 'The user agent was ' , $cgi->user_agent() , "\n"
                          , "\n"
                          , "-- \n"
-                         , "Insurrection Server - $SVN_URL$SVN_URL_PATH\n";
+                         , 'Insurrection Server - ' , $svn_HTTP() , $SVN_URL_PATH , "\n";
 
                close EMAIL;
             }

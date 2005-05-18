@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>Revision Control at MKSoft</title>
+  <title>Revision Control at Code-Host</title>
   <link rel="stylesheet" href="styles.css" type="text/css">
   <link rel="shortcut icon" href="favicon.ico">
 </head>
@@ -18,7 +18,7 @@
       <div style="margin: 0px; border: 0px; padding: 0px; text-align: center;">
         <table style="margin: auto; border: 0px; font-family: serif; font-style: italic; font-weight: bold; font-size: 18pt;" cellpadding="0" cellspacing="0">
           <tr>
-            <td valign="top" align="right"><a href="/" style="padding-right: 4px; color: #bfbfbf;">MKSoft</a></td>
+            <td valign="top" align="right"><a href="/" style="padding-right: 4px; color: #bfbfbf;">Code-Host</a></td>
             <td valign="middle" align="center"><a href="/"><img src="/InsurrectionLogo.gif" alt="Insurrection with Subversion" border="0"/></a></td>
             <td valign="bottom" align="left"><a href="/" style="padding-left: 4px; color: #bfbfbf;">Server</a></td>
           </tr>
@@ -30,7 +30,7 @@
           This document is still a work in progress.
         </p>
 
-        <h1>Revision Control at MKSoft with Subversion and Insurrection</h1>
+        <h1>Revision Control at Code-Host with Subversion and Insurrection</h1>
 
         <h2>Scope</h2>
         <p>
@@ -78,8 +78,7 @@
           client code is available on the <a href="/">Insurrection Server</a> or should
           be installed as part of your development environment.&nbsp; If you are running
           a Windows environment, please install the Subversion command line tools and the
-          TortoiseSVN GUI.&nbsp; The Linux systems that were built from the standard
-          MKSoft development workstation install should already have the base command
+          TortoiseSVN GUI.&nbsp; Many Linux systems should already have the base command
           line tools installed.
         </p>
         <p>
@@ -255,7 +254,7 @@
           locking the repository.&nbsp; Once local, you can then do operations on the object
           within the repository.&nbsp; The standard flow would look something like this:
           <div class="example">
-            <pre class="commandLine">svn checkout http://svn.sinz.com:8000/svn/example/trunk/fold/</pre>
+            <pre class="commandLine">svn checkout http://svn.code-host.net/svn/example/trunk/fold/</pre>
             <pre class="commandOutput">A  fold/fold.js
 A  fold/Base_More.gif
 A  fold/Base_Last.gif
@@ -270,7 +269,7 @@ A  fold/Plus_More.gif
 A  fold/Plus_Last.gif
 Checked out revision 40.</pre>
             At this point the directory fold was created to hold the local image of the repository
-            as seen from the <a href="http://svn.sinz.com:8000/svn/example/trunk/fold/">url</a>.&nbsp;
+            as seen from the <a href="http://svn.code-host.net/svn/example/trunk/fold/">url</a>.&nbsp;
             Unless you get rid of this directory, there is no more need to do a checkout.&nbsp;
           </div>
         </p>
@@ -476,7 +475,7 @@ Added a subdir to the tree for some example work
           the branches tree called <code>fold_test_1.0.0</code>:
           <div class="example">
             <pre class="commandLine">cd fold
-svn copy . http://svn.sinz.com:8000/svn/example/branches/fold_test_1.0.0</pre>
+svn copy . http://svn.code-host.net/svn/example/branches/fold_test_1.0.0</pre>
             <pre class="commandOutput">Committed revision 49.</pre>
             Note that the command will ask you to enter a comment of what is being done.&nbsp;
             Please be descriptive.
@@ -501,7 +500,7 @@ svn copy . http://svn.sinz.com:8000/svn/example/branches/fold_test_1.0.0</pre>
           the checkout method already described.
           <div class="example">
             <pre class="commandLine">cd fold
-svn switch http://svn.sinz.com:8000/svn/example/branches/fold_test_1.0.0</pre>
+svn switch http://svn.code-host.net/svn/example/branches/fold_test_1.0.0</pre>
             <pre class="commandOutput">At revision 49.</pre>
           </div>
           At this point, your local tree (starting at the fold directory) is connected
@@ -556,7 +555,7 @@ Make a test branch of the fold tree
           Next we need to switch back to the trunk:
           <div class="example">
             <pre class="commandLine">cd fold
-svn switch http://svn.sinz.com:8000/svn/example/trunk/fold</pre>
+svn switch http://svn.code-host.net/svn/example/trunk/fold</pre>
             <pre class="commandOutput">U  fold.js
 U  fold.html
 U  subdir/readme.txt
@@ -577,7 +576,7 @@ Updated to revision 52.</pre>
           <div class="example">
             <pre class="commandLine">cd fold
 svn merge --dry-run -r 49:52
-    http://svn.sinz.com:8000/svn/example/branches/fold_test_1.0.0</pre>
+    http://svn.code-host.net/svn/example/branches/fold_test_1.0.0</pre>
             <pre class="commandOutput">U  fold.js
 U  fold.html
 A  subdir/note.txt
@@ -591,7 +590,7 @@ U  subdir/readme.txt</pre>
           <div class="example">
             <pre class="commandLine">cd fold
 svn merge -r 49:52
-    http://svn.sinz.com:8000/svn/example/branches/fold_test_1.0.0</pre>
+    http://svn.code-host.net/svn/example/branches/fold_test_1.0.0</pre>
             <pre class="commandOutput">U  fold.js
 U  fold.html
 A  subdir/note.txt
@@ -665,7 +664,7 @@ Committed revision 53.</pre>
           we normally delete the branch such that we know it is not active.
           <div class="example">
             <pre class="commandLine">cd fold
-svn copy . http://svn.sinz.com:8000/svn/example/tags/fold_1.0.0-1</pre>
+svn copy . http://svn.code-host.net/svn/example/tags/fold_1.0.0-1</pre>
             <pre class="commandOutput">Committed revision 54.</pre>
             Note that the command will ask you to enter a comment of what is being done.&nbsp;
             Please be descriptive.

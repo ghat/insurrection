@@ -30,7 +30,7 @@
     <div style="margin: 0px; border: 0px; padding: 0px; text-align: center;">
       <table style="margin: auto; border: 0px; font-family: serif; font-style: italic; font-weight: bold; font-size: 18pt;" cellpadding="0" cellspacing="0">
         <tr>
-          <td valign="top" align="right"><a href="/" title="Home" style="padding-right: 4px; color: #bfbfbf;">Demo</a></td>
+          <td valign="top" align="right"><a href="/" title="Home" style="padding-right: 4px; color: #bfbfbf;">MKSoft</a></td>
           <td valign="middle" align="center"><a href="/" title="Home"><img src="/InsurrectionLogo.gif" alt="Insurrection with Subversion" border="0"/></a></td>
           <td valign="bottom" align="left"><a href="/" title="Home" style="padding-left: 4px; color: #bfbfbf;">Server</a></td>
         </tr>

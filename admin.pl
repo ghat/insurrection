@@ -55,6 +55,22 @@ if (open(INSURRECTION,'<insurrection.xsl'))
 ## Get the blank icon path (we always need it)
 my $blankIcon = &svn_IconPath('blank');
 
+
+##
+## Get the HTTP and server part of the URL.
+## This should include:  http://server:port
+## (no trailing slash)
+sub svn_HTTP()
+{
+   if ($cgi->url =~ m|(https?://[^/]+)|)
+   {
+      return $1;
+   }
+
+   ## If we can not find the host, something bad happened!
+   return 'http://svn.code-host.net';
+}
+
 ##
 ## Get the path of a given icon/graphic file
 sub svn_IconPath($name)

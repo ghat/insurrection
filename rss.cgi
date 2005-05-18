@@ -163,7 +163,7 @@ if ((defined $top) && (defined $topDate))
    print $cgi->header('-expires' => '+120m' ,
                       '-type' => 'text/xml; charset=' . $encoding);
 
-   my $rLink = $SVN_URL . &svn_URL_Escape($SVN_REPOSITORIES_URL . $rpath . $opath) . '?Insurrection=log';
+   my $rLink = &svn_HTTP() . &svn_URL_Escape($SVN_REPOSITORIES_URL . $rpath . $opath) . '?Insurrection=log';
 
    print $top , "\n"
        , "<!-- Insurrection Web Tools for Subversion RSS Feed -->\n"
