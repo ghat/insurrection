@@ -449,14 +449,26 @@ td.user
   font-size: 11pt;
 }
 
+div.user
+{
+  white-space: nowrap;
+  line-height: 8pt;
+  font-size: 8pt;
+}
+
+img.user
+{
+  margin-right: 1px;
+  vertical-align: middle;
+}
+
 .revdate
 {
-  line-height: 16pt;
   font-size: 14pt;
   vertical-align: baseline;
 }
 
-span.revdate
+.revdate span
 {
   margin-left: 1em;
   font-size: 8pt;

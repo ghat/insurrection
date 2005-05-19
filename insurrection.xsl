@@ -62,6 +62,7 @@
   <xsl:template name="infoicon-path">/info.gif</xsl:template>
   <xsl:template name="blankicon-path">/blank.gif</xsl:template>
   <xsl:template name="rssicon-path">/rss.gif</xsl:template>
+  <xsl:template name="aticon-path">/at.gif</xsl:template>
 
   <!-- ******************************************************************************************************************* -->
   <xsl:template name="blank">
@@ -671,11 +672,26 @@
           <xsl:value-of select="@revision"/>
           <xsl:text>);</xsl:text>
         </xsl:attribute>
-        <xsl:value-of select="author"/>
+        <xsl:if test="contains(author,'@')">
+          <xsl:value-of select="substring-before(author,'@')"/>
+          <div class="user">
+            <xsl:element name="img">
+              <xsl:attribute name="src">
+                <xsl:call-template name="aticon-path"/>
+              </xsl:attribute>
+              <xsl:attribute name="class">user</xsl:attribute>
+              <xsl:attribute name="alt">at</xsl:attribute>
+            </xsl:element>
+            <xsl:value-of select="substring-after(author,'@')"/>
+          </div>
+        </xsl:if>
+        <xsl:if test="not(contains(author,'@'))">
+          <xsl:value-of select="author"/>
+        </xsl:if>
       </xsl:element>
       <xsl:element name="td">
         <xsl:attribute name="class">details</xsl:attribute>
-        <xsl:element name="span">
+        <xsl:element name="div">
           <xsl:attribute name="title">Show / hide details</xsl:attribute>
           <xsl:attribute name="onclick">
             <xsl:text>toggle(</xsl:text>
@@ -729,14 +745,14 @@
               <xsl:text>)</xsl:text>
             </xsl:element>
           </xsl:if>
-          <div class="revdate">
+          <span class="revdate">
             <xsl:value-of select="substring-before($date,'T')"/>
-            <span class="revdate">
+            <span>
               <xsl:text>at </xsl:text>
               <xsl:value-of select="substring-before(substring-after($date,'T'),'.')"/>
               <xsl:text> GMT</xsl:text>
             </span>
-          </div>
+          </span>
           <div class="logmsg">
             <xsl:call-template name="lf2br">
               <xsl:with-param name="StringToTransform" select="msg"/>
