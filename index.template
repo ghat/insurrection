@@ -1,7 +1,7 @@
 <repos/>
 <ul>
   <li>
-    <a style="margin-left: 2px;" href="http://feedvalidator.org/check.cgi?url=http://svn.sinz.com:8000/svn/Web/?Insurrection=rss"><img src="valid-rss.png" alt="[Valid RSS]" title="Validate my RSS feed" align="right" border="0"/></a>
+    <a style="margin-left: 2px;" href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=rss"><img src="valid-rss.png" alt="[Valid RSS]" title="Validate my RSS feed" align="right" border="0"/></a>
     To access the repositories above via a web browser, just click on the links
     above.&nbsp; You may be asked to enter your username and password to get access
     to the repository.<br>
@@ -14,13 +14,7 @@
     <code>/trunk </code> <i>to the URL.</i>
   </li>
 </ul>
-<table width="100%" cellpadding="6" cellspacing="0" border="0">
-  <tr>
-    <td nowrap width="33%" align="left"><a class="linkbutton" href="password.cgi">Change your password</a></td>
-    <td nowrap width="34%" align="center"><a class="linkbutton" href="admin.cgi">Manage users</a></td>
-    <td nowrap width="33%" align="right"><a class="linkbutton" href="auth_index.cgi">Login</a></td>
-  </tr>
-</table>
+<buttons/>
 <table class="versiontable" border="0" width="100%">
   <tr>
     <th colspan="2">Local Documentation</th>
