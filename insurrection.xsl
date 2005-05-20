@@ -142,7 +142,7 @@
                 <xsl:call-template name="banner"/>
                 <xsl:apply-templates select="index"/>
                 <div class="footer">
-                  <xsl:text>Powered by Subversion </xsl:text>
+                  <xsl:text>Powered by Insurrection &amp; Subversion </xsl:text>
                   <xsl:value-of select="@version"/>
                   <xsl:text> -- $Id$</xsl:text>
                 </div>
