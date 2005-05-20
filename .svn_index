@@ -35,6 +35,15 @@
     </ul>
   </li>
   <br/>
+  <li>
+    <a href="insurrection.conf"><code>insurrection.conf</code></a>
+    <ul>
+      This is the Apache 2.0.x virtual server configuration file for the svn.* server.&nbsp;
+      This is needed to get Insurrection and Subversion to run within a relatively standard
+      Apache configuration.
+    </ul>
+  </li>
+  <br/>
   <li><img align="right" src="InsurrectionLogo.gif" />
     <a href="InsurrectionLogo.gif"><code>InsurrectionLogo.gif</code></a>
     <ul>
