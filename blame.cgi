@@ -35,6 +35,8 @@ if (open(GETBLAME,"$cmd |"))
 {
    print '<table class="blame" cellspacing="0" cellpadding="0">';
 
+   my $atImage = '<img class="user" alt="at" src="' . &svn_IconPath('at') . '"/>';
+
    my $lastREV = '';
    my $lastUSER = '';
    my $nl = '';
@@ -59,12 +61,15 @@ if (open(GETBLAME,"$cmd |"))
 
             $count++;
 
+            my $fixedUser = &svn_XML_Escape($user);
+            $fixedUser =~ s:@:$atImage:;
+
             print '<tr class="blameline' , ($count & 1) , '"'
                 ,     ' title="Show commit log for revision ' , $rev , '"'
                 ,     ' onclick="window.open(\'' , $getLog , '&amp;r=' , $rev , '\')"'
                 ,     '>'
                 ,  '<td class="blamerev">' , $rev , '</td>'
-                ,  '<td class="blameuser">' , &svn_XML_Escape($user) , '</td>'
+                ,  '<td class="blameuser">' , $fixedUser , '</td>'
                 ,  '<td class="blamelines"><tt>';
             $lastREV = $rev;
             $lastUSER = $user;

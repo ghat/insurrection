@@ -1,3 +1,4 @@
+<buttons/>
 <repos/>
 <ul>
   <li>
@@ -14,7 +15,6 @@
     <code>/trunk </code> <i>to the URL.</i>
   </li>
 </ul>
-<buttons/>
 <table class="versiontable" border="0" width="100%">
   <tr>
     <th colspan="2">Local Documentation</th>

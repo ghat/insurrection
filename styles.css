@@ -458,7 +458,7 @@ div.user
 
 img.user
 {
-  margin-right: 1px;
+  margin: 1px;
   vertical-align: middle;
 }
 
@@ -689,22 +689,17 @@ td.details
 
 .blameline0
 {
-  background: rgb(95%,100%,95%);
-}
-
-.blameline0 :hover
-{
-  background: rgb(85%,100%,85%);
+  background: rgb(90%,100%,95%);
 }
 
 .blameline1
 {
-  background: rgb(95%,95%,100%);
+  background: rgb(90%,95%,100%);
 }
 
-.blameline1 :hover
+.blameline0 :hover, .blameline1 :hover
 {
-  background: rgb(85%,85%,100%);
+  background: rgb(100%,100%,75%);
 }
 
 .blamerev
@@ -724,6 +719,7 @@ td.details
   vertical-align: top;
   padding-left: 0.5em;
   padding-right: 0.5em;
+  white-space: nowrap;
 }
 
 .blamelines
