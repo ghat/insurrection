@@ -103,8 +103,8 @@ RewriteRule	^project.html$	/project.cgi	[R,L]
 ## last parameter before the end of the URI.  Ugly but it works...
 RewriteCond %{REQUEST_METHOD} GET
 RewriteCond %{QUERY_STRING} Insurrection=(blame|diff|get|log|rss)
-RewriteRule	^svn(/.*)$	"/%1.cgi?%{QUERY_STRING}&Path=$1"	[P,L]
-#RewriteRule	^svn/(.*)$	"/%1.cgi/$1"	[P,L]
+RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&Path=$1"	[P,L]
+#RewriteRule	^svn/(.*)$	"http://%{HTTP_HOST}/%1.cgi/$1"	[P,L]
 
 ## What a trick - to get the broken browsers to work.
 ## Now the need XMLHttp, but the don't need the XSLT
@@ -137,6 +137,6 @@ RewriteCond %{QUERY_STRING} !XMLHttp=1
 RewriteCond %{HTTP_USER_AGENT} Opera		[OR]
 RewriteCond %{HTTP_USER_AGENT} Safari		[OR]
 RewriteCond %{HTTP_USER_AGENT} Konqueror
-RewriteRule	^svn(/.*/)$	"/broken_xslt.cgi?&Path=$1"	[P,L]
-#RewriteRule	^svn/(.*/)$	"/broken_xslt.cgi/$1"	[P,L]
+RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/broken_xslt.cgi?&Path=$1"	[P,L]
+#RewriteRule	^svn/(.*/)$	"http://%{HTTP_HOST}/broken_xslt.cgi/$1"	[P,L]
 
