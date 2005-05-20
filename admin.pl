@@ -37,6 +37,44 @@ use Fcntl ':flock'; # import LOCK_* constants
 $accessVersion; ## The version of the access file
 $passwdVersion; ## The version of the password file
 
+## ###### HACK - HACK ###### HACK - HACK ###### HACK - HACK ######
+##
+## Yes, Virginia, we have a problem!  Apache's rewrite messes up
+## some characters and we get all confused...  So, we try to
+## fix it here before we call the CGI module.
+##
+## We happen to know at least one of the problems and since we
+## always do the same thing in our system we know how to work
+## around it (for the most part)
+##
+if ($ENV{'SERVER_PROTOCOL'} =~ m:^(.+)\s(HTTP/\d+\.\d+)$:)
+{
+   $ENV{'SERVER_PROTOCOL'} = $2;
+
+   ## Note that we assume it was only one space...  If the
+   ## first space is a double-space then we have a problem...
+   $ENV{'REQUEST_URI'} .= ' ' . $1;
+}
+
+## We also know that we have a path parameter at the end
+## (Always)
+if ($ENV{'REQUEST_URI'} =~ m:&Path=(/.*)$:)
+{
+   ## Set up the PATH_INFO to match...
+   $ENV{'PATH_INFO'} = $1;
+
+   ## And now get the request URI to not have the Path argument
+   $ENV{'REQUEST_URI'} =~ s:&Path=/.*$::;
+}
+
+## Finally, fix up the query string to match the request URI
+($ENV{'QUERY_STRING'}) = ($ENV{'REQUEST_URI'} =~ m/\?(.*)$/);
+
+##
+## :END:
+##
+## ###### HACK - HACK ###### HACK - HACK ###### HACK - HACK ######
+
 # Set up our CGI context and get some information
 use CGI;
 $cgi = new CGI;

@@ -89,16 +89,22 @@ RewriteRule	^project.html$	/project.cgi	[R,L]
 ## proxy behavior and when proxied to via this mechanism
 ## do not do their own authentication.
 ##
-## NOTE - Currently a bug in Apache/mod_rewrite
-## prevents this from working if the file or path
-## contains a '?' character.  See Apache bug report
-## http://issues.apache.org/bugzilla/show_bug.cgi?id=34602
-##
 ## Note that we only look at GET access methods.
 ## All other methods are reserver for mod_dav_svn.
+##
+## NOTE - Currently a bug in Apache/mod_rewrite
+## has bugs with certain characters in the URL.
+## http://issues.apache.org/bugzilla/show_bug.cgi?id=34602
+##
+## The rewrite/proxy we do here specifically tries to get
+## around this problem by putting the URI into a CGI parameter
+## and not the path_info and then doing some re-parsing with
+## the understanding that the Path parameter is always the
+## last parameter before the end of the URI.  Ugly but it works...
 RewriteCond %{REQUEST_METHOD} GET
 RewriteCond %{QUERY_STRING} Insurrection=(blame|diff|get|log|rss)
-RewriteRule	^svn/(.*)$	"/%1.cgi/$1"	[P,L]
+RewriteRule	^svn(/.*)$	"/%1.cgi?%{QUERY_STRING}&Path=$1"	[P,L]
+#RewriteRule	^svn/(.*)$	"/%1.cgi/$1"	[P,L]
 
 ## What a trick - to get the broken browsers to work.
 ## Now the need XMLHttp, but the don't need the XSLT
@@ -124,10 +130,13 @@ RewriteRule	^svn/(.*)$	"/%1.cgi/$1"	[P,L]
 ## browser technologies do work correctly enough to
 ## not need this hack.  That ends up covering 98% of
 ## all wed users.  (That is Mozilla/Firefox and IE)
+##
+## Again, with the same hack to make this work the way I want...
 RewriteCond %{REQUEST_METHOD} GET
 RewriteCond %{QUERY_STRING} !XMLHttp=1
 RewriteCond %{HTTP_USER_AGENT} Opera		[OR]
 RewriteCond %{HTTP_USER_AGENT} Safari		[OR]
 RewriteCond %{HTTP_USER_AGENT} Konqueror
-RewriteRule	^svn/(.*/)$	"/broken_xslt.cgi/$1"	[P,L]
+RewriteRule	^svn(/.*/)$	"/broken_xslt.cgi?&Path=$1"	[P,L]
+#RewriteRule	^svn/(.*/)$	"/broken_xslt.cgi/$1"	[P,L]
 
