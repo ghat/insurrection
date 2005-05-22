@@ -1,3 +1,8 @@
+##
+## $Id$
+## Copyright 2004,2005 - Michael Sinz
+##
+
 AuthUserFile /home/subversion/authentication/passwords
 AuthName "MKSoft Insurrection Repository"
 AuthType Basic
@@ -71,8 +76,10 @@ DirectoryIndex index.cgi
 
 ## You need to have mod-rewrite enabled in apache
 RewriteEngine On
-RewriteRule	^index.html$	/index.cgi	[R,L]
-RewriteRule	^project.html$	/project.cgi	[R,L]
+
+## Simple rule to support having intex.html and project.html
+## actually be cgi scripts.
+RewriteRule	^(index|project).html$	/$1.cgi	[PT,L]
 
 ## We use a local proxy operation such that we can
 ## publicly expose only the normal Subversion paths
