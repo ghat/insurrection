@@ -28,7 +28,7 @@
   <!-- Note: the data within this template must be literal - no XSLT tags -->
   <xsl:template name="banner">
     <div style="margin: 0px; border: 0px; padding: 0px; text-align: center;">
-      <a href="/" title="Home"><img src="/InsurrectionLogo.gif" alt="Insurrection with Subversion" border="0"/></a>
+      <a href="/" title="Home"><img src="/Logo.gif" alt="Revision Management with Insurrection and Subversion" border="0"/></a>
     </div>
   </xsl:template>
 
