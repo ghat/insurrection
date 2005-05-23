@@ -236,6 +236,9 @@ a:active {color: red; text-decoration: underline;}
   font-size: 80%;
   text-align: right;
   white-space: nowrap;
+  background-image: url('/PoweredByInsurrection.gif');
+  background-position: center left;
+  background-repeat: no-repeat;
 }
 
 .svn
