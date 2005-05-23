@@ -157,7 +157,7 @@ if ((defined $rpath) && (defined $opath))
 if ((defined $top) && (defined $topDate))
 {
    ## Check if we have loaded the admin stuff yet...
-   &loadAccessFile() if (!defined $groupUsers);
+   &loadAccessFile() if (!defined %groupComments);
 
    ## Note that RSS feeds expire after 120 minutes...
    print $cgi->header('-expires' => '+120m' ,
