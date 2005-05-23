@@ -798,7 +798,7 @@ sub repositoryTable()
          }
       }
 
-      $result .= '<table class="accessinfo" cellspacing="0"><tr><th>Repository</th><th>Size</th><th>Description</th></tr>';
+      $result .= '<table class="accessinfo" cellspacing="0"><tr><th>Repository</th><th>Size</th><th width="99%">Description</th></tr>';
 
       my $totalSize = 0;
 
