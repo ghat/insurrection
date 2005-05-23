@@ -81,6 +81,17 @@ RewriteEngine On
 ## actually be cgi scripts.
 RewriteRule	^(index|project).html$	/$1.cgi	[PT,L]
 
+## Some custom logo processing based on the domain that
+## connected.  We do the test in this order such that
+## only the request for an insurrection logo will pass.
+## Also, note that the HTTP_HOST may have the port number
+## on it, so the file name may need to have to be in both
+## forms.  Note that we do this internally (PT) such that
+## the user does not know this exists.
+RewriteCond %{REQUEST_FILENAME} "^/home/subversion/www/InsurrectionLogo.gif$"
+RewriteCond /home/subversion/www/%{HTTP_HOST}.gif -f
+RewriteRule	^InsurrectionLogo.gif	"/%{HTTP_HOST}.gif"	[PT,L]
+
 ## We use a local proxy operation such that we can
 ## publicly expose only the normal Subversion paths
 ## with the only difference being CGI query strings.
