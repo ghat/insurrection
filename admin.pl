@@ -94,10 +94,12 @@ if (open(INSURRECTION,'<insurrection.xsl'))
 my $blankIcon = &svn_IconPath('blank');
 
 
-##
-## Get the HTTP and server part of the URL.
-## This should include:  http://server:port
-## (no trailing slash)
+##############################################################################
+#
+# Get the HTTP and server part of the URL.
+# This should include:  http://server:port
+# (no trailing slash)
+#
 sub svn_HTTP()
 {
    if ($cgi->url =~ m|(https?://[^/]+)|)
@@ -109,8 +111,10 @@ sub svn_HTTP()
    return 'http://svn.code-host.net';
 }
 
-##
-## Get the path of a given icon/graphic file
+##############################################################################
+#
+# Get the path of a given icon/graphic file
+#
 sub svn_IconPath($name)
 {
    my $name = shift;
@@ -126,10 +130,12 @@ sub svn_IconPath($name)
    return $result;
 }
 
-##
-## This function does the XML escaping for the '&', '<', '>', and '"'
-## characters.  The first 3 are absolutely required and the last one
-## enables putting the string within quoted parameters.
+##############################################################################
+#
+# This function does the XML escaping for the '&', '<', '>', and '"'
+# characters.  The first 3 are absolutely required and the last one
+# enables putting the string within quoted parameters.
+#
 sub svn_XML_Escape($str)
 {
    my $str = shift;
@@ -142,11 +148,13 @@ sub svn_XML_Escape($str)
    return $str;
 }
 
-##
-## This function just does the %xx escaping of a string
-## for use within URLs.  Even though it is so small, it
-## is easier to maintain in one place rather than have
-## it all over the place.
+##############################################################################
+#
+# This function just does the %xx escaping of a string
+# for use within URLs.  Even though it is so small, it
+# is easier to maintain in one place rather than have
+# it all over the place.
+#
 sub svn_URL_Escape($path)
 {
    my $path = shift;
@@ -157,11 +165,13 @@ sub svn_URL_Escape($path)
    return $path;
 }
 
-##
-## This function takes a repository path from the URL
-## and makes it into a local file:// URL.  It also
-## makes sure that external ".." operations are not
-## allowed to reach outside of the repository.
+##############################################################################
+#
+# This function takes a repository path from the URL
+# and makes it into a local file:// URL.  It also
+# makes sure that external ".." operations are not
+# allowed to reach outside of the repository.
+#
 sub svn_URL($path)
 {
    my $path = shift;
@@ -185,9 +195,11 @@ sub svn_URL($path)
    return $path;
 }
 
-##
-## This function takes a repository path from the URL
-## and returns the local repository name information
+##############################################################################
+#
+# This function takes a repository path from the URL
+# and returns the local repository name information
+#
 sub svn_REPO($path)
 {
    my $path = shift;
@@ -206,9 +218,11 @@ sub svn_REPO($path)
    return $path;
 }
 
-##
-## This function takes a repository path from the URL
-## and returns the relative path from within the repository
+##############################################################################
+#
+# This function takes a repository path from the URL
+# and returns the relative path from within the repository
+#
 sub svn_RPATH($path)
 {
    my $path = shift;
@@ -237,10 +251,12 @@ sub svn_RPATH($path)
    return $path;
 }
 
-##
-## This put up the default header for every CGI generated HTML page
-## Note that the expires parameter is optional and will default to
-## a 1 day expire.
+##############################################################################
+#
+# This put up the default header for every CGI generated HTML page
+# Note that the expires parameter is optional and will default to
+# a 1 day expire.
+#
 sub svn_HEADER($title,$expires)
 {
    my $title = shift;
@@ -291,9 +307,11 @@ sub svn_HEADER($title,$expires)
        ,       '<div class="svn"><div id="localbanner"></div>' , "\n";
 }
 
-##
-## This put up the default tail for all of the pages that use
-## the svn_HEADER() function above.
+##############################################################################
+#
+# This put up the default tail for all of the pages that use
+# the svn_HEADER() function above.
+#
 sub svn_TRAILER($version)
 {
    my $version = shift;
@@ -319,10 +337,12 @@ sub svn_TRAILER($version)
        , '</html>';
 }
 
-##
-## This function returns only the number part of the
-## parameter.  We use this to filter incoming parameters
-## to only include numbers (when needed)
+##############################################################################
+#
+# This function returns only the number part of the
+# parameter.  We use this to filter incoming parameters
+# to only include numbers (when needed)
+#
 sub getNumParam($param)
 {
    my $result;
@@ -425,6 +445,9 @@ sub typeMember($group,$user)
    my $group = shift;
    my $user = shift;
 
+   ## Check if we have loaded the admin stuff yet...
+   &loadAccessFile() if (!defined %groupUsers);
+
    if (defined $groupUsers{$group})
    {
       my $type = ${groupUsers{$group}}{$user};
@@ -477,6 +500,9 @@ sub isAdminMember($group,$user)
          $group = $1;
       }
    }
+
+   ## Check if we have loaded the admin stuff yet...
+   &loadAccessFile() if (!defined %groupAdmins);
 
    if (defined $groupAdmins{$group})
    {
@@ -658,7 +684,6 @@ sub lockPasswordFile()
 #
 sub unlockPasswordFile()
 {
-   ## Lock the password file for the duration...
    flock(LOCK_PW,LOCK_UN);
    close(LOCK_PW);
 }
@@ -747,7 +772,7 @@ sub repositoryTable()
    my $result = '';
 
    ## Check if we have loaded the admin stuff yet...
-   &loadAccessFile() if (!defined $groupUsers);
+   &loadAccessFile() if (!defined %groupUsers);
 
    ## For the list of repositories and their sizes, we want
    ## to include the anonymous access repositories...
@@ -818,5 +843,5 @@ sub repositoryTable()
    return $result;
 }
 
-
 return 1;
+
