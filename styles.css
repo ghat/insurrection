@@ -9,6 +9,9 @@ html, body
   text-align: center;
   margin: 0px;
   height: 100%;
+  background-image: url('/PoweredByInsurrection.gif');
+  background-position: bottom center;
+  background-repeat: no-repeat;
 }
 
 img { border: none; }
