@@ -774,55 +774,125 @@ sub repositoryTable()
    ## Check if we have loaded the admin stuff yet...
    &loadAccessFile() if (!defined %groupUsers);
 
-   ## For the list of repositories and their sizes, we want
-   ## to include the anonymous access repositories...
-   %tlist = (%{$usersGroup{$user}},%{$usersGroup{'*'}});
+   ## Now, for each access type, build the correct table...
+   $result .= &makeRepositoryTable(3) if (defined $AuthUser);
+   $result .= &makeRepositoryTable(2) if (defined $AuthUser);
+   $result .= &makeRepositoryTable(1);
+   $result .= &makeRepositoryTable(0) if (defined $AuthUser);
 
-   ## If the user is admin, get all groups.
-   %tlist = %groupComments if (&isAdminMember('Admin',$AuthUser));
-
-   @accessGroups = sort keys %tlist;
-   if (@accessGroups > 0)
+   if ($result ne '')
    {
+      $result = '<table class="accessinfo" cellspacing="0">' . $result . '</table>';
+   }
+
+   return $result;
+}
+
+## Store the sizes of the repositories in this "global" such that we only every
+## get the du once, but only when we need it...
+my %rSize;
+
+##############################################################################
+#
+# This actually builds the table rows for the given access type and current
+# user authentication.
+#
+sub makeRepositoryTable($type)
+{
+   my $type = shift;
+
+   my $user = '*';
+   $user = $AuthUser if (defined $AuthUser);
+
+   my $result = '';
+
+   my $isAdmin = &isAdminMember('Admin',$AuthUser);
+
+   if (($type != 0) || $isAdmin)
+   {
+      my $totalSize = 0;
+      my $totalCount = 0;
       my $rssIcon = &svn_IconPath('rss');
 
-      ## Get the sizes of all of the repositories...
-      my %rSize;
-      ## Only if the directory exists and we have an authorized user
-      if ((defined $AuthUser) && (-d $SVN_BASE))
+      foreach my $g (sort keys %groupComments)
       {
-         foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
+         my $utype = &typeMember($g,$user);
+         my $atype = &typeMember($g,'*');
+         $utype = $atype if ($atype > $utype);
+
+         if ($utype == $type)
          {
-            my ($size,$repo) = ($line =~ /^(\d+)\s+(\S.*)$/);
-            $rSize{$repo} = $size;
-         }
-      }
+            my $comments = $groupComments{$g};
 
-      $result .= '<table class="accessinfo" cellspacing="0"><tr><th>Repository</th>';
-      $result .= '<th>Size</th>' if (defined $AuthUser);
-      $result .= '<th width="99%">Description</th></tr>';
+            ## Add the table elements for the result...
+            if ($result eq '')
+            {
+               $result .= '<tr><th>Repository</th>';
 
-      my $totalSize = 0;
+               if (($type == 3) || $isAdmin)
+               {
+                  $result .= '<th>Size</th><th width="99%">';
+               }
+               else
+               {
+                  $result .= '<th colspan="2" width="99%">';
+               }
 
-      foreach my $group (@accessGroups)
-      {
-         my $comments = $groupComments{$group};
-         $group =~ s/(^[^:]+):.*$/$1/;
-         my $size = 0 + $rSize{$group};
+               if ($type == 3)
+               {
+                  $result .= '(Admin Access)';
+               }
+               elsif ($type == 2)
+               {
+                  $result .= '(Full Access)</th>';
+               }
+               elsif ($type == 1)
+               {
+                  $result .= '(Read-Only)';
+               }
+               else
+               {
+                  $result .= '(No Access)';
+               }
 
-         ## Validate that the repository is really there...
-         if (-d "$SVN_BASE/$group")
-         {
-            $totalSize += $size;
+               $result .= '</th></tr>';
+            }
 
-            ## Cute trick to get comas into the number...
-            while ($size =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+            ## Get the nice display name...
+            my $group = $g;
+            $group =~ s/(^[^:]+):.*$/$1/;
 
             $result .= '<tr>'
                      .  '<td><a title="Explore repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/">' . $group . '</a></td>';
-            $result .=  '<td align="right">' . $size . 'k</td>' if (defined $AuthUser);
-            $result .=  '<td>'
-                     .   '<a title="RSS Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
+
+            ## Now, if we want the sizes...
+            if (($type == 3) || $isAdmin)
+            {
+               ## Only do this once, and only when/if we need to.
+               if (!defined $rSize{$group})
+               {
+                  foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
+                  {
+                     my ($s,$r) = ($line =~ /^(\d+)\s+(\S.*)$/);
+                     $rSize{$r} = $s;
+                  }
+               }
+
+               my $size = $rSize{$group};
+               $totalSize += $size;
+               $totalCount++;
+
+               ## Cute trick to get comas into the number...
+               while ($size =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+
+               $result .=  '<td align="right">' . $size . 'k</td><td>';
+            }
+            else
+            {
+               $result .= '<td colspan="2" align="left">';
+            }
+
+            $result .=   '<a title="RSS Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
                      .    '<img src="' . $rssIcon . '" alt="RSS Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
                      .   '</a>'
                      .   $comments
@@ -830,17 +900,30 @@ sub repositoryTable()
                      . '</tr>';
          }
       }
-      if ($totalSize > 0)
+
+      ## We don't want individual totals if we are admin...
+      $totalSize = 0 if ($isAdmin);
+
+      ## Build the overall total...
+      if ($type == 0)
+      {
+         foreach my $r (keys %rSize)
+         {
+            $totalSize += $rSize{$r};
+            $totalCount++;
+         }
+      }
+
+      if (($totalSize > 0) && ($totalCount > 1))
       {
          ## Cute trick to get comas into the number...
          while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/) {}
          $result .= '<tr class="accessinfototal">'
                   .  '<td><b>Total:</b></td>'
                   .  '<td align="right">' . $totalSize . 'k</td>'
-                  .  '<th>&nbsp;</th>'
+                  .  '<td>&nbsp;</td>'
                   . '</tr>';
       }
-      $result .= "</table>";
    }
 
    return $result;
