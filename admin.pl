@@ -788,8 +788,8 @@ sub repositoryTable()
 
       ## Get the sizes of all of the repositories...
       my %rSize;
-      ## Only if the directory exists do we even try this...
-      if (-d $SVN_BASE)
+      ## Only if the directory exists and we have an authorized user
+      if ((defined $AuthUser) && (-d $SVN_BASE))
       {
          foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
          {
@@ -798,7 +798,9 @@ sub repositoryTable()
          }
       }
 
-      $result .= '<table class="accessinfo" cellspacing="0"><tr><th>Repository</th><th>Size</th><th width="99%">Description</th></tr>';
+      $result .= '<table class="accessinfo" cellspacing="0"><tr><th>Repository</th>';
+      $result .= '<th>Size</th>' if (defined $AuthUser);
+      $result .= '<th width="99%">Description</th></tr>';
 
       my $totalSize = 0;
 
@@ -806,19 +808,20 @@ sub repositoryTable()
       {
          my $comments = $groupComments{$group};
          $group =~ s/(^[^:]+):.*$/$1/;
-         my $size = $rSize{$group};
-         if (defined $size)
+         my $size = 0 + $rSize{$group};
+
+         ## Validate that the repository is really there...
+         if (-d "$SVN_BASE/$group")
          {
-            $size += 0; ## Make sure that the size is a number...
             $totalSize += $size;
 
             ## Cute trick to get comas into the number...
             while ($size =~ s/(\d+)(\d\d\d)/$1,$2/) {}
 
             $result .= '<tr>'
-                     .  '<td><a title="Explore repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/">' . $group . '</a></td>'
-                     .  '<td align="right">' . $size . 'k</td>'
-                     .  '<td>'
+                     .  '<td><a title="Explore repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/">' . $group . '</a></td>';
+            $result .=  '<td align="right">' . $size . 'k</td>' if (defined $AuthUser);
+            $result .=  '<td>'
                      .   '<a title="RSS Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
                      .    '<img src="' . $rssIcon . '" alt="RSS Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
                      .   '</a>'
