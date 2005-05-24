@@ -172,9 +172,9 @@ sub svn_URL_Escape($path)
 # makes sure that external ".." operations are not
 # allowed to reach outside of the repository.
 #
-sub svn_URL($path)
+sub svn_URL()
 {
-   my $path = shift;
+   my $path = $cgi->path_info;
 
    if (defined $path)
    {
@@ -200,9 +200,9 @@ sub svn_URL($path)
 # This function takes a repository path from the URL
 # and returns the local repository name information
 #
-sub svn_REPO($path)
+sub svn_REPO()
 {
-   my $path = shift;
+   my $path = $cgi->path_info;
 
    if (defined $path)
    {
@@ -223,9 +223,9 @@ sub svn_REPO($path)
 # This function takes a repository path from the URL
 # and returns the relative path from within the repository
 #
-sub svn_RPATH($path)
+sub svn_RPATH()
 {
-   my $path = shift;
+   my $path = $cgi->path_info;
 
    if (defined $path)
    {
@@ -389,8 +389,8 @@ sub isBrokenBrowser()
 #
 sub checkAuthMode()
 {
-   ## Get the base CGI name such that we can be sure to use it...
-   my ($type) = ($cgi->url =~ m|^.*?/(?:auth_)?([^/]+)\.cgi$|);
+   ## Get the base CGI name such that we can double check the access...
+   my ($type) = ($cgi->url =~ m|^.*/([^/]+)\.cgi$|);
 
    my $path = substr($cgi->path_info(),1);
 

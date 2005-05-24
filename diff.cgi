@@ -17,8 +17,8 @@ $rev1 = 'HEAD' if (!defined $rev1);
 my $rev2 = &getNumParam($cgi->param('r2'));
 $rev2 = "HEAD" if (!defined $rev2);
 
-## Get the real document info
-my $docURL = &svn_URL($cgi->path_info);
+## Get the local document URL
+my $docURL = &svn_URL();
 
 ## Now, lets get the diff (or at least try to)
 my $cmd = $SVN_CMD . ' diff --non-interactive --no-auth-cache --notice-ancestry "' . $docURL . '@' . $rev1 . '" "' . $docURL . '@' . $rev2 . '"';

@@ -14,8 +14,8 @@ require 'admin.pl';
 my $rev = &getNumParam($cgi->param('r'));
 $rev = 'HEAD' if (!defined $rev);
 
-## Get the real document info
-my $docURL = &svn_URL($cgi->path_info);
+## Get the local document URL
+my $docURL = &svn_URL();
 
 ## Lets see if we can find the mime type...
 my $mimeget = $SVN_CMD . ' propget --non-interactive --no-auth-cache -r ' . $rev . ' svn:mime-type ' . $docURL;

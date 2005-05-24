@@ -28,11 +28,11 @@ my @monthDays = (0, 31,   28,   31,   30,   31,   30,   31,   31,   30,   31,   
 ## every once in a while...  So we just ignore that fact...
 
 ## Get the local document URL
-my $rssURL = &svn_URL($cgi->path_info);
+my $rssURL = &svn_URL();
 
 ## Split the repository from the path within the repository
-my $rpath = &svn_REPO($cgi->path_info);
-my $opath = &svn_RPATH($cgi->path_info);
+my $rpath = &svn_REPO();
+my $opath = &svn_RPATH();
 
 ## What we are going to do here is just get the log entry for the
 ## head revision and use it to find out the date of the last

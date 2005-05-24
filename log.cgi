@@ -11,11 +11,11 @@ require 'admin.pl';
 &checkAuthMode();
 
 ## Get the local document URL
-my $logURL = &svn_URL($cgi->path_info);
+my $logURL = &svn_URL();
 
 ## Split the repository from the path within the repository
-my $rpath = &svn_REPO($cgi->path_info);
-my $opath = &svn_RPATH($cgi->path_info);
+my $rpath = &svn_REPO();
+my $opath = &svn_RPATH();
 
 ## Get the limit of revisions to show in one request
 my $maxEntries = &getNumParam($cgi->param('max'));
