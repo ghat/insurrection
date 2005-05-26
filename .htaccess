@@ -24,20 +24,11 @@ DirectoryIndex index.cgi
 	SetHandler cgi-script
 </Files>
 
-## This is exactly the same as the index.cgi but it
-## requires login and shows all elements that are
-## available to that specific user.
-<Files ~ "^auth_index\.cgi$">
-	SetHandler cgi-script
-	require valid-user
-</Files>
-
-<Files ~ "^password\.cgi$">
-	SetHandler cgi-script
-	require valid-user
-</Files>
-
-<Files ~ "^admin\.cgi$">
+## These CGIs require a login in order to validate the
+## user's specific access rights - we can not just check
+## if the user as access to the repository via the
+## above method.
+<Files ~ "^(admin|auth_index|bandwidth|dump|password)\.cgi$">
 	SetHandler cgi-script
 	require valid-user
 </Files>
@@ -53,10 +44,10 @@ DirectoryIndex index.cgi
 
 ## These CGIs can be used without login depending on
 ## the repository being requested in the path extra
-## and the access rights defined.  So, we default to
-## letting anyone use these forms of the CGIs.  When
-## the CGI notices an authentication requirement,
-## it forces the use of the auth_* version below.
+## and the access rights defined.  We let the Subversion
+## mod_authz_svn take care of the path check before
+## we proxy to here.  We then just validate in these
+## scripts that we have been proxied.
 <Files ~ "^(blame|diff|get|log|rss)\.cgi$">
 	SetHandler cgi-script
 </Files>
@@ -65,10 +56,7 @@ DirectoryIndex index.cgi
 ## correctly or not working at all.  What this CGI does
 ## is to generate the SVN Index base page as HTML and then
 ## let the browser and JavaScript via XMLHttp do the
-## real work.  Note that this does not need to check
-## authentication as no actual data shows up in the HTML
-## but via the XMLHttp and those operations are fully
-## authenticated.  This works in conjunction with the
+## real work.  This works in conjunction with the
 ## rewrite rule below that does the user agent checking.
 <Files ~ "^broken_xslt\.cgi$">
 	SetHandler cgi-script
@@ -92,8 +80,7 @@ RewriteCond %{REQUEST_FILENAME} "^/home/subversion/www/Logo.gif$"
 RewriteCond /home/subversion/www/%{HTTP_HOST}.gif -f
 RewriteRule	^Logo.gif	"/%{HTTP_HOST}.gif"	[PT,L]
 
-## If no one handled the Logo.gif yet, lets use the
-## InsurrectionLogo.gif...
+## If no specific Logo.gif use the InsurrectionLogo.gif
 RewriteRule	^Logo.gif	"/InsurrectionLogo.gif"	[PT,L]
 
 ## We use a local proxy operation such that we can
@@ -124,7 +111,7 @@ RewriteRule	^Logo.gif	"/InsurrectionLogo.gif"	[PT,L]
 ## the understanding that the Path parameter is always the
 ## last parameter before the end of the URI.  Ugly but it works...
 RewriteCond %{REQUEST_METHOD} GET
-RewriteCond %{QUERY_STRING} Insurrection=(blame|diff|get|log|rss)
+RewriteCond %{QUERY_STRING} Insurrection=(bandwidth|blame|diff|dump|get|log|rss)
 RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&Path=$1"	[P,L]
 #RewriteRule	^svn/(.*)$	"http://%{HTTP_HOST}/%1.cgi/$1"	[P,L]
 

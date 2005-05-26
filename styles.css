@@ -1,15 +1,17 @@
-/* $Id$ */
+/*
+ * $Id$
+ * Copyright 2004,2005 - Michael Sinz
+ */
+
+@import url(frame/style.css);
+@import url(gauge/style.css);
 
 html, body
 {
-  color: black;
-  background: #7e7e7e;
   font-family: helvetica, ariel, sansserif;
   font-size: 10pt;
   text-align: center;
-  margin: 0px;
-  height: 100%;
-  background-image: url('/PoweredByInsurrection.gif');
+  background-image: url('./PoweredByInsurrection.gif');
   background-position: bottom center;
   background-repeat: no-repeat;
 }
@@ -28,86 +30,13 @@ a:active {color: red; text-decoration: underline;}
   margin-right: auto;
 }
 
-#top-left, #top, #top-right, #bottom-left, #bottom, #bottom-right
-{
-  height: 14px;
-}
-
-#top-left, #left, #bottom-left, #top-right, #right, #bottom-right
-{
-  width: 14px;
-}
-
-#top-left, #top-right, #bottom-left, #bottom-right
-{
-  background-repeat: no-repeat;
-}
-
-#top, #bottom
-{
-  background-repeat: repeat-x;
-}
-
-#left, #right
-{
-  background-repeat: repeat-y;
-}
-
-#top-left
-{
-  background-image: url('/top-left.gif');
-  background-position: bottom right;
-}
-
-#top
-{
-  background-image: url('/top.gif');
-  background-position: bottom left;
-}
-
-#top-right
-{
-  background-image: url('/top-right.gif');
-  background-position: bottom left;
-}
-
-#left
-{
-  background-image: url('/left.gif');
-  background-position: top right;
-}
-
-#right
-{
-  background-image: url('/right.gif');
-  background-position: top left;
-}
-
-#bottom-left
-{
-  background-image: url('/bottom-left.gif');
-  background-position: top right;
-}
-
-#bottom
-{
-  background-image: url('/bottom.gif');
-  background-position: top left;
-}
-
-#bottom-right
-{
-  background-image: url('/bottom-right.gif');
-  background-position: top left;
-}
-
 #content
 {
   /* Remove the width style if you want it to be more dynamic */
   width: 672px;
   color: black;
   background: white;
-  background-image: url('/turtles.jpg');
+  background-image: url('./turtles.jpg');
   background-repeat: repeat-y;
   background-position: top center;
 }
@@ -215,6 +144,8 @@ a:active {color: red; text-decoration: underline;}
 
 .accessinfo td
 {
+  background-color: transparent;
+  color: black;
   border-top: 1px gray solid;
   border-left: 1px black solid;
   border-bottom: 0px;
@@ -223,8 +154,15 @@ a:active {color: red; text-decoration: underline;}
   padding-right: 4px;
 }
 
+.accessinfototal th
+{
+  text-align: left;
+}
+
 .accessinfototal td
 {
+  text-align: right;
+  font-weight: bold;
   background-color: rgb(95%,80%,85%);
 }
 
@@ -232,6 +170,81 @@ a:active {color: red; text-decoration: underline;}
 {
   color: yellow;
 }
+
+
+
+.bandwidth
+{
+  margin-top: 2px;
+  text-align: center;
+  font-size: 9pt;
+}
+
+.bandwidthheader1
+{
+  font-weight: bold;
+  font-size: 16pt;
+}
+
+.bandwidthheader2
+{
+  padding-bottom: 4px;
+  font-size: 12pt;
+}
+
+.bandwidthdata
+{
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px black solid;
+  border-top: 1px black solid;
+  border-left: 1px black solid;
+  font-size: 9pt;
+}
+
+.bandwidthdata td, .bandwidthdata th
+{
+  border-left: 1px black solid;
+  border-top: 1px black solid;
+
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+.bandwidthdata td
+{
+  text-align: right;
+}
+
+.bandwidthdata th
+{
+  text-align: left;
+}
+
+.bandwidthfooter
+{
+  padding: 9px;
+}
+
+.bandwidthtitles th, .bandwidthtitles td
+{
+  background-color: rgb(182,38,133);
+  color: white;
+  text-align: center;
+}
+
+.bandwidthtotal
+{
+  font-weight: bold;
+  background-color: rgb(95%,80%,85%);
+}
+
+.bandwidthtotal th
+{
+  text-align: left;
+}
+
+
 
 .versiontable li
 {
@@ -245,7 +258,7 @@ a:active {color: red; text-decoration: underline;}
   font-size: 80%;
   text-align: right;
   white-space: nowrap;
-  background-image: url('/PoweredByInsurrection.gif');
+  background-image: url('./PoweredByInsurrection.gif');
   background-position: center left;
   background-repeat: no-repeat;
 }

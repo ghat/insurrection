@@ -28,7 +28,7 @@ $buttons   .=   '<td nowrap width="33%" align="left">';
 $buttons   .=    '<a class="linkbutton" href="password.cgi">Change your password</a>' if (defined $AuthUser);
 $buttons   .=   '</td>';
 $buttons   .=   '<td nowrap width="34%" align="center">';
-$buttons   .=    '<a class="linkbutton" href="admin.cgi">Manage users</a>' if (defined $AuthUser);
+$buttons   .=    '<a class="linkbutton" href="admin.cgi">Manage users</a>' if (&isAdmin(undef,$AuthUser));
 $buttons   .=   '</td>';
 $buttons   .=   '<td nowrap width="33%" align="right">';
 $buttons   .=    '<a class="linkbutton" href="auth_index.cgi">Login</a>' if (!defined $AuthUser);

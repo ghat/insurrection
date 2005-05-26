@@ -90,9 +90,8 @@ if (open(INSURRECTION,'<insurrection.xsl'))
    close(INSURRECTION);
 }
 
-## Get the blank icon path (we always need it)
-my $blankIcon = &svn_IconPath('blank');
-
+## Get the blank icon path and make a spacer (1x1) image
+my $blank = '<img alt="" src="' . &svn_IconPath('blank') . '"/>';
 
 ##############################################################################
 #
@@ -287,21 +286,21 @@ sub svn_HEADER($title,$expires)
        ,   '<table id="pagetable" cellpadding="0" cellspacing="0">'
        ,    '<thead>'
        ,     '<tr>'
-       ,      '<th id="top-left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
-       ,      '<th id="top"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
-       ,      '<th id="top-right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,      '<th id="top-left">' , $blank , '</th>'
+       ,      '<th id="top">' , $blank , '</th>'
+       ,      '<th id="top-right">' , $blank , '</th>'
        ,     '</tr>'
        ,    '</thead>'
        ,    '<tfoot>'
        ,     '<tr>'
-       ,      '<th id="bottom-left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
-       ,      '<th id="bottom"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
-       ,      '<th id="bottom-right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,      '<th id="bottom-left">' , $blank , '</th>'
+       ,      '<th id="bottom">' , $blank , '</th>'
+       ,      '<th id="bottom-right">' , $blank , '</th>'
        ,     '</tr>'
        ,    '</tfoot>'
        ,    '<tbody>'
        ,     '<tr>'
-       ,      '<th id="left"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,      '<th id="left">' , $blank , '</th>'
        ,      '<td id="content">'
        ,       $banner
        ,       '<div class="svn"><div id="localbanner"></div>' , "\n";
@@ -329,7 +328,7 @@ sub svn_TRAILER($version)
        ,        'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
    print       '</div>'
        ,      '</td>'
-       ,      '<th id="right"><img alt="" width="1" height="1" src="' , $blankIcon , '"/></th>'
+       ,      '<th id="right">' , $blank , '</th>'
        ,     '</tr>'
        ,    '</tbody>'
        ,   '</table>'
@@ -434,6 +433,22 @@ sub checkAuthMode()
 
 ##############################################################################
 #
+# This checks that the access to the given repository is being done by an
+# admin for that repository or the global admin.  If either fails, we just
+# redirect to the main default page.
+#
+sub checkAdminMode()
+{
+   ## Now, lets check that we are a real admin for the repository
+   return 1 if (&isAdmin(&svn_REPO(),$AuthUser));
+
+   print $cgi->redirect('-location' => $SVN_URL_PATH,
+                        '-status' => '302 Invalid path');
+   exit 0;
+}
+
+##############################################################################
+#
 # A simple member type function that returns:
 #   0 if the user is not a member
 #   1 if the user is read-only
@@ -525,9 +540,21 @@ sub isAdmin($group,$user)
    my $group = shift;
    my $user = shift;
 
+   return 0 if (!defined $user);
+
    return 1 if (&isAdminMember('Admin',$user));
 
-   return &isAdminMember($group,$user);
+   if (defined $group)
+   {
+      return &isAdminMember($group,$user);
+   }
+
+   foreach $group (@accessGroups)
+   {
+      return 1 if (&isAdminMember($group,$user));
+   }
+
+   return 0;
 }
 
 ##############################################################################
@@ -894,8 +921,16 @@ sub makeRepositoryTable($type)
 
             $result .=   '<a title="RSS Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
                      .    '<img src="' . $rssIcon . '" alt="RSS Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
+                     .   '</a>';
+
+            $result .=   '<a title="Download a dump of repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=dump">'
+                     .    '<img src="' . &svn_IconPath('dump') . '" alt="Download a dump of repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
                      .   '</a>'
-                     .   $comments
+                     .   '<a title="Bandwidth usage of repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=bandwidth">'
+                     .    '<img src="' . &svn_IconPath('usage') . '" alt="Bandwidth usage of repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
+                     .   '</a>' if ($type == 3);
+
+            $result .=   $comments
                      .  '</td>'
                      . '</tr>';
          }
@@ -919,12 +954,94 @@ sub makeRepositoryTable($type)
          ## Cute trick to get comas into the number...
          while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/) {}
          $result .= '<tr class="accessinfototal">'
-                  .  '<td><b>Total:</b></td>'
-                  .  '<td align="right">' . $totalSize . 'k</td>'
+                  .  '<td>Total:</td>'
+                  .  '<td>' . $totalSize . 'k</td>'
                   .  '<td>&nbsp;</td>'
                   . '</tr>';
       }
    }
+
+   return $result;
+}
+
+##############################################################################
+#
+# This returns an HTML table element that shows a horizontal gauge that
+# represents the "fullness" of the data.  The $fill is the amount in the
+# "container" and the $limit is what a full container can hold.
+# The $title is optional but would be used to build a more descriptive
+# title tag for the table.  The default is just to show the percentage)
+#
+sub gauge($fill,$limit,$title)
+{
+   my $fill = shift;
+   my $limit = shift;
+   my $title = shift;
+
+   my $raw = $fill * 100 / $limit;
+
+   ## The $filled value is what we use to
+   ## build the image widths.
+   my $filled = int($raw + 0.5);
+
+   ## Make sure we are not 0% or 100% unless we
+   ## really are completely empty or full.
+   ## This is only for the image sizing, not
+   ## the actual number.
+   $filled = 1 if (($filled == 0) && ($fill > 0));
+   $filled = 99 if (($filled == 100) && ($fill < $limit));
+
+   ## Cute trick to get comas into the number...
+   while ($fill =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+   while ($limit =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+
+   $title .= ' : ' if (defined $title);
+   $title = '' if (!defined $title);
+   $title = &svn_XML_Escape(sprintf('%s%.2f%%',$title,$raw));
+
+   my $result = '';
+
+   $result .= '<div style="margin: 0; padding: 0; text-align: left; border: 0;">';
+   $result .= '<table class="gauge" title="' . $title . '" cellpadding="0" cellspacing="0" border="0"><tr>';
+
+   ## If we are over the "100%" then put it into critical display...
+   if ($raw > 100)
+   {
+      $result .= '<td class="gaugestartcritical">' . $blank . '</td>';
+      $result .= '<td class="gaugecritical" width="100%">' . $blank . '</td>';
+      $result .= '<td class="gaugeendcritical">' . $blank . '</td>';
+   }
+   else
+   {
+      if ($filled > 0)
+      {
+         $result .= '<td class="gaugestartfilled">' . $blank . '</td>';
+         if ($filled > 1)
+         {
+            $result .= '<td class="gaugefilled" width="' . $filled . '%">' . $blank . '</td>';
+         }
+      }
+      else
+      {
+         $result .= '<td class="gaugestartempty">' . $blank . '</td>';
+      }
+
+      if ($filled < 100)
+      {
+         if ($filled < 99)
+         {
+            $result .= '<td class="gaugeempty" width="' . (100 - $filled) . '%">' . $blank . '</td>';
+         }
+         $result .= '<td class="gaugeendempty">' . $blank . '</td>';
+      }
+      else
+      {
+         $result .= '<td class="gaugeendfilled">' . $blank . '</td>';
+      }
+   }
+
+   $result .= '</tr></table>';
+   $result .= '</div>';
 
    return $result;
 }

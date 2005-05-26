@@ -1,0 +1,85 @@
+/*
+ * $Id$
+ * Copyright 2004,2005 - Michael Sinz
+ */
+
+html, body
+{
+  color: black;
+  background: #7e7e7e;
+  margin: 0px;
+}
+
+#top-left, #top, #top-right, #bottom-left, #bottom, #bottom-right
+{
+  height: 14px;
+}
+
+#top-left, #left, #bottom-left, #top-right, #right, #bottom-right
+{
+  width: 14px;
+}
+
+#top-left, #top-right, #bottom-left, #bottom-right
+{
+  background-repeat: no-repeat;
+}
+
+#top, #bottom
+{
+  background-repeat: repeat-x;
+}
+
+#left, #right
+{
+  background-repeat: repeat-y;
+}
+
+#top-left
+{
+  background-image: url('./top-left.gif');
+  background-position: bottom right;
+}
+
+#top
+{
+  background-image: url('./top.gif');
+  background-position: bottom left;
+}
+
+#top-right
+{
+  background-image: url('./top-right.gif');
+  background-position: bottom left;
+}
+
+#left
+{
+  background-image: url('./left.gif');
+  background-position: top right;
+}
+
+#right
+{
+  background-image: url('./right.gif');
+  background-position: top left;
+}
+
+#bottom-left
+{
+  background-image: url('./bottom-left.gif');
+  background-position: top right;
+}
+
+#bottom
+{
+  background-image: url('./bottom.gif');
+  background-position: top left;
+}
+
+#bottom-right
+{
+  background-image: url('./bottom-right.gif');
+  background-position: top left;
+}
+

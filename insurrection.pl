@@ -14,6 +14,9 @@ $SVN_BASE = '/home/subversion/repositories';
 ## This is the base of the authentication directory.  All of the authentication stuff lives here.
 $SVN_AUTH = '/home/subversion/authentication';
 
+## This is the base of the logs directory.  All of the http logs live here.
+$SVN_LOGS = '/home/subversion/logs';
+
 ## This is where the svn binaries live.
 $SVN_BIN = '/home/subversion/svn/bin/';
 
@@ -39,6 +42,7 @@ $SVN_REPOSITORIES_URL = '/svn/';
 ## The specific binaries we use
 $SVN_CMD = $SVN_BIN . 'svn';
 $SVNLOOK_CMD = $SVN_BIN . 'svnlook';
+$SVNADMIN_CMD = $SVN_BIN . 'svnadmin';
 
 return 1;
 

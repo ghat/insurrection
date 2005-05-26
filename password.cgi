@@ -16,13 +16,13 @@ $Operation = "" if (!defined $Operation);
 
 if ($AuthUser eq 'demo')
 {
-   print $cgi->redirect($SVN_URL_PATH . 'admin.cgi');
+   print $cgi->redirect($SVN_URL_PATH . 'auth_index.cgi');
    exit 0;
 }
 
 if ($Operation eq 'Cancel')
 {
-   print $cgi->redirect($SVN_URL_PATH);
+   print $cgi->redirect($SVN_URL_PATH . 'auth_index.cgi');
    exit 0;
 }
 
@@ -70,7 +70,7 @@ if ($Operation eq 'Update')
       &savePasswordFile('password.cgi: Password changed');
 
       print '<h2 align="center"><font color="green">Password successfully changed.</font></h2>'
-          , '<p>You will need to <a href="?">log in again</a> as your password has changed.</p>';
+          , '<p>You will need to <a href="' , $SVN_URL_PATH , 'auth_index.cgi?">log in again</a> as your password has changed.</p>';
 
       $changed = 1;
    }

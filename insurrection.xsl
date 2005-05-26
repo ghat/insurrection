@@ -54,16 +54,17 @@
   <xsl:template name="diricon-path">/folder.gif</xsl:template>
   <xsl:template name="fileicon-path">/file.gif</xsl:template>
   <xsl:template name="infoicon-path">/info.gif</xsl:template>
+  <xsl:template name="spacericon-path">/spacer.gif</xsl:template>
   <xsl:template name="blankicon-path">/blank.gif</xsl:template>
   <xsl:template name="rssicon-path">/rss.gif</xsl:template>
+  <xsl:template name="dumpicon-path">/dump.gif</xsl:template>
+  <xsl:template name="usageicon-path">/usage.gif</xsl:template>
   <xsl:template name="aticon-path">/at.gif</xsl:template>
 
   <!-- ******************************************************************************************************************* -->
   <xsl:template name="blank">
     <xsl:element name="img">
       <xsl:attribute name="alt"></xsl:attribute>
-      <xsl:attribute name="width">1</xsl:attribute>
-      <xsl:attribute name="height">1</xsl:attribute>
       <xsl:attribute name="src">
         <xsl:call-template name="blankicon-path"/>
       </xsl:attribute>
@@ -189,9 +190,9 @@
         </xsl:element>
         <xsl:element name="img">
           <xsl:attribute name="src">
-            <xsl:call-template name="blankicon-path"/>
+            <xsl:call-template name="spacericon-path"/>
           </xsl:attribute>
-          <xsl:attribute name="id">blankImage</xsl:attribute>
+          <xsl:attribute name="id">spacerImage</xsl:attribute>
           <xsl:attribute name="style">display: none</xsl:attribute>
           <xsl:attribute name="alt"></xsl:attribute>
         </xsl:element>
@@ -366,7 +367,7 @@
             <xsl:element name="img">
               <xsl:attribute name="alt"></xsl:attribute>
               <xsl:attribute name="src">
-                <xsl:call-template name="blankicon-path"/>
+                <xsl:call-template name="spacericon-path"/>
               </xsl:attribute>
             </xsl:element>
           </td>
@@ -461,7 +462,7 @@
         <xsl:element name="img">
           <xsl:attribute name="alt"></xsl:attribute>
           <xsl:attribute name="src">
-            <xsl:call-template name="blankicon-path"/>
+            <xsl:call-template name="spacericon-path"/>
           </xsl:attribute>
         </xsl:element>
       </td>
@@ -481,7 +482,7 @@
         <xsl:element name="img">
           <xsl:attribute name="alt"></xsl:attribute>
           <xsl:attribute name="src">
-            <xsl:call-template name="blankicon-path"/>
+            <xsl:call-template name="spacericon-path"/>
           </xsl:attribute>
         </xsl:element>
       </td>

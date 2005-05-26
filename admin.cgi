@@ -33,14 +33,7 @@ my %tlist = %{$usersGroup{$AuthUser}};
 my @accessGroups = sort keys %tlist;
 
 ## Check if this user can administrate other users
-my $canAdminUser = $isAdmin;
-foreach my $group (@accessGroups)
-{
-   if (!$canAdminUser)
-   {
-      $canAdminUser = 1 if (&isAdmin($group,$AuthUser));
-   }
-}
+my $canAdminUser = &isAdmin(undef,$AuthUser);
 
 ## Print our standard header...   (Note the 0-minute expires!)
 &svn_HEADER('Admin - Insurrection Server','+0m');

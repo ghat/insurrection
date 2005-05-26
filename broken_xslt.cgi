@@ -57,7 +57,7 @@ print '<img style="display: none;" alt="" id="closedImage" src="' , &svn_IconPat
     , '<img style="display: none;" alt="" id="dirImage" src="' , &svn_IconPath('dir') , '"/>'
     , '<img style="display: none;" alt="" id="fileImage" src="' , &svn_IconPath('file') , '"/>'
     , '<img style="display: none;" alt="" id="infoImage" src="' , &svn_IconPath('info') , '"/>'
-    , '<img style="display: none;" alt="" id="blankImage" src="' , &svn_IconPath('blank') , '"/>'
+    , '<img style="display: none;" alt="" id="spacerImage" src="' , &svn_IconPath('spacer') , '"/>'
     , '<script language="JavaScript" type="text/javascript">'
     ,  'setTimeout(\'loadDir(document.getElementById("/"));\',100);'
     , '</script>';

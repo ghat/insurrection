@@ -240,7 +240,7 @@ function doNextItem()
 				tr.appendChild(td);
 				td.className = 'foldspace';
 				img = document.createElement('img');
-				img.src = document.getElementById('blankImage').src;
+				img.src = document.getElementById('spacerImage').src;
 				img.alt = '';
 				img.align = 'middle';
 				td.appendChild(img);
@@ -305,7 +305,7 @@ function doNextItem()
 				tr.appendChild(td);
 				td.className = 'foldspace';
 				img = document.createElement('img');
-				img.src = document.getElementById('blankImage').src;
+				img.src = document.getElementById('spacerImage').src;
 				img.alt = '';
 				img.align = 'middle';
 				td.appendChild(img);
