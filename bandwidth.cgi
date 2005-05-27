@@ -90,7 +90,7 @@ elsif (defined $raw)
 
          ## Oh, and all local links and images need the extra parameter if
          ## they are not already done
-         $html =~ s:(HREF=|SRC=)"([^/"]+)":$1"$2?Insurrection=bandwidth":sg;
+         $html =~ s:(HREF=|SRC=)"(\./)?([^/"]+)":$1"$3?Insurrection=bandwidth":sg;
 
          $html =~ s|<H2>(.*?)</H2>|<div style="text-align: center; font-weight: bold; font-size: 20pt;">$1</div>|s;
          $html =~ s|<SMALL><STRONG>(.*?)</STRONG></SMALL>|<div style="text-align: right; font-size: 10pt;">$1</div>|s;
