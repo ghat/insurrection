@@ -35,7 +35,7 @@ if ($cgi->param('Dump') eq 'go')
                       '-Content-Disposition' => 'attachment; filename=' . $dumpName ,
                       '-Content-Description' => 'Insurrection/Subversion repository dump');
 
-   print `$cmd`;
+   system($cmd);
 
    exit 0;
 }
