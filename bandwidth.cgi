@@ -31,6 +31,8 @@ my $showDetails = $cgi->param('Details');
 my $repo = &svn_REPO();
 $repo = '' if ($repo eq '/');
 
+my ($raw) = (&svn_RPATH =~ m:/\.raw-details\./(.*):);
+
 ## Only the global admin can check on all of the repository details
 if (($repo eq '') && (!$isAdmin))
 {
@@ -65,6 +67,50 @@ if ($repo eq '')
    print '<div class="bandwidth bandwidthheader1">'
        ,  &niceNumber($total) , ' bytes total measured bandwidth'
        , '</div>';
+}
+elsif (defined $raw)
+{
+   my $file = "$USAGE_DIR/$repo/stats/$raw";
+
+   if ($raw =~ m:.html$:)
+   {
+      ## Ahh, the HTML - I need to clean it up a bit...
+      if (open(RAW,"<$file"))
+      {
+         my $html = join('',<RAW>);
+         close(RAW);
+
+         ## Rip out just we don't want
+         $html =~ s|.*<BODY[^>]*>||sg;
+         $html =~ s|</BODY[^>]*>.*||sg;
+         $html =~ s|<P>.<HR>.<TABLE.*||sg;
+
+         ## Make all of the references to URLs relative to the server...
+         $html =~ s|http://Repository\s$repo/|/|sg;
+
+         ## Oh, and all local links and images need the extra parameter if
+         ## they are not already done
+         $html =~ s:(HREF=|SRC=)"([^/"]+)":$1"$2?Insurrection=bandwidth":sg;
+
+         $html =~ s|<H2>(.*?)</H2>|<div style="text-align: center; font-weight: bold; font-size: 20pt;">$1</div>|s;
+         $html =~ s|<SMALL><STRONG>(.*?)</STRONG></SMALL>|<div style="text-align: right; font-size: 10pt;">$1</div>|s;
+
+         ## Last bit of fixup...
+         $html =~ s|<CENTER>.<HR>(.*)</CENTER>|<div style="background: #EEEEEE; border: 1px black solid; margin-top: 2px; padding: 2px;"><CENTER>$1</CENTER></div>|s;
+
+         &svn_HEADER_oldHTML('Raw Details: ' . $repo);
+         print "\n<!-- Begin: HTML generated via legacy software -->\n";
+         print $html;
+         print "\n<!-- End: HTML generated via legacy software -->\n";
+      }
+   }
+   else
+   {
+      ## Unknown type, so just send it...
+      print $cgi->header('-type' => 'application/octet-stream');
+      system('cat',$file);
+      exit 0;
+   }
 }
 else
 {
@@ -219,6 +265,19 @@ sub repoUsage($repo)
 
       print '<div class="bandwidthfooter">'
           ,  '<a href="' , $link , '" class="linkbutton">Show Details</a>'
+          , '</div>';
+   }
+   else
+   {
+      my $link = $cgi->url() . '/' . $repo . '/.raw-details./index.html?Details=1';
+
+      ## If we got here via the proxy trick, continue to use it...
+      $link = $SVN_REPOSITORIES_URL . $repo . '/.raw-details./index.html?Insurrection=bandwidth' if ($cgi->param('Insurrection') eq 'bandwidth');
+
+      $link = &svn_XML_Escape($link);
+
+      print '<div class="bandwidthfooter">'
+          ,  '<a href="' , $link , '" class="linkbutton">Raw Details</a>'
           , '</div>';
    }
 

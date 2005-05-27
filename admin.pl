@@ -253,13 +253,18 @@ sub svn_RPATH()
 ##############################################################################
 #
 # This put up the default header for every CGI generated HTML page
+# Note that the
 # Note that the expires parameter is optional and will default to
 # a 1 day expire.
 #
-sub svn_HEADER($title,$expires)
+sub svn_HEADER($title,$expires,$doctype)
 {
    my $title = shift;
    my $expires = shift;
+   my $doctype = shift;
+
+   ## If no doctype, set the good default...
+   $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' if (!defined $doctype);
 
    ## Expires is optional and thus we default it to 1 day if not given.
    $expires = '+1d' if (!defined $expires);
@@ -273,7 +278,7 @@ sub svn_HEADER($title,$expires)
    print $cgi->header('-expires' => $expires ,
                       '-type' => 'text/html');
 
-   print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' , "\n"
+   print $doctype , "\n"
        , "<!-- Insurrection Web Tools for Subversion          -->\n"
        , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
@@ -306,6 +311,27 @@ sub svn_HEADER($title,$expires)
        ,       '<div class="svn"><div id="localbanner"></div>' , "\n";
 }
 
+my $oldHTML = 0;
+
+##############################################################################
+#
+# This does the header with an older doctype...
+#
+sub svn_HEADER_oldHTML($title,$expires)
+{
+   my $title = shift;
+   my $expires = shift;
+
+   ## Flag that we are not 4.01...
+   $oldHTML = 1;
+
+   ## We have &svn_HEADER_int as the function that does all
+   ## of the work...  This just is here to give an old doctype
+   &svn_HEADER($title,
+               $expires,
+               '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">');
+}
+
 ##############################################################################
 #
 # This put up the default tail for all of the pages that use
@@ -319,11 +345,11 @@ sub svn_TRAILER($version)
    $version = '$Id$' if (!defined $version);
 
    print       '</div>'
-       ,       '<div class="footer">'
-       ,        '<a title="Valid HTML 4.01!" href="http://validator.w3.org/check?uri=referer">'
+       ,       '<div class="footer">';
+   print        '<a title="Valid HTML 4.01!" href="http://validator.w3.org/check?uri=referer">'
        ,         '<img style="margin-left: 1em;" align="right" border="0" src="/valid-html401.png" alt="Valid HTML 4.01!">'
-       ,        '</a>'
-       ,        $version;
+       ,        '</a>' if (!$oldHTML);
+   print        $version;
    print        '&nbsp;&nbsp;--&nbsp;&nbsp;'
        ,        'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
    print       '</div>'
