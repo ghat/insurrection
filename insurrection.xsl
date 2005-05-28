@@ -941,4 +941,82 @@
     </xsl:if>
   </xsl:template>
 
+  <!-- ******************************************************************************************************************* -->
+  <!-- This is the template for the RSS feed when it happens to be loaded in a browser -->
+  <xsl:template match="rss">
+    <xsl:apply-templates select="channel"/>
+  </xsl:template>
+
+  <xsl:template match="channel">
+    <html>
+      <head>
+        <title>
+          <xsl:value-of select="title"/>
+        </title>
+        <xsl:call-template name="header"/>
+      </head>
+      <body>
+        <table id="pagetable" cellpadding="0" cellspacing="0">
+          <xsl:call-template name="top-bottom"/>
+          <tbody>
+            <tr>
+              <xsl:call-template name="left-side"/>
+              <td id="content">
+                <xsl:call-template name="banner"/>
+                <div class="footer" style="font-size: 16pt; font-weight: bold;">
+                  <xsl:text>This XML/RSS data is meant to be read using an RSS viewer.</xsl:text>
+                </div>
+                <div class="rss-title">
+                  <xsl:variable name="tmp" select="description"/>
+                  <xsl:value-of select="substring-before($tmp,'. &lt;')"/>
+                </div>
+                <xsl:apply-templates select="item"/>
+                <div class="footer">
+                  <xsl:text>$Id$</xsl:text>
+                </div>
+              </td>
+              <xsl:call-template name="right-side"/>
+            </tr>
+          </tbody>
+        </table>
+      </body>
+    </html>
+  </xsl:template>
+
+  <xsl:template match="item">
+    <div class="rss-item">
+      <xsl:element name="a">
+        <xsl:attribute name="href">
+          <xsl:value-of select="link"/>
+        </xsl:attribute>
+        <xsl:attribute name="title">
+          <xsl:value-of select="title"/>
+        </xsl:attribute>
+        <span class="rss-itemtitle">
+          <xsl:value-of select="title"/>
+        </span>
+        <span class="rss-date">
+           <xsl:value-of select="pubDate"/>
+         </span>
+        <span class="rss-author">
+          <xsl:text>by </xsl:text>
+          <xsl:if test="contains(author,'@')">
+            <xsl:value-of select="substring-before(author,'@')"/>
+            <xsl:element name="img">
+              <xsl:attribute name="src">
+                <xsl:call-template name="aticon-path"/>
+              </xsl:attribute>
+              <xsl:attribute name="class">user</xsl:attribute>
+              <xsl:attribute name="alt">at</xsl:attribute>
+            </xsl:element>
+            <xsl:value-of select="substring-after(author,'@')"/>
+          </xsl:if>
+          <xsl:if test="not(contains(author,'@'))">
+            <xsl:value-of select="author"/>
+          </xsl:if>
+        </span>
+      </xsl:element>
+   </div>
+  </xsl:template>
+
 </xsl:stylesheet>
