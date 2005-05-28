@@ -86,7 +86,7 @@
   </li>
   <br/>
   <li>
-    <a href="index.cgi"><code>index.cgi</code></a>
+    <a href="index.cgi"><code>index.cgi</code></a>&nbsp;&nbsp;&nbsp;<a href="auth_index.cgi"><code>auth_index.cgi</code></a>
     <ul>
       This CGI produces the main welcome page for the server.&nbsp; It uses the
       <a href="index.template">index.template</a> file and replaces the &lt;repos/&gt;
@@ -187,6 +187,21 @@
       A simple web-based user admin and repository access control manager for
       Subversion servers that use the <code>mod_authz_svn</code> plugin to Apache and
       Subversion.
+    </ul>
+  </li>
+  <br/>
+  <li>
+    <a href="dump.cgi"><code>dump.cgi</code></a>
+    <ul>
+      A simple web-based repository dump download tool for administrators.
+    </ul>
+  </li>
+  <br/>
+  <li>
+    <a href="bandwidth.cgi"><code>bandwidth.cgi</code></a>
+    <ul>
+      A simple web-based interface such that repository administrators can monitor
+      their repository's bandwidth usage.
     </ul>
   </li>
 </ul>
