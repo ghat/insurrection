@@ -31,7 +31,9 @@ my $showDetails = $cgi->param('Details');
 my $repo = &svn_REPO();
 $repo = '' if ($repo eq '/');
 
-my ($raw) = (&svn_RPATH =~ m:/\.raw-details\./(.*):);
+## Check for the raw details information - we are rather strict in the
+## way it needs to look.
+my ($raw) = (&svn_RPATH =~ m:/\.raw-details\./([a-z][a-z0-9_.]+)$:);
 
 ## Only the global admin can check on all of the repository details
 if (($repo eq '') && (!$isAdmin))
@@ -49,34 +51,14 @@ if (!(-d "$USAGE_DIR/$repo"))
    exit 0;
 }
 
-## Now, if we have no repository, we need to do all of the
-## directories in the $USAGE_DIR
-if ($repo eq '')
+## If we have a raw details request and the directory exists
+if (defined $raw)
 {
-   &svn_HEADER('Bandwidth usage');
-
-   my $total = 0;
-
-   foreach $repo (sort split("\n",`ls $USAGE_DIR`))
+   if (open(RAW,"<$USAGE_DIR/$repo/stats/$raw"))
    {
-      $total += &repoUsage($repo);
-
-      print '<hr/>';
-   }
-
-   print '<div class="bandwidth bandwidthheader1">'
-       ,  &niceNumber($total) , ' bytes total measured bandwidth'
-       , '</div>';
-}
-elsif (defined $raw)
-{
-   my $file = "$USAGE_DIR/$repo/stats/$raw";
-
-   if ($raw =~ m:.html$:)
-   {
-      ## Ahh, the HTML - I need to clean it up a bit...
-      if (open(RAW,"<$file"))
+      if ($raw =~ m:.html$:)
       {
+         ## Ahh, the HTML - I need to clean it up a bit...
          my $html = join('',<RAW>);
          close(RAW);
 
@@ -102,15 +84,38 @@ elsif (defined $raw)
          print "\n<!-- Begin: HTML generated via legacy software -->\n";
          print $html;
          print "\n<!-- End: HTML generated via legacy software -->\n";
+
+         &svn_TRAILER('$Id$');
+         exit 0;
+      }
+      else
+      {
+         ## Unknown type, so just send it...
+         print $cgi->header('-type' => 'application/octet-stream') , <RAW>;
+         close(RAW);
+         exit 0;
       }
    }
-   else
+}
+
+## Now, if we have no repository, we need to do all of the
+## directories in the $USAGE_DIR
+if ($repo eq '')
+{
+   &svn_HEADER('Bandwidth usage');
+
+   my $total = 0;
+
+   foreach $repo (sort split("\n",`ls $USAGE_DIR`))
    {
-      ## Unknown type, so just send it...
-      print $cgi->header('-type' => 'application/octet-stream');
-      system('cat',$file);
-      exit 0;
+      $total += &repoUsage($repo);
+
+      print '<hr/>';
    }
+
+   print '<div class="bandwidth bandwidthheader1">'
+       ,  &niceNumber($total) , ' bytes total measured bandwidth'
+       , '</div>';
 }
 else
 {
@@ -258,7 +263,7 @@ sub repoUsage($repo)
       my $link = $cgi->url() . '/' . $repo . '?Details=1';
 
       ## If we got here via the proxy trick, continue to use it...
-      $link = '?Insurrection=bandwidth&Details=1' if ($cgi->param('Insurrection') eq 'bandwidth');
+      $link = $SVN_REPOSITORIES_URL . $repo . '/?Insurrection=bandwidth&Details=1' if ($cgi->param('Insurrection') eq 'bandwidth');
 
       $link .= '&History=' . $max_history if ($max_history != $MAX_HISTORY);
       $link = &svn_XML_Escape($link);
@@ -267,9 +272,10 @@ sub repoUsage($repo)
           ,  '<a href="' , $link , '" class="linkbutton">Show Details</a>'
           , '</div>';
    }
-   else
+   elsif (-d "$USAGE_DIR/$repo/stats")
    {
-      my $link = $cgi->url() . '/' . $repo . '/.raw-details./index.html?Details=1';
+      ## If we have raw stats for this account, show the button...
+      my $link = $cgi->url() . '/' . $repo . '/.raw-details./index.html';
 
       ## If we got here via the proxy trick, continue to use it...
       $link = $SVN_REPOSITORIES_URL . $repo . '/.raw-details./index.html?Insurrection=bandwidth' if ($cgi->param('Insurrection') eq 'bandwidth');
