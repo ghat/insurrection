@@ -44,5 +44,5 @@ $SVN_CMD = $SVN_BIN . 'svn';
 $SVNLOOK_CMD = $SVN_BIN . 'svnlook';
 $SVNADMIN_CMD = $SVN_BIN . 'svnadmin';
 
-return 1;
+1;
 

@@ -1072,5 +1072,5 @@ sub gauge($fill,$limit,$title)
    return $result;
 }
 
-return 1;
+1;
 
