@@ -33,7 +33,7 @@ $repo = '' if ($repo eq '/');
 
 ## Check for the raw details information - we are rather strict in the
 ## way it needs to look.
-my ($raw) = (&svn_RPATH =~ m:/\.raw-details\./([a-z][a-z0-9_.]+)$:);
+my ($raw) = (&svn_RPATH =~ m:/\.raw-details\./([a-z][a-z0-9_.]+)$:o);
 
 ## Only the global admin can check on all of the repository details
 if (($repo eq '') && (!$isAdmin))
@@ -56,29 +56,29 @@ if (defined $raw)
 {
    if (open(RAW,"<$USAGE_DIR/$repo/stats/$raw"))
    {
-      if ($raw =~ m:.html$:)
+      if ($raw =~ m:.html$:o)
       {
          ## Ahh, the HTML - I need to clean it up a bit...
          my $html = join('',<RAW>);
          close(RAW);
 
          ## Rip out just we don't want
-         $html =~ s|.*<BODY[^>]*>||sg;
-         $html =~ s|</BODY[^>]*>.*||sg;
-         $html =~ s|<P>.<HR>.<TABLE.*||sg;
+         $html =~ s|.*<BODY[^>]*>||sgo;
+         $html =~ s|</BODY[^>]*>.*||sgo;
+         $html =~ s|<P>.<HR>.<TABLE.*||sgo;
 
          ## Make all of the references to URLs relative to the server...
          $html =~ s|http://Repository\s$repo/|/|sg;
 
          ## Oh, and all local links and images need the extra parameter if
          ## they are not already done
-         $html =~ s:(HREF=|SRC=)"(\./)?([^/"]+)":$1"$3?Insurrection=bandwidth":sg;
+         $html =~ s:(HREF=|SRC=)"(\./)?([^/"]+)":$1"$3?Insurrection=bandwidth":sgo;
 
-         $html =~ s|<H2>(.*?)</H2>|<div style="text-align: center; font-weight: bold; font-size: 20pt;">$1</div>|s;
-         $html =~ s|<SMALL><STRONG>(.*?)</STRONG></SMALL>|<div style="text-align: right; font-size: 10pt;">$1</div>|s;
+         $html =~ s|<H2>(.*?)</H2>|<div style="text-align: center; font-weight: bold; font-size: 20pt;">$1</div>|so;
+         $html =~ s|<SMALL><STRONG>(.*?)</STRONG></SMALL>|<div style="text-align: right; font-size: 10pt;">$1</div>|so;
 
          ## Last bit of fixup...
-         $html =~ s|<CENTER>.<HR>(.*)</CENTER>|<div style="background: #EEEEEE; border: 1px black solid; margin-top: 2px; padding: 2px;"><CENTER>$1</CENTER></div>|s;
+         $html =~ s|<CENTER>.<HR>(.*)</CENTER>|<div style="background: #EEEEEE; border: 1px black solid; margin-top: 2px; padding: 2px;"><CENTER>$1</CENTER></div>|so;
 
          &svn_HEADER_oldHTML('Raw Details: ' . $repo);
          print "\n<!-- Begin: HTML generated via legacy software -->\n";
@@ -102,20 +102,29 @@ if (defined $raw)
 ## directories in the $USAGE_DIR
 if ($repo eq '')
 {
-   &svn_HEADER('Bandwidth usage');
-
-   my $total = 0;
-
-   foreach $repo (sort split("\n",`ls $USAGE_DIR`))
+   if (opendir(DIR,$USAGE_DIR))
    {
-      $total += &repoUsage($repo);
+      &svn_HEADER('Bandwidth usage');
 
-      print '<hr/>';
+      my $total = 0;
+
+      foreach my $repo (sort grep(!/^\./, readdir(DIR)))
+      {
+         $total += &repoUsage($repo);
+         print '<hr/>';
+      }
+      closedir(DIR);
+
+      print '<div class="bandwidth bandwidthheader1">'
+          ,  &niceNumber($total) , ' bytes total measured bandwidth'
+          , '</div>';
    }
-
-   print '<div class="bandwidth bandwidthheader1">'
-       ,  &niceNumber($total) , ' bytes total measured bandwidth'
-       , '</div>';
+   else
+   {
+      print $cgi->redirect('-location' => $SVN_URL_PATH,
+                           '-status' => '302 Failed to open directory');
+      exit 0;
+   }
 }
 else
 {
@@ -141,7 +150,7 @@ sub repoUsage($repo)
    my $grandTotal = 0;
 
    my $title = 'Bandwidth sumary: ' . $repo . ' repository';
-   if ($repo =~ /^-.*-$/)
+   if ($repo =~ m/^-.*-$/o)
    {
       $title = 'System: ' . $repo;
    }
@@ -209,7 +218,7 @@ sub repoUsage($repo)
          my $count = 0;
          foreach my $date (@dates)
          {
-            if ($date =~ m:^(\d+)/(\d+)/(\d+)$:)
+            if ($date =~ m:^(\d+)/(\d+)/(\d+)$:o)
             {
                if ($lastmonth ne "$1/$2")
                {
@@ -316,7 +325,7 @@ sub niceNumber($num)
    my $num = shift;
 
    ## Cute trick to get comas into the number...
-   while ($num =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+   while ($num =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
 
    return $num;
 }

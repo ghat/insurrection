@@ -28,14 +28,14 @@ my $PasswordFileLock = $SVN_AUTH . '/.lock-PasswordFile';
 use Fcntl ':flock'; # import LOCK_* constants
 
 ## We export these hashes for playing around with.
-%groupComments; ## Comments for groups
-%groupUsers;    ## The group's users
-%usersGroup;    ## The user's groups (a pivot just to make life eaier)
-%groupAdmins;   ## The group admin users
-%userPasswords; ## The password file
-%userCreators;  ## The users who "created" this user
-$accessVersion; ## The version of the access file
-$passwdVersion; ## The version of the password file
+our %groupComments; ## Comments for groups
+our %groupUsers;    ## The group's users
+our %usersGroup;    ## The user's groups (a pivot just to make life eaier)
+our %groupAdmins;   ## The group admin users
+our %userPasswords; ## The password file
+our %userCreators;  ## The users who "created" this user
+our $accessVersion; ## The version of the access file
+our $passwdVersion; ## The version of the password file
 
 ## ###### HACK - HACK ###### HACK - HACK ###### HACK - HACK ######
 ##
@@ -47,29 +47,31 @@ $passwdVersion; ## The version of the password file
 ## always do the same thing in our system we know how to work
 ## around it (for the most part)
 ##
-if ($ENV{'SERVER_PROTOCOL'} =~ m:^(.+)\s(HTTP/\d+\.\d+)$:)
+if (defined $ENV{'SERVER_PROTOCOL'})
 {
-   $ENV{'SERVER_PROTOCOL'} = $2;
+   if ($ENV{'SERVER_PROTOCOL'} =~ m:^(.+)\s(HTTP/\d+\.\d+)$:o)
+   {
+      $ENV{'SERVER_PROTOCOL'} = $2;
 
-   ## Note that we assume it was only one space...  If the
-   ## first space is a double-space then we have a problem...
-   $ENV{'REQUEST_URI'} .= ' ' . $1;
+      ## Note that we assume it was only one space...  If the
+      ## first space is a double-space then we have a problem...
+      $ENV{'REQUEST_URI'} .= ' ' . $1;
+   }
+
+   ## We also know that we have a path parameter at the end
+   ## (Always)
+   if ($ENV{'REQUEST_URI'} =~ m:&Path=(/.*)$:o)
+   {
+      ## Set up the PATH_INFO to match...
+      $ENV{'PATH_INFO'} = $1;
+
+      ## And now get the request URI to not have the Path argument
+      $ENV{'REQUEST_URI'} =~ s:&Path=/.*$::o;
+   }
+
+   ## Finally, fix up the query string to match the request URI
+   ($ENV{'QUERY_STRING'}) = ($ENV{'REQUEST_URI'} =~ m/\?(.*)$/o);
 }
-
-## We also know that we have a path parameter at the end
-## (Always)
-if ($ENV{'REQUEST_URI'} =~ m:&Path=(/.*)$:)
-{
-   ## Set up the PATH_INFO to match...
-   $ENV{'PATH_INFO'} = $1;
-
-   ## And now get the request URI to not have the Path argument
-   $ENV{'REQUEST_URI'} =~ s:&Path=/.*$::;
-}
-
-## Finally, fix up the query string to match the request URI
-($ENV{'QUERY_STRING'}) = ($ENV{'REQUEST_URI'} =~ m/\?(.*)$/);
-
 ##
 ## :END:
 ##
@@ -77,8 +79,8 @@ if ($ENV{'REQUEST_URI'} =~ m:&Path=(/.*)$:)
 
 # Set up our CGI context and get some information
 use CGI;
-$cgi = new CGI;
-$AuthUser = $cgi->remote_user;
+our $cgi = new CGI;
+our $AuthUser = $cgi->remote_user;
 
 ## Read the insurrection.xsl file for configuration information.
 ## The configuration is within the XSL file due to problems with
@@ -101,7 +103,7 @@ my $blank = '<img alt="" src="' . &svn_IconPath('blank') . '"/>';
 #
 sub svn_HTTP()
 {
-   if ($cgi->url =~ m|(https?://[^/]+)|)
+   if ($cgi->url =~ m|(https?://[^/]+)|o)
    {
       return $1;
    }
@@ -139,10 +141,10 @@ sub svn_XML_Escape($str)
 {
    my $str = shift;
 
-   $str =~ s/&/&amp;/sg;
-   $str =~ s/</&lt;/sg;
-   $str =~ s/>/&gt;/sg;
-   $str =~ s/"/&quot;/sg;
+   $str =~ s/&/&amp;/sgo;
+   $str =~ s/</&lt;/sgo;
+   $str =~ s/>/&gt;/sgo;
+   $str =~ s/"/&quot;/sgo;
 
    return $str;
 }
@@ -159,7 +161,7 @@ sub svn_URL_Escape($path)
    my $path = shift;
 
    ## Modify our path to escape some characters into URL form...
-   $path =~ s|([^-.A-Za-z0-9/_])|sprintf("%%%02X",ord($1))|seg;
+   $path =~ s|([^-.A-Za-z0-9/_])|sprintf("%%%02X",ord($1))|sego;
 
    return $path;
 }
@@ -179,10 +181,10 @@ sub svn_URL()
    {
       ## Prevent ugly hacks from getting into my pathinfo...
       ## (The only one I care about is the '..')
-      $path =~ s:(\.\./)|(/\.\.)|(^\.\.$)::g;
+      $path =~ s:(\.\./)|(/\.\.)|(^\.\.$)::go;
 
       ## Get rid of trailing '/'
-      $path =~ s:/+$::;
+      $path =~ s:/+$::o;
 
       ## Fix up/escape as needed...
       $path = &svn_URL_Escape($path);
@@ -207,11 +209,11 @@ sub svn_REPO()
    {
       ## Prevent ugly hacks from getting into my pathinfo...
       ## (The only one I care about is the '..')
-      $path =~ s:(\.\./)|(/\.\.)|(^\.\.$)::g;
+      $path =~ s:(\.\./)|(/\.\.)|(^\.\.$)::go;
 
       ## Note that only the first element is used, so
       ## get rid of anything after the first element.
-      $path =~ s:^/([^/]+).*$:$1:;
+      $path =~ s:^/([^/]+).*$:$1:o;
    }
 
    return $path;
@@ -230,14 +232,14 @@ sub svn_RPATH()
    {
       ## Prevent ugly hacks from getting into my pathinfo...
       ## (The only one I care about is the '..')
-      $path =~ s:(\.\./)|(/\.\.)|(^\.\.$)::g;
+      $path =~ s:(\.\./)|(/\.\.)|(^\.\.$)::go;
 
       ## Get rid of trailing '/'
-      $path =~ s:/+$::;
+      $path =~ s:/+$::o;
 
       ## Note that only the first element is used, so
       ## get rid of anything after the first element.
-      if ($path =~ m:^/[^/]+(/.*)$:)
+      if ($path =~ m:^/[^/]+(/.*)$:o)
       {
          $path = $1;
       }
@@ -269,11 +271,11 @@ sub svn_HEADER($title,$expires,$doctype)
    ## Expires is optional and thus we default it to 1 day if not given.
    $expires = '+1d' if (!defined $expires);
 
-   my ($header) = ($insurrection_xml =~ m|<xsl:template name="header">(.*?)</xsl:template>|s);
-   my ($banner) = ($insurrection_xml =~ m|<xsl:template name="banner">(.*?)</xsl:template>|s);
+   my ($header) = ($insurrection_xml =~ m|<xsl:template name="header">(.*?)</xsl:template>|so);
+   my ($banner) = ($insurrection_xml =~ m|<xsl:template name="banner">(.*?)</xsl:template>|so);
 
    ## Darn HTML 4 does not let <link> tags be closed!  How annoying!
-   $header =~ s|(<link\s[^>]*)/>|$1>|gs;
+   $header =~ s|(<link\s[^>]*)/>|$1>|gso;
 
    print $cgi->header('-expires' => $expires ,
                       '-type' => 'text/html');
@@ -372,14 +374,13 @@ sub getNumParam($param)
 {
    my $result;
    my $param = shift;
-   if ($param =~ m/(\d+)/)
+   if ($param =~ m/(\d+)/o)
    {
       $result = $1;
    }
 
    return $result;
 }
-
 
 ##############################################################################
 #
@@ -404,7 +405,7 @@ sub getNumParam($param)
 #
 sub isBrokenBrowser()
 {
-   return ((!defined $cgi->param('XMLHttp')) && ($cgi->user_agent =~ m/(Opera)|(Safari)|(Konqueror)/));
+   return ((!defined $cgi->param('XMLHttp')) && ($cgi->user_agent =~ m/(Opera)|(Safari)|(Konqueror)/o));
 }
 
 ##############################################################################
@@ -415,23 +416,31 @@ sub isBrokenBrowser()
 sub checkAuthMode()
 {
    ## Get the base CGI name such that we can double check the access...
-   my ($type) = ($cgi->url =~ m|^.*/([^/]+)\.cgi$|);
+   my ($type) = ($cgi->url =~ m|^.*/([^/]+)\.cgi$|o);
 
-   my $path = substr($cgi->path_info(),1);
-
-   ## Lets check if this happened to come through the internal
-   ## proxy request.  The reason this is important is that the
-   ## mod_authz_svn will have already authenticated the request
-   ## and now all we need to do is trust it.  In all other cases
-   ## Note: This security can be broken if someone else puts in
-   ## a proxy on the same server and sets it up just right...
-   if ((($ENV{'REMOTE_ADDR'} eq $ENV{'SERVER_ADDR'})
-      && ($ENV{'HTTP_HOST'} eq $ENV{'HTTP_X_FORWARDED_HOST'}))
-      && (length($path) > 2)
-      && (defined $cgi->param('Insurrection'))
-      && ($cgi->param('Insurrection') eq $type))
+   my $path = $cgi->path_info();
+   if ((defined $path) && (length($path) > 1))
    {
-      return 1;
+      $path = substr($cgi->path_info(),1);
+
+      ## Lets check if this happened to come through the internal
+      ## proxy request.  The reason this is important is that the
+      ## mod_authz_svn will have already authenticated the request
+      ## and now all we need to do is trust it.  In all other cases
+      ## Note: This security can be broken if someone else puts in
+      ## a proxy on the same server and sets it up just right...
+      if ((($ENV{'REMOTE_ADDR'} eq $ENV{'SERVER_ADDR'})
+         && ($ENV{'HTTP_HOST'} eq $ENV{'HTTP_X_FORWARDED_HOST'}))
+         && (length($path) > 2)
+         && (defined $cgi->param('Insurrection'))
+         && ($cgi->param('Insurrection') eq $type))
+      {
+         return 1;
+      }
+   }
+   else
+   {
+      $path = '';
    }
 
    ## If we can not figure out what is to be done, we just punt...
@@ -447,7 +456,7 @@ sub checkAuthMode()
       ## Make sure we strip out any "old" Insurrection=xxx elements
       ## from the qwery string before we go adding a specific one...
       my $qstring = $ENV{'QUERY_STRING'};
-      $qstring =~ s/Insurrection=((.*?&)|(.*$))//;
+      $qstring =~ s/Insurrection=((.*?&)|(.*$))//o;
       $qstring = '&' . $qstring if (length($qstring) > 0);
       $target = $SVN_REPOSITORIES_URL . $path . '?Insurrection=' . $type . $qstring;
    }
@@ -532,24 +541,28 @@ sub isAdminMember($group,$user)
    my $group = shift;
    my $user = shift;
 
-   ## Fix up the group name...
-   if (!($group =~ /^Admin.*/))
+   ## Only if we are given a user name does this even matter...
+   if (defined $user)
    {
-      $group = 'Admin_' . $group;
-      if ($group =~ /(^[^:]+):/)
+      ## Fix up the group name...
+      if (!($group =~ m/^Admin.*/o))
       {
-         $group = $1;
+         $group = 'Admin_' . $group;
+         if ($group =~ m/(^[^:]+):/o)
+         {
+            $group = $1;
+         }
       }
-   }
 
-   ## Check if we have loaded the admin stuff yet...
-   &loadAccessFile() if (!defined %groupAdmins);
+      ## Check if we have loaded the admin stuff yet...
+      &loadAccessFile() if (!defined %groupAdmins);
 
-   if (defined $groupAdmins{$group})
-   {
-      foreach $t (@{$groupAdmins{$group}})
+      if (defined $groupAdmins{$group})
       {
-         return 1 if ($t eq $user);
+         foreach $t (@{$groupAdmins{$group}})
+         {
+            return 1 if ($t eq $user);
+         }
       }
    }
 
@@ -625,17 +638,17 @@ sub loadAccessFile()
       chomp $line;
 
       ## Get the version of the file we are dealing with...
-      if ($line =~ /^#.*\$Id\:\s*(.+?)\s*\$/)
+      if ($line =~ m/^#.*\$Id\:\s*(.+?)\s*\$/o)
       {
          $accessVersion = $1;
          chomp($accessVersion);
       }
-      elsif ($line =~ /^#+\s*(.+)$/)
+      elsif ($line =~ m/^#+\s*(.+)$/o)
       {
          ## Comment lines are skipped but we remember them because we may need it
          $lastComment = $1;
       }
-      elsif ($line =~ /^\[(.+?)\]$/)
+      elsif ($line =~ m/^\[(.+?)\]$/o)
       {
          $section = $1;
          if ($section ne 'groups')
@@ -644,7 +657,7 @@ sub loadAccessFile()
             %{$groupUsers{$section}} = %empty;
          }
       }
-      elsif (($line =~ /^(Admin\S*)\s+=\s*(.*)$/) && ($section eq 'groups'))
+      elsif (($line =~ m/^(Admin\S*)\s+=\s*(.*)$/o) && ($section eq 'groups'))
       {
          ## Ahh, an admin definition - now lets deal with it...
          my $group = $1;
@@ -652,12 +665,12 @@ sub loadAccessFile()
 
          @{$groupAdmins{$group}} = @users;
       }
-      elsif (($line =~ /^(\S+)\s+=\s*(.*)$/) && ($section ne 'groups'))
+      elsif (($line =~ m/^(\S+)\s+=\s*(.*)$/o) && ($section ne 'groups'))
       {
          my $user = $1;
          my $access = $2;
 
-         if ($user =~ /^[^@]/)
+         if ($user =~ m/^[^@]/o)
          {
             ${$groupUsers{$section}}{$user} = $access;
             ${$usersGroup{$user}}{$section} = $access;
@@ -754,12 +767,12 @@ sub loadPasswordFile()
       chomp $line;
 
       ## Get the version of the file we are dealing with...
-      if ($line =~ /^#.*\$Id\:\s*(.+?)\s*\$/)
+      if ($line =~ m/^#.*\$Id\:\s*(.+?)\s*\$/o)
       {
          $passwdVersion = $1;
          chomp($passwdVersion);
       }
-      $line =~ s/#.*//;  ## Remove comments...
+      $line =~ s/#.*//o;  ## Remove comments...
       my @creators = split(/:/,$line);
       my $user = shift @creators;
       my $pass = shift @creators;
@@ -913,7 +926,7 @@ sub makeRepositoryTable($type)
 
             ## Get the nice display name...
             my $group = $g;
-            $group =~ s/(^[^:]+):.*$/$1/;
+            $group =~ s/(^[^:]+):.*$/$1/o;
 
             $result .= '<tr>'
                      .  '<td><a title="Explore repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/">' . $group . '</a></td>';
@@ -926,7 +939,7 @@ sub makeRepositoryTable($type)
                {
                   foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
                   {
-                     my ($s,$r) = ($line =~ /^(\d+)\s+(\S.*)$/);
+                     my ($s,$r) = ($line =~ m/^(\d+)\s+(\S.*)$/o);
                      $rSize{$r} = $s;
                   }
                }
@@ -936,7 +949,7 @@ sub makeRepositoryTable($type)
                $totalCount++;
 
                ## Cute trick to get comas into the number...
-               while ($size =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+               while ($size =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
 
                $result .=  '<td align="right">' . $size . 'k</td><td>';
             }
@@ -978,7 +991,7 @@ sub makeRepositoryTable($type)
       if (($totalSize > 0) && ($totalCount > 1))
       {
          ## Cute trick to get comas into the number...
-         while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+         while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
          $result .= '<tr class="accessinfototal">'
                   .  '<td>Total:</td>'
                   .  '<td>' . $totalSize . 'k</td>'
@@ -1018,8 +1031,8 @@ sub gauge($fill,$limit,$title)
    $filled = 99 if (($filled == 100) && ($fill < $limit));
 
    ## Cute trick to get comas into the number...
-   while ($fill =~ s/(\d+)(\d\d\d)/$1,$2/) {}
-   while ($limit =~ s/(\d+)(\d\d\d)/$1,$2/) {}
+   while ($fill =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
+   while ($limit =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
 
    $title .= ' : ' if (defined $title);
    $title = '' if (!defined $title);

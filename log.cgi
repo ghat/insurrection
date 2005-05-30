@@ -63,7 +63,7 @@ else
    my $hcmd = $SVNLOOK_CMD . ' history';
    $hcmd .= ' -r "' . $r1 . '"' if (defined $r1);
    $hcmd .= ' "' . $SVN_BASE . '/' . $rpath . '" "' . $opath . '"';
-   @revs = (`$hcmd` =~ m:(\d+)\s+(/[^\n]*):gs);
+   @revs = (`$hcmd` =~ m:(\d+)\s+(/[^\n]*):gso);
    $revcount = @revs / 2;
    $maxEntries = $revcount if (!defined $maxEntries);
    $maxEntries = $revcount if (($maxEntries > $revcount) || ($maxEntries < 1));
@@ -128,7 +128,7 @@ if ((defined $rpath)
    ## svn log command.
    while (<LOGXML>)
    {
-      if ($_ =~ m:<log>:)
+      if ($_ =~ m:<log>:o)
       {
          print '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
              , "<!-- Insurrection Web Tools for Subversion: History -->\n"

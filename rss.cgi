@@ -67,7 +67,7 @@ if ($opath ne '/')
    my $lastR = 0;
    foreach my $rline (split("\n",`$cmd`))
    {
-      if ($rline =~ m/^\s*(\d+)\s+/)
+      if ($rline =~ m/^\s*(\d+)\s+/o)
       {
          my $r = 0 + $1;
          $lastR = $r if ($r > $lastR);
@@ -78,11 +78,11 @@ if ($opath ne '/')
 
 my $cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache --xml --stop-on-copy ' . $rev . $rssURL;
 my $hdata = `$cmd`;
-if ($hdata =~ m:<date>\s*(.*?)\s*</date>:s)
+if ($hdata =~ m:<date>\s*(.*?)\s*</date>:so)
 {
    ## Date format:  2005-05-07T02:41:02.820786Z
    my $firstDate = $1;
-   if ($firstDate =~ m/^(\d+)-(\d+)-(\d+)(T.*)$/)
+   if ($firstDate =~ m/^(\d+)-(\d+)-(\d+)(T.*)$/o)
    {
       my $year = $1;
       my $month = $2;
@@ -121,7 +121,7 @@ if ((defined $rpath) && (defined $opath))
    $log = `$cmd`;
 
    ## Parse the log into entries array...
-   @entries = ($log =~ m|(<logentry\s.*?</logentry>)|sg);
+   @entries = ($log =~ m|(<logentry\s.*?</logentry>)|sgo);
 
    ## Drop all of the entries that are beyond our limit...
    while (@entries > $MAX_ENTRIES)
@@ -132,23 +132,23 @@ if ((defined $rpath) && (defined $opath))
    ## Get our XML intro so we can match the encodings.
    ## (We are not changing any bytes of content, so it will
    ## be whatever was given to us.
-   if ($log =~ m:(<\?xml.*?\?>):s)
+   if ($log =~ m:(<\?xml.*?\?>):so)
    {
       $top = $1;
-      if ($top =~ /encoding="(.*?)"/s)
+      if ($top =~ m/encoding="(.*?)"/so)
       {
          $encoding = $1;
       }
    }
 
    ## Get the date of the first entry
-   if ($entries[0] =~ m:<date>\s*(.*?)\s*</date>:s)
+   if ($entries[0] =~ m:<date>\s*(.*?)\s*</date>:so)
    {
       $topDate = $1;
    }
 
    ## And the date of the last entry
-   if ($entries[@entries - 1] =~ m:<date>\s*(.*?)\s*</date>:s)
+   if ($entries[@entries - 1] =~ m:<date>\s*(.*?)\s*</date>:so)
    {
       $endDate = $1;
    }
@@ -189,16 +189,16 @@ if ((defined $top) && (defined $topDate))
 
    foreach my $entry (@entries)
    {
-      my ($revision) = ($entry =~ m:revision="(.+?)">:s);
-      my ($author) = ($entry =~ m:<author>\s*(.*?)\s*</author>:s);
-      my ($logmsg) = ($entry =~ m:<msg>\s*(.*?)\s*</msg>:s);
-      my ($date) = ($entry =~ m:<date>\s*(.*?)\s*</date>:s);
+      my ($revision) = ($entry =~ m:revision="(.+?)">:so);
+      my ($author) = ($entry =~ m:<author>\s*(.*?)\s*</author>:so);
+      my ($logmsg) = ($entry =~ m:<msg>\s*(.*?)\s*</msg>:so);
+      my ($date) = ($entry =~ m:<date>\s*(.*?)\s*</date>:so);
 
       ## Convert line enders into <br/>
-      $logmsg =~ s:\n:<br/>:sg;
+      $logmsg =~ s:\n:<br/>:sgo;
 
       ## If the author does not have a domain, add the default one
-      $author .= $EMAIL_DOMAIN if (!($author =~ m/@/));
+      $author .= $EMAIL_DOMAIN if (!($author =~ m/@/o));
 
       ## Make the link to this individual log message.
       my $link = $rLink . '&r=' . $revision;
@@ -267,7 +267,7 @@ sub dateFormat($isodate)
    my $isodate = shift;
    my $result = '?';
 
-   if ($isodate =~ m/(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d:\d\d:\d\d)/)
+   if ($isodate =~ m/(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d:\d\d:\d\d)/o)
    {
       $result = $3 . ' ' . $months[$2] . ' ' . $1 . ' ' . $4 . ' GMT';
    }

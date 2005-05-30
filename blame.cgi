@@ -44,11 +44,11 @@ if (open(GETBLAME,"$cmd |"))
 
    while (<GETBLAME>)
    {
-      if ($_ =~ m:^Skipping binary file:)
+      if ($_ =~ m:^Skipping binary file:o)
       {
          print '<tr><td>Skipping binary file</td></tr>';
       }
-      elsif ($_ =~ m:^\s*(\d+)\s*(\S+)\s(.*)$:)
+      elsif ($_ =~ m:^\s*(\d+)\s*(\S+)\s(.*)$:o)
       {
          ## Split the lines up...
          my $rev = $1;
@@ -62,7 +62,7 @@ if (open(GETBLAME,"$cmd |"))
             $count++;
 
             my $fixedUser = &svn_XML_Escape($user);
-            $fixedUser =~ s:@:$atImage:;
+            $fixedUser =~ s:@:$atImage:o;
 
             print '<tr class="blameline' , ($count & 1) , '"'
                 ,     ' title="Show commit log for revision ' , $rev , '"'

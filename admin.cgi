@@ -79,7 +79,7 @@ elsif ($Operation eq 'Update')
             my %empty;
             %{$groupUsers{$group}} = %empty;
 
-            my ($adminGroup) = ($group =~ /(^[^:]+):/);
+            my ($adminGroup) = ($group =~ /(^[^:]+):/o);
             $adminGroup = 'Admin_' . $adminGroup;
             delete $groupAdmins{$adminGroup};
 
@@ -137,7 +137,7 @@ elsif ($Operation eq 'AddUser')
       my $user = $cgi->param('NewUser');
       chomp $user;
 
-      if ($user =~ /^[a-z][-.@a-z0-9_]+$/)
+      if ($user =~ /^[a-z][-.@a-z0-9_]+$/o)
       {
          ## Lock the password file...
          &lockPasswordFile();
@@ -438,7 +438,7 @@ exit 0;
 sub emailAddress($user)
 {
    my $user = shift;
-   $user .= $EMAIL_DOMAIN if (!($user =~ /@/));
+   $user .= $EMAIL_DOMAIN if (!($user =~ /@/o));
    return $user;
 }
 
@@ -527,7 +527,7 @@ sub makeID($user,$group)
    my $id = "ID_$user:$group";
 
    ## Modify our path to escape some characters into URL form...
-   $id =~ s|([^a-zA-Z:_])|sprintf("%03o",ord($1))|seg;
+   $id =~ s|([^a-zA-Z:_])|sprintf("%03o",ord($1))|sego;
 
    return($id);
 }

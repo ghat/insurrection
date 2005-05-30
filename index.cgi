@@ -17,7 +17,7 @@ close INDEX;
 
 my $repoTable = &repositoryTable();
 
-$index =~ s:<repos/>:$repoTable:sge;
+$index =~ s:<repos/>:$repoTable:sgeo;
 
 ## Now, set up the buttons area HTML and put that into the
 ## template.  Note that we do this here because we need
@@ -36,7 +36,7 @@ $buttons   .=   '</td>';
 $buttons   .=  '</tr>';
 $buttons   .= '</table>';
 
-$index =~ s:<buttons/>:$buttons:sge;
+$index =~ s:<buttons/>:$buttons:sgeo;
 
 &svn_HEADER('MKSoft Insurrection Server');
 

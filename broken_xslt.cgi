@@ -10,8 +10,8 @@ require 'admin.pl';
 
 ## Get the real document info
 my $pathInfo = $cgi->path_info;
-my ($repo,$repo_path) = ($pathInfo =~ m|^(/[^/]+)(.*?)$|);
-$repo_path = '/' if (!($repo_path =~ m|^/|));
+my ($repo,$repo_path) = ($pathInfo =~ m|^(/[^/]+)(.*?)$|o);
+$repo_path = '/' if (!($repo_path =~ m|^/|o));
 
 ## Print our standard header...   (Note the 0-minute expires!)
 &svn_HEADER($repo_path . ' (non-XSLT)','+0m');

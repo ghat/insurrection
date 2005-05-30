@@ -40,10 +40,10 @@ if (defined $results)
       my $patchName = $cgi->path_info . '-r.' . $rev1 . '-r.' . $rev2 . '.patch';
 
       ## Get rid of leading '/'
-      $patchName =~ s|^/*||;
+      $patchName =~ s|^/*||o;
 
       ## Change '/' to '_'
-      $patchName =~ s|/|_|g;
+      $patchName =~ s|/|_|go;
 
       ## A patch does not expire easily since they are always
       ## to specific revisions and thus should not change...
@@ -66,30 +66,30 @@ if (defined $results)
    $results = '<div class="diff">' . "\n" . $results . '</div>';
 
    ## Next, lets style the diff "Index:" section
-   $results =~ s|\nIndex(:.*?)\n\=+\n|<div class="diffindex">diff$1</div>|sg;
+   $results =~ s|\nIndex(:.*?)\n\=+\n|<div class="diffindex">diff$1</div>|sgo;
 
    ## Style the property differences
    ## This is a bit difficult for the directory differences
    ## since you can have a batch of differences only in properties.
    ## This is partially why this bit of regexp is as complex as it is.
-   $results =~ s|\n+(Property changes[^\n]+)(\n[^<]*?)(?=\nProperty changes)|\n<div class="diffindex">$1</div><div class="diffprop">$2</div>\n|sg;
-   $results =~ s|\n+(Property changes[^\n]+)(\n[^<]*)|\n<div class="diffindex">$1</div><div class="diffprop">$2</div>|sg;
-   $results =~ s|</div>\n|</div>|sg;
-   $results =~ s|\n_+\n||sg;
-   $results =~ s|(?<=[\n>])(   \- [^<\n]+)|<div class="diff1">$1</div>|g;
-   $results =~ s|(?<=[\n>])(   \+ [^<\n]+)|<div class="diff2">$1</div>|g;
-   $results =~ s|</div>\n+</div>|</div></div>|sg;
+   $results =~ s|\n+(Property changes[^\n]+)(\n[^<]*?)(?=\nProperty changes)|\n<div class="diffindex">$1</div><div class="diffprop">$2</div>\n|sgo;
+   $results =~ s|\n+(Property changes[^\n]+)(\n[^<]*)|\n<div class="diffindex">$1</div><div class="diffprop">$2</div>|sgo;
+   $results =~ s|</div>\n|</div>|sgo;
+   $results =~ s|\n_+\n||sgo;
+   $results =~ s|(?<=[\n>])(   \- [^<\n]+)|<div class="diff1">$1</div>|go;
+   $results =~ s|(?<=[\n>])(   \+ [^<\n]+)|<div class="diff2">$1</div>|go;
+   $results =~ s|</div>\n+</div>|</div></div>|sgo;
 
    ## Finally, lets style the line context/delete/add lines
    ## Note, that while we do style the div correctly for monospaced
    ## characters, this does not always take so we add the <tt></tt> tag
    ## to work around the "don't override fonts" option in many browsers.
-   $results =~ s|(?<=[\n>])(\s[^<\n]*)|<div class="diff0"><tt>$1</tt></div>|g;
-   $results =~ s|(?<=[\n>])(\-[^<\n]*)|<div class="diff1"><tt>$1</tt></div>|g;
-   $results =~ s|(?<=[\n>])(\+[^<\n]*)|<div class="diff2"><tt>$1</tt></div>|g;
+   $results =~ s|(?<=[\n>])(\s[^<\n]*)|<div class="diff0"><tt>$1</tt></div>|go;
+   $results =~ s|(?<=[\n>])(\-[^<\n]*)|<div class="diff1"><tt>$1</tt></div>|go;
+   $results =~ s|(?<=[\n>])(\+[^<\n]*)|<div class="diff2"><tt>$1</tt></div>|go;
 
    ## Style the diff line add/delete sections
-   $results =~ s|(?<=[\n>])(\@\@[^<\n]*)|<div class="diff3">$1</div>|g;
+   $results =~ s|(?<=[\n>])(\@\@[^<\n]*)|<div class="diff3">$1</div>|go;
 }
 else
 {

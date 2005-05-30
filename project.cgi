@@ -16,7 +16,7 @@ my $index = join('',<INDEX>);
 close INDEX;
 
 my $svn_server = &svn_HTTP();
-$index =~ s|http://server:port|$svn_server|gs;
+$index =~ s|http://server:port|$svn_server|gso;
 
 &svn_HEADER('MKSoft Insurrection Project');
 
