@@ -86,7 +86,7 @@
   </li>
   <br/>
   <li>
-    <a href="index.cgi"><code>index.cgi</code></a>&nbsp;&nbsp;&nbsp;<a href="auth_index.cgi"><code>auth_index.cgi</code></a>
+    <a href="index.cgi"><code>index.cgi</code></a>&nbsp;&nbsp;&amp;&nbsp;&nbsp;<a href="auth_index.cgi"><code>auth_index.cgi</code></a>
     <ul>
       This CGI produces the main welcome page for the server.&nbsp; It uses the
       <a href="index.template">index.template</a> file and replaces the &lt;repos/&gt;
@@ -200,8 +200,9 @@
   <li>
     <a href="bandwidth.cgi"><code>bandwidth.cgi</code></a>
     <ul>
-      A simple web-based interface such that repository administrators can monitor
-      their repository's bandwidth usage.
+      A simple web-based interface to some server generated usage reports such
+      that repository administrators can monitor their repository's bandwidth
+      usage.
     </ul>
   </li>
 </ul>
