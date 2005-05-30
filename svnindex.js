@@ -69,7 +69,17 @@ function loadBannerCheck()
 		{
 			if (target.xml.status == 200)
 			{
-				target.innerHTML = target.xml.responseText;
+				var txt = target.xml.responseText;
+
+				// If there are no HTML tags in the .svn_index
+				// then we will assume it is plain ascii and
+				// needs to be '<pre>' wrapped
+				if (txt.indexOf('<') < 0)
+				{
+					txt = '<pre>' + txt + '</pre>';
+				}
+
+				target.innerHTML = txt;
 				target.style.display = 'block';
 
 				// Remove the reference to the loaded document
