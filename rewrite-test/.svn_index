@@ -6,7 +6,7 @@
   within Subversion that is full of files with various 7-bit ASCII characters.&nbsp;  A number of the
   cases did not work correctly.&nbsp; At first I thought it had to be something I did wrong and
   worked on finding all escaping issues and URL mishandling within my code.&nbsp; However, after
-  doing all of that, I finally put together this <a href="test.html">test setup</a> that shows how
+  doing all of that, I finally put together this <a href="/rewrite-test/test.html">test setup</a> that shows how
   certain characters cause rather drastic changes to the passed in URL that otherwise would work
   if sent directly to the initial intended target.&nbsp; (I have not yet
   started on the work to support full UTF-8 due to the problems I had run into so far.)
@@ -31,7 +31,7 @@
   The escaped characters that cause the proxy to fail are: "<b>%20</b>", "<b>%23</b>", "<b>%25</b>", and "<b>%3F</b>"
 </p>
 <p>
-  The <a href="test.html">test setup</a> here is rather simple and consists of 4 files, the
+  The <a href="/rewrite-test/test.html">test setup</a> here is rather simple and consists of 4 files, the
   <a href="test.html">test.html</a> frameset, the <a href="control.html">control.html</a> control frame,
   the <a href="test.cgi">test.cgi</a> CGI used for all of the test frames,
   and the <a href=".htaccess">.htaccess</a> file that describes the rewrite rules.&nbsp;
