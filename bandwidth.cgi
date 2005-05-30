@@ -138,43 +138,7 @@ else
 sub repoUsage($repo)
 {
    my $repo = shift;
-   my %usage;
-   my %totals;
    my $grandTotal = 0;
-
-   my $baseTime = time;
-   my $currentMonth;
-   my @ltime = localtime($baseTime);
-
-   ## Only stay withing the current month except if there
-   ## is a custom history setting... (which only admin can do?)
-   for (my $i=0; ($i < $max_history) && ((!defined $currentMonth) || ($currentMonth == $ltime[4]) || ($max_history != $MAX_HISTORY)) ; $i++)
-   {
-      my $date = sprintf('%4d/%02d/%02d',$ltime[5]+1900,$ltime[4]+1,$ltime[3]);
-      my %data = &loadHash($repo,$date);
-      if (scalar keys %data)
-      {
-         ## If this is the first entry we saw, set that as the month
-         $currentMonth = $ltime[4] if (!defined $currentMonth);
-
-         my %data = &loadHash($repo,$date);
-         %{$usage{$date}} = %data if (scalar keys %data);
-
-         foreach my $user (keys %data)
-         {
-            $totals{$user} = 0 if (!defined $totals{$user});
-
-            $totals{$user} += $data{$user};
-            $grandTotal += $data{$user};
-         }
-      }
-
-      ## Next time...
-      $baseTime -= 60 * 60 * 24;
-      @ltime = localtime($baseTime);
-   }
-
-   my @dates = sort keys %usage;
 
    my $title = 'Bandwidth sumary: ' . $repo . ' repository';
    if ($repo =~ /^-.*-$/)
@@ -185,80 +149,123 @@ sub repoUsage($repo)
    print '<div class="bandwidth">'
        , '<div class="bandwidthheader1">'
        ,  $title
-       , '</div>'
-       , '<div class="bandwidthheader2">'
-       ,  &niceNumber($grandTotal) , ' bytes from ' , $dates[0] , ' to ' , $dates[@dates-1]
-       , '</div>'
-       , '<table class="bandwidthdata" cellspacing="0" cellpadding="0">';
+       , '</div>';
 
-   print '<tr class="bandwidthtitles">'
-       ,  '<th' , ($showDetails ? ' rowspan="2"' : '') , '>Username</th>'
-       ,  '<th' , ($showDetails ? ' rowspan="2"' : ' width="110"') , '>Usage';
-
-   my $row2 = '</th>';
-   if ($showDetails)
+   ## This is a special directory that contains the overall stats
+   ## but no details, so don't try to show it...
+   if ($repo ne '--All--')
    {
-      $row2 .= '</tr><tr class="bandwidthtitles">';
-      my $lastmonth;
-      my $count = 0;
-      foreach my $date (@dates)
+      my %usage;
+      my %totals;
+
+      my $baseTime = time;
+      my $currentMonth;
+      my @ltime = localtime($baseTime);
+
+      ## Only stay withing the current month except if there
+      ## is a custom history setting... (which only admin can do?)
+      for (my $i=0; ($i < $max_history) && ((!defined $currentMonth) || ($currentMonth == $ltime[4]) || ($max_history != $MAX_HISTORY)) ; $i++)
       {
-         if ($date =~ m:^(\d+)/(\d+)/(\d+)$:)
+         my $date = sprintf('%4d/%02d/%02d',$ltime[5]+1900,$ltime[4]+1,$ltime[3]);
+         my %data = &loadHash($repo,$date);
+         if (scalar keys %data)
          {
-            if ($lastmonth ne "$1/$2")
+            ## If this is the first entry we saw, set that as the month
+            $currentMonth = $ltime[4] if (!defined $currentMonth);
+
+            my %data = &loadHash($repo,$date);
+            %{$usage{$date}} = %data if (scalar keys %data);
+
+            foreach my $user (keys %data)
             {
-               print '</th><th colspan="' , $count , '">' , $lastmonth if (defined $lastmonth);
-               $count = 0;
-               $lastmonth = "$1/$2";
+               $totals{$user} = 0 if (!defined $totals{$user});
+
+               $totals{$user} += $data{$user};
+               $grandTotal += $data{$user};
             }
-            $count++;
-            $row2 .= '<td>' . $3 . '</td>';
          }
+
+         ## Next time...
+         $baseTime -= 60 * 60 * 24;
+         @ltime = localtime($baseTime);
       }
 
-      print '</th><th colspan="' , $count , '">' , $lastmonth if (defined $lastmonth);
-   }
-   print $row2;
-   print '</tr>';
+      my @dates = sort keys %usage;
 
-   foreach my $user (sort keys %totals)
-   {
-      print '<tr class="bandwidthdata"><th>' , &svn_XML_Escape($user);
-      print 'anon-' if ($user eq '-');
-      print '</th>';
-      print '<td>' , &gauge($totals{$user},$grandTotal,&niceNumber($totals{$user}) . ' bytes') , '</td>';
+      print '<div class="bandwidthheader2">'
+          ,  &niceNumber($grandTotal) , ' bytes from ' , $dates[0] , ' to ' , $dates[@dates-1]
+          , '</div>'
+          , '<table class="bandwidthdata" cellspacing="0" cellpadding="0">';
 
+      print '<tr class="bandwidthtitles">'
+          ,  '<th' , ($showDetails ? ' rowspan="2"' : '') , '>Username</th>'
+          ,  '<th' , ($showDetails ? ' rowspan="2"' : ' width="110"') , '>Usage';
+
+      my $row2 = '</th>';
+      if ($showDetails)
+      {
+         $row2 .= '</tr><tr class="bandwidthtitles">';
+         my $lastmonth;
+         my $count = 0;
+         foreach my $date (@dates)
+         {
+            if ($date =~ m:^(\d+)/(\d+)/(\d+)$:)
+            {
+               if ($lastmonth ne "$1/$2")
+               {
+                  print '</th><th colspan="' , $count , '">' , $lastmonth if (defined $lastmonth);
+                  $count = 0;
+                  $lastmonth = "$1/$2";
+               }
+               $count++;
+               $row2 .= '<td>' . $3 . '</td>';
+            }
+         }
+
+         print '</th><th colspan="' , $count , '">' , $lastmonth if (defined $lastmonth);
+      }
+      print $row2;
+      print '</tr>';
+
+      foreach my $user (sort keys %totals)
+      {
+         print '<tr class="bandwidthdata"><th>' , &svn_XML_Escape($user);
+         print 'anon-' if ($user eq '-');
+         print '</th>';
+         print '<td>' , &gauge($totals{$user},$grandTotal,&niceNumber($totals{$user}) . ' bytes') , '</td>';
+
+         if ($showDetails)
+         {
+            foreach my $date (@dates)
+            {
+               my %data = %{$usage{$date}};
+               &printNumberCell($data{$user});
+            }
+         }
+
+         print '</tr>';
+      }
+
+      print '<tr class="bandwidthtotal"><th>Total</th>';
+      &printNumberCell($grandTotal);
       if ($showDetails)
       {
          foreach my $date (@dates)
          {
             my %data = %{$usage{$date}};
-            &printNumberCell($data{$user});
+            my $total = 0;
+            foreach my $user (keys %data)
+            {
+               $total += $data{$user};
+            }
+            &printNumberCell($total);
          }
       }
 
-      print '</tr>';
+      print '</tr></table>';
    }
 
-   print '<tr class="bandwidthtotal"><th>Total</th>';
-   &printNumberCell($grandTotal);
-   if ($showDetails)
-   {
-      foreach my $date (@dates)
-      {
-         my %data = %{$usage{$date}};
-         my $total = 0;
-         foreach my $user (keys %data)
-         {
-            $total += $data{$user};
-         }
-         &printNumberCell($total);
-      }
-   }
-
-   print '</tr></table>';
-
-   if (!$showDetails)
+   if ((!$showDetails) && ($repo ne '--All--'))
    {
       my $link = $cgi->url() . '/' . $repo . '?Details=1';
 
