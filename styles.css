@@ -849,13 +849,13 @@ td.details
 .rss-title
 {
   font-size: 12pt;
-  font-weight: bold;
   padding-bottom: 2px;
 }
 
 .rss-title div
 {
   font-size: 16pt;
+  font-weight: bold;
   margin-top: 4px;
 }
 

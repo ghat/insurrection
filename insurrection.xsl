@@ -970,11 +970,9 @@
                   <xsl:variable name="tmp" select="description"/>
                   <div>
                     <xsl:variable name="tmp1" select="substring-before($tmp,'. &lt;hr/&gt;')"/>
-                    <xsl:value-of select="substring-before($tmp1,'y from')"/>
-                    <xsl:text>y</xsl:text>
+                    <xsl:value-of select="substring-before($tmp1,' from ')"/>
                     <br/>
-                    <xsl:text>from</xsl:text>
-                    <xsl:value-of select="substring-after($tmp1,'y from')"/>
+                    <xsl:value-of select="substring-after($tmp1,' from ')"/>
                   </div>
                   <xsl:element name="span">
                     <xsl:attribute name="id">title</xsl:attribute>
