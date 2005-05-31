@@ -848,24 +848,30 @@ td.details
 
 .rss-title
 {
-  font-size: 16pt;
+  font-size: 12pt;
   font-weight: bold;
   padding-bottom: 2px;
+}
+
+.rss-title div
+{
+  font-size: 16pt;
   margin-top: 4px;
 }
 
 .rss-item
 {
-  border-top: 1px solid rgb(85%,85%,85%);
+  border-top: 1px solid rgb(75%,75%,75%);
+  margin-top: 0.3em;
   padding-top: 0.3em;
-  padding-bottom: 0.3em;
+  padding-bottom: 0.2em;
 }
 
 .rss-item a
 {
   color: black;
   text-decoration: none;
-  padding-left: 2em;
+  padding-left: 1em;
 }
 
 .rss-item a:hover
@@ -899,5 +905,15 @@ td.details
   color: rgb(30%,30%,30%);
   font-size: 9pt;
   padding-right: 1em;
+}
+
+.rss-description
+{
+  padding-left: 2em;
+}
+
+.rss-description hr
+{
+  margin-right: 80%;
 }
 

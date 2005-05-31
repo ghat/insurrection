@@ -968,7 +968,26 @@
                 </div>
                 <div class="rss-title">
                   <xsl:variable name="tmp" select="description"/>
-                  <xsl:value-of select="substring-before($tmp,'. &lt;')"/>
+                  <div>
+                    <xsl:variable name="tmp1" select="substring-before($tmp,'. &lt;hr/&gt;')"/>
+                    <xsl:value-of select="substring-before($tmp1,'y from')"/>
+                    <xsl:text>y</xsl:text>
+                    <br/>
+                    <xsl:text>from</xsl:text>
+                    <xsl:value-of select="substring-after($tmp1,'y from')"/>
+                  </div>
+                  <xsl:element name="span">
+                    <xsl:attribute name="id">title</xsl:attribute>
+                    <xsl:attribute name="contents">
+                      <xsl:value-of select="substring-after($tmp,'. &lt;hr/&gt;')"/>
+                    </xsl:attribute>
+                  </xsl:element>
+                  <xsl:element name="script">
+                    <xsl:attribute name="type">text/javascript</xsl:attribute>
+                    <xsl:attribute name="language">JavaScript</xsl:attribute>
+                    <xsl:text>function setContents(id) { var x=document.getElementById(id); x.innerHTML = x.getAttribute("contents"); x.removeAttribute("contents"); }</xsl:text>
+                    <xsl:text>setContents("title");</xsl:text>
+                  </xsl:element>
                 </div>
                 <xsl:apply-templates select="item"/>
                 <div class="footer">
@@ -1015,6 +1034,22 @@
             <xsl:value-of select="author"/>
           </xsl:if>
         </span>
+      </xsl:element>
+      <xsl:element name="div">
+        <xsl:attribute name="class">rss-description</xsl:attribute>
+        <xsl:attribute name="id">
+          <xsl:value-of select="title"/>
+        </xsl:attribute>
+        <xsl:attribute name="contents">
+          <xsl:value-of select="description"/>
+        </xsl:attribute>
+      </xsl:element>
+      <xsl:element name="script">
+        <xsl:attribute name="type">text/javascript</xsl:attribute>
+        <xsl:attribute name="language">JavaScript</xsl:attribute>
+        <xsl:text>setContents("</xsl:text>
+        <xsl:value-of select="title"/>
+        <xsl:text>");</xsl:text>
       </xsl:element>
    </div>
   </xsl:template>
