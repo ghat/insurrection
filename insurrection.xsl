@@ -59,6 +59,7 @@
   <xsl:template name="rssicon-path">/rss.gif</xsl:template>
   <xsl:template name="dumpicon-path">/dump.gif</xsl:template>
   <xsl:template name="usageicon-path">/usage.gif</xsl:template>
+  <xsl:template name="linkicon-path">/link.gif</xsl:template>
   <xsl:template name="aticon-path">/at.gif</xsl:template>
 
   <!-- ******************************************************************************************************************* -->
@@ -1010,6 +1011,12 @@
         <xsl:attribute name="title">
           <xsl:value-of select="title"/>
         </xsl:attribute>
+        <xsl:element name="img">
+          <xsl:attribute name="alt"></xsl:attribute>
+          <xsl:attribute name="src">
+            <xsl:call-template name="linkicon-path"/>
+          </xsl:attribute>
+        </xsl:element>
         <span class="rss-itemtitle">
           <xsl:value-of select="title"/>
         </span>
