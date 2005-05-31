@@ -124,7 +124,7 @@
           </xsl:if>
           <xsl:value-of select="index/@path"/>
         </title>
-        <link rel="alternate" type="application/rss+xml" href="?Insurrection=rss" title="RSS feed for this directory in the repository"/>
+        <link rel="alternate" type="application/rss+xml" href="?Insurrection=rss" title="The RSS feed for this directory in the repository"/>
         <xsl:call-template name="header"/>
       </head>
       <body>
@@ -953,6 +953,7 @@
         <title>
           <xsl:value-of select="title"/>
         </title>
+        <link rel="alternate" type="application/rss+xml" href="?Insurrection=rss" title="The RSS feed for this directory in the repository"/>
         <xsl:call-template name="header"/>
       </head>
       <body>
