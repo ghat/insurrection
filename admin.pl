@@ -366,6 +366,27 @@ sub svn_TRAILER($version)
 
 ##############################################################################
 #
+# Months of the year (1 - 12) used for the format below...
+my @months = ('?','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+#
+# Convert the Subversion log date format into RFC822 format.
+# Note that I do not include the optional "day of week"
+#
+sub dateFormat($isodate)
+{
+   my $isodate = shift;
+   my $result = '?';
+
+   if ($isodate =~ m/(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d:\d\d:\d\d)/o)
+   {
+      $result = $3 . ' ' . $months[$2] . ' ' . $1 . ' ' . $4 . ' GMT';
+   }
+
+   return $result;
+}
+
+##############################################################################
+#
 # This function returns only the number part of the
 # parameter.  We use this to filter incoming parameters
 # to only include numbers (when needed)
@@ -879,6 +900,7 @@ sub makeRepositoryTable($type)
       my $totalSize = 0;
       my $totalCount = 0;
       my $rssIcon = &svn_IconPath('rss');
+      my $atomIcon = &svn_IconPath('atom');
 
       foreach my $g (sort keys %groupComments)
       {
@@ -960,6 +982,9 @@ sub makeRepositoryTable($type)
 
             $result .=   '<a title="RSS Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
                      .    '<img src="' . $rssIcon . '" alt="RSS Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
+                     .   '</a>'
+                     .   '<a title="Atom Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=atom">'
+                     .    '<img src="' . $atomIcon . '" alt="Atom Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
                      .   '</a>';
 
             $result .=   '<a title="Download a dump of repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=dump">'

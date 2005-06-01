@@ -48,7 +48,7 @@ DirectoryIndex index.cgi
 ## mod_authz_svn take care of the path check before
 ## we proxy to here.  We then just validate in these
 ## scripts that we have been proxied.
-<Files ~ "^(blame|diff|get|log|rss)\.cgi$">
+<Files ~ "^(atom|blame|diff|get|log|rss)\.cgi$">
 	SetHandler cgi-script
 </Files>
 
@@ -111,7 +111,7 @@ RewriteRule	^Logo.gif	"/InsurrectionLogo.gif"	[PT,L]
 ## the understanding that the Path parameter is always the
 ## last parameter before the end of the URI.  Ugly but it works...
 RewriteCond %{REQUEST_METHOD} GET
-RewriteCond %{QUERY_STRING} Insurrection=(bandwidth|blame|diff|dump|get|log|rss)
+RewriteCond %{QUERY_STRING} Insurrection=(atom|bandwidth|blame|diff|dump|get|log|rss)
 RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&Path=$1"	[P,L]
 #RewriteRule	^svn/(.*)$	"http://%{HTTP_HOST}/%1.cgi/$1"	[P,L]
 

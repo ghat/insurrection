@@ -57,6 +57,7 @@
   <xsl:template name="spacericon-path">/spacer.gif</xsl:template>
   <xsl:template name="blankicon-path">/blank.gif</xsl:template>
   <xsl:template name="rssicon-path">/rss.gif</xsl:template>
+  <xsl:template name="atomicon-path">/atom.gif</xsl:template>
   <xsl:template name="dumpicon-path">/dump.gif</xsl:template>
   <xsl:template name="usageicon-path">/usage.gif</xsl:template>
   <xsl:template name="linkicon-path">/link.gif</xsl:template>
@@ -126,6 +127,7 @@
           <xsl:value-of select="index/@path"/>
         </title>
         <link rel="alternate" type="application/rss+xml" href="?Insurrection=rss" title="The RSS feed for this directory in the repository"/>
+        <link rel="service.feed" type="application/x.atom+xml" href="?Insurrection=atom" title="The Atom feed for this directory in the repository"/>
         <xsl:call-template name="header"/>
       </head>
       <body>
@@ -334,6 +336,21 @@
           </td>
           <td class="showlog">
             <xsl:element name="a">
+              <xsl:attribute name="title">Atom Feed of activity in this directory</xsl:attribute>
+              <xsl:attribute name="href">
+                <xsl:text>?Insurrection=atom</xsl:text>
+              </xsl:attribute>
+              <xsl:element name="img">
+                <xsl:attribute name="align">middle</xsl:attribute>
+                <xsl:attribute name="alt">Atom Feed of activity in this directory</xsl:attribute>
+                <xsl:attribute name="src">
+                  <xsl:call-template name="atomicon-path"/>
+                </xsl:attribute>
+              </xsl:element>
+            </xsl:element>
+          </td>
+          <td class="showlog">
+            <xsl:element name="a">
               <xsl:attribute name="title">RSS Feed of activity in this directory</xsl:attribute>
               <xsl:attribute name="href">
                 <xsl:text>?Insurrection=rss</xsl:text>
@@ -372,7 +389,7 @@
               </xsl:attribute>
             </xsl:element>
           </td>
-          <td colspan="4" id="./">
+          <td colspan="5" id="./">
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
               <!-- I want directories displayed before files -->
               <xsl:apply-templates select="dir"/>
@@ -955,6 +972,7 @@
           <xsl:value-of select="title"/>
         </title>
         <link rel="alternate" type="application/rss+xml" href="?Insurrection=rss" title="The RSS feed for this directory in the repository"/>
+        <link rel="service.feed" type="application/x.atom+xml" href="?Insurrection=atom" title="The Atom feed for this directory in the repository"/>
         <xsl:call-template name="header"/>
       </head>
       <body>

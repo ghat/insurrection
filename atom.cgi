@@ -3,7 +3,7 @@
 # $Id$
 # Copyright 2004,2005 - Michael Sinz
 #
-# This script handles the return of rss data.
+# This script handles the return of atom data.
 #
 require 'admin.pl';
 
@@ -11,14 +11,14 @@ require 'admin.pl';
 &checkAuthMode();
 
 ## The maximum number of entries to be returned in
-## the RSS Feed.  This is just in case there was
+## the Atom Feed.  This is just in case there was
 ## a very busy period in the repository.
 my $MAX_ENTRIES = 20;
 
-## For the RSS data we will show up to n days worth
+## For the Atom data we will show up to n days worth
 ## of activity as long as it is less than the above
 ## number of entries.
-my $RSS_DAYS_RANGE = 7;
+my $ATOM_DAYS_RANGE = 7;
 
 ## Rough guess as to the number of days in a month...
 ##           ('?','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
@@ -28,7 +28,7 @@ my @monthDays = (0, 31,   28,   31,   30,   31,   30,   31,   31,   30,   31,   
 ## every once in a while...  So we just ignore that fact...
 
 ## Get the local document URL
-my $rssURL = &svn_URL();
+my $atomURL = &svn_URL();
 
 ## Split the repository from the path within the repository
 my $rpath = &svn_REPO();
@@ -42,7 +42,7 @@ my $opath = &svn_RPATH();
 ## it.  We really just want the last n days (but no more than
 ## MAX_ENTRIES) from the last entry date.
 ##
-## This gives us useful RSS feeds even for repositories that
+## This gives us useful Atom feeds even for repositories that
 ## have been quiet.
 
 ## We first look for the HEAD revision to find out the time
@@ -63,7 +63,7 @@ my $rev = '-r HEAD ';
 ## (The root always has every revision since it is all paths)
 if ($opath ne '/')
 {
-   my $cmd = $SVN_CMD . ' ls -v ' . $rssURL;
+   my $cmd = $SVN_CMD . ' ls -v ' . $atomURL;
    my $lastR = 0;
    foreach my $rline (split("\n",`$cmd`))
    {
@@ -76,7 +76,7 @@ if ($opath ne '/')
    $rev = "-r HEAD:$lastR ";
 }
 
-my $cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache --xml --stop-on-copy ' . $rev . $rssURL;
+my $cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache --xml --stop-on-copy ' . $rev . $atomURL;
 my $hdata = `$cmd`;
 if ($hdata =~ m:<date>\s*(.*?)\s*</date>:so)
 {
@@ -89,7 +89,7 @@ if ($hdata =~ m:<date>\s*(.*?)\s*</date>:so)
       my $day = $3;
       my $rest = $4;
 
-      $day = $day - $RSS_DAYS_RANGE;
+      $day = $day - $ATOM_DAYS_RANGE;
       while ($day < 1)
       {
          $month = $month - 1;
@@ -106,7 +106,7 @@ if ($hdata =~ m:<date>\s*(.*?)\s*</date>:so)
 }
 
 ## Now, lets build the correct command to run...
-$cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache --xml --stop-on-copy --verbose ' . $rev . $rssURL;
+$cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache --xml --stop-on-copy --verbose ' . $rev . $atomURL;
 
 ## Default our encoding to UTF-8, just in case we are not
 ## given one by the server.
@@ -159,33 +159,28 @@ if ((defined $top) && (defined $topDate))
    ## Check if we have loaded the admin stuff yet...
    &loadAccessFile() if (!defined %groupComments);
 
-   ## Note that RSS feeds expire after 120 minutes...
+   ## Note that Atom feeds expire after 120 minutes...
    print $cgi->header('-expires' => '+120m' ,
                       '-type' => 'text/xml; charset=' . $encoding);
 
    my $rLink = &svn_HTTP() . &svn_URL_Escape($SVN_REPOSITORIES_URL . $rpath . $opath) . '?Insurrection=log';
 
    print $top , "\n"
-       , '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
-       , "<!-- Insurrection Web Tools for Subversion RSS Feed -->\n"
-       , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
-       , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
-       , '<rss version="2.0">'
-       , '<channel>' , "\n"
+       #, '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
+       , "<!-- Insurrection Web Tools for Subversion Atom Feed -->\n"
+       , "<!-- Copyright (c) 2004,2005 - Michael Sinz          -->\n"
+       , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/  -->\n"
+       , '<feed version="0.3" xmlns="http://purl.org/atom/ns#">' , "\n"
        , '<title>Repository: ' , &svn_XML_Escape($rpath . ': ' . $opath) , '</title>' , "\n"
-       , '<description>RSS Feed of the activity in "' , &svn_XML_Escape($opath)
+       , '<tagline>Atom Feed of the activity in "' , &svn_XML_Escape($opath)
        ,   '" of the "' , &svn_XML_Escape($rpath)
        ,   '" repository from ' , &dateFormat($topDate)
-       ,   ' to ' , &dateFormat($endDate) , '. &lt;hr/&gt;'
-       ,   &svn_XML_Escape($groupComments{$rpath . ':/'})
-       , '</description>' , "\n"
-       , '<link>' , &svn_XML_Escape($rLink) , '</link>' , "\n"
-       , '<generator>Insurrection RSS Feeder - '
+       ,   ' to ' , &dateFormat($endDate) , '</tagline>'
+       , '<link rel="alternate" type="text/html" href="' , &svn_XML_Escape($rLink) , '"/>' , "\n"
+       , '<generator>Insurrection Atom Feeder - '
        ,   &svn_XML_Escape('$Id$')
        , '</generator>' , "\n"
-       , '<pubDate>' , &dateFormat($topDate) , '</pubDate>'
-       , '<lastBuildDate>' , &dateFormat($topDate) , '</lastBuildDate>'
-       , '<ttl>120</ttl>' , "\n";
+       , '<modified>' , $topDate , '</modified>';
 
    foreach my $entry (@entries)
    {
@@ -197,14 +192,10 @@ if ((defined $top) && (defined $topDate))
       ## Convert line enders into <br/>
       $logmsg =~ s:\n:<br/>:sgo;
 
-      ## If the author does not have a domain, add the default one
-      $author .= $EMAIL_DOMAIN if (!($author =~ m/@/o));
-
       ## Make the link to this individual log message.
       my $link = $rLink . '&r=' . $revision;
 
       ## Now finish building the log message...
-      ## (It get escaped below)
       $logmsg = '<div>'
                 . $logmsg
                 . &listFiles('Added','A',$entry)
@@ -214,21 +205,22 @@ if ((defined $top) && (defined $topDate))
                 . '</div>';
 
       ## Output this item...
-      print '<item>' , "\n"
+      print '<entry>' , "\n"
           , '<title>Revision ' , $revision , '</title>'
-          , '<pubDate>' , &dateFormat($date) , '</pubDate>'
-          , '<author>' , $author , '</author>' , "\n"
-          , '<link>' , &svn_XML_Escape($link) , '</link>' , "\n"
-          , '<description>' , &svn_XML_Escape($logmsg) , '</description>' , "\n"
-          , '</item>' , "\n";
+          , '<issued>' , $date , '</issued>'
+          , '<modified>' , $date , '</modified>'
+          , '<author><name>' , $author , '</name></author>' , "\n"
+          , '<id>' , &svn_XML_Escape($link) , '</id>' , "\n"
+          , '<link rel="alternate" type="text/html" href="' , &svn_XML_Escape($link) , '"/>' , "\n"
+          , '<content type="text/html" mode="escaped">' , &svn_XML_Escape($logmsg) , '</content>' , "\n"
+          , '</entry>' , "\n";
    }
-   print '</channel>'
-       , "</rss>\n";
+   print "</feed>\n";
 }
 else
 {
    print "Status: 404 Log Not Available\n";
-   &svn_HEADER('SVN RSS - Insurrection Server');
+   &svn_HEADER('SVN Feed - Insurrection Server');
 
    print '<h1>Failed to access the log</h1>'
        , '<h3>Log command:</h3>'
