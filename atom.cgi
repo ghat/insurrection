@@ -172,10 +172,12 @@ if ((defined $top) && (defined $topDate))
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/  -->\n"
        , '<feed version="0.3" xmlns="http://purl.org/atom/ns#">' , "\n"
        , '<title>Repository: ' , &svn_XML_Escape($rpath . ': ' . $opath) , '</title>' , "\n"
-       , '<tagline>Atom Feed of the activity in "' , &svn_XML_Escape($opath)
+       , '<tagline type="text/html" mode="escaped">Atom Feed of the activity in "' , &svn_XML_Escape($opath)
        ,   '" of the "' , &svn_XML_Escape($rpath)
        ,   '" repository from ' , &dateFormat($topDate)
-       ,   ' to ' , &dateFormat($endDate) , '</tagline>'
+       ,   ' to ' , &dateFormat($endDate) , '. &lt;hr/&gt;'
+       ,   &svn_XML_Escape($groupComments{$rpath . ':/'})
+       , '</tagline>' , "\n"
        , '<link rel="alternate" type="text/html" href="' , &svn_XML_Escape($rLink) , '"/>' , "\n"
        , '<generator>Insurrection Atom Feeder - '
        ,   &svn_XML_Escape('$Id$')
