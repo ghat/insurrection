@@ -1,0 +1,60 @@
+<buttons/>
+<repos/>
+<ul>
+  <li>
+    <a style="margin-left: 2px;" href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=rss"><img src="valid-rss.png" alt="[Valid RSS]" title="Validate my RSS feed" align="right" border="0"/></a>
+    To access the repositories above via a web browser, just click on the links
+    above.&nbsp; You may be asked to enter your username and password to get access
+    to the repository.<br clear="all">
+    &nbsp;
+  </li>
+  <li>
+    <a style="margin-left: 2px;" href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=atom"><img src="valid-atom.png" alt="[Valid Atom]" title="Validate my Atom feed" align="right" border="0"/></a>
+    To access the repositories above via Subversion, use the above URLs.&nbsp;
+    Subversion may then ask you to enter your username and password for access.&nbsp;
+    <i><b>Note:</b>&nbsp; You should normally check out the trunk by appending</i>
+    <code>/trunk </code> <i>to the URL.</i><br clear="all">
+  </li>
+</ul>
+<table class="versiontable" border="0" width="100%">
+  <tr>
+    <th colspan="2">Local Documentation</th>
+  </tr>
+  <tr>
+    <td><a href="browser-tests/index.html">Browser Test Pages</a></td>
+    <td>Some simple browser compatibility test pages for the Insurrection Web Tools.</td>
+  </tr>
+  <tr>
+    <td><a href="rewrite-test/index.html">Apache mod_rewrite Tests</a></td>
+    <td>It seems that certain URL patterns do not get processed correctly within mod_rewrite in Apache 2.0.54</td>
+  </tr>
+  <tr>
+    <td><a href="best-practices.html">My Subversion Quick-Start</a></td>
+    <td>Some introductory documentation about Subversion and the
+    revision control rules and procedures that I follow.</td>
+  </tr>
+</table>
+<br>
+<table class="versiontable" border="0" width="100%">
+  <tr>
+    <th colspan="2"><i>External links</i> and resources</th>
+  </tr>
+  <tr>
+    <td><a href="project.html">The Insurrection Project</a></td>
+    <td>The Insurrection project information page</td>
+  </tr>
+  <tr>
+    <td><a href="http://subversion.tigris.org/">The Subversion Project</a></td>
+    <td>The Subversion project home page</td>
+  </tr>
+  <tr>
+    <td><a href="http://svnbook.red-bean.com/">The Subversion Book</a></td>
+    <td>The Subversion Book home page</td>
+  </tr>
+  <tr>
+    <td><a href="http://subversion.tigris.org/project_links.html">The Subversion
+    Project Links</a></td>
+    <td>The Subversion related links page from the Subversion Project</td>
+  </tr>
+</table>
+
