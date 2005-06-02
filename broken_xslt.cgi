@@ -19,7 +19,7 @@ $repo_path = '/' if (!($repo_path =~ m|^/|o));
 print '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
 
 print '<tr class="updirrow">'
-    ,  '<td colspan="4">'
+    ,  '<td colspan="5">'
     ,   '<a href=".." title="Go to parent directory">'
     ,    '<div class="updir">'
     ,     '<img alt="Folder" src="' , &svn_IconPath('dir') , '" class="svnentryicon" align="middle">.. (Parent Directory)</div>'

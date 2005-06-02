@@ -219,7 +219,7 @@
 
   <xsl:template match="updir">
     <tr class="updirrow">
-      <td colspan="5">
+      <td colspan="6">
         <xsl:element name="a">
           <xsl:attribute name="title">Go to parent directory</xsl:attribute>
           <xsl:attribute name="href">..</xsl:attribute>
