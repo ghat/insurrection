@@ -114,6 +114,11 @@
     </th>
   </xsl:template>
 
+  <xsl:template name="feed-links">
+    <link rel="alternate" type="application/rss+xml" href="?Insurrection=rss" title="The RSS feed for this directory in the repository"/>
+    <link rel="service.feed" type="application/x.atom+xml" href="?Insurrection=atom" title="The Atom feed for this directory in the repository"/>
+  </xsl:template>
+
   <!-- ******************************************************************************************************************* -->
   <!-- This is the template for the SVN index browsing -->
   <xsl:template match="svn">
@@ -126,8 +131,7 @@
           </xsl:if>
           <xsl:value-of select="index/@path"/>
         </title>
-        <link rel="alternate" type="application/rss+xml" href="?Insurrection=rss" title="The RSS feed for this directory in the repository"/>
-        <link rel="service.feed" type="application/x.atom+xml" href="?Insurrection=atom" title="The Atom feed for this directory in the repository"/>
+        <xsl:call-template name="feed-links"/>
         <xsl:call-template name="header"/>
       </head>
       <body>
@@ -971,8 +975,7 @@
         <title>
           <xsl:value-of select="title"/>
         </title>
-        <link rel="alternate" type="application/rss+xml" href="?Insurrection=rss" title="The RSS feed for this directory in the repository"/>
-        <link rel="service.feed" type="application/x.atom+xml" href="?Insurrection=atom" title="The Atom feed for this directory in the repository"/>
+        <xsl:call-template name="feed-links"/>
         <xsl:call-template name="header"/>
       </head>
       <body>

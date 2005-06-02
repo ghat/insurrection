@@ -82,6 +82,15 @@ if ($hdata =~ m:<date>\s*(.*?)\s*</date>:so)
 {
    ## Date format:  2005-05-07T02:41:02.820786Z
    my $firstDate = $1;
+
+   ## Check if this is the same as before...
+   if ("\"$firstDate\"" eq $ENV{'HTTP_IF_NONE_MATCH'})
+   {
+      ## The user tells me he already has this one...
+      print $cgi->header('-Status' => '304 Not Modified');
+      exit 0;
+   }
+
    if ($firstDate =~ m/^(\d+)-(\d+)-(\d+)(T.*)$/o)
    {
       my $year = $1;
@@ -161,6 +170,7 @@ if ((defined $top) && (defined $topDate))
 
    ## Note that RSS feeds expire after 120 minutes...
    print $cgi->header('-expires' => '+120m' ,
+                      '-ETag' => "\"$topDate\"" ,
                       '-type' => 'text/xml; charset=' . $encoding);
 
    my $rLink = &svn_HTTP() . &svn_URL_Escape($SVN_REPOSITORIES_URL . $rpath . $opath) . '?Insurrection=log';
