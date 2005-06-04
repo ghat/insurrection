@@ -20,8 +20,11 @@ our $SVN_LOGS = '/home/subversion/logs';
 ## This is where the svn binaries live.
 our $SVN_BIN = '/home/subversion/svn/bin/';
 
-## The domain for the EMail addresses...
+## The domain for the default EMail addresses...
 our $EMAIL_DOMAIN = '@sinz.org';
+
+## Set this to 1 if HTTPS is the login mechanism
+our $HTTPS_LOGIN = 0;
 
 ## The default number of log entries to provide in the
 ## history.  If this is undef then we don't limit the

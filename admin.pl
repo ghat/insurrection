@@ -1075,7 +1075,15 @@ sub repositoryTable()
    $loginButton = '';
    if (!defined $AuthUser)
    {
-      $loginButton = '<a title="Login" href="auth_index.cgi">'
+      my $loginURL = 'auth_index.cgi';
+
+      if ($HTTPS_LOGIN)
+      {
+         $loginURL = $cgi->url;
+         $loginURL =~ s/^http:/https:/o;
+      }
+
+      $loginButton = '<a title="Login" href="' . $loginURL . '">'
                    .  '<img src="' . &svn_IconPath('login') . '" alt="Login" border="0" align="right"/>'
                    . '</a>';
    }
