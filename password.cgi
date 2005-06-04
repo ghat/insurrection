@@ -76,7 +76,7 @@ if ($Operation eq 'Update')
 
 print '<center>';
 
-&startBoldFrame('Change Password for "<b>' . $AuthUser . '</b>"');
+print &startBoldFrame('Change Password for "<b>' . $AuthUser . '</b>"');
 
 print q(<center><form action="?" method="post">
 <table border="0" cellpadding="1" cellspacing="3">
@@ -89,7 +89,7 @@ print q(<center><form action="?" method="post">
 <p>This page lets you change your password on this server.</p>
 ) if (!$changed);
 
-&endBoldFrame;
+print &endBoldFrame;
 
 &svn_TRAILER('$Id$');
 
