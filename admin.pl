@@ -944,7 +944,7 @@ sub startTableFrame($width,$title,$titleExtra,$title,$titleExtra,...)
 {
    my $width = shift;
    $width = ' width="' . $width . '"' if (defined $width);
-   $width = '100%' if (!defined $width);
+   $width = '' if (!defined $width);
 
    my @titles = @_;
    @titles = ('&nbsp;',undef) if (@titles < 1);
@@ -1086,12 +1086,30 @@ sub repositoryTable()
       $loginButton = '<a title="Login" href="' . $loginURL . '">'
                    .  '<img src="' . &svn_IconPath('login') . '" alt="Login" border="0" align="right"/>'
                    . '</a>';
+
+      ## Compensate for the 41 pixel login button...
+      $loginButton .= '<img src="' . &svn_IconPath('blank') . '" alt="" border="0" align="left" width="41" height="1"/>';
+
    }
    else
    {
       $loginButton = '<a title="Change Password" href="password.cgi">'
                    .  '<img src="' . &svn_IconPath('password') . '" alt="Change Password" border="0" align="right"/>'
                    . '</a>';
+
+      if (&isAdminMember('Admin',$AuthUser))
+      {
+         ## Compensate for the 90 pixel password button by making
+         ## a lot of pixels of padding (2 + 44 + 44 = 90)
+         $loginButton .= '<a title="System Administration" href="manage.cgi">'
+                       .  '<img src="' . &svn_IconPath('admin') . '" alt="System Administration" border="0" align="left" style="padding-left: 2px; padding-right: 44px;"/>'
+                       . '</a>';
+      }
+      else
+      {
+         ## Compensate for the 90 pixel password button...
+         $loginButton .= '<img src="' . &svn_IconPath('blank') . '" alt="" border="0" align="left" width="90" height="1"/>';
+      }
    }
 
    ## Check if we have loaded the admin stuff yet...

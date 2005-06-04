@@ -5,7 +5,9 @@
 
 .boldframe
 {
-  margin-top: 2px;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
   background-color: #dddddd;
 }
 
@@ -26,21 +28,29 @@ td.boldframe
 .boldframe-top-left, .boldframe-top, .boldframe-top-right
 {
   height: 37px;
+  min-height: 37px;
+  max-height: 37px;
 }
 
 .boldframe-bottom-left, .boldframe-bottom, .boldframe-bottom-right
 {
   height: 15px;
+  min-height: 15px;
+  max-height: 15px;
 }
 
 .boldframe-top-left, .boldframe-left, .boldframe-bottom-left
 {
   width: 13px;
+  min-width: 13px;
+  max-width: 13px;
 }
 
 .boldframe-top-right, .boldframe-right, .boldframe-bottom-right
 {
   width: 13px;
+  min-width: 13px;
+  max-width: 13px;
 }
 
 .boldframe-top-left, .boldframe-top-right, .boldframe-bottom-left, .boldframe-bottom-right

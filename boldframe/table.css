@@ -3,152 +3,153 @@
  * Copyright 2004,2005 - Michael Sinz
  */
 
-.tableframe
+.btableframe
 {
   margin: 0px;
   padding: 0px;
   border: 0px;
+  background-color: #dddddd;
 }
 
-.tableframe-row-even
+.btableframe-row-even
 {
   background-color: #FFFFFF;
   vertical-align: baseline;
 }
 
-.tableframe-row-odd
+.btableframe-row-odd
 {
   background-color: #F4F4F4;
   vertical-align: baseline;
 }
 
-.tableframe-row-odd td, .tableframe-row-even td
+.btableframe-row-odd td, .btableframe-row-even td
 {
   padding: 1px;
 }
 
-.tableframe-top
+.btableframe-top
 {
   text-align: center;
   vertical-align: center;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
   white-space: nowrap;
-  color: black;
+  color: white;
 }
 
-.tableframe-top-left, .tableframe-top, .tableframe-top-right, .tableframe-top-div
+.btableframe-top-left, .btableframe-top, .btableframe-top-right, .btableframe-top-div
 {
-  height: 24px;
-  min-height: 24px;
-  max-height: 24px;
+  height: 37px;
+  min-height: 37px;
+  max-height: 37px;
 }
 
-.tableframe-bottom-left, .tableframe-bottom, .tableframe-bottom-right, .tableframe-bottom-div
+.btableframe-bottom-left, .btableframe-bottom, .btableframe-bottom-right, .btableframe-bottom-div
 {
-  height: 16px;
-  min-height: 16px;
-  max-height: 16px;
+  height: 15px;
+  min-height: 15px;
+  max-height: 15px;
 }
 
-.tableframe-top-left, .tableframe-left, .tableframe-bottom-left
+.btableframe-top-left, .btableframe-left, .btableframe-bottom-left
 {
-  width: 15px;
-  min-width: 15px;
-  max-width: 15px;
+  width: 11px;
+  min-width: 11px;
+  max-width: 11px;
 }
 
-.tableframe-top-right, .tableframe-right, .tableframe-bottom-right
+.btableframe-top-right, .btableframe-right, .btableframe-bottom-right
 {
-  width: 15px;
-  min-width: 15px;
-  max-width: 15px;
+  width: 11px;
+  min-width: 11px;
+  max-width: 11px;
 }
 
-.tableframe-top-div, .tableframe-div, .tableframe-bottom-div
+.btableframe-top-div, .btableframe-div, .btableframe-bottom-div
 {
   width: 4px;
   min-width: 4px;
   max-width: 4px;
 }
 
-.tableframe-top-left, .tableframe-top-right, .tableframe-bottom-left, .tableframe-bottom-right, .tableframe-top-div, .tableframe-bottom-div
+.btableframe-top-left, .btableframe-top-right, .btableframe-bottom-left, .btableframe-bottom-right, .btableframe-top-div, .btableframe-bottom-div
 {
   background-repeat: no-repeat;
 }
 
-.tableframe-top, .tableframe-bottom
+.btableframe-top, .btableframe-bottom
 {
   background-repeat: repeat-x;
 }
 
-.tableframe-left, .tableframe-right, .tableframe-div
+.btableframe-left, .btableframe-right, .btableframe-div
 {
   background-repeat: repeat-y;
 }
 
-.tableframe-top-left
+.btableframe-top-left
 {
   background-image: url('./top-left.gif');
   background-position: bottom right;
 }
 
-.tableframe-top
+.btableframe-top
 {
   background-image: url('./top.gif');
   background-position: bottom left;
 }
 
-.tableframe-top-div
+.btableframe-top-div
 {
   background-image: url('./top-div.gif');
   background-position: bottom center;
 }
 
-.tableframe-top-right
+.btableframe-top-right
 {
   background-image: url('./top-right.gif');
   background-position: bottom left;
 }
 
-.tableframe-left
+.btableframe-left
 {
   background-image: url('./left.gif');
   background-position: top right;
 }
 
-td.tableframe-div
+td.btableframe-div
 {
   padding: 0px;
   background-image: url('./div.gif');
   background-position: top center;
 }
 
-.tableframe-right
+.btableframe-right
 {
   background-image: url('./right.gif');
   background-position: top left;
 }
 
-.tableframe-bottom-left
+.btableframe-bottom-left
 {
   background-image: url('./bottom-left.gif');
   background-position: top right;
 }
 
-.tableframe-bottom
+.btableframe-bottom
 {
   background-image: url('./bottom.gif');
   background-position: top left;
 }
 
-.tableframe-bottom-div
+.btableframe-bottom-div
 {
   background-image: url('./bottom-div.gif');
   background-position: top center;
 }
 
-.tableframe-bottom-right
+.btableframe-bottom-right
 {
   background-image: url('./bottom-right.gif');
   background-position: top left;

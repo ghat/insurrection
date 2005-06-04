@@ -5,7 +5,9 @@
 
 .innerframe
 {
-  margin-top: 2px;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
 }
 
 td.innerframe
@@ -28,21 +30,29 @@ td.innerframe
 .innerframe-top-left, .innerframe-top, .innerframe-top-right
 {
   height: 24px;
+  min-height: 24px;
+  max-height: 24px;
 }
 
 .innerframe-bottom-left, .innerframe-bottom, .innerframe-bottom-right
 {
   height: 16px;
+  min-height: 16px;
+  max-height: 16px;
 }
 
 .innerframe-top-left, .innerframe-left, .innerframe-bottom-left
 {
   width: 17px;
+  min-width: 17px;
+  max-width: 17px;
 }
 
 .innerframe-top-right, .innerframe-right, .innerframe-bottom-right
 {
   width: 17px;
+  min-width: 17px;
+  max-width: 17px;
 }
 
 .innerframe-top-left, .innerframe-top-right, .innerframe-bottom-left, .innerframe-bottom-right
