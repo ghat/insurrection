@@ -24,6 +24,10 @@ ${$groupUsers{$group}}{'*'} = '' if (!defined ${$groupUsers{$group}}{'*'});
 ## Make sure we mark the page as expiring right away...
 &svn_HEADER('Administration of ' . &svn_REPO(),'+0m');
 
+print '<div style="font-size: 20pt; text-align: center; padding-bottom: 3px; margin-bottom: 2px; border-bottom: 1px green dotted;">Repository:&nbsp;'
+    ,  '<span style="font-weight: bold;">' , &svn_REPO() , '</span>'
+    , '</div>';
+
 if (defined $cgi->param('update'))
 {
    ## Ok, so an update of the access lists is in order.  Lets lock
@@ -34,9 +38,11 @@ if (defined $cgi->param('update'))
    ## Make sure that the anon user is listed (even if no-access)
    ${$groupUsers{$group}}{'*'} = '' if (!defined ${$groupUsers{$group}}{'*'});
 
+   print '<center>' , &startInnerFrame('Action log: Update access rights');
+
    if ($accessVersion ne $cgi->param('version'))
    {
-      print '<h2 align="center" style="color: red;">Concurrent modification attempted - please recheck data and try again</h2>'
+      print '<h2 style="color: red;">Concurrent modification attempted<br/>Please recheck data and submit again</h2>'
    }
    else
    {
@@ -74,33 +80,34 @@ if (defined $cgi->param('update'))
                }
                else
                {
-                  if (($newType == 3) && (!defined $admins{$user}))
-                  {
-                     $admins{$user} = 1;
-                     $actions .= "\tGiving admin rights to $user\n";
-                  }
                   if (($newType < 3) && (defined $admins{$user}))
                   {
                      delete $admins{$user};
-                     $actions .= "\tRemoving admin rights from $user\n";
+                     $actions .= "\tRemoving admin rights from user $user\n";
                   }
 
                   if (($newType > 1) && (${$groupUsers{$group}}{$user} ne 'rw'))
                   {
                      ${$groupUsers{$group}}{$user} = 'rw';
-                     $actions .= "\tGiving read/write access to $user\n";
+                     $actions .= "\tGiving read/write repository access to user $user\n";
                   }
 
                   if (($newType == 1) && (${$groupUsers{$group}}{$user} ne 'r'))
                   {
                      ${$groupUsers{$group}}{$user} = 'r';
-                     $actions .= "\tGiving read-only access to $user\n";
+                     $actions .= "\tGiving read-only repository access to user $user\n";
                   }
 
                   if (($newType == 0) && (${$groupUsers{$group}}{$user} ne ''))
                   {
                      ${$groupUsers{$group}}{$user} = '';
-                     $actions .= "\tRemoving all access from $user\n";
+                     $actions .= "\tRemoving all repository access from user $user\n";
+                  }
+
+                  if (($newType == 3) && (!defined $admins{$user}))
+                  {
+                     $admins{$user} = 1;
+                     $actions .= "\tGiving admin rights to user $user\n";
                   }
                }
             }
@@ -113,15 +120,14 @@ if (defined $cgi->param('update'))
          @{$groupAdmins{$adminGroup}} = sort keys %admins;
 
          ## Save and reload the access file...
-         print '<center>' , &startInnerFrame('Action log') , '<pre>' , $actions , '</pre>';
+         print '<pre>' , $actions , '</pre>';
          &saveAccessFile("admin.cgi: Updated access file for group $group\n\n$actions");
-         print &endInnerFrame();
-
          &loadAccessFile();
       }
    }
-
    &unlockAccessFile();
+
+   print &endInnerFrame() , '</cetner>';
 }
 elsif (defined $cgi->param('adduser'))
 {
@@ -129,10 +135,14 @@ elsif (defined $cgi->param('adduser'))
    my $user = $cgi->param('NewUser');
    chomp $user;
 
+   ## Show the action log...
+   print '<center>' , &startInnerFrame('Action log: Add User');
+
    ## Only simple characters in the user name and nothing too long
    ## Ok, we picked the size limit out of thin air but it is a reasonable limit.
    if (($user =~ /^[a-z][-.@a-z0-9_]+$/o) || (length($user) < 64))
    {
+
       ## Lock the password file...
       &lockPasswordFile();
 
@@ -171,11 +181,11 @@ elsif (defined $cgi->param('adduser'))
 
             close EMAIL;
 
-            print '<h2 align="center" style="color: green;">New user successfully added.</h2>';
+            print '<h2 style="color: green;">New user EMail sent to ' , &svn_XML_Escape(&emailAddress($user)) , '</h2>';
          }
          else
          {
-            print '<h2 align="center" style="color: red;">Failed to send EMail to ' , &svn_XML_Escape(&emailAddress($user)) , '</h2>';
+            print '<h2 style="color: red;">Failed to send EMail to ' , &svn_XML_Escape(&emailAddress($user)) , '</h2>';
          }
       }
 
@@ -192,13 +202,18 @@ elsif (defined $cgi->param('adduser'))
          &saveAccessFile("admin.cgi: Added user $user to group $group");
          &loadAccessFile();
       }
+      else
+      {
+         print 'User ' , &svn_XML_Escape($user) , ' already exists';
+      }
 
       &unlockAccessFile();
    }
    else
    {
-      print '<h2 align="center"><font color="red">Invalid characters in username.</font></h2>'
+      print '<h2 style="color: red;">Invalid characters in username.</h2>';
    }
+   print &endInnerFrame() , '</center>';
 }
 
 &printAdminForms();
@@ -239,7 +254,8 @@ sub printAdminForms()
       }
       $access .= '</select>';
 
-      print &doTableFrameRow(&svn_XML_Escape($u),'nowrap style="padding-right: 1em; text-align: left;"',$access,'style="padding-left: 1em;"');
+      print &doTableFrameRow(&svn_XML_Escape($u),'nowrap style="padding-right: 1em; text-align: left;"'
+                            ,$access,'style="padding-left: 1em; text-align: left;"');
    }
 
    print &doTableFrameRow('<input type="reset"/>','align="left"',
