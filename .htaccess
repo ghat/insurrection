@@ -28,7 +28,7 @@ DirectoryIndex index.cgi
 ## user's specific access rights - we can not just check
 ## if the user as access to the repository via the
 ## above method.
-<Files ~ "^(admin|auth_index|bandwidth|dump|password)\.cgi$">
+<Files ~ "^(admin|auth_index|bandwidth|dump|manage|password)\.cgi$">
 	SetHandler cgi-script
 	require valid-user
 </Files>
@@ -110,8 +110,9 @@ RewriteRule	^Logo.gif	"/InsurrectionLogo.gif"	[PT,L]
 ## and not the path_info and then doing some re-parsing with
 ## the understanding that the Path parameter is always the
 ## last parameter before the end of the URI.  Ugly but it works...
-RewriteCond %{REQUEST_METHOD} GET
-RewriteCond %{QUERY_STRING} Insurrection=(atom|bandwidth|blame|diff|dump|get|log|rss)
+RewriteCond %{REQUEST_METHOD} GET	[OR]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteCond %{QUERY_STRING} Insurrection=(admin|atom|bandwidth|blame|diff|dump|get|log|rss)
 RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&Path=$1"	[P,L]
 #RewriteRule	^svn/(.*)$	"http://%{HTTP_HOST}/%1.cgi/$1"	[P,L]
 

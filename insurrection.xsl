@@ -58,60 +58,38 @@
   <xsl:template name="blankicon-path">/blank.gif</xsl:template>
   <xsl:template name="rssicon-path">/rss.gif</xsl:template>
   <xsl:template name="atomicon-path">/atom.gif</xsl:template>
-  <xsl:template name="dumpicon-path">/dump.gif</xsl:template>
-  <xsl:template name="usageicon-path">/usage.gif</xsl:template>
+  <xsl:template name="loginicon-path">/login.gif</xsl:template>
+  <xsl:template name="passwordicon-path">/password.gif</xsl:template>
+  <xsl:template name="adminicon-path">/admin.gif</xsl:template>
   <xsl:template name="linkicon-path">/link.gif</xsl:template>
   <xsl:template name="aticon-path">/at.gif</xsl:template>
 
   <!-- ******************************************************************************************************************* -->
-  <xsl:template name="blank">
-    <xsl:element name="img">
-      <xsl:attribute name="alt"></xsl:attribute>
-      <xsl:attribute name="src">
-        <xsl:call-template name="blankicon-path"/>
-      </xsl:attribute>
-    </xsl:element>
-  </xsl:template>
 
+  <!-- Some "macros" for doing our standard page layout -->
   <xsl:template name="top-bottom">
     <thead>
       <tr>
-        <th id="top-left">
-          <xsl:call-template name="blank"/>
-        </th>
-        <th id="top">
-          <xsl:call-template name="blank"/>
-        </th>
-        <th id="top-right">
-          <xsl:call-template name="blank"/>
-        </th>
+        <th id="top-left"></th>
+        <th id="top"></th>
+        <th id="top-right"></th>
       </tr>
     </thead>
     <tfoot>
       <tr>
-        <th id="bottom-left">
-          <xsl:call-template name="blank"/>
-        </th>
-        <th id="bottom">
-          <xsl:call-template name="blank"/>
-        </th>
-        <th id="bottom-right">
-          <xsl:call-template name="blank"/>
-        </th>
+        <th id="bottom-left"></th>
+        <th id="bottom"></th>
+        <th id="bottom-right"></th>
       </tr>
     </tfoot>
   </xsl:template>
 
   <xsl:template name="left-side">
-    <th id="left">
-      <xsl:call-template name="blank"/>
-    </th>
+    <th id="left"></th>
   </xsl:template>
 
   <xsl:template name="right-side">
-    <th id="right">
-      <xsl:call-template name="blank"/>
-    </th>
+    <th id="right"></th>
   </xsl:template>
 
   <xsl:template name="feed-links">

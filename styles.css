@@ -5,6 +5,9 @@
 
 @import url(frame/style.css);
 @import url(gauge/style.css);
+@import url(innerframe/frame.css);
+@import url(innerframe/table.css);
+@import url(boldframe/frame.css);
 
 html, body
 {
@@ -36,9 +39,6 @@ a:active {color: red; text-decoration: underline;}
   width: 672px;
   color: black;
   background: white;
-  background-image: url('./turtles.jpg');
-  background-repeat: repeat-y;
-  background-position: top center;
 }
 
 .versiontable th

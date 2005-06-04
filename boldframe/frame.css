@@ -1,0 +1,108 @@
+/*
+ * $Id$
+ * Copyright 2004,2005 - Michael Sinz
+ */
+
+.boldframe
+{
+  margin-top: 2px;
+  background-color: #dddddd;
+}
+
+td.boldframe
+{
+  text-align: left;
+}
+
+.boldframe-top
+{
+  text-align: center;
+  vertical-align: center;
+  font-size: 16px;
+  white-space: nowrap;
+  color: white;
+}
+
+.boldframe-top-left, .boldframe-top, .boldframe-top-right
+{
+  height: 37px;
+}
+
+.boldframe-bottom-left, .boldframe-bottom, .boldframe-bottom-right
+{
+  height: 15px;
+}
+
+.boldframe-top-left, .boldframe-left, .boldframe-bottom-left
+{
+  width: 13px;
+}
+
+.boldframe-top-right, .boldframe-right, .boldframe-bottom-right
+{
+  width: 13px;
+}
+
+.boldframe-top-left, .boldframe-top-right, .boldframe-bottom-left, .boldframe-bottom-right
+{
+  background-repeat: no-repeat;
+}
+
+.boldframe-top, .boldframe-bottom
+{
+  background-repeat: repeat-x;
+}
+
+.boldframe-left, .boldframe-right
+{
+  background-repeat: repeat-y;
+}
+
+.boldframe-top-left
+{
+  background-image: url('./top-left.gif');
+  background-position: bottom right;
+}
+
+.boldframe-top
+{
+  background-image: url('./top.gif');
+  background-position: bottom left;
+}
+
+.boldframe-top-right
+{
+  background-image: url('./top-right.gif');
+  background-position: bottom left;
+}
+
+.boldframe-left
+{
+  background-image: url('./left.gif');
+  background-position: top right;
+}
+
+.boldframe-right
+{
+  background-image: url('./right.gif');
+  background-position: top left;
+}
+
+.boldframe-bottom-left
+{
+  background-image: url('./bottom-left.gif');
+  background-position: top right;
+}
+
+.boldframe-bottom
+{
+  background-image: url('./bottom.gif');
+  background-position: top left;
+}
+
+.boldframe-bottom-right
+{
+  background-image: url('./bottom-right.gif');
+  background-position: top left;
+}
+

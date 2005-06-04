@@ -293,21 +293,21 @@ sub svn_HEADER($title,$expires,$doctype)
        ,   '<table id="pagetable" cellpadding="0" cellspacing="0">'
        ,    '<thead>'
        ,     '<tr>'
-       ,      '<th id="top-left">' , $blank , '</th>'
-       ,      '<th id="top">' , $blank , '</th>'
-       ,      '<th id="top-right">' , $blank , '</th>'
+       ,      '<th id="top-left"></th>'
+       ,      '<th id="top"></th>'
+       ,      '<th id="top-right"></th>'
        ,     '</tr>'
        ,    '</thead>'
        ,    '<tfoot>'
        ,     '<tr>'
-       ,      '<th id="bottom-left">' , $blank , '</th>'
-       ,      '<th id="bottom">' , $blank , '</th>'
-       ,      '<th id="bottom-right">' , $blank , '</th>'
+       ,      '<th id="bottom-left"></th>'
+       ,      '<th id="bottom"></th>'
+       ,      '<th id="bottom-right"></th>'
        ,     '</tr>'
        ,    '</tfoot>'
        ,    '<tbody>'
        ,     '<tr>'
-       ,      '<th id="left">' , $blank , '</th>'
+       ,      '<th id="left"></th>'
        ,      '<td id="content">'
        ,       $banner
        ,       '<div class="svn"><div id="localbanner"></div>' , "\n";
@@ -356,7 +356,7 @@ sub svn_TRAILER($version)
        ,        'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
    print       '</div>'
        ,      '</td>'
-       ,      '<th id="right">' , $blank , '</th>'
+       ,      '<th id="right"></th>'
        ,     '</tr>'
        ,    '</tbody>'
        ,   '</table>'
@@ -521,7 +521,7 @@ sub typeMember($group,$user)
 
    if (defined $groupUsers{$group})
    {
-      my $type = ${groupUsers{$group}}{$user};
+      my $type = ${$groupUsers{$group}}{$user};
       if (defined $type)
       {
          return 1 if ($type eq 'r');
@@ -678,7 +678,7 @@ sub loadAccessFile()
             %{$groupUsers{$section}} = %empty;
          }
       }
-      elsif (($line =~ m/^(Admin\S*)\s+=\s*(.*)$/o) && ($section eq 'groups'))
+      elsif (($line =~ m/^(Admin\S*)\s+=\s*(.*?)$/o) && ($section eq 'groups'))
       {
          ## Ahh, an admin definition - now lets deal with it...
          my $group = $1;
@@ -686,7 +686,7 @@ sub loadAccessFile()
 
          @{$groupAdmins{$group}} = @users;
       }
-      elsif (($line =~ m/^(\S+)\s+=\s*(.*)$/o) && ($section ne 'groups'))
+      elsif (($line =~ m/^(\S+)\s+=\s*(.*?)$/o) && ($section ne 'groups'))
       {
          my $user = $1;
          my $access = $2;
@@ -846,6 +846,220 @@ sub savePasswordFile($reason)
 
 ##############################################################################
 #
+# Start an inner frame with the given title string and an option width.
+# After starting an inner frame, output your normal contents and then
+# call endInnerFrame().  Frames can be nested.
+#
+sub startInnerFrame($title,$width)
+{
+   my $title = shift;
+   my $width = shift;
+
+   $width = ' width="' . $width . '"' if (defined $width);
+   $width = '' if (!defined $width);
+
+   return('<table class="innerframe" cellspacing="0" cellpadding="0"' . $width . '>'
+         . '<tr>'
+         .  '<td class="innerframe-top-left"></td>'
+         .  '<td class="innerframe-top">' . $title . '</td>'
+         .  '<td class="innerframe-top-right"></td>'
+         . '</tr>'
+         . '<tr>'
+         .  '<td class="innerframe-left"></td>'
+         .  '<td class="innerframe">');
+}
+
+##############################################################################
+#
+# End an inner frame - this must be called for each startInnerFrame call.
+# Frames can be nested.
+#
+sub endInnerFrame()
+{
+   return(  '</td>'
+         .  '<td class="innerframe-right"></td>'
+         . '</tr>'
+         . '<tr>'
+         .  '<td class="innerframe-bottom-left"></td>'
+         .  '<td class="innerframe-bottom"></td>'
+         .  '<td class="innerframe-bottom-right"></td>'
+         . '</tr>'
+         .'</table>');
+}
+
+##############################################################################
+#
+# Start a bold frame with the given title string and an option width.
+# After starting an inner frame, output your normal contents and then
+# call endBoldFrame().  Frames can be nested.
+#
+sub startBoldFrame($title,$width)
+{
+   my $title = shift;
+   my $width = shift;
+
+   $width = ' width="' . $width . '"' if (defined $width);
+   $width = '' if (!defined $width);
+
+   return('<table class="boldframe" cellspacing="0" cellpadding="0"' . $width . '>'
+         . '<tr>'
+         .  '<td class="boldframe-top-left"></td>'
+         .  '<td class="boldframe-top">' . $title . '</td>'
+         .  '<td class="boldframe-top-right"></td>'
+         . '</tr>'
+         . '<tr>'
+         .  '<td class="boldframe-left"></td>'
+         .  '<td class="boldframe">');
+}
+
+##############################################################################
+#
+# End an inner frame - this must be called for each startBoldFrame call.
+# Frames can be nested.
+#
+sub endBoldFrame()
+{
+   return(  '</td>'
+         .  '<td class="boldframe-right"></td>'
+         . '</tr>'
+         . '<tr>'
+         .  '<td class="boldframe-bottom-left"></td>'
+         .  '<td class="boldframe-bottom"></td>'
+         .  '<td class="boldframe-bottom-right"></td>'
+         . '</tr>'
+         .'</table>');
+}
+
+## Keep track of our table frame sizes...
+my @tableFrameSizes;
+my $tableFrameRow;
+
+##############################################################################
+#
+# Start a framed table with the given title strings and an option width.
+# Each row you output needs to be prefixed with a startTableFrameRow
+# and end with a endTableFrameRow.
+#
+sub startTableFrame($width,$title,$titleExtra,$title,$titleExtra,...)
+{
+   my $width = shift;
+   $width = ' width="' . $width . '"' if (defined $width);
+   $width = '100%' if (!defined $width);
+
+   my @titles = @_;
+   @titles = ('&nbsp;',undef) if (@titles < 1);
+
+   push(@tableFrameSizes,scalar(@titles) / 2);
+
+   my $result = '<table class="tableframe" cellspacing="0" cellpadding="0"' . $width . '>'
+              .  '<tr><td class="tableframe-top-left"></td>';
+
+   for (my $i=0; $i < @titles; $i += 2)
+   {
+      $result .= '<td class="tableframe-top"';
+      $result .= ' ' . $titles[$i+1] if (defined $titles[$i+1]);
+      $result .= '>' . $titles[$i] . '</td>';
+
+      if (($i + 2) < @titles)
+      {
+         $result .= '<td class="tableframe-top-div"></td>';
+      }
+   }
+
+   $result .= '<td class="tableframe-top-right"></td></tr>';
+
+   ## Set the row number to 0...
+   $tableFrameRow = 0;
+
+   return $result;
+}
+
+##############################################################################
+#
+# Start a table frame row - you only need to output your <td>...</td> data
+# This also makes the rows alternate in colour (subtle grey variation)
+# The needed <tr> constructs have been done for you...
+#
+sub startTableFrameRow()
+{
+   if ($tableFrameRow)
+   {
+      $tableFrameRow = 0;
+      return('<tr class="tableframe-row-odd"><td class="tableframe-left"></td>');
+   }
+   else
+   {
+      $tableFrameRow = 1;
+      return('<tr class="tableframe-row-even"><td class="tableframe-left"></td>');
+   }
+}
+
+##############################################################################
+#
+# End a table frame row - you only need to output your <td>...</td> data
+# The needed </tr> constructs will be done for you
+#
+sub endTableFrameRow()
+{
+   return('<td class="tableframe-right"></td></tr>');
+}
+
+##############################################################################
+#
+# This does the hard work of putting together a row of data for the table.
+# Note that it automatically adds the cell tags and that column dividers.
+#
+sub doTableFrameRow($cell,$cellExtra,$cell,$cellExtra,...)
+{
+   my $result = &startTableFrameRow();
+
+   my @cells = @_;
+
+   for (my $i=0; $i < @cells; $i += 2)
+   {
+      $result .= '<td';
+      $result .= ' ' . $cells[$i+1] if (defined $cells[$i+1]);
+      $result .= '>' . $cells[$i] . '</td>';
+
+      if (($i + 2) < @cells)
+      {
+         $result .= '<td class="tableframe-div"></td>';
+      }
+   }
+
+   $result .= &endTableFrameRow();
+
+   return $result;
+}
+
+##############################################################################
+#
+# End an inner frame - this must be called for each startTableframe call.
+# Frames can be nested.
+#
+sub endTableFrame()
+{
+   my $result = '<tr><td class="tableframe-bottom-left"></td>';
+
+   my $cols = pop(@tableFrameSizes);
+
+   while ($cols > 0)
+   {
+      $result .= '<td class="tableframe-bottom"></td>';
+      $result .= '<td class="tableframe-bottom-div"></td>' if ($cols > 1);
+      $cols--;
+   }
+
+   $result .= '<td class="tableframe-bottom-right"></td></tr></table>';
+
+   return $result;
+}
+
+## This is used to flag the need for the login or password button
+my $loginButton;
+
+##############################################################################
+#
 # Build and return an HTML table that contains the repositories that the
 # given user has access to via some mechanism.
 #
@@ -858,6 +1072,20 @@ sub repositoryTable()
 
    my $result = '';
 
+   $loginButton = '';
+   if (!defined $AuthUser)
+   {
+      $loginButton = '<a title="Login" href="auth_index.cgi">'
+                   .  '<img src="' . &svn_IconPath('login') . '" alt="Login" border="0" align="right"/>'
+                   . '</a>';
+   }
+   else
+   {
+      $loginButton = '<a title="Change Password" href="password.cgi">'
+                   .  '<img src="' . &svn_IconPath('password') . '" alt="Change Password" border="0" align="right"/>'
+                   . '</a>';
+   }
+
    ## Check if we have loaded the admin stuff yet...
    &loadAccessFile() if (!defined %groupUsers);
 
@@ -867,17 +1095,14 @@ sub repositoryTable()
    $result .= &makeRepositoryTable(1);
    $result .= &makeRepositoryTable(0) if (defined $AuthUser);
 
-   if ($result ne '')
-   {
-      $result = '<table class="accessinfo" cellspacing="0">' . $result . '</table>';
-   }
-
    return $result;
 }
 
 ## Store the sizes of the repositories in this "global" such that we only every
 ## get the du once, but only when we need it...
 my %rSize;
+
+my @accessTypes = ('No Access','Read Only','Full Access','Admin Access');
 
 ##############################################################################
 #
@@ -915,43 +1140,36 @@ sub makeRepositoryTable($type)
             ## Add the table elements for the result...
             if ($result eq '')
             {
-               $result .= '<tr><th>Repository</th>';
-
-               if (($type == 3) || $isAdmin)
+               ## Now, if we want the sizes...
+               if (($type == 3) || ($isAdmin))
                {
-                  $result .= '<th>Size</th><th width="99%">';
+                  $result = &startTableFrame('100%','Repository&nbsp;','width="1%"','Size','width="1%"',$loginButton . '(' . $accessTypes[$type] . ')',undef);
                }
                else
                {
-                  $result .= '<th colspan="2" width="99%">';
+                  $result = &startTableFrame('100%','Repository&nbsp;','width="1%"',$loginButton . '(' . $accessTypes[$type] . ')',undef);
                }
-
-               if ($type == 3)
-               {
-                  $result .= '(Admin Access)';
-               }
-               elsif ($type == 2)
-               {
-                  $result .= '(Full Access)</th>';
-               }
-               elsif ($type == 1)
-               {
-                  $result .= '(Read-Only)';
-               }
-               else
-               {
-                  $result .= '(No Access)';
-               }
-
-               $result .= '</th></tr>';
+               $loginButton = '';
             }
 
             ## Get the nice display name...
             my $group = $g;
             $group =~ s/(^[^:]+):.*$/$1/o;
 
-            $result .= '<tr>'
-                     .  '<td><a title="Explore repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/">' . $group . '</a></td>';
+            my $repolink = '<a title="Explore repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/">' . $group . '</a>';
+
+            my $descript = '<a title="RSS Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
+                       .    '<img src="' . $rssIcon . '" alt="RSS Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
+                       .   '</a>'
+                       .   '<a title="Atom Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=atom">'
+                       .    '<img src="' . $atomIcon . '" alt="Atom Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
+                       .   '</a>';
+
+            $descript .=   '<a title="Administrate repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=admin">'
+                       .    '<img src="' . &svn_IconPath('admin') . '" alt="Administrate repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
+                       .   '</a>' if (($type == 3) || $isAdmin);
+
+            $descript .=   $comments;
 
             ## Now, if we want the sizes...
             if (($type == 3) || $isAdmin)
@@ -972,44 +1190,14 @@ sub makeRepositoryTable($type)
 
                ## Cute trick to get comas into the number...
                while ($size =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
+               $size .= 'k';
 
-               $result .=  '<td align="right">' . $size . 'k</td><td>';
+               $result .= &doTableFrameRow($repolink,'nowrap',$size,'align="right"',$descript,undef);
             }
             else
             {
-               $result .= '<td colspan="2" align="left">';
+               $result .= &doTableFrameRow($repolink,'nowrap',$descript,undef);
             }
-
-            $result .=   '<a title="RSS Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
-                     .    '<img src="' . $rssIcon . '" alt="RSS Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
-                     .   '</a>'
-                     .   '<a title="Atom Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=atom">'
-                     .    '<img src="' . $atomIcon . '" alt="Atom Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
-                     .   '</a>';
-
-            $result .=   '<a title="Download a dump of repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=dump">'
-                     .    '<img src="' . &svn_IconPath('dump') . '" alt="Download a dump of repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
-                     .   '</a>'
-                     .   '<a title="Bandwidth usage of repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=bandwidth">'
-                     .    '<img src="' . &svn_IconPath('usage') . '" alt="Bandwidth usage of repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
-                     .   '</a>' if ($type == 3);
-
-            $result .=   $comments
-                     .  '</td>'
-                     . '</tr>';
-         }
-      }
-
-      ## We don't want individual totals if we are admin...
-      $totalSize = 0 if ($isAdmin);
-
-      ## Build the overall total...
-      if ($type == 0)
-      {
-         foreach my $r (keys %rSize)
-         {
-            $totalSize += $rSize{$r};
-            $totalCount++;
          }
       }
 
@@ -1017,12 +1205,17 @@ sub makeRepositoryTable($type)
       {
          ## Cute trick to get comas into the number...
          while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
-         $result .= '<tr class="accessinfototal">'
-                  .  '<td>Total:</td>'
-                  .  '<td>' . $totalSize . 'k</td>'
-                  .  '<td>&nbsp;</td>'
-                  . '</tr>';
+         $totalSize .= 'k';
+
+         $result .= &doTableFrameRow('Total:','style="font-weight: bold;"',
+                                     $totalSize,'style="font-weight: bold;" align="right"',
+                                     '&nbsp;',undef);
       }
+   }
+
+   if ($result ne '')
+   {
+      $result .= &endTableFrame();
    }
 
    return $result;

@@ -16,22 +16,45 @@ require 'admin.pl';
 my $deltas = $cgi->param('Deltas');
 $deltas = 0 if (!defined $deltas);
 
-## Now, lets check if this is a "go"
-if ($cgi->param('Dump') eq 'go')
+my $head = $cgi->param('Head');
+$head = 0 if (!defined $head);
+
+## Get the compression mode
+my $compress = $cgi->param('Compress');
+$compress = 'gzip' if (!defined $compress);
+
+if (defined $cgi->param('Dump'))
 {
    my $dumpName = &svn_REPO();
    $dumpName .= '.deltas' if ($deltas);
-   $dumpName .= '.svndump.gz';
+   $dumpName .= '.head' if ($head);
+   $dumpName .= '.svndump';
 
    my $rpath = $SVN_BASE . '/' . &svn_REPO();
 
    my $cmd = "$SVNADMIN_CMD dump '$rpath'";
    $cmd .= ' --deltas' if ($deltas);
-   $cmd .= ' 2>/dev/null | gzip -9';
+   $cmd .= ' 2>/dev/null';
+
+   my $type = 'application/x-svndump';
+
+   if ($compress eq 'gzip')
+   {
+      $type .= '-gzip';
+      $dumpName .= '.gz';
+      $cmd .= ' | gzip -9';
+   }
+
+   if ($compress eq 'bz2')
+   {
+      $type .= '-bzip2';
+      $dumpName .= '.bz2';
+      $cmd .= ' | bzip2 -9 -c';
+   }
 
    print $cgi->header('-expires' => '+1m' ,
                       '-cache-control' => 'no-cache',
-                      '-type' => 'application/octet-stream' ,
+                      '-type' => $type ,
                       '-Content-Disposition' => 'attachment; filename=' . $dumpName ,
                       '-Content-Description' => 'Insurrection/Subversion repository dump');
 
@@ -40,21 +63,6 @@ if ($cgi->param('Dump') eq 'go')
    exit 0;
 }
 
-&svn_HEADER('Dump ' . &svn_REPO());
-
-print '<table width="100%">'
-    ,  '<tr><th colspan="3" align="center" style="font-size: 16pt;">Download a dump of repository "' , &svn_REPO() , '"</th></tr>'
-    ,  '<tr><td colspan="3">&nbsp;</td></tr>'
-    ,  '<tr>'
-    ,   '<td nowrap width="33%" align="left"><a class="linkbutton" href="?Insurrection=dump&amp;Dump=go&amp;Deltas=1">Dump in 1.1 format</a></td>'
-    ,   '<td nowrap width="34%" align="center"><a class="linkbutton" href="?Insurrection=dump&amp;Dump=go&amp;Deltas=0">Dump in 1.0 format</a></td>'
-    ,   '<td nowrap width="33%" align="right"><a class="linkbutton" href="/">Cancel</a></td>'
-    ,  '</tr>'
-    ,  '<tr><td colspan="3">&nbsp;</td></tr>'
-    , '</table>';
-
-print '<p>This is a first-cut functional dump interface.&nbsp; It is not final.&nbsp; '
-    , 'Note that the 1.1 format can be much smaller than the 1.0 format dumps.</p>';
-
-&svn_TRAILER('$Id$');
+print $cgi->redirect('-location' => '?Insurrection=admin' ,
+                     '-status' => '302 Invalid path');
 

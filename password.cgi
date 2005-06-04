@@ -28,10 +28,6 @@ if ($Operation eq 'Cancel')
 
 &svn_HEADER('Change Password - Insurrection Server');
 
-print '<h2 align="center">Change Password</h2>'
-    , '<p>This page lets you change your password for the Insurrection server.</p>'
-    , '<p>You are logged on as: <font size="+1"><b>' , $AuthUser , '</b></font></p>';
-
 my $changed = 0;
 
 if ($Operation eq 'Update')
@@ -78,6 +74,10 @@ if ($Operation eq 'Update')
    &unlockPasswordFile();
 }
 
+print '<center>';
+
+&startBoldFrame('Change Password for "<b>' . $AuthUser . '</b>"');
+
 print q(<center><form action="?" method="post">
 <table border="0" cellpadding="1" cellspacing="3">
 <tr><td align=right>Old password:</td><td align=left>&nbsp;<input type=password size="16" maxlength="16" name="Password0"></td></tr>
@@ -86,7 +86,10 @@ print q(<center><form action="?" method="post">
 <tr><td align=right><input type="submit" name="Operation" value="Cancel">&nbsp;</td><td align=left>&nbsp;<input type="submit" name="Operation" value="Update"></td></tr>
 </table>
 </form></center>
+<p>This page lets you change your password on this server.</p>
 ) if (!$changed);
+
+&endBoldFrame;
 
 &svn_TRAILER('$Id$');
 
