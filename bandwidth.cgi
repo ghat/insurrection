@@ -274,35 +274,6 @@ sub repoUsage($repo)
       print '</tr></table>';
    }
 
-   if ((!$showDetails) && ($repo ne '--All--'))
-   {
-      my $link = $cgi->url() . '/' . $repo . '?Details=1';
-
-      ## If we got here via the proxy trick, continue to use it...
-      $link = $SVN_REPOSITORIES_URL . $repo . '/?Insurrection=bandwidth&Details=1' if ($cgi->param('Insurrection') eq 'bandwidth');
-
-      $link .= '&History=' . $max_history if ($max_history != $MAX_HISTORY);
-      $link = &svn_XML_Escape($link);
-
-      print '<div class="bandwidthfooter">'
-          ,  '<a href="' , $link , '" class="linkbutton">Show Details</a>'
-          , '</div>';
-   }
-   elsif (-d "$USAGE_DIR/$repo/stats")
-   {
-      ## If we have raw stats for this account, show the button...
-      my $link = $cgi->url() . '/' . $repo . '/.raw-details./index.html';
-
-      ## If we got here via the proxy trick, continue to use it...
-      $link = $SVN_REPOSITORIES_URL . $repo . '/.raw-details./index.html?Insurrection=bandwidth' if ($cgi->param('Insurrection') eq 'bandwidth');
-
-      $link = &svn_XML_Escape($link);
-
-      print '<div class="bandwidthfooter">'
-          ,  '<a href="' , $link , '" class="linkbutton">Raw Details</a>'
-          , '</div>';
-   }
-
    print '</div>';
 
    return($grandTotal);
