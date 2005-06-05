@@ -223,7 +223,7 @@ function doNextItem()
 				img['onclick'] = function(){loadDir(this);};
 
 				td = document.createElement('td');
-				td.width = '99%';
+				td.className = 'pathname';
 				tr.appendChild(td);
 
 				a = document.createElement('a');
@@ -256,7 +256,7 @@ function doNextItem()
 				td.appendChild(img);
 
 				td = document.createElement('td');
-				td.width = '99%';
+				td.className = 'pathname';
 				tr.appendChild(td);
 
 				a = document.createElement('a');

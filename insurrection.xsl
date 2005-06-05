@@ -401,7 +401,7 @@
           </xsl:attribute>
         </xsl:element>
       </td>
-      <td>
+      <td class="pathname">
         <xsl:element name="a">
           <xsl:attribute name="title">
             <xsl:text>Go to directory "</xsl:text>
@@ -486,7 +486,7 @@
           </xsl:attribute>
         </xsl:element>
       </td>
-      <td>
+      <td class="pathname">
         <xsl:element name="a">
           <xsl:attribute name="title">
             <xsl:text>Get latest version of "</xsl:text>
@@ -559,7 +559,7 @@
               <xsl:call-template name="left-side"/>
               <td id="content">
                 <xsl:call-template name="banner"/>
-                <table class="revision" width="100%" cellspacing="0">
+                <table class="revision" cellspacing="0">
                   <thead>
                     <tr class="logtitle">
                       <th colspan="3">
@@ -598,7 +598,7 @@
                               </xsl:if>
                               <xsl:text>)</xsl:text>
                             </th>
-                            <th id="details" width="99%">
+                            <th id="details">
                             </th>
                           </tr>
                         </table>

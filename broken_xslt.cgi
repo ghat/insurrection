@@ -31,7 +31,7 @@ print  '<tr class="pathrow">'
     ,   '<td class="foldspace">'
     ,    '<img title="Expand directory" alt="Expand directory" src="' , &svn_IconPath('closed') , '" id="/" onclick="loadDir(this)" class="dirarrow" align="middle"/>'
     ,   '</td>'
-    ,   '<td class="path" width="99%">'
+    ,   '<td class="path">'
     ,    '<img alt="Folder" src="' , &svn_IconPath('dir') , '" class="svnentryicon" align="middle"/>'
     ,    &svn_XML_Escape($repo_path)
     ,   '</td>'
