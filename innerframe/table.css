@@ -27,45 +27,50 @@
   padding: 1px;
 }
 
+td.tableframe-div
+{
+  padding: 0px;
+}
+
 .tableframe-top
 {
   text-align: center;
-  vertical-align: center;
+  vertical-align: middle;
   font-size: 12px;
   font-weight: bold;
   white-space: nowrap;
   color: black;
 }
 
-.tableframe-top-left, .tableframe-top, .tableframe-top-right, .tableframe-top-div
+.tableframe-top-left, .tableframe-top, .tableframe-top-right, .tableframe-top-div, .tableframe-top-left img
 {
   height: 24px;
   min-height: 24px;
   max-height: 24px;
 }
 
-.tableframe-bottom-left, .tableframe-bottom, .tableframe-bottom-right, .tableframe-bottom-div
+.tableframe-bottom-left, .tableframe-bottom, .tableframe-bottom-right, .tableframe-bottom-div, .tableframe-bottom-right img
 {
   height: 16px;
   min-height: 16px;
   max-height: 16px;
 }
 
-.tableframe-top-left, .tableframe-left, .tableframe-bottom-left
+.tableframe-top-left, .tableframe-left, .tableframe-bottom-left, .tableframe-top-left img
 {
   width: 15px;
   min-width: 15px;
   max-width: 15px;
 }
 
-.tableframe-top-right, .tableframe-right, .tableframe-bottom-right
+.tableframe-top-right, .tableframe-right, .tableframe-bottom-right, .tableframe-bottom-right img
 {
   width: 15px;
   min-width: 15px;
   max-width: 15px;
 }
 
-.tableframe-top-div, .tableframe-div, .tableframe-bottom-div
+.tableframe-top-div, .tableframe-div, .tableframe-bottom-div, .tableframe-top-div img
 {
   width: 4px;
   min-width: 4px;
@@ -117,9 +122,8 @@
   background-position: top right;
 }
 
-td.tableframe-div
+.tableframe-div
 {
-  padding: 0px;
   background-image: url('./div.gif');
   background-position: top center;
 }

@@ -20,35 +20,35 @@ td.innerframe
 .innerframe-top
 {
   text-align: center;
-  vertical-align: center;
+  vertical-align: middle;
   font-size: 12px;
   font-weight: bold;
   white-space: nowrap;
   color: black;
 }
 
-.innerframe-top-left, .innerframe-top, .innerframe-top-right
+.innerframe-top-left, .innerframe-top, .innerframe-top-right, .innerframe-top-left img
 {
   height: 24px;
   min-height: 24px;
   max-height: 24px;
 }
 
-.innerframe-bottom-left, .innerframe-bottom, .innerframe-bottom-right
+.innerframe-bottom-left, .innerframe-bottom, .innerframe-bottom-right, .innerframe-bottom-right img
 {
   height: 16px;
   min-height: 16px;
   max-height: 16px;
 }
 
-.innerframe-top-left, .innerframe-left, .innerframe-bottom-left
+.innerframe-top-left, .innerframe-left, .innerframe-bottom-left, .innerframe-top-left img
 {
   width: 17px;
   min-width: 17px;
   max-width: 17px;
 }
 
-.innerframe-top-right, .innerframe-right, .innerframe-bottom-right
+.innerframe-top-right, .innerframe-right, .innerframe-bottom-right, .innerframe-bottom-right img
 {
   width: 17px;
   min-width: 17px;

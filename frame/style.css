@@ -10,12 +10,12 @@ html, body
   margin: 0px;
 }
 
-#top-left, #top, #top-right, #bottom-left, #bottom, #bottom-right
+#top-left, #top, #top-right, #bottom-left, #bottom, #bottom-right, #top-left img, #bottom-right img
 {
   height: 14px;
 }
 
-#top-left, #left, #bottom-left, #top-right, #right, #bottom-right
+#top-left, #left, #bottom-left, #top-right, #right, #bottom-right, #top-left img, #bottom-right img
 {
   width: 14px;
 }

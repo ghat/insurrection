@@ -293,7 +293,7 @@ sub svn_HEADER($title,$expires,$doctype)
        ,   '<table id="pagetable" cellpadding="0" cellspacing="0">'
        ,    '<thead>'
        ,     '<tr>'
-       ,      '<th id="top-left"></th>'
+       ,      '<th id="top-left">' , $blank , '</th>'
        ,      '<th id="top"></th>'
        ,      '<th id="top-right"></th>'
        ,     '</tr>'
@@ -302,7 +302,7 @@ sub svn_HEADER($title,$expires,$doctype)
        ,     '<tr>'
        ,      '<th id="bottom-left"></th>'
        ,      '<th id="bottom"></th>'
-       ,      '<th id="bottom-right"></th>'
+       ,      '<th id="bottom-right">' , $blank , '</th>'
        ,     '</tr>'
        ,    '</tfoot>'
        ,    '<tbody>'
@@ -860,7 +860,7 @@ sub startInnerFrame($title,$width)
 
    return('<table class="innerframe" cellspacing="0" cellpadding="0"' . $width . '>'
          . '<tr>'
-         .  '<td class="innerframe-top-left"></td>'
+         .  '<td class="innerframe-top-left">' . $blank . '</td>'
          .  '<td class="innerframe-top">' . $title . '</td>'
          .  '<td class="innerframe-top-right"></td>'
          . '</tr>'
@@ -882,7 +882,7 @@ sub endInnerFrame()
          . '<tr>'
          .  '<td class="innerframe-bottom-left"></td>'
          .  '<td class="innerframe-bottom"></td>'
-         .  '<td class="innerframe-bottom-right"></td>'
+         .  '<td class="innerframe-bottom-right">' . $blank . '</td>'
          . '</tr>'
          .'</table>');
 }
@@ -903,7 +903,7 @@ sub startBoldFrame($title,$width)
 
    return('<table class="boldframe" cellspacing="0" cellpadding="0"' . $width . '>'
          . '<tr>'
-         .  '<td class="boldframe-top-left"></td>'
+         .  '<td class="boldframe-top-left">' . $blank . '</td>'
          .  '<td class="boldframe-top">' . $title . '</td>'
          .  '<td class="boldframe-top-right"></td>'
          . '</tr>'
@@ -925,7 +925,7 @@ sub endBoldFrame()
          . '<tr>'
          .  '<td class="boldframe-bottom-left"></td>'
          .  '<td class="boldframe-bottom"></td>'
-         .  '<td class="boldframe-bottom-right"></td>'
+         .  '<td class="boldframe-bottom-right">' . $blank . '</td>'
          . '</tr>'
          .'</table>');
 }
@@ -952,7 +952,7 @@ sub startTableFrame($width,$title,$titleExtra,$title,$titleExtra,...)
    push(@tableFrameSizes,scalar(@titles) / 2);
 
    my $result = '<table class="tableframe" cellspacing="0" cellpadding="0"' . $width . '>'
-              .  '<tr><td class="tableframe-top-left"></td>';
+              .  '<tr><td class="tableframe-top-left">' . $blank . '</td>';
 
    for (my $i=0; $i < @titles; $i += 2)
    {
@@ -962,7 +962,7 @@ sub startTableFrame($width,$title,$titleExtra,$title,$titleExtra,...)
 
       if (($i + 2) < @titles)
       {
-         $result .= '<td class="tableframe-top-div"></td>';
+         $result .= '<td class="tableframe-top-div">' . $blank . '</td>';
       }
    }
 
@@ -1050,7 +1050,7 @@ sub endTableFrame()
       $cols--;
    }
 
-   $result .= '<td class="tableframe-bottom-right"></td></tr></table>';
+   $result .= '<td class="tableframe-bottom-right">' . $blank . '</td></tr></table>';
 
    return $result;
 }

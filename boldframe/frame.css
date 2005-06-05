@@ -19,34 +19,34 @@ td.boldframe
 .boldframe-top
 {
   text-align: center;
-  vertical-align: center;
+  vertical-align: middle;
   font-size: 16px;
   white-space: nowrap;
   color: white;
 }
 
-.boldframe-top-left, .boldframe-top, .boldframe-top-right
+.boldframe-top-left, .boldframe-top, .boldframe-top-right, .boldframe-top-left img
 {
   height: 37px;
   min-height: 37px;
   max-height: 37px;
 }
 
-.boldframe-bottom-left, .boldframe-bottom, .boldframe-bottom-right
+.boldframe-bottom-left, .boldframe-bottom, .boldframe-bottom-right, .boldframe-bottom-right img
 {
   height: 15px;
   min-height: 15px;
   max-height: 15px;
 }
 
-.boldframe-top-left, .boldframe-left, .boldframe-bottom-left
+.boldframe-top-left, .boldframe-left, .boldframe-bottom-left, .boldframe-top-left img
 {
   width: 13px;
   min-width: 13px;
   max-width: 13px;
 }
 
-.boldframe-top-right, .boldframe-right, .boldframe-bottom-right
+.boldframe-top-right, .boldframe-right, .boldframe-bottom-right, .boldframe-bottom-right img
 {
   width: 13px;
   min-width: 13px;
