@@ -1058,6 +1058,10 @@ sub endTableFrame()
 ## This is used to flag the need for the login or password button
 my $loginButton;
 
+## Store the sizes of the repositories in this "global" such that we only every
+## get the du once, but only when we need it...
+my %rSize;
+
 ##############################################################################
 #
 # Build and return an HTML table that contains the repositories that the
@@ -1115,18 +1119,27 @@ sub repositoryTable()
    ## Check if we have loaded the admin stuff yet...
    &loadAccessFile() if (!defined %groupUsers);
 
+   ## Only system administrators see the sizes in this table.
+   if (&isAdminMember('Admin',$AuthUser))
+   {
+      foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
+      {
+         my ($s,$r) = ($line =~ m/^(\d+)\s+(\S.*)$/o);
+         $rSize{$r} = $s;
+      }
+   }
+
    ## Now, for each access type, build the correct table...
    $result .= &makeRepositoryTable(3) if (defined $AuthUser);
    $result .= &makeRepositoryTable(2) if (defined $AuthUser);
    $result .= &makeRepositoryTable(1);
    $result .= &makeRepositoryTable(0) if (defined $AuthUser);
 
+   ## Now, crunch it all into one table
+   $result =~ s:</table><table[^>]*>::sgo;
+
    return $result;
 }
-
-## Store the sizes of the repositories in this "global" such that we only every
-## get the du once, but only when we need it...
-my %rSize;
 
 my @accessTypes = ('No Access','Read Only','Full Access','Admin Access');
 
@@ -1167,7 +1180,7 @@ sub makeRepositoryTable($type)
             if ($result eq '')
             {
                ## Now, if we want the sizes...
-               if (($type == 3) || ($isAdmin))
+               if (defined %rSize)
                {
                   $result = &startTableFrame('100%','Repository&nbsp;','width="1%"','Size','width="1%"',$loginButton . '(' . $accessTypes[$type] . ')',undef);
                }
@@ -1198,18 +1211,8 @@ sub makeRepositoryTable($type)
             $descript .=   $comments;
 
             ## Now, if we want the sizes...
-            if (($type == 3) || $isAdmin)
+            if (%rSize)
             {
-               ## Only do this once, and only when/if we need to.
-               if (!defined $rSize{$group})
-               {
-                  foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
-                  {
-                     my ($s,$r) = ($line =~ m/^(\d+)\s+(\S.*)$/o);
-                     $rSize{$r} = $s;
-                  }
-               }
-
                my $size = $rSize{$group};
                $totalSize += $size;
                $totalCount++;
