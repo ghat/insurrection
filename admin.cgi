@@ -374,26 +374,41 @@ sub printAdminForms()
       $bandwidthLimit = 0 + $tmp if ((defined $tmp) && ($tmp =~ m/^\d+$/o));
    }
 
-   ## ### FIX - We should keep a running total...
-   ## ### FIX - This is rather ugly but it is also rarely used...
-   ## Now for the current month's bandwidth usage
+   ## Now for the last few months of bandwidth usage (starting at the newest?)
+   ## So, lets read the directory looking for the usage total files
    my $logDir = $USAGE_DIR . '/' . &svn_REPO();
-   my @years = (`ls -r $logDir` =~ m/(\d\d\d\d)/g);
-   $logDir .= '/' . $years[0];
-   my @m = (`ls -r $logDir` =~ m/(\d\d)/g);
-   $logDir .= '/' . $m[0];
-   my $month = ('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')[$m[0]-1];
-
-   my $bandwidthTotal = 0;
-   foreach my $line (split("\n",`cat $logDir/*`))
+   my $rows = 0;
+   my $bw_rows = '';
+   if (opendir(DIR,$logDir))
    {
-      if ($line =~ m/:(\d+)$/o)
+      foreach my $file (reverse sort grep(/^usage-.*\.db$/,readdir(DIR)))
       {
-         $bandwidthTotal += $1;
+         ## Show up to the last 4 months here?
+         if ($rows < 4)
+         {
+            if (open(DB,"<$logDir/$file"))
+            {
+               my $bandwidthTotal = <DB>;
+               close(DB);
+               $bandwidthTotal =~ s/^\D*?(\d+)\D*/$1/so;
+
+               my ($y,$m) = ($file =~ m/(\d\d\d\d)-(\d\d)/o);
+
+               my $month = ('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')[$m-1];
+
+               my $bandwidthTitle = $bandwidthTotal . ' bytes in ' . $month . '  [limit: ' . $bandwidthLimit . ']';
+               while ($bandwidthTitle =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
+
+               $bw_rows .= '<tr>'
+                         .  '<td>' . $month . '-' . $y . '&nbsp;bandwidth:&nbsp;</td>'
+                         .  '<td>' . &gauge($bandwidthTotal,$bandwidthLimit,$bandwidthTitle) . '</td>'
+                         . '</tr>';
+               $rows++;
+            }
+         }
       }
+      closedir(DIR);
    }
-   my $bandwidthTitle = $bandwidthTotal . ' bytes in ' . $month . '  [limit: ' . $bandwidthLimit . ' bytes]';
-   while ($bandwidthTitle =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
 
    print &startInnerFrame('Repository Usage','100%')
        , '<table width="100%" cellpadding="0" cellspacing="0">'
@@ -401,10 +416,7 @@ sub printAdminForms()
        ,   '<td>Repository&nbsp;size:&nbsp;</td>'
        ,   '<td width="99%">' , &gauge($diskUsage,$diskLimit,$diskUsageTitle) , '</td>'
        ,  '</tr>'
-       ,  '<tr>'
-       ,   '<td>' , $month , '&nbsp;bandwidth:&nbsp;</td>'
-       ,   '<td width="99%">' , &gauge($bandwidthTotal,$bandwidthLimit,$bandwidthTitle) , '</td>'
-       ,  '</tr>'
+       ,  $bw_rows
        , '</table>'
        , '<center>'
        ,  '<form method="get" action="?" style="margin: 2px;">'
