@@ -1120,12 +1120,14 @@ sub repositoryTable()
    &loadAccessFile() if (!defined %groupUsers);
 
    ## Only system administrators see the sizes in this table.
+   my $totalSize = 0;
    if (&isAdminMember('Admin',$AuthUser))
    {
       foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
       {
          my ($s,$r) = ($line =~ m/^(\d+)\s+(\S.*)$/o);
          $rSize{$r} = $s;
+         $totalSize += $s;
       }
    }
 
@@ -1135,7 +1137,26 @@ sub repositoryTable()
    $result .= &makeRepositoryTable(1);
    $result .= &makeRepositoryTable(0) if (defined $AuthUser);
 
-   ## Now, crunch it all into one table
+   ## If we have sizes, make a grand total...
+   ## Yes, this is a hack, but it works
+   if ($totalSize > 0)
+   {
+      while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
+      $totalSize .= 'k';
+
+      my $row = &doTableFrameRow('Total:',undef,
+                                 $totalSize,'style="align="right"',
+                                 '&nbsp;',undef);
+
+      $row =~ s/<tr/<tr style="background-color: #cee0da; font-weight: bold;"/o;
+
+      ## Now, crunch it all into the last table after the last data row and
+      ## before the frame row.
+      $result =~ s:^(.*</tr>)(<tr><td class="tableframe-bottom-left">.*?)$:$1$row$2:so;
+   }
+
+   ## Combine the possible multiple tables into one table such that
+   ## all of the columns line up
    $result =~ s:</table><table[^>]*>::sgo;
 
    return $result;
@@ -1161,8 +1182,6 @@ sub makeRepositoryTable($type)
 
    if (($type != 0) || $isAdmin)
    {
-      my $totalSize = 0;
-      my $totalCount = 0;
       my $rssIcon = &svn_IconPath('rss');
       my $atomIcon = &svn_IconPath('atom');
 
@@ -1214,8 +1233,6 @@ sub makeRepositoryTable($type)
             if (%rSize)
             {
                my $size = $rSize{$group};
-               $totalSize += $size;
-               $totalCount++;
 
                ## Cute trick to get comas into the number...
                while ($size =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
@@ -1228,17 +1245,6 @@ sub makeRepositoryTable($type)
                $result .= &doTableFrameRow($repolink,'nowrap',$descript,undef);
             }
          }
-      }
-
-      if (($totalSize > 0) && ($totalCount > 1))
-      {
-         ## Cute trick to get comas into the number...
-         while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
-         $totalSize .= 'k';
-
-         $result .= &doTableFrameRow('Total:','style="font-weight: bold;"',
-                                     $totalSize,'style="font-weight: bold;" align="right"',
-                                     '&nbsp;',undef);
       }
    }
 
