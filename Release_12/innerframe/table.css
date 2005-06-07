@@ -1,0 +1,160 @@
+/*
+ * $Id$
+ * Copyright 2004,2005 - Michael Sinz
+ */
+
+.tableframe
+{
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+
+.tableframe-row-even
+{
+  background-color: #FFFFFF;
+  vertical-align: baseline;
+}
+
+.tableframe-row-odd
+{
+  background-color: #F4F4F4;
+  vertical-align: baseline;
+}
+
+.tableframe-row-odd td, .tableframe-row-even td
+{
+  padding: 1px;
+}
+
+td.tableframe-div
+{
+  padding: 0px;
+}
+
+.tableframe-top
+{
+  text-align: center;
+  vertical-align: middle;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: black;
+}
+
+.tableframe-top-left, .tableframe-top, .tableframe-top-right, .tableframe-top-div, .tableframe-top-left img
+{
+  height: 24px;
+  min-height: 24px;
+  max-height: 24px;
+}
+
+.tableframe-bottom-left, .tableframe-bottom, .tableframe-bottom-right, .tableframe-bottom-div, .tableframe-bottom-right img
+{
+  height: 16px;
+  min-height: 16px;
+  max-height: 16px;
+}
+
+.tableframe-top-left, .tableframe-left, .tableframe-bottom-left, .tableframe-top-left img
+{
+  width: 15px;
+  min-width: 15px;
+  max-width: 15px;
+}
+
+.tableframe-top-right, .tableframe-right, .tableframe-bottom-right, .tableframe-bottom-right img
+{
+  width: 15px;
+  min-width: 15px;
+  max-width: 15px;
+}
+
+.tableframe-top-div, .tableframe-div, .tableframe-bottom-div, .tableframe-top-div img
+{
+  width: 4px;
+  min-width: 4px;
+  max-width: 4px;
+}
+
+.tableframe-top-left, .tableframe-top-right, .tableframe-bottom-left, .tableframe-bottom-right, .tableframe-top-div, .tableframe-bottom-div
+{
+  background-repeat: no-repeat;
+}
+
+.tableframe-top, .tableframe-bottom
+{
+  background-repeat: repeat-x;
+}
+
+.tableframe-left, .tableframe-right, .tableframe-div
+{
+  background-repeat: repeat-y;
+}
+
+.tableframe-top-left
+{
+  background-image: url('./top-left.gif');
+  background-position: bottom right;
+}
+
+.tableframe-top
+{
+  background-image: url('./top.gif');
+  background-position: bottom left;
+}
+
+.tableframe-top-div
+{
+  background-image: url('./top-div.gif');
+  background-position: bottom center;
+}
+
+.tableframe-top-right
+{
+  background-image: url('./top-right.gif');
+  background-position: bottom left;
+}
+
+.tableframe-left
+{
+  background-image: url('./left.gif');
+  background-position: top right;
+}
+
+.tableframe-div
+{
+  background-image: url('./div.gif');
+  background-position: top center;
+}
+
+.tableframe-right
+{
+  background-image: url('./right.gif');
+  background-position: top left;
+}
+
+.tableframe-bottom-left
+{
+  background-image: url('./bottom-left.gif');
+  background-position: top right;
+}
+
+.tableframe-bottom
+{
+  background-image: url('./bottom.gif');
+  background-position: top left;
+}
+
+.tableframe-bottom-div
+{
+  background-image: url('./bottom-div.gif');
+  background-position: top center;
+}
+
+.tableframe-bottom-right
+{
+  background-image: url('./bottom-right.gif');
+  background-position: top left;
+}
+

@@ -1,0 +1,100 @@
+<!doctype html public "-//W2C//DTD HTML 4.01 Transitional//EN">
+<!-- $Id$ -->
+<html>
+  <head>
+    <title>Insurrection Apache mod_rewrite Test Control</title>
+    <style type="text/css">
+BODY {font-size: 8pt;}
+A {color: blue; text-decoration: none;}
+A:visited {color: blue; text-decoration: none;}
+A:hover {color: green; text-decoration: none;}
+A:active {color: red; text-decoration: none;}
+SELECT {font-family: monospace;}
+TABLE {margin: 4px; background-color: #000000;}
+TR {background-color: #EEEEEE;}
+TD {padding-left: 0.5em; padding-right: 0.5em;}
+    </style>
+  </head>
+  <body>
+    <span style="margin: 3px;">
+      <select name="Special" size="1" onchange="setSpecial(this);">
+        <option value=".">Select test character</option>
+        <option value="%20">"&#032;" (%20) [proxy:fails - redirect:wrong]</option><!--   -->
+        <option value="%21">"&#033;" (%21) [proxy:works - redirect:wrong]</option><!-- ! -->
+        <option value="%22">"&#034;" (%22) [proxy:works - redirect:wrong]</option><!-- " -->
+        <option value="%23">"&#035;" (%23) [proxy:fails - redirect:wrong]</option><!-- # -->
+        <option value="%24">"&#036;" (%24) [proxy:works - redirect:wrong]</option><!-- $ -->
+        <option value="%25">"&#037;" (%25) [proxy:abort - redirect:wrong]</option><!-- % -->
+        <option value="%26">"&#038;" (%26) [proxy:works - redirect:wrong]</option><!-- & -->
+        <option value="%27">"&#039;" (%27) [proxy:works - redirect:wrong]</option><!-- ' -->
+        <option value="%28">"&#040;" (%28) [proxy:works - redirect:wrong]</option><!-- ( -->
+        <option value="%29">"&#041;" (%29) [proxy:works - redirect:wrong]</option><!-- ) -->
+        <option value="%2A">"&#042;" (%2A) [proxy:works - redirect:wrong]</option><!-- * -->
+        <option value="%2B">"&#043;" (%2B) [proxy:works - redirect:wrong]</option><!-- + -->
+        <option value="%2C">"&#044;" (%2C) [proxy:works - redirect:wrong]</option><!-- , -->
+        <option value="%2D">"&#045;" (%2D) [proxy:works - redirect:wrong]</option><!-- - -->
+        <option value="%2E">"&#046;" (%2E) [proxy:works - redirect:wrong]</option><!-- . -->
+        <option value="%30">"&#048;" (%30) [proxy:works - redirect:wrong]</option><!-- 0 -->
+        <option value="%3A">"&#058;" (%3A) [proxy:works - redirect:wrong]</option><!-- : -->
+        <option value="%3B">"&#059;" (%3B) [proxy:works - redirect:wrong]</option><!-- ; -->
+        <option value="%3C">"&#060;" (%3C) [proxy:works - redirect:wrong]</option><!-- < -->
+        <option value="%3D">"&#061;" (%3D) [proxy:works - redirect:wrong]</option><!-- = -->
+        <option value="%3E">"&#062;" (%3E) [proxy:works - redirect:wrong]</option><!-- > -->
+        <option value="%3F">"&#063;" (%3F) [proxy:fails - redirect:fails]</option><!-- ? -->
+        <option value="%40">"&#064;" (%40) [proxy:works - redirect:wrong]</option><!-- @ -->
+        <option value="%41">"&#065;" (%41) [proxy:works - redirect:wrong]</option><!-- A -->
+        <option value="%5B">"&#091;" (%5B) [proxy:works - redirect:wrong]</option><!-- [ -->
+        <option value="%5C">"&#092;" (%5C) [proxy:works - redirect:wrong]</option><!-- \ -->
+        <option value="%5D">"&#093;" (%5D) [proxy:works - redirect:wrong]</option><!-- ] -->
+        <option value="%5E">"&#094;" (%5E) [proxy:works - redirect:wrong]</option><!-- ^ -->
+        <option value="%5F">"&#095;" (%5F) [proxy:works - redirect:wrong]</option><!-- _ -->
+        <option value="%60">"&#096;" (%60) [proxy:works - redirect:wrong]</option><!-- ` -->
+        <option value="%61">"&#097;" (%61) [proxy:works - redirect:wrong]</option><!-- a -->
+        <option value="%7B">"&#123;" (%7B) [proxy:works - redirect:wrong]</option><!-- { -->
+        <option value="%7C">"&#124;" (%7C) [proxy:works - redirect:wrong]</option><!-- | -->
+        <option value="%7D">"&#125;" (%7D) [proxy:works - redirect:wrong]</option><!-- } -->
+        <option value="%7E">"&#126;" (%7E) [proxy:works - redirect:wrong]</option><!-- ~ -->
+        <option value="%7F">"&#127;" (%7F) [proxy:works - redirect:wrong]</option><!--  -->
+      </select>
+      Tests to see how special characters get passed through the
+      Apache <a href="http://httpd.apache.org/docs-2.0/mod/mod_rewrite.html" target="_top">mod_rewrite</a>
+      redirect and proxy operations.&nbsp;
+      <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=34602" target="_top">See bug 34602</a>
+    </span>
+    <table border="0" cellpadding="0" cellspacing="1">
+      <tr><td>Direct:</td><td id="direct"></td></tr>
+      <tr><td>Redirect:</td><td id="redirect"></td></tr>
+      <tr><td>Proxy:</td><td id="proxy"></td></tr>
+    </table>
+    <script language="JavaScript" type="text/javascript">
+    <!--
+function setSpecial(obj)
+{
+  if (obj.value != '.')
+  {
+    var name = "X-" + obj.value + "-Y/test.html?param1=one&param2=X-" + obj.value + "-Y&param3=/X-" + obj.value + "-Y/test.html";
+    var base = new String(document.location);
+    base = base.substring(0,base.lastIndexOf('/')+1);
+
+    setTest('direct',base + "test.cgi/" + name);
+    setTest('redirect',base + "redirect/" + name);
+    setTest('proxy',base + "proxy/" + name);
+  }
+}
+
+function setTest(id,value)
+{
+  var cell = document.getElementById(id);
+  cell.innerHTML = "";
+  top[id].document.location = value;
+  var a = document.createElement('a');
+  a.href = value;
+  a.target = id;
+  a.title = 'Click here to reload the "' + id + '" frame with this URL';
+  a.appendChild(document.createTextNode(value));
+  cell.appendChild(a);
+}
+    //-->
+    </script>
+  </body>
+</html>
