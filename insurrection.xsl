@@ -67,10 +67,19 @@
   <!-- ******************************************************************************************************************* -->
 
   <!-- Some "macros" for doing our standard page layout -->
+  <!-- Note that the top-left and bottom-right have an image in them to force the frame border sizes via the CSS -->
+  <!-- This is to work around the lack of min-width/min-height support in a number of CSS implementations. -->
   <xsl:template name="top-bottom">
     <thead>
       <tr>
-        <th id="top-left"></th>
+        <th id="top-left">
+          <xsl:element name="img">
+            <xsl:attribute name="src">
+              <xsl:call-template name="blankicon-path"/>
+            </xsl:attribute>
+            <xsl:attribute name="alt"></xsl:attribute>
+          </xsl:element>
+        </th>
         <th id="top"></th>
         <th id="top-right"></th>
       </tr>
@@ -79,7 +88,14 @@
       <tr>
         <th id="bottom-left"></th>
         <th id="bottom"></th>
-        <th id="bottom-right"></th>
+        <th id="bottom-right">
+          <xsl:element name="img">
+            <xsl:attribute name="src">
+              <xsl:call-template name="blankicon-path"/>
+            </xsl:attribute>
+            <xsl:attribute name="alt"></xsl:attribute>
+          </xsl:element>
+        </th>
       </tr>
     </tfoot>
   </xsl:template>
