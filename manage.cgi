@@ -406,13 +406,7 @@ if (@accessGroups > 0)
        ,   '<input type="text" name="NewUser" value="" size="16" maxlength="32"/>'
        ,  '</td>'
        ,  '<td align="left" valign="middle" colspan="' , ($cols + $isAdmin) , '">'
-       ,   '<table width="100%" cellspacing="0" id="versions">'
-       ,    '<tr>'
-       ,     '<th rowspan="2"><input type="submit" name="Operation" value="AddUser"/></th>'
-       ,     '<td>' , &svn_XML_Escape($accessVersion) , '</td>'
-       ,    '</tr>'
-       ,    '<tr><td width="90%">' , &svn_XML_Escape($passwdVersion) , '</td></tr>'
-       ,   '</table>'
+       ,   '<input type="submit" name="Operation" value="AddUser"/>'
        ,  '</td>'
        , '</tr>' if ($canAdminUser);
 
@@ -421,10 +415,6 @@ if (@accessGroups > 0)
        , '<td align=right><input type="submit" name="Operation" value="Update"/></td>'
        , '</tr>' if ($canMod);
    print '</table>';
-
-   print '<p style="font-size: 9pt; text-align: left;">To add a user, you must use the email address of the user.&nbsp; '
-       , 'For example, <b>msinz</b>' , $EMAIL_DOMAIN , ' would need to used.&nbsp; '
-       , 'This is important as EMail is used to send the initial password to the user.</p>' if ($canAdminUser);
 
    print $formEntries , '</form>' if ($canAdminUser);
 

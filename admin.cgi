@@ -400,7 +400,7 @@ sub printAdminForms()
                while ($bandwidthTitle =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
 
                $bw_rows .= '<tr>'
-                         .  '<td>' . $month . '-' . $y . '&nbsp;bandwidth:&nbsp;</td>'
+                         .  '<td nowrap>' . $month . '&ndash;' . $y . '&nbsp;bandwidth:&nbsp;</td>'
                          .  '<td>' . &gauge($bandwidthTotal,$bandwidthLimit,$bandwidthTitle) . '</td>'
                          . '</tr>';
                $rows++;

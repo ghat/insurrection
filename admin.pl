@@ -1090,10 +1090,6 @@ sub repositoryTable()
       $loginButton = '<a title="Login" href="' . $loginURL . '">'
                    .  '<img src="' . &svn_IconPath('login') . '" alt="Login" border="0" align="right"/>'
                    . '</a>';
-
-      ## Compensate for the 41 pixel login button...
-      $loginButton .= '<img src="' . &svn_IconPath('blank') . '" alt="" border="0" align="left" width="41" height="1"/>';
-
    }
    else
    {

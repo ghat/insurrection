@@ -41,23 +41,6 @@ a:active {color: red; text-decoration: underline;}
   background: white;
 }
 
-.versiontable th
-{
-  background-color: rgb(182,38,133);
-  color: white;
-  border-right: 1px black dotted;
-  border-bottom: 1px black dotted;
-  padding-left: 1em;
-  padding-top: 2px;
-}
-
-.versiontable td
-{
-  font-size: 90%;
-  border-right: 1px gray dotted;
-  border-bottom: 1px gray dotted;
-}
-
 .accesstable
 {
   border: 3px black solid;
@@ -83,34 +66,6 @@ a:active {color: red; text-decoration: underline;}
   border: 1px black solid;
   border-bottom: 0px;
   border-right: 0px;
-}
-
-#versions
-{
-  color: rgb(182,38,133);
-  font-family: helvetica, ariel, sansserif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 8pt;
-  padding: 0px;
-  margin: 0px;
-  border: 0px;
-}
-
-#versions th
-{
-  border: 0px;
-  padding: 2px;
-  background-color: transparent;
-  text-align: left;
-}
-
-#versions td
-{
-  border: 0px;
-  padding: 0px;
-  background-color: transparent;
-  text-align: right;
 }
 
 .accesstitles
@@ -242,13 +197,6 @@ a:active {color: red; text-decoration: underline;}
 .bandwidthtotal th
 {
   text-align: left;
-}
-
-
-
-.versiontable li
-{
-  margin-left: -0.25in;
 }
 
 .footer
