@@ -1095,10 +1095,6 @@ sub endTableFrame()
 ## This is used to flag the need for the login or password button
 my $loginButton;
 
-## Store the sizes of the repositories in this "global" such that we only every
-## get the du once, but only when we need it...
-my %rSize;
-
 ##############################################################################
 #
 # Build and return an HTML table that contains the repositories that the
@@ -1152,41 +1148,11 @@ sub repositoryTable()
    ## Check if we have loaded the admin stuff yet...
    &loadAccessFile() if (!defined %groupUsers);
 
-   ## Only system administrators see the sizes in this table.
-   my $totalSize = 0;
-   if (&isAdminMember('Admin',$AuthUser))
-   {
-      foreach my $line (split(/\n/,`cd $SVN_BASE ; du -s *`))
-      {
-         my ($s,$r) = ($line =~ m/^(\d+)\s+(\S.*)$/o);
-         $rSize{$r} = $s;
-         $totalSize += $s;
-      }
-   }
-
    ## Now, for each access type, build the correct table...
    $result .= &makeRepositoryTable(3) if (defined $AuthUser);
    $result .= &makeRepositoryTable(2) if (defined $AuthUser);
    $result .= &makeRepositoryTable(1);
    $result .= &makeRepositoryTable(0) if (defined $AuthUser);
-
-   ## If we have sizes, make a grand total...
-   ## Yes, this is a hack, but it works
-   if ($totalSize > 0)
-   {
-      while ($totalSize =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
-      $totalSize .= 'k';
-
-      my $row = &doTableFrameRow('Total:',undef,
-                                 $totalSize,'style="text-align: right;"',
-                                 '&nbsp;',undef);
-
-      $row =~ s/<tr/<tr style="background-color: #cee0da; font-weight: bold;"/o;
-
-      ## Now, crunch it all into the last table after the last data row and
-      ## before the frame row.
-      $result =~ s:^(.*</tr>)(<tr><td class="tableframe-bottom-left">.*?)$:$1$row$2:so;
-   }
 
    ## Combine the possible multiple tables into one table such that
    ## all of the columns line up
@@ -1226,20 +1192,10 @@ sub makeRepositoryTable($type)
 
          if ($utype == $type)
          {
-            my $comments = $groupComments{$g};
-
             ## Add the table elements for the result...
             if ($result eq '')
             {
-               ## Now, if we want the sizes...
-               if (defined %rSize)
-               {
-                  $result = &startTableFrame('100%','Repository&nbsp;','width="1%"','Size','width="1%"',$loginButton . '(' . $accessTypes[$type] . ')',undef);
-               }
-               else
-               {
-                  $result = &startTableFrame('100%','Repository&nbsp;','width="1%"',$loginButton . '(' . $accessTypes[$type] . ')',undef);
-               }
+               $result = &startTableFrame('100%','Repository&nbsp;','width="1%"',$loginButton . '(' . $accessTypes[$type] . ')',undef);
                $loginButton = '';
             }
 
@@ -1247,36 +1203,28 @@ sub makeRepositoryTable($type)
             my $group = $g;
             $group =~ s/(^[^:]+):.*$/$1/o;
 
-            my $repolink = '<a title="Explore repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/">' . $group . '</a>';
+            my $repolink = $group;
+            my $descript = '';
 
-            my $descript = '<a title="RSS Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
-                       .    '<img src="' . $rssIcon . '" alt="RSS Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
-                       .   '</a>'
-                       .   '<a title="Atom Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=atom">'
-                       .    '<img src="' . $atomIcon . '" alt="Atom Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
-                       .   '</a>';
-
-            $descript .=   '<a title="Administrate repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=admin">'
-                       .    '<img src="' . &svn_IconPath('admin') . '" alt="Administrate repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
-                       .   '</a>' if (($type == 3) || $isAdmin);
-
-            $descript .=   $comments;
-
-            ## Now, if we want the sizes...
-            if (%rSize)
+            if ($type > 0)
             {
-               my $size = $rSize{$group};
+               $repolink = '<a title="Explore repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/">' . $group . '</a>';
 
-               ## Cute trick to get comas into the number...
-               while ($size =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
-               $size .= 'k';
+               $descript .= '<a title="RSS Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=rss">'
+                          .  '<img src="' . $rssIcon . '" alt="RSS Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
+                          . '</a>'
+                          . '<a title="Atom Feed of activity in repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=atom">'
+                          .  '<img src="' . $atomIcon . '" alt="Atom Feed of activity in repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
+                          . '</a>';
 
-               $result .= &doTableFrameRow($repolink,'nowrap',$size,'align="right"',$descript,undef);
+               $descript .= '<a title="Administrate repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=admin">'
+                          .  '<img src="' . &svn_IconPath('admin') . '" alt="Administrate repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
+                          . '</a>' if (($type == 3) || $isAdmin);
             }
-            else
-            {
-               $result .= &doTableFrameRow($repolink,'nowrap',$descript,undef);
-            }
+
+            $descript .= $groupComments{$g};
+
+            $result .= &doTableFrameRow($repolink,'nowrap',$descript,undef);
          }
       }
    }
