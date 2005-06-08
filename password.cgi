@@ -61,7 +61,9 @@ if ($Operation eq 'Update')
       &savePasswordFile('password.cgi: Password changed');
 
       print '<h2 align="center"><font color="green">Password successfully changed.</font></h2>'
-          , '<p>You will need to <a href="' , $SVN_URL_PATH , 'auth_index.cgi?">log in again</a> as your password has changed.</p>';
+          , '<p>You will need to '
+          ,  '<a href="' , $SVN_URL_PATH , 'auth_index.cgi?' , time , '">log in again</a> '
+          ,  'as your password has changed.</p>';
 
       $changed = 1;
    }
@@ -71,20 +73,17 @@ if ($Operation eq 'Update')
 
 print '<center>';
 
-print &startBoldFrame('Change Password for "<b>' . $AuthUser . '</b>"');
-
-print q(<center><form action="?" method="post">
-<table border="0" cellpadding="1" cellspacing="3">
-<tr><td align=right>Old password:</td><td align=left>&nbsp;<input type=password size="16" maxlength="16" name="Password0"></td></tr>
-<tr><td align=right>New password:</td><td align=left>&nbsp;<input type=password size="16" maxlength="16" name="Password1"></td></tr>
-<tr><td align=right>&nbsp;&nbsp;again:</td><td align=left>&nbsp;<input type=password size="16" maxlength="16" name="Password2"></td></tr>
-<tr><td align=right><input type="submit" name="Operation" value="Cancel">&nbsp;</td><td align=left>&nbsp;<input type="submit" name="Operation" value="Update"></td></tr>
-</table>
-</form></center>
-<p>This page lets you change your password on this server.</p>
-) if (!$changed);
-
-print &endBoldFrame;
+print &startBoldFrame('Change Password for "<b>' . $AuthUser . '</b>"')
+    , '<center><form action="?" method="post">'
+    , '<table border="0" cellpadding="1" cellspacing="3">'
+    , '<tr><td align=right>Old password:</td><td align=left>&nbsp;<input type=password size="16" maxlength="16" name="Password0"></td></tr>'
+    , '<tr><td align=right>New password:</td><td align=left>&nbsp;<input type=password size="16" maxlength="16" name="Password1"></td></tr>'
+    , '<tr><td align=right>&nbsp;&nbsp;again:</td><td align=left>&nbsp;<input type=password size="16" maxlength="16" name="Password2"></td></tr>'
+    , '<tr><td align=right><input type="submit" name="Operation" value="Cancel">&nbsp;</td><td align=left>&nbsp;<input type="submit" name="Operation" value="Update"></td></tr>'
+    , '</table>'
+    , '</form></center>'
+    , '<p>This page lets you change your password on this server.</p>'
+    , &endBoldFrame if (!$changed);
 
 &svn_TRAILER('$Id$');
 

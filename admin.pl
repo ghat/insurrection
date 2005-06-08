@@ -846,6 +846,43 @@ sub savePasswordFile($reason)
 
 ##############################################################################
 #
+# Generate a random password of up to 12 characters (upper/lower/numbers)
+#
+sub genPassword()
+{
+   my $result='';
+
+   ## Seed the generator
+   srand();
+
+   ## Now, generate a password/verification word.
+   for (my $i=0; $i<12; $i++)
+   {
+      ## We ask for more than just 62 numbers
+      ## (which is the number of letters and digits)
+      ## such that we can also generate passwords that
+      ## have less characters...  (sneaky :-)
+      my $p = int(rand(64));
+
+      if ($p < 10)
+      {
+         $result .= chr($p + 48);
+      }
+      elsif ($p < 36)
+      {
+         $result .= chr($p - 10 + 65);
+      }
+      elsif ($p < 62)
+      {
+         $result .= chr($p - 10 - 26 + 65 + 32);
+      }
+   }
+
+   return $result;
+}
+
+##############################################################################
+#
 # Start an inner frame with the given title string and an option width.
 # After starting an inner frame, output your normal contents and then
 # call endInnerFrame().  Frames can be nested.
