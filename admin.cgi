@@ -11,6 +11,9 @@ require 'admin.pl';
 ## First, lets see if we are the admin of the repository...
 &checkAdminMode();
 
+## Check if we are the system admin
+my $isAdmin = &isAdminMember('Admin',$AuthUser);
+
 ## We will need this...
 &loadAccessFile() if (!defined %groupUsers);
 
@@ -54,10 +57,6 @@ if (defined $cgi->param('update'))
       {
          $admins{$user} = 1;
       }
-
-      ## We need to know if we are "super-user" such that we can
-      ## also change our own status...
-      my $isAdmin = &isAdminMember('Admin',$AuthUser);
 
       foreach my $user (sort keys %{$groupUsers{$group}})
       {
@@ -301,7 +300,7 @@ sub printAdminForms()
    ##############################################################################
    ### Repository dump form
    print '<form method="get" action="?">'
-       , &startInnerFrame('Repository Dump','100%')
+       , &startInnerFrame('Repository Dump','width="100%"')
        , '<input type="hidden" name="Insurrection" value="dump"/>'
        , '<center>'
        , '<table cellspacing="0" cellpadding="0" style="font-size: 10pt;">'
@@ -358,7 +357,10 @@ sub printAdminForms()
    ## So, lets read the directory looking for the usage total files
    my $logDir = $USAGE_DIR . '/' . &svn_REPO();
    my $rows = 0;
-   my $bw_rows = '';
+   my $bw_rows = '<tr height="2"><td colspan="2"></td></tr>'
+               . '<tr height="1" style="background-color: #888888;"><td colspan="2"></td></tr>'
+               . '<tr height="2"><td colspan="2"></td></tr>';
+
    if (opendir(DIR,$logDir))
    {
       foreach my $file (reverse sort grep(/^usage-.*\.db$/,readdir(DIR)))
@@ -390,7 +392,7 @@ sub printAdminForms()
       closedir(DIR);
    }
 
-   print &startInnerFrame('Repository Usage','100%')
+   print &startInnerFrame('Repository Usage','width="100%"')
        , '<table width="100%" cellpadding="0" cellspacing="0">'
        ,  '<tr>'
        ,   '<td>Repository&nbsp;size:&nbsp;</td>'
@@ -399,18 +401,9 @@ sub printAdminForms()
        ,  $bw_rows
        , '</table>'
        , '<center>'
-       ,  '<form method="get" action="?" style="margin: 2px;">'
-       ,   '<input type="hidden" name="Insurrection" value="bandwidth"/>'
-       ,   '<input type="submit" name="go" value="View current summary"/>'
-       ,  '</form>'
-       ,  '<form method="get" action="?" style="margin: 2px;">'
-       ,   '<input type="hidden" name="Insurrection" value="bandwidth"/>'
-       ,   '<input type="hidden" name="Details" value="1"/>'
-       ,   '<input type="submit" name="go" value="View daily details"/>'
-       ,  '</form>'
        ,  '<form method="get" action="' , $SVN_REPOSITORIES_URL , &svn_REPO() , '/.raw-details./index.html" style="margin: 2px;">'
        ,   '<input type="hidden" name="Insurrection" value="bandwidth"/>'
-       ,   '<input type="submit" name="go" value="View raw details"/>'
+       ,   '<input type="submit" name="go" value="View usage details"/>'
        ,  '</form>'
        , '</center>'
        , &endInnerFrame();

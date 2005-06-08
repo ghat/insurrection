@@ -883,19 +883,30 @@ sub genPassword()
 
 ##############################################################################
 #
-# Start an inner frame with the given title string and an option width.
+# Make an EMail address from a user name if the user name is not already in
+# an EMail form...
+#
+sub emailAddress($user)
+{
+   my $user = shift;
+   $user .= $EMAIL_DOMAIN if (!($user =~ /@/o));
+   return $user;
+}
+
+##############################################################################
+#
+# Start an inner frame with the given title string and an option extra.
 # After starting an inner frame, output your normal contents and then
 # call endInnerFrame().  Frames can be nested.
 #
-sub startInnerFrame($title,$width)
+sub startInnerFrame($title,$extra)
 {
    my $title = shift;
-   my $width = shift;
+   my $extra = shift;
 
-   $width = ' width="' . $width . '"' if (defined $width);
-   $width = '' if (!defined $width);
+   $extra = '' if (!defined $extra);
 
-   return('<table class="innerframe" cellspacing="0" cellpadding="0"' . $width . '>'
+   return('<table class="innerframe" cellspacing="0" cellpadding="0"' . $extra . '>'
          . '<tr>'
          .  '<td class="innerframe-top-left">' . $blank . '</td>'
          .  '<td class="innerframe-top">' . $title . '</td>'
