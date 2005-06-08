@@ -1141,7 +1141,7 @@ sub repositoryTable()
       $totalSize .= 'k';
 
       my $row = &doTableFrameRow('Total:',undef,
-                                 $totalSize,'style="align="right"',
+                                 $totalSize,'style="text-align: right;"',
                                  '&nbsp;',undef);
 
       $row =~ s/<tr/<tr style="background-color: #cee0da; font-weight: bold;"/o;
