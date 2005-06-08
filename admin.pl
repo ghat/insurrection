@@ -1291,6 +1291,111 @@ sub makeRepositoryTable($type)
 
 ##############################################################################
 #
+# Return the size of a given repository in "k" bytes.  Note that it will
+# return 0 if there is no known size.
+#
+sub repoSize($repo)
+{
+   my $repo = shift;
+
+   ## The repository directory on the local disk...
+   my $repoDir = $SVN_BASE . '/' . $repo;
+
+   my $diskUsage = 0;
+   if (`du -s $repoDir` =~ m/^\s*(\d+)\s+/so)
+   {
+      $diskUsage = $1
+   }
+
+   return $diskUsage;
+}
+
+##############################################################################
+#
+# Return the size limit of a given repository in "k" bytes.  Note that it will
+# return 1gig if there is no known size.
+#
+sub repoSizeLimit($repo)
+{
+   my $repo = shift;
+
+   ## The repository directory on the local disk...
+   my $repoDir = $SVN_BASE . '/' . $repo;
+
+   my $diskLimit = 1024 * 1024;
+
+   ## See if the repository has a specific disk limit
+   if (open(DISKLIMIT,'<' . $repoDir . '/disk.limit'))
+   {
+      my $tmp = <DISKLIMIT>;
+      chomp $tmp;
+      close DISKLIMIT;
+
+      $diskLimit = 0 + $tmp if ((defined $tmp) && ($tmp =~ m/^\d+$/o));
+   }
+
+   return $diskLimit;
+}
+
+##############################################################################
+#
+# Return the bandwidth used so far this month.  Note that on the first of
+# the month this returns last month's numbers.
+#
+sub repoBandwidth($repo)
+{
+   my $repo = shift;
+
+   ## The repository usage directory on the local disk...
+   my $repoDir = $SVN_LOGS . '/usage-history/' . $repo;
+
+   my @tm = gmtime time;
+   my $file = sprintf('usage-%04d-%02d.db',$tm[5] + 1900,$tm[4] + 1);
+
+   my $usage = 0;
+   if (open(DB,"<$repoDir/$file"))
+   {
+      my $t = <DB>;
+      close(DB);
+      if ($t =~ m/\D*?(\d+)\D*/)
+      {
+         $usage = $1;
+      }
+   }
+
+   return $usage;
+}
+
+##############################################################################
+#
+# Return the bandwidth limit of a given repository in bytes per month.
+# Note that it will return 2gig if there is no known limit.
+#
+sub repoBandwidthLimit($repo)
+{
+   my $repo = shift;
+
+   ## The repository directory on the local disk...
+   my $repoDir = $SVN_BASE . '/' . $repo;
+
+   ## The bandwidth limit default is 2gig (2 * 1024 * 1024 * 1024 bytes)
+   my $bandwidthLimit = 2 * 1024 * 1024 * 1024;
+
+   ## See if the repository has a specific bandwidth limit
+   if (open(BWLIMIT,'<' . $repoDir . '/bandwidth.limit'))
+   {
+      my $tmp = <BWLIMIT>;
+      chomp $tmp;
+      close BWLIMIT;
+
+      $bandwidthLimit = 0 + $tmp if ((defined $tmp) && ($tmp =~ m/^\d+$/o));
+   }
+
+   return $bandwidthLimit;
+}
+
+##############################################################################
+#
 # This returns an HTML table element that shows a horizontal gauge that
 # represents the "fullness" of the data.  The $fill is the amount in the
 # "container" and the $limit is what a full container can hold.

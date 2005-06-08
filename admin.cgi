@@ -341,39 +341,18 @@ sub printAdminForms()
    ## The repository directory on the local disk...
    my $repoDir = $SVN_BASE . '/' . &svn_REPO();
 
-   ## The disk limit default is 1gig (1024 * 1024 k)
-   my $diskLimit = 1024 * 1024;
-
-   ## The disk limit default is 2gig (2 * 1024 * 1024 * 1024 bytes)
-   my $bandwidthLimit = 2 * 1024 * 1024 * 1024;
-
-   ## See if the repository has a specific disk limit
-   if (open(DISKLIMIT,'<' . $repoDir . '/disk.limit'))
-   {
-      my $tmp = <DISKLIMIT>;
-      chomp $tmp;
-      close DISKLIMIT;
-
-      $diskLimit = 0 + $tmp if ((defined $tmp) && ($tmp =~ m/^\d+$/o));
-   }
+   ## Get the size limit for this repository.
+   my $diskLimit = &repoSizeLimit(&svn_REPO());
 
    ## Get the disk space used in the repository.
-   my $diskUsage = `du -s $repoDir`;
-   $diskUsage =~ s/^\s*(\d+)\s+.*/$1/so;
+   my $diskUsage = &repoSize(&svn_REPO());
 
    ## Make a nice title to popup when showing the usage...
    my $diskUsageTitle = 'using ' . $diskUsage . 'k  [limit: ' . $diskLimit . 'k]';
    while ($diskUsageTitle =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
 
-   ## See if the repository has a specific bandwidth limit
-   if (open(BWLIMIT,'<' . $repoDir . '/bandwidth.limit'))
-   {
-      my $tmp = <BWLIMIT>;
-      chomp $tmp;
-      close BWLIMIT;
-
-      $bandwidthLimit = 0 + $tmp if ((defined $tmp) && ($tmp =~ m/^\d+$/o));
-   }
+   ## The bandwidth limit for this repository.
+   my $bandwidthLimit = &repoBandwidthLimit(&svn_REPO());
 
    ## Now for the last few months of bandwidth usage (starting at the newest?)
    ## So, lets read the directory looking for the usage total files
