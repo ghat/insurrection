@@ -1,0 +1,85 @@
+<repos/>
+<ul>
+  <li>
+    <a style="margin-left: 2px;" href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=rss"><img src="valid-rss.png" alt="[Valid RSS]" title="Validate my RSS feed" align="right" border="0"/></a>
+    To access the repositories above via a web browser, just click on the links
+    above.&nbsp; You may be asked to enter your username and password to get access
+    to the repository.<br clear="all">
+    &nbsp;
+  </li>
+  <li>
+    <a style="margin-left: 2px;" href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=atom"><img src="valid-atom.png" alt="[Valid Atom]" title="Validate my Atom feed" align="right" border="0"/></a>
+    To access the repositories above via Subversion, use the above URLs.&nbsp;
+    Subversion may then ask you to enter your username and password for access.&nbsp;
+    <i><b>Note:</b>&nbsp; You should normally check out the trunk by appending</i>
+    <code>/trunk </code> <i>to the URL.</i><br clear="all">
+  </li>
+</ul>
+
+<table class="tableframe" cellspacing="0" cellpadding="0" width="100%">
+  <tr>
+    <td class="tableframe-top-left"></td>
+    <td class="tableframe-top" width="1%" style="text-align: left;">Local links</td>
+    <td class="tableframe-top-div"></td>
+    <td class="tableframe-top">&nbsp;</td>
+    <td class="tableframe-top-right"></td>
+  </tr>
+  <tr class="tableframe-row-even"><td class="tableframe-left"></td>
+    <td><a href="browser-tests/index.html">Browser Test Pages</a></td>
+    <td class="tableframe-div"></td>
+    <td>Some simple browser compatibility test pages for the Insurrection Web Tools.</td>
+  <td class="tableframe-right"></td></tr>
+  <tr class="tableframe-row-odd"><td class="tableframe-left"></td>
+    <td nowrap><a href="rewrite-test/index.html">Apache mod_rewrite Tests</a></td>
+    <td class="tableframe-div"></td>
+    <td>It seems that certain URL patterns do not get processed correctly within mod_rewrite in Apache 2.0.54</td>
+  <td class="tableframe-right"></td></tr>
+  <tr class="tableframe-row-even"><td class="tableframe-left"></td>
+    <td nowrap><a href="best-practices.html">My Subversion Quick-Start</a></td>
+    <td class="tableframe-div"></td>
+    <td>Some introductory documentation about Subversion and the
+    revision control rules and procedures that I follow.</td>
+  <td class="tableframe-right"></td></tr>
+  <tr>
+    <td class="tableframe-bottom-left"></td>
+    <td class="tableframe-bottom"></td>
+    <td class="tableframe-bottom-div"></td>
+    <td class="tableframe-bottom"></td>
+    <td class="tableframe-bottom-right"></td>
+  </tr>
+  <tr>
+    <td class="tableframe-top-left"></td>
+    <td class="tableframe-top" width="1%" style="text-align: left;">External links</td>
+    <td class="tableframe-top-div"></td>
+    <td class="tableframe-top">&nbsp;</td>
+    <td class="tableframe-top-right"></td>
+  </tr>
+  <tr class="tableframe-row-even"><td class="tableframe-left"></td>
+    <td nowrap><a href="project.html">The Insurrection Project</a></td>
+    <td class="tableframe-div"></td>
+    <td>The Insurrection project information page</td>
+  <td class="tableframe-right"></td></tr>
+  <tr class="tableframe-row-odd"><td class="tableframe-left"></td>
+    <td nowrap><a href="http://subversion.tigris.org/">The Subversion Project</a></td>
+    <td class="tableframe-div"></td>
+    <td>The Subversion project home page</td>
+  <td class="tableframe-right"></td></tr>
+  <tr class="tableframe-row-even"><td class="tableframe-left"></td>
+    <td nowrap><a href="http://svnbook.red-bean.com/">The Subversion Book</a></td>
+    <td class="tableframe-div"></td>
+    <td>The Subversion Book home page</td>
+  <td class="tableframe-right"></td></tr>
+  <tr class="tableframe-row-odd"><td class="tableframe-left"></td>
+    <td nowrap><a href="http://subversion.tigris.org/project_links.html">The Subversion Project Links</a></td>
+    <td class="tableframe-div"></td>
+    <td>The Subversion related links page from the Subversion Project</td>
+  <td class="tableframe-right"></td></tr>
+  <tr>
+    <td class="tableframe-bottom-left"></td>
+    <td class="tableframe-bottom"></td>
+    <td class="tableframe-bottom-div"></td>
+    <td class="tableframe-bottom"></td>
+    <td class="tableframe-bottom-right"></td>
+  </tr>
+</table>
+
