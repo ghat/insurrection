@@ -32,8 +32,8 @@ our %groupComments; ## Comments for groups
 our %groupUsers;    ## The group's users
 our %usersGroup;    ## The user's groups (a pivot just to make life eaier)
 our %groupAdmins;   ## The group admin users
-our %userPasswords; ## The password file
-our %userCreators;  ## The users who "created" this user
+our %userPasswords; ## The passwords (encrypted)
+our %userDates;     ## The date of the last password change
 our $accessVersion; ## The version of the access file
 our $passwdVersion; ## The version of the password file
 
@@ -794,13 +794,15 @@ sub loadPasswordFile()
          chomp($passwdVersion);
       }
       $line =~ s/#.*//o;  ## Remove comments...
-      my @creators = split(/:/,$line);
-      my $user = shift @creators;
-      my $pass = shift @creators;
+      my @data = split(/:/,$line);
+      my $user = shift @data;
+      my $pass = shift @data;
+      my $date = shift @data;
+      $date = time if (!defined $date);
       if (defined $pass)
       {
          $userPasswords{$user} = $pass;
-         @{$userCreators{$user}} = @creators;
+         $userDates{$user} = $date;
       }
    }
    close DATA;
@@ -832,9 +834,7 @@ sub savePasswordFile($reason)
 
       foreach my $user (sort keys %userPasswords)
       {
-         print DATA $user , ':' , $userPasswords{$user};
-         print DATA ':' , join(':',@{$userCreators{$user}}) if (@{$userCreators{$user}} > 0);
-         print DATA "\n";
+         print DATA $user , ':' , $userPasswords{$user} , ':' , $userDates{$user} , "\n";
       }
 
       flock(DATA,LOCK_UN);

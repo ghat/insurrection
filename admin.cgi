@@ -153,6 +153,7 @@ elsif (defined $cgi->param('adduser'))
       {
          my $pw = &genPassword();
          $userPasswords{$user} = crypt($pw,$pw);
+         $userDates{$user} = 0;  ## The user never changed his password yet...
          &savePasswordFile("admin.cgi: Added user $user");
 
          if (open EMAIL,'| /usr/sbin/sendmail -t')

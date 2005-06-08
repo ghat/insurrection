@@ -14,12 +14,6 @@ require 'admin.pl';
 my $Operation = $cgi->param('Operation');
 $Operation = "" if (!defined $Operation);
 
-if ($AuthUser eq 'demo')
-{
-   print $cgi->redirect($SVN_URL_PATH . 'auth_index.cgi');
-   exit 0;
-}
-
 if ($Operation eq 'Cancel')
 {
    print $cgi->redirect($SVN_URL_PATH . 'auth_index.cgi');
@@ -62,7 +56,8 @@ if ($Operation eq 'Update')
    }
    else
    {
-      $userPasswords{$AuthUser} = crypt($Password1,$AuthUser);
+      $userPasswords{$AuthUser} = crypt($Password1,&genPassword());
+      $userDates{$AuthUser} = time;
       &savePasswordFile('password.cgi: Password changed');
 
       print '<h2 align="center"><font color="green">Password successfully changed.</font></h2>'
