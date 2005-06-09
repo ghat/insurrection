@@ -223,7 +223,7 @@ td.foldspace
   padding: 0px;
 }
 
-.dirarrow, .editable, .logheader, .blameline0, .blameline1, tr.revision
+.dirarrow .logheader, .blameline0, .blameline1, tr.revision
 {
   cursor: pointer;
 }
@@ -247,11 +247,6 @@ td.foldspace
 {
   background: rgb(100%,100%,50%);
   opacity: 1.00;
-}
-
-.editable:hover
-{
-  background: yellow;
 }
 
 .example

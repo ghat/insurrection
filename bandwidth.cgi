@@ -70,8 +70,12 @@ if (open(RAW,"<$USAGE_DIR/$repo/stats/$raw"))
       ## they are not already done
       $html =~ s:(HREF=|SRC=)"(?!#)(\./)?([^/"]+)":$1"$3?Insurrection=bandwidth":sgo;
 
+      ## Some headers need changing...
       $html =~ s|<H2>(.*?)</H2>|<div style="text-align: center; font-weight: bold; font-size: 20pt;">$1</div>|so;
       $html =~ s|<SMALL><STRONG>(.*?)</STRONG></SMALL>|<div style="text-align: right; font-size: 10pt;">$1</div>|so;
+
+      ## Oh, all of those bad blank rows with not enough columns - just throw them out
+      $html =~ s:<TR><TH HEIGHT=\d+></TH></TR>::sgo;
 
       ## Last bit of fixup...
       $html =~ s|<CENTER>.<HR>(.*)</CENTER>|<div style="background: #EEEEEE; border: 1px black solid; margin-top: 2px; padding: 2px;"><CENTER>$1</CENTER></div>|so;
