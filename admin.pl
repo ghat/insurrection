@@ -755,6 +755,7 @@ sub saveAccessFile($reason)
       close DATA;
 
       system($SVN_CMD,'commit','--non-interactive','--no-auth-cache','--username',$AuthUser,'-m',$reason,$AccessFile);
+      system($SVN_CMD,'update','--non-interactive','--no-auth-cache',$AccessFile);
    }
 }
 
@@ -841,6 +842,7 @@ sub savePasswordFile($reason)
       close DATA;
 
       system($SVN_CMD,'commit','--non-interactive','--no-auth-cache','--username',$AuthUser,'-m',$reason,$PasswordFile);
+      system($SVN_CMD,'update','--non-interactive','--no-auth-cache',$PasswordFile);
    }
 }
 
@@ -891,6 +893,24 @@ sub emailAddress($user)
    my $user = shift;
    $user .= $EMAIL_DOMAIN if (!($user =~ /@/o));
    return $user;
+}
+
+##############################################################################
+#
+# Convert a time value into a nice string
+#
+sub niceTime($time)
+{
+   my @modtime=gmtime shift;
+   my @Months = ( "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" );
+   my @Days = ( "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" );
+
+   $modtime[1] = "0" . $modtime[1] if ($modtime[1] < 10);
+   $modtime[5] += 1900 if ($modtime[5] < 1900);
+
+   my $result="$Days[$modtime[6]], $Months[$modtime[4]] $modtime[3], $modtime[5] at $modtime[2]:$modtime[1] GMT";
+
+   return $result;
 }
 
 ##############################################################################

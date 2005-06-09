@@ -210,7 +210,7 @@ elsif (defined $cgi->param('adduser'))
                       , "\n"
                       , "You can change your password via " , &svn_HTTP() , $SVN_URL_PATH , "password.cgi\n"
                       , "\n"
-                      , 'Please go to ' , &svn_HTTP() , $SVN_URL_PATH , "for information and documentation\n"
+                      , 'Please go to ' , &svn_HTTP() , $SVN_URL_PATH , " for information and documentation\n"
                       , "about the Insurrection server.\n"
                       , "\n"
                       , 'This EMail was produced on ' , &niceTime(time) , "\n"

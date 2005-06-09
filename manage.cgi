@@ -125,9 +125,12 @@ elsif ((defined $cgi->param('DelUser')) && (defined $cgi->param('Delete')))
    &lockPasswordFile();
    &loadPasswordFile();
 
+   my $deleted = 0;
+
    ## Don't let the admin delete himself!
    if ((defined $userPasswords{$user}) && ($user ne $AuthUser))
    {
+      $deleted = 1;
       delete $userPasswords{$user};
       print "<pre>\tDeleted user $user\n</pre>";
 
@@ -136,6 +139,29 @@ elsif ((defined $cgi->param('DelUser')) && (defined $cgi->param('Delete')))
    }
 
    &unlockPasswordFile();
+
+   ## If we have deleted a user, we also want to make sure that
+   ## user is no longer in the access file just such that we
+   ## clean up any mess.
+   if (($deleted) && ((scalar keys %{$usersGroup{$user}}) > 0))
+   {
+      &lockAccessFile();
+      &loadAccessFile();
+
+      my $actions = '';
+
+      foreach my $group (keys %{$usersGroup{$user}})
+      {
+         delete ${$groupUsers{$group}}{$user};
+         $actions .= "\tRemoved deleted user $user from $group\n";
+      }
+
+      print "<pre>$actions</pre>";
+      &saveAccessFile("manage.cgi: Updated access lists:\n\n$actions");
+      &loadAccessFile();
+
+      &unlockAccessFile();
+   }
 
    print $reloadForm;
    print &endInnerFrame();
@@ -242,22 +268,6 @@ sub niceNum($num)
    my $num = shift;
    while ($num =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
    return $num;
-}
-
-##############################################################################
-#
-# Convert a time value into a nice string
-#
-sub niceTime($time)
-{
-   my @modtime=localtime shift;
-   my @Months = ( "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" );
-   my @Days = ( "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" );
-   if ($modtime[1] < 10) { $modtime[1]="0" . $modtime[1]; }
-   $modtime[5] += 1900 if ($modtime[5] < 1900);
-   my $result="$Days[$modtime[6]], $Months[$modtime[4]] $modtime[3], $modtime[5] at $modtime[2]:$modtime[1]";
-
-   return $result;
 }
 
 ##############################################################################
