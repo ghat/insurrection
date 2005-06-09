@@ -41,11 +41,25 @@
 my $RepositoryPath = $ARGV[0];
 my $Transaction = $ARGV[1];
 
-my $cmd = "/usr/subversion/svn/bin/svnlook changed -t $Transaction $RepositoryPath";
+## This is the command we will run to look into the transaction...
+my $cmd = "/home/subversion/svn/bin/svnlook changed -t $Transaction $RepositoryPath";
 
-my @results = `$cmd`;
+## We keep track of the "added" paths such that we know what
+## a new directory is.  The reason for this is such that we
+## can accept, in a single transaction, non-add events into
+## a tag when the directory was an add event.  If the directory
+## was not an add event, it will not be accepted.
+## This extra complication is needed to allow making tags
+## from mixed revision WC.  For some reason that operation
+## comes in as a transaction that has delete events in it
+## which means that a simplistic add-only hook blocks those.
+my @addDirStack;
+my $lastPath = undef;
 
-foreach my $line (@results)
+## Yes, this could have been a bit more compact but I wanted to
+## make the code as reasonably clear as possible given the
+## nature of what it is doing.
+foreach my $line (`$cmd`)
 {
    chomp $line;
 
@@ -57,23 +71,65 @@ foreach my $line (@results)
       exit 1;
    }
 
-   if ($path =~ m:^tags:)
+   ## We check if the current path in within the previous one.
+   ## If not, then we pop the previous one and check again.
+   ## Once we have hit the end of the stack then no path
+   ## was a parent and this must be a new one.
+   while ((defined $lastPath) && (!($path =~ m:^$lastPath:)))
+   {
+      pop(@addDirStack);
+      $lastPath = undef;
+      $lastPath = $addDirStack[@addDirStack-1] if (@addDirStack > 0);
+   }
+
+   ## If the path is a directory (ends in '/') and the action is
+   ## Add then we add this directory to the stack and remember it
+   ## as our lastPath.
+   if (($action eq 'A') && ($path =~ m:/$:))
+   {
+      push(@addDirStack,$path);
+      $lastPath = $path;
+   }
+
+   ## the /tags/ tree is special in that things never change once
+   ## being put there.  Ok, so there is a possibility of putting
+   ## a new directory within an older one, but at least you can
+   ## not check out a tag and change the data in it.
+   if ($path =~ m:^tags/:)
    {
       if ($action ne 'A')
       {
-         print STDERR "You can not check in changes in tags.\n"
-                    , "Make a branch and make your changes there.";
-         exit 1;
+         ## If we don't have a valid "last added directory" this was a
+         ## non-authorized change.  It takes just one to fail the whole
+         ## transaction.
+         if (!defined $lastPath)
+         {
+            print STDERR "You can not check in changes into tags.\n"
+                       , "Make a branch and make your changes there\n"
+                       , "and then make a new tag.";
+            exit 1;
+         }
       }
    }
 
-   if ($path =~ m:^releases:)
+   ## the /releasess/ tree is special in that things never change once
+   ## being put there.  Ok, so there is a possibility of putting
+   ## a new directory within an older one, but at least you can
+   ## not check out a tag and change the data in it.
+   if ($path =~ m:^releases/:)
    {
       if ($action ne 'A')
       {
-         print STDERR "You can not check in changes in releases.\n"
-                    , "Make a branch and make your changes there.";
-         exit 1;
+         ## If we don't have a valid "last added directory" this was a
+         ## non-authorized change.  It takes just one to fail the whole
+         ## transaction.
+         if (!defined $lastPath)
+         {
+            print STDERR "You can not check in changes into releases.\n"
+                       , "Make a branch and make your changes there\n"
+                       , "and then make a new release.";
+            exit 1;
+         }
       }
    }
 }
