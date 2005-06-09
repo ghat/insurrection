@@ -208,7 +208,7 @@ if ((defined $top) && (defined $topDate))
       $logmsg =~ s:\n:<br/>:sgo;
 
       ## If the author does not have a domain, add the default one
-      $author .= $EMAIL_DOMAIN if (!($author =~ m/@/o));
+      $author = &emailAddress($author);
 
       ## Make the link to this individual log message.
       my $link = $rLink . '&r=' . $revision;
