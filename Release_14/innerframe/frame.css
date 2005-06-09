@@ -1,0 +1,120 @@
+/*
+ * $Id$
+ * Copyright 2004,2005 - Michael Sinz
+ */
+
+.innerframe
+{
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+
+td.innerframe
+{
+  text-align: left;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.innerframe-top
+{
+  text-align: center;
+  vertical-align: middle;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: black;
+}
+
+.innerframe-top-left, .innerframe-top, .innerframe-top-right, .innerframe-top-left img
+{
+  height: 24px;
+  min-height: 24px;
+  max-height: 24px;
+}
+
+.innerframe-bottom-left, .innerframe-bottom, .innerframe-bottom-right, .innerframe-bottom-right img
+{
+  height: 16px;
+  min-height: 16px;
+  max-height: 16px;
+}
+
+.innerframe-top-left, .innerframe-left, .innerframe-bottom-left, .innerframe-top-left img
+{
+  width: 17px;
+  min-width: 17px;
+  max-width: 17px;
+}
+
+.innerframe-top-right, .innerframe-right, .innerframe-bottom-right, .innerframe-bottom-right img
+{
+  width: 17px;
+  min-width: 17px;
+  max-width: 17px;
+}
+
+.innerframe-top-left, .innerframe-top-right, .innerframe-bottom-left, .innerframe-bottom-right
+{
+  background-repeat: no-repeat;
+}
+
+.innerframe-top, .innerframe-bottom
+{
+  background-repeat: repeat-x;
+}
+
+.innerframe-left, .innerframe-right
+{
+  background-repeat: repeat-y;
+}
+
+.innerframe-top-left
+{
+  background-image: url('./top-left.gif');
+  background-position: bottom right;
+}
+
+.innerframe-top
+{
+  background-image: url('./top.gif');
+  background-position: bottom left;
+}
+
+.innerframe-top-right
+{
+  background-image: url('./top-right.gif');
+  background-position: bottom left;
+}
+
+.innerframe-left
+{
+  background-image: url('./left.gif');
+  background-position: top right;
+}
+
+.innerframe-right
+{
+  background-image: url('./right.gif');
+  background-position: top left;
+}
+
+.innerframe-bottom-left
+{
+  background-image: url('./bottom-left.gif');
+  background-position: top right;
+}
+
+.innerframe-bottom
+{
+  background-image: url('./bottom.gif');
+  background-position: top left;
+}
+
+.innerframe-bottom-right
+{
+  background-image: url('./bottom-right.gif');
+  background-position: top left;
+}
+

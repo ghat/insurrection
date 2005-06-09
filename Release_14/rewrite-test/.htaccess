@@ -1,0 +1,15 @@
+# $Id$
+DirectoryIndex index.html
+
+<Files ~ "^test\.cgi$">
+	SetHandler cgi-script
+</Files>
+
+## You need to have mod-rewrite and proxy enabled in apache
+RewriteEngine On
+
+## Note that these rules need to be adjusted to match your
+## local install location.
+RewriteRule	^redirect/(.*)$	"/rewrite-test/test.cgi/$1"	[R,L]
+RewriteRule	^proxy/(.*)$	"/rewrite-test/test.cgi/$1"	[P,L]
+
