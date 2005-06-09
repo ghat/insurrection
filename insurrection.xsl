@@ -61,6 +61,9 @@
   <xsl:template name="loginicon-path">/login.gif</xsl:template>
   <xsl:template name="passwordicon-path">/password.gif</xsl:template>
   <xsl:template name="adminicon-path">/admin.gif</xsl:template>
+  <xsl:template name="editicon-path">/edit.gif</xsl:template>
+  <xsl:template name="saveicon-path">/save.gif</xsl:template>
+  <xsl:template name="previewicon-path">/preview.gif</xsl:template>
   <xsl:template name="linkicon-path">/link.gif</xsl:template>
   <xsl:template name="aticon-path">/at.gif</xsl:template>
 

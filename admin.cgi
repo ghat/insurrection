@@ -19,19 +19,59 @@ my $isAdmin = &isAdminMember('Admin',$AuthUser);
 
 ## For now we only support full repository management.  I plan to add
 ## sub-path management later
-my $group = &svn_REPO() . ':/';
+my $repo = &svn_REPO();
+my $group = $repo . ':/';
 
 ## Make sure that the anon user is listed (even if no-access)
 ${$groupUsers{$group}}{'*'} = '' if (!defined ${$groupUsers{$group}}{'*'});
 
 ## Make sure we mark the page as expiring right away...
-&svn_HEADER('Administration of ' . &svn_REPO(),'+0m');
+&svn_HEADER('Administration of ' . $repo,'+0m');
 
-print '<div style="font-size: 20pt; text-align: center; padding-bottom: 3px; margin-bottom: 2px; border-bottom: 1px green dotted;">Repository:&nbsp;'
-    ,  '<span style="font-weight: bold;">' , &svn_REPO() , '</span>'
+print '<center>'
+    , '<div class="admin-title">Repository:&nbsp;'
+    ,  '<span style="font-weight: bold;">' , $repo , '</span>'
     , '</div>';
 
-if (defined $cgi->param('update'))
+my $reloadForm = '<br/><center><a href="?Insurrection=admin" title="reload">Reload administration page</a></center>';
+
+my $newDescription = $cgi->param('newDescription');
+if (defined $newDescription)
+{
+   ## Remove eol characters as they are not supported...
+   ## (Just make them white-space)
+   $newDescription =~ s/[\n\r]/ /sgo;
+
+   ## Remove leading and trailing white space...
+   $newDescription =~ s/^\s*(.*?)\s*$/$1/so;
+
+   ## Only think about it if there was a change and it is non-trivial
+   if ((length($newDescription) > 1) && ($newDescription ne $groupComments{$group}))
+   {
+      ## Ok, so an update of the access lists is in order.  Lets lock
+      ## the access file and try to get ready...
+      &lockAccessFile();
+      &loadAccessFile();
+
+      print &startInnerFrame('Action log: Update repository description');
+
+      if ($accessVersion ne $cgi->param('version'))
+      {
+         print '<h2 style="color: red;">Concurrent modification attempted<br/>Please recheck data and submit again</h2>'
+      }
+      else
+      {
+         $groupComments{$group} = $newDescription;
+         &saveAccessFile("admin.cgi: Updated description for group $group");
+         &loadAccessFile();
+      }
+      &unlockAccessFile();
+
+      print $reloadForm;
+      print &endInnerFrame();
+   }
+}
+elsif (defined $cgi->param('update'))
 {
    ## Ok, so an update of the access lists is in order.  Lets lock
    ## the access file and try to get ready...
@@ -41,7 +81,7 @@ if (defined $cgi->param('update'))
    ## Make sure that the anon user is listed (even if no-access)
    ${$groupUsers{$group}}{'*'} = '' if (!defined ${$groupUsers{$group}}{'*'});
 
-   print '<center>' , &startInnerFrame('Action log: Update access rights');
+   print &startInnerFrame('Action log: Update access rights');
 
    if ($accessVersion ne $cgi->param('version'))
    {
@@ -51,7 +91,7 @@ if (defined $cgi->param('update'))
    {
       my $actions = '';
       my $changed = 0;
-      my $adminGroup = 'Admin_' . &svn_REPO();
+      my $adminGroup = 'Admin_' . $repo;
       my %admins;
       foreach my $user (@{$groupAdmins{$adminGroup}})
       {
@@ -126,6 +166,7 @@ if (defined $cgi->param('update'))
    }
    &unlockAccessFile();
 
+   print $reloadForm;
    print &endInnerFrame() , '</cetner>';
 }
 elsif (defined $cgi->param('adduser'))
@@ -135,7 +176,7 @@ elsif (defined $cgi->param('adduser'))
    chomp $user;
 
    ## Show the action log...
-   print '<center>' , &startInnerFrame('Action log: Add User');
+   print &startInnerFrame('Action log: Add User');
 
    ## Only simple characters in the user name and nothing too long
    ## Ok, we picked the size limit out of thin air but it is a reasonable limit.
@@ -213,16 +254,88 @@ elsif (defined $cgi->param('adduser'))
    {
       print '<h2 style="color: red;">Invalid characters in username.</h2>';
    }
-   print &endInnerFrame() , '</center>';
+
+   print $reloadForm;
+   print &endInnerFrame();
 }
 
 &printAdminForms();
+
+print '</center>';
 
 &svn_TRAILER('$Id$');
 
 sub printAdminForms()
 {
-   print '<center>';
+   ##############################################################################
+   ### Repository description administration form
+   my $repolink = '<a title="Explore repository ' . &svn_XML_Escape($repo) . '" href="' . &svn_XML_Escape($SVN_REPOSITORIES_URL . $repo) . '/">' . &svn_XML_Escape($repo) . '</a>';
+
+   my $editlink = '';
+
+   ## I am not sure yet if this is something that is safe for all.
+   ## Lets just assume that it is ok for repository admins to use this...
+   ## if ($isAdmin)
+   {
+      print '<form name="Description" id="Description" method="post" action="?Insurrection=admin">'
+          , '<input type="hidden" name="version" value="' , &svn_XML_Escape($accessVersion) , '"/>'
+          , '<input type="hidden" name="newDescription" value=""/>'
+          , '</form>';
+
+      $editlink = '<span style="float: right; cursor: pointer;">'
+                .  '<img id="PreviewDescription" src="' . &svn_IconPath('preview') . '" alt="Preview" style="margin-left: 3px; display: none;" onclick="previewDescript();"/>'
+                .  '<img id="SaveDescription" src="' . &svn_IconPath('save') . '" alt="Save" style="margin-left: 3px; display: none;" onclick="saveDescript();"/>'
+                .  '<img id="EditDescription" src="' . &svn_IconPath('edit') . '" alt="Edit" style="margin-left: 3px;" onclick="editDescript();"/>'
+                . '</span>'
+                . '<input type="text" id="EdDescription" name="Description" '
+                .        'value="' . &svn_XML_Escape($groupComments{$group}) . '" '
+                .        'size="70" maxlength="255" onchange="previewDescript();" '
+                .        'style="display: none;"/>'
+                . '<script language="JavaScript" type="text/javascript"><!--' . "\n"
+                . 'function editDescript()'
+                . '{'
+                .   'var rd = document.getElementById("RepoDescription");'
+                .   'var ed = document.getElementById("EdDescription");'
+                .   'ed.value = rd.innerHTML;'
+                .   'document.getElementById("EditDescription").style.display = "none";'
+                .   'document.getElementById("SaveDescription").style.display = "none";'
+                .   'document.getElementById("PreviewDescription").style.display = "";'
+                .   'rd.style.display = "none";'
+                .   'ed.style.display = "";'
+                .   'ed.focus();'
+                . '}'
+                . 'function previewDescript()'
+                . '{'
+                .   'var rd = document.getElementById("RepoDescription");'
+                .   'var ed = document.getElementById("EdDescription");'
+                .   'rd.innerHTML = ed.value;'
+                .   'document.getElementById("EditDescription").style.display = "";'
+                .   'document.getElementById("SaveDescription").style.display = "";'
+                .   'document.getElementById("PreviewDescription").style.display = "none";'
+                .   'rd.style.display = "";'
+                .   'ed.style.display = "none";'
+                . '}'
+                . 'function saveDescript()'
+                . '{'
+                .   'var rd = document.getElementById("RepoDescription");'
+                .   'var form = document.getElementById("Description");'
+                .   'form.newDescription.value = rd.innerHTML;'
+                .   'form.submit();'
+                . '}'
+                . '//--></script>';
+   }
+
+   $editlink .= '<span id="RepoDescription">' . $groupComments{$group} . '</span>';
+
+   print &startTableFrame('width="100%"'
+                         ,'Repository&nbsp;','width="1%"'
+                         ,'Description of repository: ' . &svn_XML_Escape($repo),undef)
+       , &doTableFrameRow($repolink,'valign="top" nowrap'
+                         ,$editlink,'valign="top"')
+       , &endTableFrame();
+
+   ### Repository description administration
+   ##############################################################################
 
    ##############################################################################
    ### User access administration form
@@ -266,7 +379,6 @@ sub printAdminForms()
    ### User access administration form
    ##############################################################################
 
-   print '</center>';
    print '<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="left" valign="top">';
 
    ##############################################################################
@@ -299,7 +411,10 @@ sub printAdminForms()
 
    ##############################################################################
    ### Repository dump form
-   print '<form method="get" action="?">'
+   my $action = '?';
+   $action = $SVN_URL_PATH . 'dump.cgi/' . $repo if ($isAdmin);
+
+   print '<form method="get" action="' , &svn_XML_Escape($action) , '">'
        , &startInnerFrame('Repository Dump','width="100%"')
        , '<input type="hidden" name="Insurrection" value="dump"/>'
        , '<center>'
@@ -338,24 +453,24 @@ sub printAdminForms()
    my $USAGE_DIR = $SVN_LOGS . '/usage-history';
 
    ## The repository directory on the local disk...
-   my $repoDir = $SVN_BASE . '/' . &svn_REPO();
+   my $repoDir = $SVN_BASE . '/' . $repo;
 
    ## Get the size limit for this repository.
-   my $diskLimit = &repoSizeLimit(&svn_REPO());
+   my $diskLimit = &repoSizeLimit($repo);
 
    ## Get the disk space used in the repository.
-   my $diskUsage = &repoSize(&svn_REPO());
+   my $diskUsage = &repoSize($repo);
 
    ## Make a nice title to popup when showing the usage...
    my $diskUsageTitle = 'using ' . $diskUsage . 'k  [limit: ' . $diskLimit . 'k]';
    while ($diskUsageTitle =~ s/(\d+)(\d\d\d)/$1,$2/o) {}
 
    ## The bandwidth limit for this repository.
-   my $bandwidthLimit = &repoBandwidthLimit(&svn_REPO());
+   my $bandwidthLimit = &repoBandwidthLimit($repo);
 
    ## Now for the last few months of bandwidth usage (starting at the newest?)
    ## So, lets read the directory looking for the usage total files
-   my $logDir = $USAGE_DIR . '/' . &svn_REPO();
+   my $logDir = $USAGE_DIR . '/' . $repo;
    my $rows = 0;
    my $bw_rows = '<tr height="2"><td colspan="2"></td></tr>'
                . '<tr height="1" style="background-color: #888888;"><td colspan="2"></td></tr>'
@@ -392,6 +507,12 @@ sub printAdminForms()
       closedir(DIR);
    }
 
+   my $repoLink = $SVN_REPOSITORIES_URL . $repo;
+
+   ## We have the admin get to the bandwidth without going thought the repository
+   ## such that the admin does not need repository access rights to admin it.
+   $repoLink = $SVN_URL_PATH . 'bandwidth.cgi/' . $repo if ($isAdmin);
+
    print &startInnerFrame('Repository Usage','width="100%"')
        , '<table width="100%" cellpadding="0" cellspacing="0">'
        ,  '<tr>'
@@ -401,7 +522,7 @@ sub printAdminForms()
        ,  $bw_rows
        , '</table>'
        , '<center>'
-       ,  '<form method="get" action="' , $SVN_REPOSITORIES_URL , &svn_REPO() , '/.raw-details./index.html" style="margin: 2px;">'
+       ,  '<form method="get" action="' , $repoLink , '/.raw-details./index.html" style="margin: 2px;">'
        ,   '<input type="hidden" name="Insurrection" value="bandwidth"/>'
        ,   '<input type="submit" name="go" value="View usage details"/>'
        ,  '</form>'

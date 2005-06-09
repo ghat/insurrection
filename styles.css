@@ -11,7 +11,7 @@
 
 html, body
 {
-  font-family: helvetica, ariel, sansserif;
+  font-family: sansserif;
   font-size: 10pt;
   text-align: center;
   background-image: url('./PoweredByInsurrection.gif');
@@ -25,6 +25,13 @@ a {color: blue; text-decoration: none;}
 a:visited {color: blue; text-decoration: none;}
 a:hover {color: green; text-decoration: underline;}
 a:active {color: red; text-decoration: underline;}
+
+form
+{
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
 
 #pagetable
 {
@@ -41,162 +48,26 @@ a:active {color: red; text-decoration: underline;}
   background: white;
 }
 
-.accesstable
+#EdDescription, #RepoDescription
 {
-  border: 3px black solid;
-  border-left: 2px black solid;
-  font-size: 11pt;
-}
-
-.accesstable th
-{
-  background-color: rgb(182,38,133);
-  color: white;
-  padding-left: 4px;
-  padding-right: 4px;
-  padding-bottom: 2px;
-  font-weight: bold;
-  text-align: center;
+  font-family: sansserif;
+  font-size: 10pt;
+  text-align: left;
+  margin: 0px;
   border: 0px;
-  border-left: 1px black solid;
+  padding: 1px;
 }
 
-.accesstable td
+#EdDescription
 {
-  border: 1px black solid;
-  border-bottom: 0px;
-  border-right: 0px;
+  background-color: #FFFFBB;
 }
 
-.accesstitles
+.admin-title
 {
-  font-weight: normal;
-  font-size: 8pt;
-}
-
-.accessinfo
-{
-  border: 2px black solid;
-  border-top: 0px;
-  border-left: 1px black solid;
-  width: 100%;
-  font-size: 9pt;
-}
-
-.accessinfo th
-{
-  background-color: rgb(182,38,133);
-  color: white;
-  padding-left: 4px;
-  padding-right: 4px;
-  padding-bottom: 2px;
-  font-weight: bold;
+  font-size: 20pt;
   text-align: center;
-  border: 0px;
-  border-left: 1px black solid;
-  border-top: 2px black solid;
-}
-
-.accessinfo td
-{
-  background-color: transparent;
-  color: black;
-  border-top: 1px gray solid;
-  border-left: 1px black solid;
-  border-bottom: 0px;
-  border-right: 0px;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-.accessinfototal th
-{
-  text-align: left;
-}
-
-.accessinfototal td
-{
-  text-align: right;
-  font-weight: bold;
-  background-color: rgb(95%,80%,85%);
-}
-
-.accessadmin
-{
-  color: yellow;
-}
-
-
-
-.bandwidth
-{
-  margin-top: 2px;
-  text-align: center;
-  font-size: 9pt;
-}
-
-.bandwidthheader1
-{
-  font-weight: bold;
-  font-size: 16pt;
-}
-
-.bandwidthheader2
-{
-  padding-bottom: 4px;
-  font-size: 12pt;
-}
-
-.bandwidthdata
-{
-  margin-left: auto;
-  margin-right: auto;
-  border: 2px black solid;
-  border-top: 1px black solid;
-  border-left: 1px black solid;
-  font-size: 9pt;
-}
-
-.bandwidthdata td, .bandwidthdata th
-{
-  border-left: 1px black solid;
-  border-top: 1px black solid;
-
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-}
-
-.bandwidthdata td
-{
-  text-align: right;
-}
-
-.bandwidthdata th
-{
-  text-align: left;
-}
-
-.bandwidthfooter
-{
-  padding: 9px;
-}
-
-.bandwidthtitles th, .bandwidthtitles td
-{
-  background-color: rgb(182,38,133);
-  color: white;
-  text-align: center;
-}
-
-.bandwidthtotal
-{
-  font-weight: bold;
-  background-color: rgb(95%,80%,85%);
-}
-
-.bandwidthtotal th
-{
-  text-align: left;
+  margin-bottom: 5px;
 }
 
 .footer

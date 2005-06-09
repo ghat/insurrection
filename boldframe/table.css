@@ -15,12 +15,14 @@
 {
   background-color: #FFFFFF;
   vertical-align: baseline;
+  text-align: left;
 }
 
 .btableframe-row-odd
 {
   background-color: #F4F4F4;
   vertical-align: baseline;
+  text-align: left;
 }
 
 .btableframe-row-odd td, .btableframe-row-even td

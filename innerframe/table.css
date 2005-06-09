@@ -14,12 +14,14 @@
 {
   background-color: #FFFFFF;
   vertical-align: baseline;
+  text-align: left;
 }
 
 .tableframe-row-odd
 {
   background-color: #F4F4F4;
   vertical-align: baseline;
+  text-align: left;
 }
 
 .tableframe-row-odd td, .tableframe-row-even td

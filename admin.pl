@@ -895,7 +895,7 @@ sub emailAddress($user)
 
 ##############################################################################
 #
-# Start an inner frame with the given title string and an option extra.
+# Start an inner frame with the given title string and optional extra attrs.
 # After starting an inner frame, output your normal contents and then
 # call endInnerFrame().  Frames can be nested.
 #
@@ -937,19 +937,18 @@ sub endInnerFrame()
 
 ##############################################################################
 #
-# Start a bold frame with the given title string and an option width.
+# Start a bold frame with the given title string and optional extra attrs
 # After starting an inner frame, output your normal contents and then
 # call endBoldFrame().  Frames can be nested.
 #
-sub startBoldFrame($title,$width)
+sub startBoldFrame($title,$extra)
 {
    my $title = shift;
-   my $width = shift;
+   my $extra = shift;
 
-   $width = ' width="' . $width . '"' if (defined $width);
-   $width = '' if (!defined $width);
+   $extra = '' if (!defined $extra);
 
-   return('<table class="boldframe" cellspacing="0" cellpadding="0"' . $width . '>'
+   return('<table class="boldframe" cellspacing="0" cellpadding="0"' . $extra . '>'
          . '<tr>'
          .  '<td class="boldframe-top-left">' . $blank . '</td>'
          .  '<td class="boldframe-top">' . $title . '</td>'
@@ -984,22 +983,21 @@ my $tableFrameRow;
 
 ##############################################################################
 #
-# Start a framed table with the given title strings and an option width.
+# Start a framed table with the given title strings and optional extra attrs
 # Each row you output needs to be prefixed with a startTableFrameRow
 # and end with a endTableFrameRow.
 #
-sub startTableFrame($width,$title,$titleExtra,$title,$titleExtra,...)
+sub startTableFrame($extra,$title,$titleExtra,$title,$titleExtra,...)
 {
-   my $width = shift;
-   $width = ' width="' . $width . '"' if (defined $width);
-   $width = '' if (!defined $width);
+   my $extra = shift;
+   $extra = '' if (!defined $extra);
 
    my @titles = @_;
    @titles = ('&nbsp;',undef) if (@titles < 1);
 
    push(@tableFrameSizes,scalar(@titles) / 2);
 
-   my $result = '<table class="tableframe" cellspacing="0" cellpadding="0"' . $width . '>'
+   my $result = '<table class="tableframe" cellspacing="0" cellpadding="0"' . $extra . '>'
               .  '<tr><td class="tableframe-top-left">' . $blank . '</td>';
 
    for (my $i=0; $i < @titles; $i += 2)
@@ -1188,9 +1186,7 @@ sub makeRepositoryTable($type)
 
    my $result = '';
 
-   my $isAdmin = &isAdminMember('Admin',$AuthUser);
-
-   if (($type != 0) || $isAdmin)
+   if (($type != 0) || &isAdminMember('Admin',$AuthUser))
    {
       my $rssIcon = &svn_IconPath('rss');
       my $atomIcon = &svn_IconPath('atom');
@@ -1206,7 +1202,9 @@ sub makeRepositoryTable($type)
             ## Add the table elements for the result...
             if ($result eq '')
             {
-               $result = &startTableFrame('100%','Repository&nbsp;','width="1%"',$loginButton . '(' . $accessTypes[$type] . ')',undef);
+               $result = &startTableFrame('width="100%"'
+                                         ,'Repository&nbsp;','width="1%"'
+                                         ,$loginButton . '(' . $accessTypes[$type] . ')',undef);
                $loginButton = '';
             }
 
@@ -1230,7 +1228,7 @@ sub makeRepositoryTable($type)
 
                $descript .= '<a title="Administrate repository ' . $group . '" href="' . $SVN_REPOSITORIES_URL . $group . '/?Insurrection=admin">'
                           .  '<img src="' . &svn_IconPath('admin') . '" alt="Administrate repository ' . $group . '" border="0" style="padding-left: 2px;" align="right"/>'
-                          . '</a>' if (($type == 3) || $isAdmin);
+                          . '</a>' if ($type == 3);
             }
 
             $descript .= $groupComments{$g};
