@@ -18,10 +18,8 @@
 
 <table class="tableframe" cellspacing="0" cellpadding="0" width="100%">
   <tr>
-    <td class="tableframe-top-left"></td>
-    <td class="tableframe-top" width="1%" style="text-align: left;">Local links</td>
-    <td class="tableframe-top-div"></td>
-    <td class="tableframe-top">&nbsp;</td>
+    <td class="tableframe-top-left"><img src="blank.gif" alt=""/></td>
+    <td class="tableframe-top" colspan="3" style="text-align: left;">Local links</td>
     <td class="tableframe-top-right"></td>
   </tr>
   <tr class="tableframe-row-even"><td class="tableframe-left"></td>
@@ -49,9 +47,7 @@
   </tr>
   <tr>
     <td class="tableframe-top-left"></td>
-    <td class="tableframe-top" width="1%" style="text-align: left;">External links</td>
-    <td class="tableframe-top-div"></td>
-    <td class="tableframe-top">&nbsp;</td>
+    <td class="tableframe-top" colspan="3" style="text-align: left;">External links</td>
     <td class="tableframe-top-right"></td>
   </tr>
   <tr class="tableframe-row-even"><td class="tableframe-left"></td>
@@ -79,7 +75,7 @@
     <td class="tableframe-bottom"></td>
     <td class="tableframe-bottom-div"></td>
     <td class="tableframe-bottom"></td>
-    <td class="tableframe-bottom-right"></td>
+    <td class="tableframe-bottom-right"><img src="blank.gif" alt=""/></td>
   </tr>
 </table>
 

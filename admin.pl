@@ -927,14 +927,24 @@ sub startInnerFrame($title,$extra)
    $extra = '' if (!defined $extra);
 
    return('<table class="innerframe" cellspacing="0" cellpadding="0"' . $extra . '>'
-         . '<tr>'
-         .  '<td class="innerframe-top-left">' . $blank . '</td>'
-         .  '<td class="innerframe-top">' . $title . '</td>'
-         .  '<td class="innerframe-top-right"></td>'
-         . '</tr>'
-         . '<tr>'
-         .  '<td class="innerframe-left"></td>'
-         .  '<td class="innerframe">');
+         . '<thead>'
+         .  '<tr>'
+         .   '<td class="innerframe-top-left">' . $blank . '</td>'
+         .   '<td class="innerframe-top">' . $title . '</td>'
+         .   '<td class="innerframe-top-right"></td>'
+         .  '</tr>'
+         . '</thead>'
+         . '<tfoot>'
+         .  '<tr>'
+         .   '<td class="innerframe-bottom-left"></td>'
+         .   '<td class="innerframe-bottom"></td>'
+         .   '<td class="innerframe-bottom-right">' . $blank . '</td>'
+         .  '</tr>'
+         . '</tfoot>'
+         . '<tbody>'
+         .  '<tr>'
+         .   '<td class="innerframe-left"></td>'
+         .   '<td class="innerframe">');
 }
 
 ##############################################################################
@@ -944,14 +954,10 @@ sub startInnerFrame($title,$extra)
 #
 sub endInnerFrame()
 {
-   return(  '</td>'
-         .  '<td class="innerframe-right"></td>'
-         . '</tr>'
-         . '<tr>'
-         .  '<td class="innerframe-bottom-left"></td>'
-         .  '<td class="innerframe-bottom"></td>'
-         .  '<td class="innerframe-bottom-right">' . $blank . '</td>'
-         . '</tr>'
+   return(   '</td>'
+         .   '<td class="innerframe-right"></td>'
+         .  '</tr>'
+         . '</tbody>'
          .'</table>');
 }
 
@@ -969,14 +975,24 @@ sub startBoldFrame($title,$extra)
    $extra = '' if (!defined $extra);
 
    return('<table class="boldframe" cellspacing="0" cellpadding="0"' . $extra . '>'
-         . '<tr>'
-         .  '<td class="boldframe-top-left">' . $blank . '</td>'
-         .  '<td class="boldframe-top">' . $title . '</td>'
-         .  '<td class="boldframe-top-right"></td>'
-         . '</tr>'
-         . '<tr>'
-         .  '<td class="boldframe-left"></td>'
-         .  '<td class="boldframe">');
+         . '<thead>'
+         .  '<tr>'
+         .   '<td class="boldframe-top-left">' . $blank . '</td>'
+         .   '<td class="boldframe-top">' . $title . '</td>'
+         .   '<td class="boldframe-top-right"></td>'
+         .  '</tr>'
+         . '</thead>'
+         . '<tfoot>'
+         .  '<tr>'
+         .   '<td class="boldframe-bottom-left"></td>'
+         .   '<td class="boldframe-bottom"></td>'
+         .   '<td class="boldframe-bottom-right">' . $blank . '</td>'
+         .  '</tr>'
+         . '</tfoot>'
+         . '<tbody>'
+         .  '<tr>'
+         .   '<td class="boldframe-left"></td>'
+         .   '<td class="boldframe">');
 }
 
 ##############################################################################
@@ -986,19 +1002,14 @@ sub startBoldFrame($title,$extra)
 #
 sub endBoldFrame()
 {
-   return(  '</td>'
-         .  '<td class="boldframe-right"></td>'
-         . '</tr>'
-         . '<tr>'
-         .  '<td class="boldframe-bottom-left"></td>'
-         .  '<td class="boldframe-bottom"></td>'
-         .  '<td class="boldframe-bottom-right">' . $blank . '</td>'
-         . '</tr>'
+   return(   '</td>'
+         .   '<td class="boldframe-right"></td>'
+         .  '</tr>'
+         . '</tbody>'
          .'</table>');
 }
 
-## Keep track of our table frame sizes...
-my @tableFrameSizes;
+## Keep track of our table frame row number for alternating backgrounds...
 my $tableFrameRow;
 
 ##############################################################################
@@ -1015,24 +1026,29 @@ sub startTableFrame($extra,$title,$titleExtra,$title,$titleExtra,...)
    my @titles = @_;
    @titles = ('&nbsp;',undef) if (@titles < 1);
 
-   push(@tableFrameSizes,scalar(@titles) / 2);
-
    my $result = '<table class="tableframe" cellspacing="0" cellpadding="0"' . $extra . '>'
-              .  '<tr><td class="tableframe-top-left">' . $blank . '</td>';
+              .  '<thead><tr><td class="tableframe-top-left">' . $blank . '</td>';
 
    for (my $i=0; $i < @titles; $i += 2)
    {
       $result .= '<td class="tableframe-top"';
       $result .= ' ' . $titles[$i+1] if (defined $titles[$i+1]);
       $result .= '>' . $titles[$i] . '</td>';
-
-      if (($i + 2) < @titles)
-      {
-         $result .= '<td class="tableframe-top-div">' . $blank . '</td>';
-      }
+      $result .= '<td class="tableframe-top-div">' . $blank . '</td>' if (($i + 2) < @titles);
    }
 
-   $result .= '<td class="tableframe-top-right"></td></tr>';
+   $result .= '<td class="tableframe-top-right"></td></tr></thead>'
+            . '<tfoot><tr><td class="tableframe-bottom-left"></td>';
+
+
+   for (my $i=0; $i < @titles; $i += 2)
+   {
+      $result .= '<td class="tableframe-bottom"></td>';
+      $result .= '<td class="tableframe-bottom-div"></td>' if (($i + 2) < @titles);
+   }
+
+   $result .= '<td class="tableframe-bottom-right">' . $blank . '</td></tr></tfoot>'
+            . '<tbody>';
 
    ## Set the row number to 0...
    $tableFrameRow = 0;
@@ -1105,19 +1121,7 @@ sub doTableFrameRow($cell,$cellExtra,$cell,$cellExtra,...)
 #
 sub endTableFrame()
 {
-   my $result = '<tr><td class="tableframe-bottom-left"></td>';
-
-   my $cols = pop(@tableFrameSizes);
-
-   while ($cols > 0)
-   {
-      $result .= '<td class="tableframe-bottom"></td>';
-      $result .= '<td class="tableframe-bottom-div"></td>' if ($cols > 1);
-      $cols--;
-   }
-
-   $result .= '<td class="tableframe-bottom-right">' . $blank . '</td></tr></table>';
-
+   my $result = '</tbody></table>';
    return $result;
 }
 
@@ -1182,10 +1186,6 @@ sub repositoryTable()
    $result .= &makeRepositoryTable(2) if (defined $AuthUser);
    $result .= &makeRepositoryTable(1);
    $result .= &makeRepositoryTable(0) if (defined $AuthUser);
-
-   ## Combine the possible multiple tables into one table such that
-   ## all of the columns line up
-   $result =~ s:</table><table[^>]*>::sgo;
 
    return $result;
 }
