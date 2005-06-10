@@ -214,8 +214,11 @@ function selectForDiff(path,rev)
 {
 	diffPath = path;
 	diffRev = rev;
-	SetTempCookie('diffPath',path);
-	SetTempCookie('diffRev',rev);
+
+    // Limit the revision cookie to this repository
+    cookiePath = Insurrection.SVN_URL + path.substring(0,path.indexOf('/'));
+	SetTempCookie('diffPath',path,cookiePath);
+	SetTempCookie('diffRev',rev,cookiePath);
 	setSelectMessage();
 }
 
@@ -554,9 +557,9 @@ function GetCookie(name)
  * Setting a cookie is just too easy...  Too bad getting the
  * cookie is not as easy.
  */
-function SetTempCookie(name, value)
+function SetTempCookie(name, value, path)
 {
-    document.cookie = name + '=' + escape(value) + '; path=/';
+    document.cookie = name + '=' + escape(value) + '; path=' + path;
 }
 
 /*
