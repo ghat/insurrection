@@ -1224,7 +1224,7 @@ sub makeRepositoryTable($type)
                ## narrow as possible to fit the data.  We depend on the
                ## fact that columns will automatically expand due to content.
                $result = &startTableFrame('width="100%"'
-                                         ,'Repository Name','style="width: 1px; padding-right: 4px; text-align:left; white-space: nowrap;"'
+                                         ,'Repository&nbsp;Name','style="width: 1px; padding-right: 4px; text-align:left; white-space: nowrap;"'
                                          ,$loginButton . '(' . $accessTypes[$type] . ')',undef);
                $loginButton = '';
             }
