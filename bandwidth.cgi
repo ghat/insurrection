@@ -78,7 +78,7 @@ if (open(RAW,"<$USAGE_DIR/$repo/stats/$raw"))
       $html =~ s:<TR><TH HEIGHT=\d+></TH></TR>::sgo;
 
       ## Last bit of fixup...
-      $html =~ s|<CENTER>.<HR>(.*)</CENTER>|<div style="background: #EEEEEE; border: 1px black solid; margin-top: 2px; padding: 2px;"><CENTER>$1</CENTER></div>|so;
+      $html =~ s|<CENTER>.<HR>(?:.?<P>)?(.*?)(?:<P>.?)?</CENTER>|<div style="background: #EEEEEE; border: 1px black solid; margin-top: 2px; padding: 0.5em;">$1</div>|so;
 
       &svn_HEADER_oldHTML('Raw Details: ' . $repo);
       print "\n<!-- Begin: HTML generated via legacy software -->\n";
