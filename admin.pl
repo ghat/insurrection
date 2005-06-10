@@ -1040,7 +1040,6 @@ sub startTableFrame($extra,$title,$titleExtra,$title,$titleExtra,...)
    $result .= '<td class="tableframe-top-right"></td></tr></thead>'
             . '<tfoot><tr><td class="tableframe-bottom-left"></td>';
 
-
    for (my $i=0; $i < @titles; $i += 2)
    {
       $result .= '<td class="tableframe-bottom"></td>';
@@ -1116,13 +1115,12 @@ sub doTableFrameRow($cell,$cellExtra,$cell,$cellExtra,...)
 
 ##############################################################################
 #
-# End an inner frame - this must be called for each startTableframe call.
+# End an inner table frame - this must be called for each startTableframe.
 # Frames can be nested.
 #
 sub endTableFrame()
 {
-   my $result = '</tbody></table>';
-   return $result;
+   return('</tbody></table>');
 }
 
 ## This is used to flag the need for the login or password button
@@ -1222,8 +1220,11 @@ sub makeRepositoryTable($type)
             ## Add the table elements for the result...
             if ($result eq '')
             {
+               ## Note that the width style is just to make the column as
+               ## narrow as possible to fit the data.  We depend on the
+               ## fact that columns will automatically expand due to content.
                $result = &startTableFrame('width="100%"'
-                                         ,'Repository&nbsp;','width="1%"'
+                                         ,'Repository Name','style="width: 1px; padding-right: 4px; text-align:left; white-space: nowrap;"'
                                          ,$loginButton . '(' . $accessTypes[$type] . ')',undef);
                $loginButton = '';
             }
