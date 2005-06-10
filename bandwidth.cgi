@@ -59,8 +59,8 @@ if (open(RAW,"<$USAGE_DIR/$repo/stats/$raw"))
       close(RAW);
 
       ## Rip out just we don't want
-      $html =~ s|.*<BODY[^>]*>||sgo;
-      $html =~ s|</BODY[^>]*>.*||sgo;
+      $html =~ s|^.*<BODY[^>]*>||sgo;
+      $html =~ s|</BODY[^>]*>.*$||sgo;
       $html =~ s|<P>.<HR>.<TABLE.*||sgo;
 
       ## Make all of the references to URLs relative to the server...
@@ -71,19 +71,20 @@ if (open(RAW,"<$USAGE_DIR/$repo/stats/$raw"))
       $html =~ s:(HREF=|SRC=)"(?!#)(\./)?([^/"]+)":$1"$3?Insurrection=bandwidth":sgo;
 
       ## Some headers need changing...
-      $html =~ s|<H2>(.*?)</H2>|<div style="text-align: center; font-weight: bold; font-size: 20pt;">$1</div>|so;
-      $html =~ s|<SMALL><STRONG>(.*?)</STRONG></SMALL>|<div style="text-align: right; font-size: 10pt;">$1</div>|so;
+      $html =~ s|\s*<H2>\s*(.*?)\s*</H2>\s*|<div style="text-align: center; font-weight: bold; font-size: 20pt;">$1</div>|so;
+      $html =~ s|\s*<SMALL><STRONG>\s*(.*?)\s*</STRONG></SMALL>\s*|<div style="text-align: right; font-size: 10pt;">$1</div>|so;
 
       ## Oh, all of those bad blank rows with not enough columns - just throw them out
-      $html =~ s:<TR><TH HEIGHT=\d+></TH></TR>::sgo;
+      $html =~ s:\s*<TR>\s*<TH HEIGHT=\d+>\s*</TH>\s*</TR>\s*::sgo;
 
       ## Last bit of fixup...
-      $html =~ s|<CENTER>.<HR>(?:.?<P>)?(.*?)(?:<P>.?)?</CENTER>|<div style="background: #EEEEEE; border: 1px black solid; margin-top: 2px; padding: 0.5em;">$1</div>|so;
+      $html =~ s|\s*<CENTER>\s*<HR>(?:\s*<P>)?\s*(.*?)\s*(?:<P>\s*)?</CENTER>\s*$|<div style="background: #EEEEEE; border: 1px black solid; margin-top: 2px; padding: 0.5em;">$1</div>|so;
 
       &svn_HEADER_oldHTML('Raw Details: ' . $repo);
+
       print "\n<!-- Begin: HTML generated via legacy software -->\n";
       print $html;
-      print "\n<!-- End: HTML generated via legacy software -->\n";
+      print "\n<!-- End: HTML generated via legacy software -->\n\n";
 
       &svn_TRAILER('$Id$');
       exit 0;
