@@ -47,6 +47,13 @@
   The RSS feed has been validated to conform to the
   <a href="http://blogs.law.harvard.edu/tech/rss">RSS 2.0 specification</a>.
 </p>
+<p style="font-size: 12pt;">
+  Both feeds support HTTP "Conditional GET" operation via the the HTTP ETag header to
+  reduce bandwidth and system overhead when there are no new updates since the last
+  download of the feed.&nbsp; Most feed readers and browsers support this.&nbsp; You
+  can read more about it at <a href="http://fishbowl.pastiche.org/2002/10/21/http_conditional_get_for_rss_hackers">this
+  blog</a> and in <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19">the HTTP specification</a>.
+</p>
 
 <script type="text/javascript" language="JavaScript"><!--
   startTabSetPage('main');
