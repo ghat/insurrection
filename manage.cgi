@@ -244,11 +244,11 @@ foreach my $user (sort keys %userPasswords)
                          );
 }
 
-print &doTableFrameRow('<input type="reset"/>','align="left"'
-                      ,'&nbsp;',undef
-                      ,'&nbsp;',undef
-                      ,'<input type="submit" name="update" value="Save Changes"/>','align="right"'
-                      );
+print &doTableFrameLastRows('<input type="reset"/>','align="left"'
+                           ,'&nbsp;',undef
+                           ,'&nbsp;',undef
+                           ,'<input type="submit" name="update" value="Save Changes"/>','align="right"'
+                           );
 
 print &endTableFrame()
     , '</form>';

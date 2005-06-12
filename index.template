@@ -1,87 +1,145 @@
-<repos/>
-<ul>
-  <li>
-    <a style="margin-left: 2px;" href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=rss"><img src="valid-rss.png" alt="[Valid RSS]" title="Validate my RSS feed" align="right" border="0"/></a>
-    To access the repositories above via a web browser, just click on the links
-    above.&nbsp; You may be asked to enter your username and password to get access
-    to the repository.<br clear="all">
-    &nbsp;
-  </li>
-  <li>
-    <a style="margin-left: 2px;" href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=atom"><img src="valid-atom.png" alt="[Valid Atom]" title="Validate my Atom feed" align="right" border="0"/></a>
-    To access the repositories above via Subversion, use the above URLs.&nbsp;
-    Subversion may then ask you to enter your username and password for access.&nbsp;
-    <i><b>Note:</b>&nbsp; You should normally check out the trunk by appending</i>
-    <code>/trunk </code> <i>to the URL.</i><br clear="all">
-  </li>
-</ul>
+<!-- We use my tabs.js tool to dynamically build the tab frames for this page -->
+<script type="text/javascript" language="JavaScript" src="tabs.js"></script>
 
-<table class="tableframe" cellspacing="0" cellpadding="0" width="100%">
- <thead>
-  <tr>
-    <td class="tableframe-top-left"><img src="blank.gif" alt=""/></td>
-    <td class="tableframe-top" colspan="3" style="text-align: left;">Local links</td>
-    <td class="tableframe-top-right"></td>
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSet('main',['Repositories','Atom &amp; RSS','Local links','External links','About']);
+//--></script>
+
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSetPage('main');
+//--></script>
+<p style="font-size: 12pt;">
+  To access the repositories below via a web browser, just click on the links.&nbsp;
+  You may be asked to enter your username and password to get access
+  to restricted repositories.
+</p>
+<repos/>
+<p style="font-size: 12pt;">
+  To access the repositories above via Subversion, browse to the location in the
+  repository you want via your web browser and then use that URL with your favorite
+  Subversion client tool.&nbsp; You may asked to enter your username
+  and password for access to any restricted repositories.
+</p>
+<p>
+  <i><b>Note:</b>&nbsp; You should normally <b>not</b> check out the whole repository
+  from the root as it may contain many tags and/or branches.</i>
+</p>
+
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSetPage('main');
+//--></script>
+<p style="font-size: 12pt;">
+  <span style="float: right; margin-left: 3px;">
+    <a href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=atom"><img src="valid-atom.png" alt="[Valid Atom]" title="Validate my Atom feed"/></a>
+    <br/>
+    <a href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=rss"><img src="valid-rss.png" alt="[Valid RSS]" title="Validate my RSS feed"/></a>
+  </span>
+  Atom and RSS feeds are available for activity in a repository or sub-tree of a repository.&nbsp;
+  The Atom and RSS link buttons you will see while browsing the repositories will produce a feed for
+  that part of the repository.
+</p>
+<p style="font-size: 12pt;">
+  The Atom feed has been validated to conform to the current
+  <a href="http://www.ietf.org/internet-drafts/draft-ietf-atompub-protocol-04.txt">IETF draft</a>
+  standard.
+</p>
+<p style="font-size: 12pt;">
+  The RSS feed has been validated to conform to the
+  <a href="http://blogs.law.harvard.edu/tech/rss">RSS 2.0 specification</a>.
+</p>
+
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSetPage('main');
+//--></script>
+<p style="font-size: 12pt;">Some resources that are located on this server.</p>
+<table class="tableframe" cellspacing="0" cellpadding="1" width="100%">
+  <tr class="tableframe-row-odd">
+    <td nowrap><a href="project.html">The Insurrection Project</a></td>
+    <td class="tableframe-div"></td>
+    <td>The Insurrection project information page - the code that we developed for our service.</td>
   </tr>
- </thead>
- <tfoot>
-  <tr>
-    <td class="tableframe-bottom-left"></td>
-    <td class="tableframe-bottom"></td>
-    <td class="tableframe-bottom-div"></td>
-    <td class="tableframe-bottom"></td>
-    <td class="tableframe-bottom-right"><img src="blank.gif" alt=""/></td>
-  </tr>
- </tfoot>
- <tbody>
-  <tr class="tableframe-row-even"><td class="tableframe-left"></td>
+  <tr class="tableframe-row-even">
     <td><a href="browser-tests/index.html">Browser Test Pages</a></td>
     <td class="tableframe-div"></td>
     <td>Some simple browser compatibility test pages for the Insurrection Web Tools.</td>
-  <td class="tableframe-right"></td></tr>
-  <tr class="tableframe-row-odd"><td class="tableframe-left"></td>
+  </tr>
+  <tr class="tableframe-row-odd">
     <td nowrap><a href="rewrite-test/index.html">Apache mod_rewrite Tests</a></td>
     <td class="tableframe-div"></td>
     <td>It seems that certain URL patterns do not get processed correctly within mod_rewrite in Apache 2.0.54</td>
-  <td class="tableframe-right"></td></tr>
-  <tr class="tableframe-row-even"><td class="tableframe-left"></td>
+  </tr>
+  <tr class="tableframe-row-even">
     <td nowrap><a href="best-practices.html">My Subversion Quick-Start</a></td>
     <td class="tableframe-div"></td>
     <td>Some introductory documentation about Subversion and the
     revision control rules and procedures that I follow.</td>
-  <td class="tableframe-right"></td></tr>
-  <tr>
-    <td class="tableframe-bottom-left"></td>
-    <td class="tableframe-bottom"></td>
-    <td class="tableframe-bottom-div"></td>
-    <td class="tableframe-bottom"></td>
-    <td class="tableframe-bottom-right"></td>
   </tr>
-  <tr>
-    <td class="tableframe-top-left"></td>
-    <td class="tableframe-top" colspan="3" style="text-align: left;">External links</td>
-    <td class="tableframe-top-right"></td>
-  </tr>
-  <tr class="tableframe-row-even"><td class="tableframe-left"></td>
-    <td nowrap><a href="project.html">The Insurrection Project</a></td>
-    <td class="tableframe-div"></td>
-    <td>The Insurrection project information page</td>
-  <td class="tableframe-right"></td></tr>
-  <tr class="tableframe-row-odd"><td class="tableframe-left"></td>
+</table>
+
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSetPage('main');
+//--></script>
+<p style="font-size: 12pt;">Some resources that we think are useful for working with Code-Host services.</p>
+<table class="tableframe" cellspacing="0" cellpadding="1" width="100%">
+  <tr class="tableframe-row-odd">
     <td nowrap><a href="http://subversion.tigris.org/">The Subversion Project</a></td>
     <td class="tableframe-div"></td>
     <td>The Subversion project home page</td>
-  <td class="tableframe-right"></td></tr>
-  <tr class="tableframe-row-even"><td class="tableframe-left"></td>
+  </tr>
+  <tr class="tableframe-row-even">
     <td nowrap><a href="http://svnbook.red-bean.com/">The Subversion Book</a></td>
     <td class="tableframe-div"></td>
-    <td>The Subversion Book home page</td>
-  <td class="tableframe-right"></td></tr>
-  <tr class="tableframe-row-odd"><td class="tableframe-left"></td>
+    <td>
+      The Subversion Book - a freely available, very good book on using Subversion.&nbsp; Also published
+      by <a href="http://www.oreilly.com/catalog/0596004486/">O'Reilly Media</a>.
+    </td>
+  </tr>
+  <tr class="tableframe-row-odd">
+    <td nowrap><a href="project.html">The Insurrection Project</a></td>
+    <td class="tableframe-div"></td>
+    <td>The Insurrection project information page - the code that we developed for our service.</td>
+  </tr>
+  <tr class="tableframe-row-even">
     <td nowrap><a href="http://subversion.tigris.org/project_links.html">The Subversion Project Links</a></td>
     <td class="tableframe-div"></td>
     <td>The Subversion related links page from the Subversion Project</td>
-  <td class="tableframe-right"></td></tr>
- </tbody>
+  </tr>
 </table>
+
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSetPage('main');
+//--></script>
+<p style="font-size: 12pt;">
+  <b><a href="http://svn.code-host.net/">Code-Host.net</a></b> by MKSoft Development provides reliable &amp; secure hosted document and
+  code revision management services via the internet.&nbsp; The service is built on industry
+  leading technologies:
+  <a href="http://www.kernel.org/">Linux</a> servers,
+  <a href="http://www.apache.org/">Apache</a> webservers,
+  <a href="http://subversion.tigris.org/">Subversion</a> repositories,
+  and the <a href="http://www.sinz.org/Michael.Sinz/Insurrection/project.html">Insurrection</a> web interface.
+</p>
+<p style="font-size: 12pt;">
+  The Code-Host.net servers are high-quality, carrier grade servers that are co-located
+  in high-security, high-bandwidth data centers.&nbsp; The repositories on the servers
+  are backed up nightly to a secured backup system with at least two generations of
+  complete backups available.
+</p>
+<p style="font-size: 12pt;">
+  <b>MKSoft Development</b> provides advanced internet and computer technology consulting
+  services.&nbsp; MKSoft Development has a full range of revision management solutions
+  ranging from basic network hosted revision management accounts to full custom
+  integrated systems at customer sites.&nbsp; We have built custom revision management and
+  software build solutions for over 15 years for a variety of environments and using
+  various technologies proven and stable technolgies.&nbsp; Reliability and security are
+  always critical concerns, especially for revision management systems.
+</p>
+<p style="font-size: 12pt;">
+  <b><a href="http://www.sinz.org/">Michael Sinz</a></b> has been in the technology and software industry since 1979.&nbsp;
+  In addition to his commercial work, he has been contributing to "open source" for much
+  of that time.&nbsp;
+</p>
+
+<script type="text/javascript" language="JavaScript"><!--
+  endTabSet('main');
+//--></script>
 

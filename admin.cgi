@@ -371,8 +371,8 @@ sub printAdminForms()
                             ,$access,'style="padding-left: 1em; text-align: left;"');
    }
 
-   print &doTableFrameRow('<input type="reset"/>','align="left"',
-                          '<input type="submit" name="update" value="Save Changes"/>','align="right"');
+   print &doTableFrameLastRows('<input type="reset"/>','align="left"',
+                               '<input type="submit" name="update" value="Save Changes"/>','align="right"');
 
    print &endTableFrame()
        , '</form>';

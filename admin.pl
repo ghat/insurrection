@@ -327,11 +327,10 @@ sub svn_HEADER_oldHTML($title,$expires)
    ## Flag that we are not 4.01...
    $oldHTML = 1;
 
-   ## We have &svn_HEADER_int as the function that does all
-   ## of the work...  This just is here to give an old doctype
+   ## We have &svn_HEADER as the function that does all
+   ## of the work...  This just is here to give a non-valid HTML tag...
    &svn_HEADER($title,
-               $expires,
-               '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">');
+               $expires);
 }
 
 ##############################################################################
@@ -1061,17 +1060,26 @@ sub startTableFrame($extra,$title,$titleExtra,$title,$titleExtra,...)
 # This also makes the rows alternate in colour (subtle grey variation)
 # The needed <tr> constructs have been done for you...
 #
-sub startTableFrameRow()
+# If the "plain" flag is "true" then the row will be plain (no odd/even)
+#
+sub startTableFrameRow($plain)
 {
-   if ($tableFrameRow)
+   if (shift)
    {
-      $tableFrameRow = 0;
-      return('<tr class="tableframe-row-odd"><td class="tableframe-left"></td>');
+      return('<tr class="tableframe-row-last"><td class="tableframe-left"></td>');
    }
    else
    {
-      $tableFrameRow = 1;
-      return('<tr class="tableframe-row-even"><td class="tableframe-left"></td>');
+      if ($tableFrameRow)
+      {
+         $tableFrameRow = 0;
+         return('<tr class="tableframe-row-odd"><td class="tableframe-left"></td>');
+      }
+      else
+      {
+         $tableFrameRow = 1;
+         return('<tr class="tableframe-row-even"><td class="tableframe-left"></td>');
+      }
    }
 }
 
@@ -1087,12 +1095,12 @@ sub endTableFrameRow()
 
 ##############################################################################
 #
-# This does the hard work of putting together a row of data for the table.
-# Note that it automatically adds the cell tags and that column dividers.
+# This does the actual work of making a table frame row based on the type of
+# row and the data for the row.
 #
-sub doTableFrameRow($cell,$cellExtra,$cell,$cellExtra,...)
+sub doTableFrameRow1($plain,$cell,$cellExtra,$cell,$cellExtra,...)
 {
-   my $result = &startTableFrameRow();
+   my $result = &startTableFrameRow(shift);
 
    my @cells = @_;
 
@@ -1111,6 +1119,27 @@ sub doTableFrameRow($cell,$cellExtra,$cell,$cellExtra,...)
    $result .= &endTableFrameRow();
 
    return $result;
+}
+
+##############################################################################
+#
+# This does the hard work of putting together a row of data for the table.
+# Note that it automatically adds the cell tags and that column dividers.
+#
+sub doTableFrameRow($cell,$cellExtra,$cell,$cellExtra,...)
+{
+   return &doTableFrameRow1(0,@_);
+}
+
+##############################################################################
+#
+# This makes a table frame row that is "plain" which we use for the end of
+# a sortable table for rows that we don't want sorted.  (Such as rows with
+# buttons, etc)
+#
+sub doTableFrameLastRows($cell,$cellExtra,$cell,$cellExtra,...)
+{
+   return &doTableFrameRow1(1,@_);
 }
 
 ##############################################################################
