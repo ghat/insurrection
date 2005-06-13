@@ -101,19 +101,22 @@ if (open(RAW,"<$USAGE_DIR/$repo/stats/$raw"))
             $insertText .= ',"' . $tabs[$i] . '"';
          }
          $insertText .= ']);'
-                      . 'startTabSetPage("bw",0);'
+                      . 'startTabSetPage("bw");'
                       . '//--></script><center><br/>';
 
          $html =~ s|<SMALL>\s*<A HREF="#.*?</SMALL>\s*<P>|$insertText|s;
+
+         ## Each page in the tabset needs one of these...
+         my $nextPage = '<br/><script type="text/javascript" language="JavaScript"><!--' . "\n"
+                      . 'startTabSetPage("bw");'
+                      . '//--></script><center><br/>';
 
          $insertText = '';
          for (my $i=0; $i < @tabs; $i+=2)
          {
             my $findText = '<A NAME="' . $tabs[$i] . '"></A>';
 
-            $insertText .= '<br/><script type="text/javascript" language="JavaScript"><!--' . "\n"
-                         . 'startTabSetPage("bw");'
-                         . '//--></script><center><br/>';
+            $insertText .= $nextPage;
 
             ## If we find that section, clear out the insertText...
             ## We need to keep track of non-used pages as they need to
