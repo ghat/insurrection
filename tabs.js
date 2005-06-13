@@ -33,8 +33,8 @@ function startTabSetPage(setName)
   var tabSet = tabSets[setName];
   if (tabSet)
   {
-	var tab = tabSet.current;
-	tabSet.current++;
+    var tab = tabSet.current;
+    tabSet.current++;
 
     var tabID = 'tab_' + setName + '_' + tab;
     var numTabs = tabSet.tabs.length;
@@ -84,21 +84,17 @@ function startTabSetPage(setName)
       }
 
       document.write('<td class="' + tabClass + '">');
-	  if (i != tab)
-	  {
-		  document.write('<a class="innerframe-tab" title="' + tabSet.tabs[i] + '" href="#" onclick="return clickTab(\'' + setName + '\',' + i + ');">');
-	  }
+      document.write('<a title="' + tabSet.tabs[i] + '" onclick="return clickTab(\'' + setName + '\',' + i + ');">');
       document.write(tabSet.tabs[i]);
-	  if (i != tab)
-	  {
-		  document.write('</a>');
-	  }
+      document.write('</a>');
       document.write('</td>');
       document.write('<td class="' + rightClass + '"><img alt="" src="/blank.gif"/></td>');
     }
 
-    document.write('<td class="innerframe-top-light-space"></td>');
-    document.write('<td class="innerframe-top-right-light"></td>');
+    // A hidden feature - click on the top-right of the non-tab in the tab area and
+    // all of the tabbed sections will be displayed at the same time.
+    document.write('<td onclick="toggleAllTabs(\'' + setName + '\');" title="Toggle all tabs" style="cursor: pointer;" class="innerframe-top-light-space"></td>');
+    document.write('<td onclick="toggleAllTabs(\'' + setName + '\');" title="Toggle all tabs" style="cursor: pointer;" class="innerframe-top-right-light"></td>');
     document.write('</tr></thead>');
 
     document.write('<tfoot><tr>');
@@ -126,9 +122,16 @@ function endTabSet(setName)
       document.write('</td><td class="innerframe-right"></td></tr></tbody></table>');
     }
 
-    var itab = tabGetCookie(setName);
+    // Get the tab tables to be set up
+    tabSet.tables = new Array();
+    for (i=0; i<tabSet.current; i++)
+    {
+      tabSet.tables[i] = document.getElementById('tab_' + setName + '_' + i);
+    }
 
-    if ((itab == null) || (itab < 0) || (itab >= tabSet.tabs.length))
+    var  itab  =  tabGetCookie( setName);
+
+    if ((itab == null) || (itab < 0) || (itab >= tabSet.current))
     {
       itab = 0;
     }
@@ -151,19 +154,55 @@ function clickTab(setName,tab)
     var newTab = document.getElementById(tabID);
     if (newTab)
     {
-      if (tabSet.active)
+      // Set the new active tab...
+      tabSet.active = tab;
+
+      // Cause all of the other tabs to be hidden.
+      // We do all of them as more than one may be showing
+      // due to the special "show all" feature.
+      for (i=0; i<tabSet.current; i++)
       {
-        tabSet.active.style.display = 'none';
+        if (tabSet.tables[i])
+        {
+          tabSet.tables[i].style.display = 'none';
+        }
       }
-      tabSet.active = newTab;
-      tabSet.active.style.display = 'block';
+
+      // Display the tab that we want...
+      newTab.style.display = 'block';
 
       // Set a cookie to tell us that this tab is active
       tabSetCookie(setName,tab);
     }
   }
 
+  // Return false for the onclick checking in the link...
   return false;
+}
+
+/*
+ * Show/hide all tabs at once (silly?)
+ */
+function toggleAllTabs(setName)
+{
+  var tabSet = tabSets[setName];
+  if (tabSet)
+  {
+    for (i=0; i<tabSet.current; i++)
+    {
+      if ((tabSet.tables[i]) && (i != tabSet.active))
+      {
+        if (tabSet.tables[i].style.display == 'none')
+        {
+          tabSet.tables[i].style.display = 'block';
+        }
+        else
+        {
+          tabSet.tables[i].style.display = 'none';
+        }
+      }
+    }
+  }
 }
 
 /*
@@ -173,32 +212,32 @@ function clickTab(setName,tab)
  */
 function tabGetCookie(name)
 {
-    var arg = 'TAB_' + name + "=";
-    var alen = arg.length;
-    var clen = document.cookie.length;
-    var i = 0;
+  var arg = 'TAB_' + name + "=";
+  var alen = arg.length;
+  var clen = document.cookie.length;
+  var i = 0;
 
-    while (i < clen)
+  while (i < clen)
+  {
+    var j = i + alen;
+    if (document.cookie.substring(i, j) == arg)
     {
-        var j = i + alen;
-        if (document.cookie.substring(i, j) == arg)
-        {
-            var endstr = document.cookie.indexOf (";", j);
-            if (endstr == -1)
-            {
-                endstr = document.cookie.length;
-            }
-            return unescape(document.cookie.substring(j, endstr));
-        }
-
-        i = document.cookie.indexOf(" ", i) + 1;
-
-        if (i == 0)
-        {
-            return null;
-        }
+      var endstr = document.cookie.indexOf (";", j);
+      if (endstr == -1)
+      {
+        endstr = document.cookie.length;
+      }
+      return unescape(document.cookie.substring(j, endstr));
     }
-    return null;
+
+    i = document.cookie.indexOf(" ", i) + 1;
+
+    if (i == 0)
+    {
+      return null;
+    }
+  }
+  return null;
 }
 
 /*
@@ -208,6 +247,6 @@ function tabGetCookie(name)
  */
 function tabSetCookie(name, value)
 {
-    document.cookie = 'TAB_' + name + '=' + escape(value);
+  document.cookie = 'TAB_' + name + '=' + escape(value);
 }
 

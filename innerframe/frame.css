@@ -30,13 +30,27 @@ td.innerframe
   width: 99%;
 }
 
-a.innerframe-tab, a.innerframe-tab:visited
+.innerframe-top a, .innerframe-top a:visited
 {
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+}
+
+.innerframe-top a:hover, .innerframe-top a:active
+{
+  color: black;
+  text-decoration: underline;
+}
+
+.innerframe-top-light a, .innerframe-top-light a:visited
+{
+  cursor: pointer;
   color: #999999;
   text-decoration: none;
 }
 
-a.innerframe-tab:hover, a.innerframe-tab:active
+.innerframe-top-light a:hover, .innerframe-top-light a:active
 {
   color: #006600;
   text-decoration: underline;
