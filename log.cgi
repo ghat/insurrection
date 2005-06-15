@@ -134,6 +134,7 @@ if ((defined $rpath)
              , "<!-- Insurrection Web Tools for Subversion: History -->\n"
              , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
              , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
+             , '<!DOCTYPE log SYSTEM "' , &svn_HTTP() , $SVN_URL_PATH , 'log.dtd">' , "\n"
              , '<log repository="' , &svn_XML_Escape($rpath) , '" path="' , &svn_XML_Escape($opath) , '">' , "\n";
 
          ## Since we always include the last entry as the first entry on the

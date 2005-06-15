@@ -140,10 +140,12 @@
               <td id="content">
                 <xsl:call-template name="banner"/>
                 <xsl:apply-templates select="index"/>
-                <div class="footer">
+                <div class="footer" title="$Id$">
+                  <a title="Valid XML 1.0!" href="http://validator.w3.org/check?uri=referer">
+                    <img style="margin-left: 1em;" align="right" border="0" src="/valid-xml10.png" alt="Valid XML 1.0!"/>
+                  </a>
                   <xsl:text>Powered by Insurrection &amp; Subversion </xsl:text>
                   <xsl:value-of select="@version"/>
-                  <xsl:text> -- $Id$</xsl:text>
                 </div>
               </td>
               <xsl:call-template name="right-side"/>
@@ -636,8 +638,11 @@
                 <!-- If we have a morelog tag, we need to provide a way to get it -->
                 <xsl:apply-templates select="morelog"/>
 
-                <div class="footer">
-                  <xsl:text>$Id$</xsl:text>
+                <div class="footer" title="$Id$">
+                  <a title="Valid XML 1.0!" href="http://validator.w3.org/check?uri=referer">
+                    <img style="margin-left: 1em;" align="right" border="0" src="/valid-xml10.png" alt="Valid XML 1.0!"/>
+                  </a>
+                  <xsl:text>&#160;</xsl:text>
                 </div>
               </td>
               <xsl:call-template name="right-side"/>
@@ -1008,8 +1013,13 @@
                   </xsl:element>
                 </div>
                 <xsl:apply-templates select="item"/>
-                <div class="footer">
-                  <xsl:text>$Id$</xsl:text>
+                <div class="footer" title="$Id$">
+                  <!-- Do we really want to say RSS is valid XML since it has no DTD?
+                  <a title="Valid XML 1.0!" href="http://validator.w3.org/check?uri=referer">
+                    <img style="margin-left: 1em;" align="right" border="0" src="/valid-xml10.png" alt="Valid XML 1.0!"/>
+                  </a>
+                  -->
+                  <xsl:text>&#160;</xsl:text>
                 </div>
               </td>
               <xsl:call-template name="right-side"/>

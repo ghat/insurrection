@@ -345,14 +345,15 @@ sub svn_TRAILER($version)
    ## Use the version of this file if there was no version passed.
    $version = '$Id$' if (!defined $version);
 
+   ## Now, lets just use the version information a title attribute of the footer
+
    print       '</div>'
-       ,       '<div class="footer">';
+       ,       '<div class="footer" title="' , &svn_XML_Escape($version) , '">';
    print        '<a title="Valid HTML 4.01!" href="http://validator.w3.org/check?uri=referer">'
        ,         '<img style="margin-left: 1em;" align="right" border="0" src="/valid-html401.png" alt="Valid HTML 4.01!">'
        ,        '</a>' if (!$oldHTML);
-   print        $version;
-   print        '&nbsp;&nbsp;--&nbsp;&nbsp;'
-       ,        'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
+   print        '&nbsp;';
+   print        'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
    print       '</div>'
        ,      '</td>'
        ,      '<th id="right"></th>'
