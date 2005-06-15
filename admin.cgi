@@ -520,14 +520,17 @@ sub printAdminForms()
        ,   '<td width="99%">' , &gauge($diskUsage,$diskLimit,$diskUsageTitle) , '</td>'
        ,  '</tr>'
        ,  $bw_rows
-       , '</table>'
-       , '<center>'
+       , '</table>';
+
+   ## If this user is able to see the details, make the link
+   print '<center>'
        ,  '<form method="get" action="' , $repoLink , '/.raw-details./index.html" style="margin: 2px;">'
        ,   '<input type="hidden" name="Insurrection" value="bandwidth"/>'
        ,   '<input type="submit" name="go" value="View usage details"/>'
        ,  '</form>'
-       , '</center>'
-       , &endInnerFrame();
+       , '</center>' if (($isAdmin) || (!(-f "$SVN_BASE/$repo/no-stats.flag"))) ;
+
+   print &endInnerFrame();
    ### Repository usage form
    ##############################################################################
 

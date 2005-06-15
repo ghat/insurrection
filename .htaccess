@@ -24,6 +24,12 @@ DirectoryIndex index.cgi
 	SetHandler cgi-script
 </Files>
 
+## The *.template files are not to be served directly
+## so exclude them here
+<Files ~ "\.template$">
+	Deny from all
+</Files>
+
 ## These CGIs require a login in order to validate the
 ## user's specific access rights - we can not just check
 ## if the user as access to the repository via the

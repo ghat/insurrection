@@ -129,9 +129,26 @@ function endTabSet(setName)
       tabSet.tables[i] = document.getElementById('tab_' + setName + '_' + i);
     }
 
-    var  itab  =  tabGetCookie( setName);
+    // Check to see if the URL asked for a specific tab
+    var itab = new String(document.location);
+    if (itab.lastIndexOf('#') > 0)
+    {
+      itab = itab.substring(itab.lastIndexOf('#')+1);
+    }
+    else
+    {
+      itab = null;
+    }
 
-    if ((itab == null) || (itab < 0) || (itab >= tabSet.current))
+    if ((itab == null) || (!tabSet.tables[itab]))
+    {
+      // If we don't have a valid tab location in the URL, check
+      // our cookie...
+      itab = tabGetCookie(setName);
+    }
+
+    // Validate tab we will use as the initial location
+    if ((itab == null) || (!tabSet.tables[itab]))
     {
       itab = 0;
     }

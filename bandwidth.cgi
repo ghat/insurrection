@@ -15,22 +15,16 @@ require 'admin.pl';
 ## Where the usage history sumary files are stored
 my $USAGE_DIR = $SVN_LOGS . '/usage-history';
 
-## Load upto n-days into the past for this history
-## Note that only admins can see more than 1 month worth.
-my $MAX_HISTORY = 400;
-
+## Get the system admin account information...
 my $isAdmin = &isAdminMember('Admin',$AuthUser);
-
-my $max_history = $cgi->param('History');
-$max_history = $MAX_HISTORY if ((!defined $max_history) || (!$isAdmin));
-
-## Check if we are to show details
-my $showDetails = $cgi->param('Details');
 
 ## The repository we are playing with...
 my $repo = &svn_REPO();
 $repo = '' if ($repo eq '/');
-if ($repo eq '')
+
+## If the repository is flagged as no-stats and we are not
+## the system administarator, don't let them in...
+if (($repo eq '') || ((!$isAdmin) && (-f "$SVN_BASE/$repo/no-stats.flag")))
 {
    print $cgi->redirect('-location' => $SVN_URL_PATH,
                         '-status' => '302 Invalid path');

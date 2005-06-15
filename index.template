@@ -8,13 +8,13 @@
 <script type="text/javascript" language="JavaScript"><!--
   startTabSetPage('main');
 //--></script>
-<p style="font-size: 12pt;">
+<p>
   To access the repositories below via a web browser, just click on the links.&nbsp;
   You may be asked to enter your username and password to get access
   to restricted repositories.
 </p>
 <repos/>
-<p style="font-size: 12pt;">
+<p>
   To access the repositories above via Subversion, browse to the location in the
   repository you want via your web browser and then use that URL with your favorite
   Subversion client tool.&nbsp; You may asked to enter your username
@@ -28,7 +28,7 @@
 <script type="text/javascript" language="JavaScript"><!--
   startTabSetPage('main');
 //--></script>
-<p style="font-size: 12pt;">
+<p>
   <span style="float: right; margin-left: 3px;">
     <a href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=atom"><img src="valid-atom.png" alt="[Valid Atom]" title="Validate my Atom feed"/></a>
     <br/>
@@ -38,16 +38,16 @@
   The Atom and RSS link buttons you will see while browsing the repositories will produce a feed for
   that part of the repository.
 </p>
-<p style="font-size: 12pt;">
+<p>
   The Atom feed has been validated to conform to the current
   <a href="http://www.ietf.org/internet-drafts/draft-ietf-atompub-protocol-04.txt">IETF draft</a>
   standard.
 </p>
-<p style="font-size: 12pt;">
+<p>
   The RSS feed has been validated to conform to the
   <a href="http://blogs.law.harvard.edu/tech/rss">RSS 2.0 specification</a>.
 </p>
-<p style="font-size: 12pt;">
+<p>
   Both feeds support HTTP "Conditional GET" operation via the the HTTP ETag header to
   reduce bandwidth and system overhead when there are no new updates since the last
   download of the feed.&nbsp; Most feed readers and browsers support this.&nbsp; You
@@ -58,7 +58,7 @@
 <script type="text/javascript" language="JavaScript"><!--
   startTabSetPage('main');
 //--></script>
-<p style="font-size: 12pt;">Some resources that are located on this server.</p>
+<p>Some resources that are located on this server.</p>
 <table class="tableframe" cellspacing="0" cellpadding="1" width="100%">
   <tr class="tableframe-row-odd">
     <td nowrap><a href="project.html">The Insurrection Project</a></td>
@@ -86,7 +86,7 @@
 <script type="text/javascript" language="JavaScript"><!--
   startTabSetPage('main');
 //--></script>
-<p style="font-size: 12pt;">Some resources that we think are useful for working with Code-Host services.</p>
+<p>Some resources that we think are useful for working with Code-Host services.</p>
 <table class="tableframe" cellspacing="0" cellpadding="1" width="100%">
   <tr class="tableframe-row-odd">
     <td nowrap><a href="http://subversion.tigris.org/">The Subversion Project</a></td>
@@ -116,22 +116,24 @@
 <script type="text/javascript" language="JavaScript"><!--
   startTabSetPage('main');
 //--></script>
-<p style="font-size: 12pt;">
-  <b><a href="http://svn.code-host.net/">Code-Host.net</a></b> by MKSoft Development provides reliable &amp; secure hosted document and
-  code revision management services via the internet.&nbsp; The service is built on industry
-  leading technologies:
+<p>
+  <b><a href="http://svn.code-host.net/">Code-Host.net</a></b> by MKSoft Development provides
+  reliable &amp; secure hosted document and code revision management services via the
+  internet.&nbsp; The service is built on industry leading technologies:
+  <a href="http://www.cisco.com/">Cisco</a> firewalls,
   <a href="http://www.kernel.org/">Linux</a> servers,
   <a href="http://www.apache.org/">Apache</a> webservers,
   <a href="http://subversion.tigris.org/">Subversion</a> repositories,
   and the <a href="http://www.sinz.org/Michael.Sinz/Insurrection/project.html">Insurrection</a> web interface.
 </p>
-<p style="font-size: 12pt;">
+<p>
   The Code-Host.net servers are high-quality, carrier grade servers that are co-located
   in high-security, high-bandwidth data centers.&nbsp; The repositories on the servers
   are backed up nightly to a secured backup system with at least two generations of
-  complete backups available.
+  complete backups available.&nbsp; For that extra level of security, each server is
+  secured behind a dedicated external firewall in addition to the server's internal firewall.
 </p>
-<p style="font-size: 12pt;">
+<p>
   <b>MKSoft Development</b> provides advanced internet and computer technology consulting
   services.&nbsp; MKSoft Development has a full range of revision management solutions
   ranging from basic network hosted revision management accounts to full custom
@@ -140,10 +142,10 @@
   various technologies proven and stable technolgies.&nbsp; Reliability and security are
   always critical concerns, especially for revision management systems.
 </p>
-<p style="font-size: 12pt;">
+<p>
   <b><a href="http://www.sinz.org/">Michael Sinz</a></b> has been in the technology and software industry since 1979.&nbsp;
   In addition to his commercial work, he has been contributing to "open source" for much
-  of that time.&nbsp;
+  of that time.
 </p>
 
 <script type="text/javascript" language="JavaScript"><!--
