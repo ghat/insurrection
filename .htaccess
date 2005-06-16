@@ -86,7 +86,7 @@ RewriteEngine On
 ## then it is a valid host.  If not, out you go...
 RewriteCond %{HTTP_HOST}	"^.*/.*$"	[OR]
 RewriteCond /home/subversion/www/%{HTTP_HOST}.gif !-f
-RewriteRule ^(.*)$	[G,L]
+RewriteRule ^(.*)$	""	[F,L]
 
 ## Some custom logo processing based on the host that
 ## we are acting as.  We know it exists otherwise
