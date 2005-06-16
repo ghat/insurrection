@@ -71,23 +71,33 @@ DirectoryIndex index.cgi
 ## You need to have mod-rewrite enabled in apache
 RewriteEngine On
 
+## Since we depend on HTTP_HOST being a reasonable value
+## in some of the other request, we first filter all
+## requests through here.  Basically, we check that
+## the HTTP_HOST is reasonable and if not, fail the
+## request right here, right now.
+## First we check if the host name has a slash in it.
+## Then we check that the host name has a matching .GIF image.
+## Note that the HTTP_HOST may have the port number
+## on it, so the file name may need to have to be in both
+## forms.
+## This is how we then configure what host name or names
+## we want to support here.  If it has a GIF file
+## then it is a valid host.  If not, out you go...
+RewriteCond %{HTTP_HOST}	"^.*/.*$"	[OR]
+RewriteCond /home/subversion/www/%{HTTP_HOST}.gif !-f
+RewriteRule ^(.*)$	[G,L]
+
+## Some custom logo processing based on the host that
+## we are acting as.  We know it exists otherwise
+## the above safety check rule would have caught us.
+## Note that we do this internally (PT) such that
+## the user does not know this exists.
+RewriteRule	^Logo.gif	"/%{HTTP_HOST}.gif"	[PT,L]
+
 ## Simple rule to support having intex.html and project.html
 ## actually be cgi scripts.
 RewriteRule	^(index|project).html$	/$1.cgi	[PT,L]
-
-## Some custom logo processing based on the domain that
-## connected.  We do the test in this order such that
-## only the request for an insurrection logo will pass.
-## Also, note that the HTTP_HOST may have the port number
-## on it, so the file name may need to have to be in both
-## forms.  Note that we do this internally (PT) such that
-## the user does not know this exists.
-RewriteCond %{REQUEST_FILENAME} "^/home/subversion/www/Logo.gif$"
-RewriteCond /home/subversion/www/%{HTTP_HOST}.gif -f
-RewriteRule	^Logo.gif	"/%{HTTP_HOST}.gif"	[PT,L]
-
-## If no specific Logo.gif use the InsurrectionLogo.gif
-RewriteRule	^Logo.gif	"/InsurrectionLogo.gif"	[PT,L]
 
 ## We use a local proxy operation such that we can
 ## publicly expose only the normal Subversion paths
@@ -106,6 +116,11 @@ RewriteRule	^Logo.gif	"/InsurrectionLogo.gif"	[PT,L]
 ##
 ## Note that we only look at GET access methods.
 ## All other methods are reserver for mod_dav_svn.
+##
+## This is one of the reasons the HTTP_HOST needs
+## to be filtered - otherwise these rules could
+## be used to jump elsewhere on the net by providing
+## incorrect HTTP_HOST values.
 ##
 ## NOTE - Currently a bug in Apache/mod_rewrite
 ## has bugs with certain characters in the URL.
