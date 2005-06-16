@@ -197,6 +197,22 @@ foreach my $group (sort keys %groupUsers)
    }
 }
 
+print &doTableFrameRow( '' , undef
+                      , '' , undef
+                      , '<a href="' . &svn_XML_Escape($SVN_URL_PATH . 'bandwidth.cgi/--overhead--/.raw-details./index.html') . '" title="View usage details">System overhead</a>' , 'style="font-size: 10px; white-space: nowrap;"'
+                      , 'Bandwidth details for system overhead' , undef
+                      );
+print &doTableFrameRow( '' , undef
+                      , '' , undef
+                      , '<a href="' . &svn_XML_Escape($SVN_URL_PATH . 'bandwidth.cgi/-Internal-/.raw-details./index.html') . '" title="View usage details">Internal overhead</a>' , 'style="font-size: 10px; white-space: nowrap;"'
+                      , 'Internal bandwidth due to the proxy trick' , undef
+                      );
+print &doTableFrameRow( '' , undef
+                      , '' , undef
+                      , '<a href="' . &svn_XML_Escape($SVN_URL_PATH . 'bandwidth.cgi/--All--/.raw-details./index.html') . '" title="View usage details">All HTTP/HTTPS</a>' , 'style="font-size: 10px; white-space: nowrap;"'
+                      , 'Usage details for all repositories on this server' , undef
+                      );
+
 print &endTableFrame();
 ### System repository administration form
 ##############################################################################
