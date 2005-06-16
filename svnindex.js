@@ -149,174 +149,173 @@ function foldDir(arrow)
  * eliminates that problem.  We also find our images from the
  * hiddent images that the XSLT generated.
  */
-var actionList = new Array();
-var actionTimer = null;
-function doNextItem()
+function doNextItem(actionList)
 {
-	if (actionTimer != null)
+	// Do up to 3 entries at a time...
+	// Why 3?  Why not - just a number that seemed to fit
+	// It could be as low as 1 or as high as you want...
+	// To large and the browser "hangs" while it does all
+	// the work on a large directory.  Too low and the
+	// directory takes longer to display...
+	var bunchCount = 3;
+
+	// Some variables that we will use...
+	var tr;
+	var td;
+	var a;
+	var img;
+	var div;
+	var txt;
+
+	while ((actionList.length > 0) && (bunchCount > 0))
 	{
-		actionTimer = null;
+		bunchCount--;
+		var action = actionList.shift();
+		var tgt = action.target.id + action.href;
 
-		// Do up to 4 entries at a time...
-		var bunchCount = 4;
-
-		// Some variables that we will use...
-		var tr;
-		var td;
-		var a;
-		var img;
-		var div;
-		var txt;
-
-		while ((actionList.length > 0) && (bunchCount > 0))
+		// Check if this is the root index, and if so, load it...
+		// This is here to support the broken XSLT browsers.
+		if (tgt == './.svn_index')
 		{
-			bunchCount--;
-			var action = actionList.shift();
-			var tgt = action.target.id + action.href;
+			loadBanner('.svn_index');
+		}
 
-			// Check if this is the root index, and if so, load it...
-			// This is here to support the broken XSLT browsers.
-			if (tgt == './.svn_index')
-			{
-				loadBanner('.svn_index');
-			}
+		tr = document.createElement('tr');
+		action.target.dirlist.appendChild(tr);
 
-			tr = document.createElement('tr');
-			action.target.dirlist.appendChild(tr);
+		if (action.type == 'dir')
+		{
+			tr.className = 'dirrow';
 
-			if (action.type == 'dir')
-			{
-				tr.className = 'dirrow';
-
-				td = document.createElement('td');
-				tr.appendChild(td);
-
-				td.className = 'foldspace';
-				img = document.createElement('img');
-				img.className = 'dirarrow';
-				img.title = 'Expand directory';
-				img.alt = img.title;
-				img.id = tgt.substring(1);
-				img.src = document.getElementById('closedImage').src;
-				img.align = 'middle';
-				td.appendChild(img);
-
-				// Yes, this is a strange way to set the onclick method
-				// but due to IE not being fully consistant in the DOM/JS
-				// interface.  But, this happens to be the "other" way to
-				// set this onclick property...
-				img['onclick'] = function(){loadDir(this);};
-
-				td = document.createElement('td');
-				td.className = 'pathname';
-				tr.appendChild(td);
-
-				a = document.createElement('a');
-				a.href = tgt;
-				a.title = 'Go to directory "' + action.name + '"';
-				td.appendChild(a);
-				div = document.createElement('div');
-				div.className = 'dir';
-				a.appendChild(div);
-				img = document.createElement('img');
-				div.appendChild(img);
-				img.src = document.getElementById('dirImage').src;
-				img.alt = 'Folder';
-				img.className = 'svnentryicon';
-				img.align = 'middle';
-				img.alt = a.title;
-				div.appendChild(document.createTextNode(action.name + '/'));
-			}
-			else
-			{
-				tr.className = 'filerow';
-
-				td = document.createElement('td');
-				tr.appendChild(td);
-				td.className = 'foldspace';
-				img = document.createElement('img');
-				img.src = document.getElementById('spacerImage').src;
-				img.alt = '';
-				img.align = 'middle';
-				td.appendChild(img);
-
-				td = document.createElement('td');
-				td.className = 'pathname';
-				tr.appendChild(td);
-
-				a = document.createElement('a');
-				a.href = tgt;
-				a.title = 'Get latest version of "' + action.name + '"';
-				td.appendChild(a);
-				div = document.createElement('div');
-				div.className = 'file';
-				a.appendChild(div);
-				img = document.createElement('img');
-				div.appendChild(img);
-				img.src = document.getElementById('fileImage').src;
-				img.alt = 'File';
-				img.className = 'svnentryicon';
-				img.align = 'middle';
-				img.alt = a.title;
-				div.appendChild(document.createTextNode(action.name));
-			}
-
-			// The 3rd column for both files and directories is the
-			// same, so we do that outside of the separate elements.
-			// (This is the "showlog" icon/action)
 			td = document.createElement('td');
 			tr.appendChild(td);
 
-			td.className = 'showlog';
-			a = document.createElement('a');
-			td.appendChild(a);
-
-			if (action.type == 'dir')
-			{
-				a.title = 'Show revision history for directory "' + action.name + '"';
-			}
-			else
-			{
-				a.title = 'Show revision history for file "' + action.name + '"';
-			}
-
-			a.href = tgt + '?Insurrection=log';
+			td.className = 'foldspace';
 			img = document.createElement('img');
-			img.src = document.getElementById('infoImage').src;
+			img.className = 'dirarrow';
+			img.title = 'Expand directory';
+			img.alt = img.title;
+			img.id = tgt.substring(1);
+			img.src = document.getElementById('closedImage').src;
+			img.align = 'middle';
+			td.appendChild(img);
+
+			// Yes, this is a strange way to set the onclick method
+			// but due to IE not being fully consistant in the DOM/JS
+			// interface.  But, this happens to be the "other" way to
+			// set this onclick property...
+			img['onclick'] = function(){loadDir(this);};
+
+			td = document.createElement('td');
+			td.className = 'pathname';
+			tr.appendChild(td);
+
+			a = document.createElement('a');
+			a.href = tgt;
+			a.title = 'Go to directory "' + action.name + '"';
+			td.appendChild(a);
+			div = document.createElement('div');
+			div.className = 'dir';
+			a.appendChild(div);
+			img = document.createElement('img');
+			div.appendChild(img);
+			img.src = document.getElementById('dirImage').src;
+			img.alt = 'Folder';
+			img.className = 'svnentryicon';
 			img.align = 'middle';
 			img.alt = a.title;
-			a.appendChild(img);
+			div.appendChild(document.createTextNode(action.name + '/'));
+		}
+		else
+		{
+			tr.className = 'filerow';
 
-			// Directories also have a hidden second row where the
-			// in-line sub-directory expansion happens.  Fun stuff
-			if (action.type == 'dir')
-			{
-				tr = document.createElement('tr');
-				tr.style.display = 'none';
-				tr.id = tgt + '/';
-				action.target.dirlist.appendChild(tr);
+			td = document.createElement('td');
+			tr.appendChild(td);
+			td.className = 'foldspace';
+			img = document.createElement('img');
+			img.src = document.getElementById('spacerImage').src;
+			img.alt = '';
+			img.align = 'middle';
+			td.appendChild(img);
 
-				td = document.createElement('td');
-				tr.appendChild(td);
-				td.className = 'foldspace';
-				img = document.createElement('img');
-				img.src = document.getElementById('spacerImage').src;
-				img.alt = '';
-				img.align = 'middle';
-				td.appendChild(img);
+			td = document.createElement('td');
+			td.className = 'pathname';
+			tr.appendChild(td);
 
-				td = document.createElement('td');
-				tr.appendChild(td);
-				td.id = tgt;
-				td.colSpan = 2;
-			}
+			a = document.createElement('a');
+			a.href = tgt;
+			a.title = 'Get latest version of "' + action.name + '"';
+			td.appendChild(a);
+			div = document.createElement('div');
+			div.className = 'file';
+			a.appendChild(div);
+			img = document.createElement('img');
+			div.appendChild(img);
+			img.src = document.getElementById('fileImage').src;
+			img.alt = 'File';
+			img.className = 'svnentryicon';
+			img.align = 'middle';
+			img.alt = a.title;
+			div.appendChild(document.createTextNode(action.name));
+		}
+
+		// The 3rd column for both files and directories is the
+		// same, so we do that outside of the separate elements.
+		// (This is the "showlog" icon/action)
+		td = document.createElement('td');
+		tr.appendChild(td);
+
+		td.className = 'showlog';
+		a = document.createElement('a');
+		td.appendChild(a);
+
+		if (action.type == 'dir')
+		{
+			a.title = 'Show revision history for directory "' + action.name + '"';
+		}
+		else
+		{
+			a.title = 'Show revision history for file "' + action.name + '"';
+		}
+
+		a.href = tgt + '?Insurrection=log';
+		img = document.createElement('img');
+		img.src = document.getElementById('infoImage').src;
+		img.align = 'middle';
+		img.alt = a.title;
+		a.appendChild(img);
+
+		// Directories also have a hidden second row where the
+		// in-line sub-directory expansion happens.  Fun stuff
+		if (action.type == 'dir')
+		{
+			tr = document.createElement('tr');
+			tr.style.display = 'none';
+			tr.id = tgt + '/';
+			action.target.dirlist.appendChild(tr);
+
+			td = document.createElement('td');
+			tr.appendChild(td);
+			td.className = 'foldspace';
+			img = document.createElement('img');
+			img.src = document.getElementById('spacerImage').src;
+			img.alt = '';
+			img.align = 'middle';
+			td.appendChild(img);
+
+			td = document.createElement('td');
+			tr.appendChild(td);
+			td.id = tgt;
+			td.colSpan = 2;
 		}
 	}
 
-	// If there are still things to do, go do them...
-	if ((actionTimer == null) && (actionList.length > 0))
+	// If there are still things to do, do them after a
+	// small timeout (just to keep the browser responsive)
+	if (actionList.length > 0)
 	{
-		actionTimer = setTimeout('doNextItem();',1);
+		setTimeout(function() {doNextItem(actionList);},1);
 	}
 }
 
@@ -345,6 +344,9 @@ function loadDirTarget(target,responseXML)
 	// Keep track of the table body...
 	target.dirlist = tbody;
 
+	// We need this action list...
+	var actionList = new Array();
+
 	// build the list of directory actions...
 	var dirs = responseXML.getElementsByTagName('dir');
 	for (var i=0; i < dirs.length; i++)
@@ -369,8 +371,8 @@ function loadDirTarget(target,responseXML)
 		actionList.push(action);
 	}
 
-	// Ask the system to do the next action...
-	doNextItem();
+	// Ask the system to process the list...
+	doNextItem(actionList);
 }
 
 /*
