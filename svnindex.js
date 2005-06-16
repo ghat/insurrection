@@ -55,37 +55,27 @@ function getXMLHTTP()
 /*
  * This is the callback function from the XMLHttpRequest
  * which then, if the request completes correctly, displays
- * the result.  It is annoying that the callback does not
- * provide the XMLHttpRequest object, so I have to store
- * it globally.
+ * the result.
  */
-var _target = null;
-function loadBannerCheck()
+function loadBannerCheck(target)
 {
-	var target = _target;
-	if (target.xml)
+	if ((target.xml) && (target.xml.readyState == 4) && (target.xml.status == 200))
 	{
-		if (target.xml.readyState == 4)
+		var txt = target.xml.responseText;
+
+		// If there are no HTML tags in the .svn_index
+		// then we will assume it is plain ascii and
+		// needs to be '<pre>' wrapped
+		if (txt.indexOf('<') < 0)
 		{
-			if (target.xml.status == 200)
-			{
-				var txt = target.xml.responseText;
-
-				// If there are no HTML tags in the .svn_index
-				// then we will assume it is plain ascii and
-				// needs to be '<pre>' wrapped
-				if (txt.indexOf('<') < 0)
-				{
-					txt = '<pre>' + txt + '</pre>';
-				}
-
-				target.innerHTML = txt;
-				target.style.display = 'block';
-
-				// Remove the reference to the loaded document
-				target.xml = null;
-			}
+			txt = '<pre>' + txt + '</pre>';
 		}
+
+		target.innerHTML = txt;
+		target.style.display = 'block';
+
+		// Remove the reference to the loaded document
+		target.xml = null;
 	}
 }
 
@@ -102,20 +92,15 @@ function loadBannerCheck()
  */
 function loadBanner(name)
 {
-	// Check if the load is already in progress...
-	if (_target == null)
+	var target = document.getElementById('localbanner');
+	if (target)
 	{
-		var target = document.getElementById('localbanner');
-		if (target)
+		target.xml = getXMLHTTP();
+		if (target.xml)
 		{
-			target.xml = getXMLHTTP();
-			if (target.xml)
-			{
-				_target = target;
-				target.xml.onreadystatechange = loadBannerCheck;
-				target.xml.open("GET",name,true);
-				target.xml.send(null);
-			}
+			target.xml.onreadystatechange = function() { loadBannerCheck(target); };
+			target.xml.open("GET",name,true);
+			target.xml.send(null);
 		}
 	}
 }
@@ -390,20 +375,17 @@ function loadDirTarget(target,responseXML)
 
 /*
  * This is the nasty part of the in-line directory loading
- * code.  When the result comes back, we expand it as needed.
- * It is a shame that the callback does not
- * give me the XMLHttpRequest object and thus
- * we need to use globals.
+ * code.  When the result comes back, load the XML into
+ * action items to update the DOM.  This is done in these
+ * stages such that we can give the browser some time
+ * to respond to user actions while doing all of this
+ * DOM work.  This is important since the DOM work
+ * can be rather significant.
  */
-var _loadTarget = null;
-function loadDirCheck()
+function loadDirCheck(target)
 {
-	var target = _loadTarget;
-	if ((target) && (target.xml) && (target.xml.readyState == 4))
+	if ((target.xml) && (target.xml.readyState == 4))
 	{
-		// We are done with this one...
-		_loadTarget = null;
-
 		// Set the internal text just in case of an error:
 		target.innerHTML = target.id + ' : ' + target.xml.status + ' : ' + target.xml.statusText;
 
@@ -429,7 +411,8 @@ function loadDir(arrow)
 	// Find our target and make sure we are not in the middle
 	// of doing one already...
 	var target = document.getElementById('.' + arrow.id);
-	if ((target) && (_loadTarget == null))
+
+	if (target)
 	{
 		target.arrow = arrow;
 		target.row = document.getElementById(target.id + '/');
@@ -438,16 +421,13 @@ function loadDir(arrow)
 			target.xml = getXMLHTTP();
 			if (target.xml)
 			{
-				// We have to keep a global to find ourselves again...
-				_loadTarget = target;
-
 				// Flip the arrow and start showing the rows now...
 				foldDir(arrow);
 
 				// Set the internal text such that we know where we are...
 				target.innerHTML = 'xml.open("GET","' + target.id + '",true);';
 
-				target.xml.onreadystatechange = loadDirCheck;
+				target.xml.onreadystatechange = function() { loadDirCheck(target); };
 				target.xml.open("GET",target.id + '?XMLHttp=1',true);
 				target.xml.send(null);
 			}
