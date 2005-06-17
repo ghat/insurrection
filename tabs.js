@@ -84,7 +84,7 @@ function startTabSetPage(setName)
       }
 
       document.write('<td class="' + tabClass + '">');
-      document.write('<a title="' + tabSet.tabs[i] + '" onclick="return clickTab(\'' + setName + '\',' + i + ');">');
+      document.write('<a title="' + tabSet.tabs[i] + '" onclick="return clickTab(\'' + setName + '\',' + i + ');" href="#' + i + '">');
       document.write(tabSet.tabs[i]);
       document.write('</a>');
       document.write('</td>');
