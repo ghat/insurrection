@@ -96,14 +96,14 @@ if (open(RAW,"<$USAGE_DIR/$repo/stats/$raw"))
          }
          $insertText .= ']);'
                       . 'startTabSetPage("bw");'
-                      . '//--></script><center><br/>';
+                      . '//--></script><div class="bandwidth">';
 
          $html =~ s|<SMALL>\s*<A HREF="#.*?</SMALL>\s*<P>|$insertText|s;
 
          ## Each page in the tabset needs one of these...
-         my $nextPage = '<br/><script type="text/javascript" language="JavaScript"><!--' . "\n"
+         my $nextPage = '</div><script type="text/javascript" language="JavaScript"><!--' . "\n"
                       . 'startTabSetPage("bw");'
-                      . '//--></script><center><br/>';
+                      . '//--></script><div class="bandwidth">';
 
          $insertText = '';
          for (my $i=0; $i < @tabs; $i+=2)
@@ -118,14 +118,18 @@ if (open(RAW,"<$USAGE_DIR/$repo/stats/$raw"))
             $insertText = '' if ($html =~ s/<P>\s*$findText/$insertText/s);
          }
 
+         ## I want to tweek some of the tables a bit...
+         $html =~ s|<TABLE (?!BGCOLOR)|<TABLE BGCOLOR="#DDDDDD" |sgo;
+         $html =~ s|<TR>|<TR BGCOLOR="#FFFFFF">|sgo;
+
          $html .= $insertText
-                . '<script type="text/javascript" language="JavaScript"><!--' . "\n"
+                . '</div><script type="text/javascript" language="JavaScript"><!--' . "\n"
                 . 'endTabSet("bw");'
                 . '//--></script>';
       }
       else
       {
-         $html =~ s|\s*<CENTER>\s*<HR>(?:\s*<P>)?\s*(.*?)\s*(?:<P>\s*)?</CENTER>\s*$|<div style="background: #EEEEEE; border: 1px black solid; margin-top: 2px; padding: 0.5em;">$1</div>|so;
+         $html =~ s|\s*<CENTER>\s*<HR>(?:\s*<P>)?\s*(.*?)\s*(?:<P>\s*)?</CENTER>\s*$|<div style="background: #EEEEEE; border: 1px black solid; margin-top: 2px; padding: 0.5em;"><div class="bandwidth">$1</div></div>|so;
          $html =~ s|</CENTER><PRE>|<PRE>|sgo;
       }
 

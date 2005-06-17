@@ -13,18 +13,25 @@
 .tableframe-row-even
 {
   background-color: #FFFFFF;
-  vertical-align: baseline;
-  text-align: left;
 }
 
 .tableframe-row-odd
 {
   background-color: #F4F4F4;
+}
+
+.tableframe-row-last
+{
+  background-color: #E4E4E4;
+}
+
+.tableframe-row-even, .tableframe-row-odd, .tableframe-row-last
+{
   vertical-align: baseline;
   text-align: left;
 }
 
-.tableframe-row-odd td, .tableframe-row-even td
+.tableframe-row-even td, .tableframe-row-odd td, .tableframe-row-last td
 {
   padding: 1px;
 }
