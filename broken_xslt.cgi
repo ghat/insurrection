@@ -22,7 +22,7 @@ print '<tr class="updirrow">'
     ,  '<td colspan="5">'
     ,   '<a href=".." title="Go to parent directory">'
     ,    '<div class="updir">'
-    ,     '<img alt="Folder" src="' , &svn_IconPath('dir') , '" class="svnentryicon" align="middle">.. (Parent Directory)</div>'
+    ,     '<img alt="Folder" src="' , &svn_IconPath('dir') , '" class="svnentryicon" align="middle"/>.. (Parent Directory)</div>'
     ,    '</a>'
     ,   '</td>'
     ,  '</tr>' if ($repo_path ne '/');

@@ -350,7 +350,7 @@ sub svn_TRAILER($version)
    print       '</div>'
        ,       '<div class="footer" title="' , &svn_XML_Escape($version) , '">';
    print        '<a title="Valid HTML 4.01!" href="http://validator.w3.org/check?uri=referer">'
-       ,         '<img style="margin-left: 1em;" align="right" border="0" src="/valid-html401.png" alt="Valid HTML 4.01!">'
+       ,         '<img style="margin-left: 1em;" align="right" border="0" src="/valid-html401.png" alt="Valid HTML 4.01!"/>'
        ,        '</a>' if (!$oldHTML);
    print        '&nbsp;';
    print        'You are logged on as: <b>' , $AuthUser , '</b>' if (defined $AuthUser);
