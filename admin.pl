@@ -337,8 +337,8 @@ sub svn_HEADER_oldHTML($title,$expires)
 #
 # This returns the content that needs to be in a page to show the no-HTTPS
 # warning.  Note that you should insert this into the page where you want
-# the warning.  It will make a display with the style for element ID NoHTTPS
-# NOTE - You can only have this on a page once.
+# the warning.  It will make a display with the style for element class
+# NoHTTPS
 #
 # Note that if the argument is undefined then no check will be included
 # This makes it easy to have the check optional based on, say, the $AuthUser
