@@ -335,6 +335,23 @@ sub svn_HEADER_oldHTML($title,$expires)
 
 ##############################################################################
 #
+# This returns the content that needs to be in a page to show the no-HTTPS
+# warning.  Note that you should insert this into the page where you want
+# the warning.  It will make a display with the style for element ID NoHTTPS
+# NOTE - You can only have this on a page once.
+#
+# Note that if the argument is undefined then no check will be included
+# This makes it easy to have the check optional based on, say, the $AuthUser
+# variable.
+#
+sub httpsCheckJS($flag)
+{
+   return '' if (!defined $_[0]);
+   return('<script type="text/javascript" language="JavaScript" src="' . $SVN_URL_PATH . 'https-check.js"></script>');
+}
+
+##############################################################################
+#
 # This put up the default tail for all of the pages that use
 # the svn_HEADER() function above.
 #

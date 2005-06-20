@@ -740,3 +740,33 @@ td.details
   margin-right: auto;
 }
 
+.NoHTTPS
+{
+  display: block;
+  margin: 1em;
+  border: 0.5em solid black;
+  padding: 0.5em;
+  background-color: yellow;
+  font-size: 120%;
+  color: black;
+  text-decoration: none;
+  text-align: left;
+}
+
+.NoHTTPS a, .NoHTTPS a:visited
+{
+  color: black;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.NoHTTPS a:hover
+{
+  color: blue;
+}
+
+.NoHTTPS a:active
+{
+  color: red;
+}
+
