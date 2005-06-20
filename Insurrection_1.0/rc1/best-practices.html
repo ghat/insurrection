@@ -1,0 +1,750 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Revision Control at Code-Host</title>
+  <link rel="stylesheet" href="styles.css" type="text/css">
+  <link rel="shortcut icon" href="favicon.ico">
+</head>
+<body>
+<table id="pagetable" cellpadding="0" cellspacing="0">
+  <tr>
+    <td id="top-left"><img width="1" height="1" src="/blank.gif"></td>
+    <td id="top"><img width="1" height="1" src="/blank.gif"></td>
+    <td id="top-right"><img width="1" height="1" src="/blank.gif"></td>
+  </tr>
+  <tr>
+    <td id="left"><img width="1" height="1" src="/blank.gif"></td>
+    <td id="content">
+      <div style="margin: 0px; border: 0px; padding: 0px; text-align: center;">
+        <a href="/" title="Home"><img src="/Logo.gif" alt="Revision Management with Insurrection and Subversion" border="0"/></a>
+      </div>
+      <div class="poweredby"></div>
+      <div class="svn">
+
+        <p style="text-align:center; font-size: 120%; font-weight: bold; color: red;">
+          This document is still a work in progress.
+        </p>
+
+        <h1>Revision Control at Code-Host with Subversion and Insurrection</h1>
+
+        <h2>Scope</h2>
+        <p>
+          The scope of this document is to describe and define some basic methods of
+          using Subversion in the development process.&nbsp; These proceedures are mainly
+          focused on the software development process for product release and support.&nbsp;
+          This document is intended to be an adjunct to the <a href="http://svnbook.red-bean.com/">Subversion
+	  documentation</a> and not a replacement for it.&nbsp; This is also not a
+	  a replacement for a more user-oriented introduction to Subversion and the
+	  <a href="http://tortoisesvn.tigris.org/">TortoiseSVN</a> integration into the Windows Explorer.
+        </p>
+
+        <h2>Subversion Revision Control</h2>
+        <p>
+          The revision control system we have instituted here is known as Subversion.&nbsp;
+          It is a very powerful, modern revision control solution that works with many
+          different platforms and tools.&nbsp; It was build as a better revision control
+          system than CVS while still keeping as much of the feel and desireable features
+          of CVS.&nbsp; This means that for the basic, day-to-day operations, Subversion
+          is very much like CVS.
+        </p>
+        <p>
+          Subversion does have a number of improvements over CVS, with the major ones being
+          atomic operations such as commits and the tracking of meta-data, including rename
+          operations and filesystem flags.&nbsp; Subversion also brings with it a much more
+          flexible branching and tagging system.&nbsp; In fact, it is this extreem flexibility
+          which makes it important to define specific practices as Subversion does not directly
+          enforce any specific or single view of those practices.
+        </p>
+        <p>
+          For more detailed technical documentation on the actual use of Subversion, please
+          see the Subversion book in <a href="http://svnbook.red-bean.com/en/1.1/">HTML format</a> or
+          <a href="http://svnbook.red-bean.com/en/1.1/svn-book.pdf">PDF format</a>.&nbsp; The book is also available as
+          an <a href="http://www.oreilly.com/catalog/0596004486/">O'Reilly printed book</a>
+          but the digital versions tend to be more up-to-date due to physical publication
+          overhead.
+        </p>
+
+        <h3>Tools you will need</h3>
+        <p>
+          One of the powerful features of Subversion is that it operates via HTTP/WEBDAV
+          protocols.&nbsp; This means that any modern browser can browse the current version
+          of files in the repository.&nbsp; However, to make full use of the revision control
+          features, you will need a Subversion client tool.&nbsp; The current
+          client code is available on the <a href="/">Insurrection Server</a> or should
+          be installed as part of your development environment.&nbsp; If you are running
+          a Windows environment, please install the Subversion command line tools and the
+          TortoiseSVN GUI.&nbsp; Many Linux systems should already have the base command
+          line tools installed.
+        </p>
+        <p>
+          The Subversion Server also has access controls in place.&nbsp; In order
+          to access the various repositories, you will need an account defined.&nbsp; Once
+          you have an account, you will have read-only access to all repositories and read-write
+          access to those repositories that you have been associated with a manager.&nbsp;
+          All users are also given access to the example repository within which you can play
+          around without affecting actual active repositories.&nbsp; The example repository
+          will be where some of the examples within this document will be shown.
+        </p>
+
+        <h3>Getting Started</h3>
+        <p>
+          If you don't have an account on the Insurrection server, please get one now.&nbsp;
+          The username of the account should be the same as your EMail address.
+          This is important as Insurrection will be sending EMail to you
+          with your new account password.&nbsp; (There may be other important EMail from
+          the Insurrection server in the future.)
+        </p>
+        <p>
+          Once you have your account, go to <a href="password.cgi">password change</a>
+          web interface and log in using your user name and password.&nbsp; You should
+          also take a moment to change the password to something secure.&nbsp; Note that
+          the Insurrection server passwords are stored in a one-way encrypted format and
+          thus can not be recovered but they may be reset by an administrator.
+        </p>
+        <p>
+          After having set your password, you should go to <a href="svn/example/">the
+          example repository</a> and browse around.&nbsp; Note that the repository
+          browsing features require a web browser that is XML and XSLT compatible.&nbsp;
+          (This means most any modern web browser, albeit Safari needs to be Mac OS-X
+          10.3.9 or later.)
+        </p>
+
+        <h3>Differences from Visual SourceSafe</h3>
+        <p>
+          Subversion is modelled after CVS (Concurrent Version System) which is designed
+          for concurrent development.&nbsp; This model has proven itself to scale very well
+          with both the size of the project and the number of developers.&nbsp; This is not
+          the model of Visual SourceSafe (VSS) and thus there are some differences in the
+          work flow that due to this core difference in operation.
+        </p>
+        <p>
+          The major difference is that when working with Subversion (and CVS), you do not
+          normally have "locks" on files.&nbsp; That is, the local files are always available
+          for you to edit/update.&nbsp; The normal process is to edit what you need to and
+          when you are ready to "commit" the changes back to the repository, you would issue
+          the commit operation.&nbsp; This may tell you that some files that you changed have
+          also be changed by others and you will need to merge the changes.&nbsp; Usually this
+          process goes very smoothly and the changes merge automatically.
+        </p>
+        <p>
+          A major technical benefit of Subversion is the fact that commits are atomic.&nbsp;
+          That means, if you have changed 5 files as part of an update, doing the commit of
+          the whole will commit all 5 of the changed files as a single, atomic operation.&nbsp;
+          In VSS this would end up having each file individually commited and thus potentially
+          split and not trackable as a single item.
+        </p>
+        <p>
+          Another difference is the user interface.&nbsp; There are "VSS-like" user interfaces
+          available for Subversion, however the TortoiseSVN interface which integrates right
+          into the Windows Explorer and Desktop provides for nearly seemless interaction with
+          Subversion.&nbsp; There is also the very powerful command line tool which can do
+          even more (albeit without the fancy GUI as the command line tool really is a command
+          line tool).
+        </p>
+        <p>
+          The other major change is the tagging and branching support.&nbsp; Subversion has
+          very advanced branching and tagging support, albeit the features are so flexible
+          that they do not enforce any one operational convention.&nbsp; The following sections
+          will describe what I feel is the best convention for our use.&nbsp; This will
+          change as we find new and different processes that help our productivity.
+        </p>
+
+        <h2>Subversion Basics</h2>
+        <p>
+          This section will describe the usage of Subversion in the terms of the SVN commands
+          and operations.&nbsp; These operations may be named slightly differently in the
+          various GUIs that are available.&nbsp; I will use the terms as they exist in the
+          core "SVN" command line tools.
+        </p>
+        <p>
+          <i><b>One note of importance</b> that I would like to state here, even before we
+          run into it:&nbsp; When dealing with files that are under revision control, it
+          is important that you use the revision control system to do file operations such
+          as rename, delete, copy, etc.&nbsp; This is because Subversion actually tracks
+          these things in the repository and unless it is told about this, it can not
+          track them.</i>
+        </p>
+
+        <h3>The Repository</h3>
+        <p>
+          Subversion uses HTTP protocol to talk with the repository.&nbsp; As such, repository
+          location identifiers look like standard URLs and can be accessed in a simple manner
+          with a standard web browser.&nbsp; The full URLs are only needed when referencing
+          a repository location you do not currently have checked out on your local system.
+        </p>
+        <p>
+          We actually have multiple repositories at MKSoft in order to easily support
+          different access rules for each repository.&nbsp; Everyone with a Subversion access
+          account gets full access to the Example repository which this document will make
+          use of.
+        </p>
+        <p>
+          Each repository is broken into 4 core directories that have some special meaning as
+          to the rules I have established for the revision control system.&nbsp; Subversion's
+          flexibility here is so great that it actually does not impose any structure at all
+          so this structure is something we impose on ourselves.&nbsp; The structure is documented
+          the the Readme.txt file that is part of every repository.&nbsp; It basically reads:
+          <ul>
+            The root of the repository contains the following directories:
+            <li><pre>/trunk</pre>
+		This is the trunk of the source revision tree.  It contains
+		the current development branch.  Most new work should happen
+		here.
+            </li>
+	    <li><pre>/branches</pre>
+		This tree is for the branches that we build.  A branch is
+		just a special "copy" of the source tree within Subversion
+		that started at some specific revision of the code.  A
+		simple branch is done by just using <code>svn copy</code> of the
+		<code>/trunk</code> to some named branch in <code>/branch/somename_1.0</code>.
+		Even more interesting branches can be made by using
+		<code>svn copy</code> to copy from your local checkout to the branch.
+		This will make sure that the exact versions in your local
+		checkout is what the branch contains.
+                <ul>
+                  <li><pre>/branches/personal</pre>
+      		  Within the /branches tree is the /branches/personal tree
+      		  for personal branches, such as when doing some in-depth
+      		  work on something and wish to not clutter the main tree
+      		  with it until it is working enough to do so.
+                </ul>
+            </li>
+
+	    <li><pre>/tags</pre>
+                This tree is for revision tags.  This is the way Subversion
+		likes to deal with tags.  You name them by the directory you
+		create within this tree.  Thus, the tag name is the name of
+		the directory in the tags directory.  Note that tags and
+		branches are exactly the same from Subversion's standpoint.
+		It is up to us to make sure that tags are tags, and branches
+		are branches.  That is, you should never commit to a tag
+		but rather first create a branch and do your work there.
+                <ul>
+                  <li><pre>/tags/personal</pre>
+		  Within the /tags tree is the /tags/personal tree
+		  for personal tags, such as bookmarking some work in progress
+		  for future diff work.
+                </ul>
+             </li>
+             <li><pre>/releases</pre>
+		This tree is where we <code>svn copy</code> a tag that actually
+		made it to production.  We should name it with something that
+		ties it to the product version or ChangeControl process
+                (such as using the ChangeControl number as the first part of the name)
+		This is here such that, while we may have multiple tags for
+		a specific project, only a few of them actually made it to
+		production and we can then easily go here to see what is in
+		production.
+             </li>
+          </ul>
+          What the structure of the tags and releases directories should look like
+          is up to your project needs.&nbsp; I would recommend sub directories in those
+          trees by the name of the product if you have more than one to maintain.&nbsp;
+          This then gives a natural separation of the tags/releases.&nbsp; The same could
+          be done in the branch tree if you want to segrigate your branches.
+        </p>
+        <p>
+          Checking out a part of a repository means that you are getting a local copy of that
+          section of the repository within which you can work.&nbsp; This does not involve
+          locking the repository.&nbsp; Once local, you can then do operations on the object
+          within the repository.&nbsp; The standard flow would look something like this:
+          <div class="example">
+            <pre class="commandLine">svn checkout http://svn.code-host.net/svn/example/trunk/fold/</pre>
+            <pre class="commandOutput">A  fold/fold.js
+A  fold/Base_More.gif
+A  fold/Base_Last.gif
+A  fold/Minus_More.gif
+A  fold/Minus_Last.gif
+A  fold/Item_More.gif
+A  fold/Item_Last.gif
+A  fold/Sub_Closed.gif
+A  fold/Sub_Opened.gif
+A  fold/fold.html
+A  fold/Plus_More.gif
+A  fold/Plus_Last.gif
+Checked out revision 40.</pre>
+            At this point the directory fold was created to hold the local image of the repository
+            as seen from the <a href="http://svn.code-host.net/svn/example/trunk/fold/">url</a>.&nbsp;
+            Unless you get rid of this directory, there is no more need to do a checkout.&nbsp;
+          </div>
+        </p>
+        <p>
+          For more detailed and compete examples, please see
+          <a href="http://svnbook.red-bean.com/en/1.1/ch03s04.html">chapter 3, section 4</a>
+          of the
+          <a href="http://svnbook.red-bean.com/en/1.1/">Subversion book</a>.
+        </p>
+
+        <h3>Simple update/edit/commit cycle</h3>
+        <p>
+          Working with the same fold that we got from the repository above, we want to make sure
+          we are up to the latest version.
+          If a "VSS get latest" is needed, one would just:
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn update</pre>
+<pre class="commandOutput">U  fold.js
+U  fold.html
+A  subdir
+A  subdir/readme.txt
+Updated to revision 47.</pre>
+            This would update all of the files that have newer revisions on the server and
+            add any files that have been added to the server and remove any files that have
+            been removed.&nbsp; In this case, two files were updated, a directory was added
+            and a file in that directory was added.
+          </div>
+        </p>
+        <p>
+          After editing files, one would just issue the commit operation at the outer most
+          directory containing the changes.&nbsp; By doing so, all of the changes will be part
+          of the same atomic operation and thus will be seen/tracked/logged together.&nbsp;
+          This does not mean you can not manually get only one of the changes, but it does
+          make it much easier to get all of the related changes and less likely that something
+          goes unnoticed.&nbsp; The commit operation asks for a commit message.&nbsp; It
+          is important that this message be useful and meaningful as they are used to find out
+          what the changes are in a repository.&nbsp; For example, the output (minus the commit
+          message entry) would be done like this:
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn commit</pre>
+            <pre class="commandOutput">Sending        fold.html
+Sending        subdir/readme.txt
+Transmitting file data ..
+Committed revision 48.
+</pre>
+            As can be seen here, only two files were updated for this changed.
+          </div>
+        </p>
+        <p>
+          For more detailed and compete examples, please see
+          <a href="http://svnbook.red-bean.com/en/1.1/ch03s05.html">chapter 3, section 5</a>
+          of the
+          <a href="http://svnbook.red-bean.com/en/1.1/">Subversion book</a>.
+        </p>
+        <p>
+          You can see the history of a given file or a whole tree by using the log operation.&nbsp;
+          The history of a file would look like this:
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn log subdir/readme.txt</pre>
+            <pre class="commandOutput">------------------------------------------------------------------------
+r48 | msinz | 2005-01-18 10:28:15 -0500 (Tue, 18 Jan 2005) | 2 lines
+
+Some minor changes to show how a commit process works
+
+------------------------------------------------------------------------
+r47 | msinz | 2005-01-18 10:02:44 -0500 (Tue, 18 Jan 2005) | 2 lines
+
+Added a subdir to the tree for some example work
+
+------------------------------------------------------------------------</pre>
+          </div>
+          You can also do a whole tree:
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn log .</pre>
+            <pre class="commandOutput">------------------------------------------------------------------------
+r48 | msinz | 2005-01-18 10:28:15 -0500 (Tue, 18 Jan 2005) | 2 lines
+
+Some minor changes to show how a commit process works
+
+------------------------------------------------------------------------
+r47 | msinz | 2005-01-18 10:02:44 -0500 (Tue, 18 Jan 2005) | 2 lines
+
+Added a subdir to the tree for some example work
+
+------------------------------------------------------------------------
+r41 | msinz | 2004-11-29 11:38:58 -0500 (Mon, 29 Nov 2004) | 2 lines
+
+Just some example changes - no real impact
+
+------------------------------------------------------------------------
+r40 | lwang | 2004-11-17 12:13:10 -0500 (Wed, 17 Nov 2004) | 2 lines
+
+Just an example of how to commit
+
+------------------------------------------------------------------------
+r2 | (no author) | 2004-10-18 06:57:09 -0400 (Mon, 18 Oct 2004) | 2 lines
+
+This is a simple example directory containing my Folding HTML tree code
+
+------------------------------------------------------------------------</pre>
+          </div>
+          Even more powerful is the fact that the logs can contain more details,
+          such as the files that were changed/added/deleted as part of the
+          operations.&nbsp; For example, if I do this operation on a single
+          file, I see:
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn log -v subdir/readme.txt</pre>
+            <pre class="commandOutput">------------------------------------------------------------------------
+r48 | msinz | 2005-01-18 10:28:15 -0500 (Tue, 18 Jan 2005) | 2 lines
+Changed paths:
+   M /trunk/fold/fold.html
+   M /trunk/fold/subdir/readme.txt
+
+Some minor changes to show how a commit process works
+
+------------------------------------------------------------------------
+r47 | msinz | 2005-01-18 10:02:44 -0500 (Tue, 18 Jan 2005) | 2 lines
+Changed paths:
+   A /trunk/fold/subdir
+   A /trunk/fold/subdir/readme.txt
+
+Added a subdir to the tree for some example work
+
+------------------------------------------------------------------------</pre>
+            Here I see what all was related with that commit.&nbsp;
+            For example, the commit for repository revision 48 had
+            not just the readme.txt file but also the fold.html file
+            as part of the commit.&nbsp; The same information can be
+            had for a whole tree of files.
+          </div>
+        </p>
+        <p>
+          For more detailed and compete examples, please see
+          <a href="http://svnbook.red-bean.com/en/1.1/ch03s06.html">chapter 3, section 6</a>
+          of the
+          <a href="http://svnbook.red-bean.com/en/1.1/">Subversion book</a>.
+        </p>
+
+        <h2>Branches and Tags</h2>
+        <p>
+          This is where correct use of Subversion can significantly improve
+          the development process relative to VSS.&nbsp; If you already read
+          about tagging and branching in the Subversion book, you already know
+          that there really is no difference as far as Subversion is concerned.&nbsp;
+          There is a semantic difference that is, with some extra scripts on
+          the server, enforced for our repositories.
+        </p>
+
+        <h3>Branches are cheap</h3>
+        <p>
+          Subversion makes branching cheap.&nbsp; They happen very quickly and are
+          very low overhead on the server.&nbsp; Thus do not worry about the number of
+          branches you may wish to make.
+        </p>
+        <p>
+          A branch in Subversion is a copy of part of the repository into another
+          place in the repository via the <code>svn copy</code> command.&nbsp; The branch
+          still is associated with the original files and has their whole history available
+          to it..&nbsp; It also knows where in that history it was made.
+        </p>
+        <p>
+          Branches should be made at a minimum for each line of code development.&nbsp;
+          Taking an example from the Backoffice development process, when we start to
+          get ready for a new product release, we cut a branch for that specific release
+          target from the trunk.&nbsp; For example, we made a branch called Backoffice_2.0.1
+          in the branches tree when we started the Backoffice 2.0.1 stabilization process.&nbsp;
+          Future work that was outside the scope of 2.0.1 continued in the trunk while
+          the 2.0.1 work was going on.&nbsp; At some point defined by the team, the changes
+          from 2.0.1 branch work will be merged back into the trunk via the Subversion
+          three-way merge tool.&nbsp; In most cases this will "just work" but if a section
+          of code was changed in the trunk and the branch, some intervention will be needed.&nbsp;
+          The amount of intervention depends on how much simular code changes were done in
+          both places.
+        </p>
+        <p>
+          Since branches are so cheap to manage, you can even cut a branch for each bug
+          that is being worked on.  What this does is provide a stable and isolated revision
+          tree for that bug work.&nbsp; Once the bug has been fixed, the branch can be
+          the merged back to the source tree or trees that need that fix.&nbsp; Since the
+          branch had only the bug fix in it, the Subversion differences within that branch
+          will be the "change set" for the bug fix and thus the source code "patch" for
+          the bugfix.
+        </p>
+        <p>
+          Once branches are no longer active and the changes have been merged back or
+          abandoned, you can then "delete" the branch.&nbsp; This does not actually delete
+          the information but it removes the branch from the active view of the repository.
+          The branch is still available in the repository history and thus the can be called
+          back to life at any time by revision id or date.
+        </p>
+        <p>
+          Using the fold example again, lets make a branch to work on.&nbsp; Note that we are
+          using the current local tree as the source for the branch as that will then make
+          sure that the branch is what you have locally, including any local changes that
+          you may not have committed yet.&nbsp; (Thus, you can choose to make the branch
+          after you have realized that the changes you are making are too complex or too
+          risky to do in the current location.)&nbsp; Here we make a branch at the root of
+          the branches tree called <code>fold_test_1.0.0</code>:
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn copy . http://svn.code-host.net/svn/example/branches/fold_test_1.0.0</pre>
+            <pre class="commandOutput">Committed revision 49.</pre>
+            Note that the command will ask you to enter a comment of what is being done.&nbsp;
+            Please be descriptive.
+          </div>
+        </p>
+        <p>
+          Now, to get the branch locally, we can do a number of things.&nbsp; The commonly used
+          method would be to check out the branch into its own local directory tree.&nbsp; You
+          then would be able to work on the new branch in that location and the original one in
+          the original location.&nbsp; The process of the checkout is just as before.&nbsp; There
+          is no special behavior for dealing with a branch other than the checkout needs the
+          initial URL to point to the branch.&nbsp; This would be the same URL used to make the
+          branch.
+        </p>
+        <p>
+          There is another option - you can take your current source tree and "switch" it
+          to a different branch.&nbsp; This is very useful if you don't want to change the
+          directory the source is located in due to some external tool or IDE.&nbsp;
+          Using the switch feature can also be much faster in that Subversion knows what
+          needs to be changed and will only transmit the changes needed to execute the
+          switch.&nbsp; For this example, we will use this method as it is different than
+          the checkout method already described.
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn switch http://svn.code-host.net/svn/example/branches/fold_test_1.0.0</pre>
+            <pre class="commandOutput">At revision 49.</pre>
+          </div>
+          At this point, your local tree (starting at the fold directory) is connected
+          with the branch we just made.&nbsp; You can make your changes here and the commit
+          operations will be to the branch.
+        </p>
+        <p>
+          For more detailed and compete examples, please see
+          <a href="http://svnbook.red-bean.com/en/1.1/ch04s02.html">chapter 4, section 2</a> and
+          <a href="http://svnbook.red-bean.com/en/1.1/ch04s05.html">chapter 4, section 5</a>
+          of the
+          <a href="http://svnbook.red-bean.com/en/1.1/">Subversion book</a>.
+        </p>
+        <p>
+          After making some changes to the files in the branch and committing the changes,
+          we want to merge that back to the trunk.&nbsp; First we will want to know how
+          much to merge.&nbsp; Since we have not merged since creating the branch, this
+          can easily be found by doing a log that traces back to the branch creation.
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn up</pre>
+            <pre class="commandOutput">At revision 52.</pre>
+            <pre class="commandLine">svn log --stop-on-copy</pre>
+            <pre class="commandOutput">------------------------------------------------------------------------
+r52 | msinz | 2005-01-19 10:39:09 -0500 (Wed, 19 Jan 2005) | 2 lines
+
+A new file created in the branch
+
+------------------------------------------------------------------------
+r51 | msinz | 2005-01-19 10:32:20 -0500 (Wed, 19 Jan 2005) | 2 lines
+
+Some more changes to play with the branch/merge features
+
+------------------------------------------------------------------------
+r50 | msinz | 2005-01-19 10:31:37 -0500 (Wed, 19 Jan 2005) | 2 lines
+
+A change to the readme for showing what happened in the branch
+
+------------------------------------------------------------------------
+r49 | msinz | 2005-01-19 10:10:28 -0500 (Wed, 19 Jan 2005) | 2 lines
+
+Make a test branch of the fold tree
+
+------------------------------------------------------------------------</pre>
+            The <code>svn update</code> was done before this in order to refresh information
+            from the server.&nbsp; It is generally a good idea to do this before doing operations
+            where you want to know what is within a branch.&nbsp;
+            As you can see the branch starts at revision 49.
+          </div>
+        </p>
+        <p>
+          Next we need to switch back to the trunk:
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn switch http://svn.code-host.net/svn/example/trunk/fold</pre>
+            <pre class="commandOutput">U  fold.js
+U  fold.html
+U  subdir/readme.txt
+D  subdir/note.txt
+Updated to revision 52.</pre>
+            Note that this shows all of the changes that were done to your local system in
+            order to convert from the branch back to the trunk.&nbsp; Thus this gives you
+            a look at what the scope of the changes were.
+          </div>
+        </p>
+        <p>
+          Now, we merge that branch into our trunk.&nbsp; First, lets see what would be done
+          by using the dry-run option.&nbsp; Note that we want all of the changes in the
+          branch starting at the start of the branch until the last revision in the branch,
+          which in this case happens to be the head of the tree, but it is best never to assume
+          that.&nbsp; The dry-run does not change any files, it just is useful to get a guess
+          as to the extent of the merge.
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn merge --dry-run -r 49:52
+    http://svn.code-host.net/svn/example/branches/fold_test_1.0.0</pre>
+            <pre class="commandOutput">U  fold.js
+U  fold.html
+A  subdir/note.txt
+U  subdir/readme.txt</pre>
+            (Due to complexities of the merge, this is only
+            a very good guess as there are special cases it can not notice during a dry run.)
+          </div>
+        </p>
+        <p>
+          Now, lets actually do the operation:
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn merge -r 49:52
+    http://svn.code-host.net/svn/example/branches/fold_test_1.0.0</pre>
+            <pre class="commandOutput">U  fold.js
+U  fold.html
+A  subdir/note.txt
+U  subdir/readme.txt</pre>
+          </div>
+        </p>
+        <p>
+          At this point, the files have been changed but not committed into the trunk.&nbsp;
+          You can see the status of the files:
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn status</pre>
+            <pre class="commandOutput">M      fold.js
+M      fold.html
+A  +   subdir/note.txt
+M      subdir/readme.txt</pre>
+          </div>
+        </p>
+        <p>
+          It would be at this time any conflicts would be addressed.&nbsp; This example does
+          not have any, so all that is needed is a commit to get the merged changes into
+          the repository.
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn commit</pre>
+            <pre class="commandOutput">Sending        fold.html
+Sending        fold.js
+Adding         subdir/note.txt
+Sending        subdir/readme.txt
+Transmitting file data ...
+Committed revision 53.</pre>
+             During the commit process you will be asked to enter a commit note.&nbsp;
+             You should describe what was done, which in this case was a merge from a
+             branch.&nbsp; Including the branch merge information in this note is
+             a good idea such that you can always go back to the log and figure out
+             what the merge was and even try to reproduce or reverse the merge.
+          </div>
+        </p>
+        <p>
+          For more detailed and compete examples, please see
+          <a href="http://svnbook.red-bean.com/en/1.1/ch04s03.html">chapter 4, section 3</a> and
+          <a href="http://svnbook.red-bean.com/en/1.1/ch04s04.html">chapter 4, section 4</a>
+          of the
+          <a href="http://svnbook.red-bean.com/en/1.1/">Subversion book</a>.
+        </p>
+
+        <h3>Tags are very cheap</h3>
+        <p>
+          Tags are just like branches within Subversion but we add an extra semantic rule
+          that says a tag never changes.&nbsp; That is, if you tag something, every time
+          you get data from that tag it will be exactly the same.&nbsp; This is a critical
+          concept for revision control systems as you would want tags for each release
+          of a product.&nbsp;
+          The Subversion repositories have be configured to enforce the rule
+          that tags can not change.&nbsp; This way we can be sure that once a tag is
+          set there is nothing that can change it.
+        </p>
+        <p>
+          Using the Backoffice 2.0.1 release project as an example, every time we do a build
+          that goes to QA, we tag that.  Those tags are of the form Backoffice_2.0.1.<b>n</b>
+          were the <b>n</b> is the build number.&nbsp; This way, we are able to always get back
+          to exactly the source and build process that produced the release.&nbsp; Once a
+          specific build gets out of QA and into production, we copy/tag that specific release
+          into the releases tree under the formal release name.
+        </p>
+        <p>
+          Using the fold tree as an example, lets make a tag:
+        </p>
+        <p>
+          Once we finish with the branch and have merged all of the changes back to the trunk,
+          we normally delete the branch such that we know it is not active.
+          <div class="example">
+            <pre class="commandLine">cd fold
+svn copy . http://svn.code-host.net/svn/example/tags/fold_1.0.0-1</pre>
+            <pre class="commandOutput">Committed revision 54.</pre>
+            Note that the command will ask you to enter a comment of what is being done.&nbsp;
+            Please be descriptive.
+          </div>
+        </p>
+        <p>
+          For more detailed and compete examples, please see
+          <a href="http://svnbook.red-bean.com/en/1.1/ch04s06.html">chapter 4, section 6</a>
+          of the
+          <a href="http://svnbook.red-bean.com/en/1.1/">Subversion book</a>.
+        </p>
+        <p style="font-size: 90%; color: grey;">
+          Note - I have run into cases where the system thought that your local files were out
+          of date and would not let a tag be made.&nbsp; This is always addressed by doing an
+          <code>svn up</code> command but that may update files you do not want updated.&nbsp;
+          You can update without recursion using the <code>-N</code> option.&nbsp; I do not know
+          why this condition exists other than it is exposed due to our strict handling of
+          tags.
+        </p>
+
+        <h3>Changes from a Tag</h3>
+        <p>
+          As stated before, tags can not change - they are immutable.&nbsp; Sometimes, however,
+          you need to make changes to a specific release of the code.&nbsp; To do this, you
+          make a branch from the given tag you need to change.&nbsp; All changes are done in
+          the branch and once completed, a new tag can be made from that branch.&nbsp; The
+          new tag must have a new, unique name, but that is what we want since it is not
+          exactly same as the previously tagged release.&nbsp; The rule is revision control
+          is that you can not change history.&nbsp; In fact, it is the history that is
+          the main value of revision control.&nbsp; Subversion has no support for changing
+          history short reinitializing the whole server.&nbsp; The rule of no changes to
+          what a tag or release defines is equally as important.
+        </p>
+
+        <h3>Merging with conflicts</h3>
+        <p>
+          The <a href="http://svnbook.red-bean.com/en/1.1/">Subversion book</a> does a very good job explaining the
+          process of conflict resolution during a merge.&nbsp; Since much of the actual process
+          depends on the code editing process, the book's description is as simple as it gets.
+          See <a href="http://svnbook.red-bean.com/en/1.1/ch03s05.html#svn-ch-3-sect-5.4">chapter 3, section 5, "Resolve Conflicts"</a>
+          for details on how to resolve conflicts during the merge.
+        </p>
+
+        <h2>Advanced Management</h2>
+        <h3>Branches as change sets</h3>
+        <p>
+          Since branches are so easy to deal with, one form of development management has a new
+          branch made for each bug fix.&nbsp; What this does is give a complete history of the work
+          for a given bug fix and an identifiable change set that implements the bug fix.&nbsp;
+          Thus, if a bug fix needs to be applied to another version of the product, the process
+          is basically a merge of that specific bug fix branch into the product.&nbsp; This is
+          useful when needing to support older releases of the software.&nbsp; Now, this does not
+          magicly make things work, but it does provide a level of tracking and support from
+          the tools to implement.
+        </p>
+
+        <h3>Branches as bookmarks</h3>
+        <p>
+          Sometimes when working on some code, you try to implement something and then choose not
+          to go that route at this time.&nbsp; If you wish to keep that work but not in the main
+          tree, you can make a branch of your as of yet un-committed changes.&nbsp; When making
+          the branch, do not first commit your new changes.&nbsp; Just use the <code>svn copy</code>
+          command with the local directory as the source and the target your new branch for this
+          bookmark.&nbsp; Subversion will make the branch and then check in the local changes onto
+          that branch all in one operation.&nbsp; You can then revert your local copy to the mainline
+          code again, knowing that you can always get your changes back by merging from your bookmark
+          branch.&nbsp; (This is bettern than committing the code on the mainline and then undoing
+          the changes since it is harder to merge those types of conditions than from a self-contained
+          branch)
+        </p>
+
+        <p style="text-align:center; font-size: 120%; font-weight: bold; color: red;">
+          This document is still a work in progress.
+        </p>
+
+      </div>
+      <div class="footer">$Id$</div>
+    </td>
+    <td id="right"><img width="1" height="1" src="/blank.gif"></td>
+  </tr>
+  <tr>
+    <td id="bottom-left"><img width="1" height="1" src="/blank.gif"></td>
+    <td id="bottom"><img width="1" height="1" src="/blank.gif"></td>
+    <td id="bottom-right"><img width="1" height="1" src="/blank.gif"></td>
+  </tr>
+</table>
+</body>
+</html>

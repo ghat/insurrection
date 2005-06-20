@@ -1,0 +1,118 @@
+<h1>Insurrection Web Tools</h1>
+<p>
+  One of my pet projects has been to build a better web based interface to a revision control system
+  known as <a href="http://subversion.tigris.org/">Subversion</a>.&nbsp;
+  The <a href="/">Insurrection</a> project is the result of that effort.&nbsp;
+  While it is still under development, it already is a very compelling web interface to
+  <a href="http://subversion.tigris.org/">Subversion</a> and is in active use in a number of places.
+</p>
+<p>
+  The project page is at <a href="http://insurrection.tigris.org/">http://insurrection.tigris.org/</a>
+  but the source code can be accessed via the Insurrection tools itself at
+  <a href="http://server:port/">http://server:port/</a>.&nbsp; If you use Subversion,
+  you can get the latest code via: <code>svn&nbsp;co&nbsp;http://server:port/svn/Web/trunk</code>
+</p>
+<h3>Features</h3>
+<ul>
+  <li>Easily browse the repository</li>
+  <li>Access any version of any file</li>
+  <li>View revision histories</li>
+  <li>View differences at various revisions</li>
+  <li>Annotate files with respect to author and revision</li>
+  <li>Get RSS and Atom feeds of changes in a repository or part of a repository or a specific file</li>
+  <li>All repository features are via repository consistent URLs</li>
+  <li>Administrate user access to repositories</li>
+</ul>
+<h3>Design Goals</h3>
+<ul>
+  <li>
+    Must work without the need to install anything on the host OS.&nbsp; This means
+    that all of the functionality of this system must work in a user process with a
+    locally built Apache and Subversion code base.&nbsp; We do assume some basic
+    features of a "unix" like operating environment, such as having a basic Perl
+    installation.
+  </li>
+  <li>
+    Make use of modern browser technology to reduce server side overhead and
+    bandwidth usage.&nbsp; This means using client-side XSLT transforms to embellish
+    XML output into a presentable form.&nbsp; This means heavy use of XSLT, CSS, and
+    JavaScript where needed to product a better result.&nbsp; No aiming at the
+    lowest possible version.
+  </li>
+  <li>
+    Try not to use any browser or platform specific extensions if at all possible.&nbsp;
+    This means that none of the JavaScript will do browser detection.&nbsp; <i style="color: darkgreen;">There
+    is one case were we have to check for a Microsoft-ism due to the lack of a
+    common standard but the check is written such that if IE does start supporting
+    the standard it will automatically used that form.&nbsp;</i> The minimum browser
+    support is for Firefox 1.0, Mozilla 1.7.x, and IE 6 with IE 5+, Opera, and Safari
+    to be supported where reasonable.&nbsp; <i style="color: darkgreen;">Safari is
+    partially working due to bugs in Safari.&nbsp; Opera is not working due to lack of
+    an XSLT implementation.&nbsp;</i>
+    (See <a href="/browser-tests/">these browser functionality tests</a>
+    that I have put together for details on client side requirements.)
+  </li>
+  <li>
+    To provide a way to administrate and support multiple repositories on the same
+    server.&nbsp; Currently the code does not support a single repository only
+    format since it assumes a multi-repository structure.&nbsp; Support for single
+    repository configuration will be looked at if it does not adversely impact the
+    support for multiple repositories.
+  </li>
+  <li>
+    To make sure that we don't use any more bad puns as we have used our allowance
+    in the naming of this project.
+  </li>
+  <li>
+    ...more to come...
+  </li>
+</ul>
+
+<h3>Project Status</h3>
+<p>
+  The current code is in active use on at least two non-public Subversion servers.&nbsp;
+  This does not mean that the project is complete or stable.&nbsp; Many things
+  have not been cleaned up or as fully supported as I would like.&nbsp; There is
+  also a lack of clean documentation as to how to install the code.&nbsp; This is
+  because, so far, it has always been installed by the same person who it.
+</p>
+<p>
+  I have put up a <a href="http://server:port/"><b>demo server</b> at
+  <tt>http://server:port/</tt></a> that has the Insurrection code on it so you
+  can see it in action.
+</p>
+<p>
+  I have put together some simple tests of the client-side/browser capabilities
+  that the Insurrection system needs.&nbsp; You can try these tests at
+  <a href="http://server:port/browser-tests/">http://server:port/browser-tests/</a>
+  and the source for these tests are in the source repository.
+</p>
+<p>
+  The goal of this set of tools is to become a reasonably complete Subversion
+  repository browsing system plus a simple administration system for repository
+  access controls.
+</p>
+
+<h3>Why reinvent the wheel?</h3>
+<p>
+  While, in some ways I believe that I have built something that already exists, I
+  have done so mainly due to direct needs or issues with what already exists.&nbsp;
+  <i style="color: darkgreen;">See some of the design goals above...</i>
+</p>
+<p>
+  The main reason was the need for running within a standard Linux server install
+  without the need for any root access.&nbsp; This makes this a clean install onto
+  already supported NOC servers within a company without special needs or
+  configuration.&nbsp; The current setups I have installed allows for the
+  migration of the whole system to another machine by just moving the user account
+  and directories.&nbsp; No special backup procedures, system installs, or extra
+  patching for securty or administration.&nbsp; (For example, my setup runs on a
+  plain-vanilla RedHat AS2.1 install)
+</p>
+<p>
+  One of the key components that made this possible is the Subversion Filesystem
+  database backend support.&nbsp; In my testing of the FSFS repositories, I have
+  found that they are actually more reliable than the BDB ones.&nbsp; (Less
+  operator intervention in the case of a lights-out environment.)
+</p>
+

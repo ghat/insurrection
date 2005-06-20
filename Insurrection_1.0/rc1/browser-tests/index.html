@@ -1,0 +1,199 @@
+<!doctype HTML PUBLIC "-//W2C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Insurrection Browser Compatibility Tests</title>
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <table id="pagetable">
+      <tr>
+        <td id="content">
+          <div style="margin: 0px; border: 0px; padding-top: 4px; text-align: center;">
+            <table style="margin: auto; border: 0px; font-family: garamond, times new roman, times, serif; font-style: italic; font-weight: bold; font-size: 18pt;">
+              <tr>
+                <td valign="top" align="right"><a href="/" style="color: #bfbfbf;">MKSoft</a></td>
+                <td valign="middle" align="center"><a href="/"><img src="/InsurrectionLogo.gif" alt="Logo" border="0"/></a></td>
+                <td valign="bottom" align="left"><a href="/" style="color: #bfbfbf;">Tests</a></td>
+              </tr>
+            </table>
+          </div>
+          <div class="svn">
+            <p>
+              The following test pages are to test if your browser is compatible with the
+              Insurrection Web Tools for Subversion.&nbsp; Where ever possible, the tests have
+              been broken out into individual situations such that the core issues can be
+              identified.&nbsp; The tests require at least and HTML 4.0 browser in order to
+              view the reference samples as they are presented in HTML.
+            </p>
+            <p>
+              The reference pages are rendered using plain HTML plus style sheets.&nbsp; The
+              test pages should render just like the reference pages.&nbsp; The links below
+              will load the two pages within frames in your browser such that you can see the
+              test page and reference page at the same time.
+            </p>
+            <table class="versiontable" border="0" width="100%">
+              <tr>
+                <th>Test</th>
+                <th width="99%">Description</th>
+              </tr>
+              <tr>
+                <td><a href="test1.html">Test&nbsp;#1</a></td>
+                <td>
+                  Basic Browser based XML Request loading.
+                  <ul>
+                    <li>
+                      <b style="color: green;">Mozilla</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: green;">Windows-IE</b> - tested and working.&nbsp;
+                      Note that Windows-IE currently uses a built-in ActiveX control to load the fragment
+                      and may complain about scripting of the control, depending on your security settings.
+                    </li>
+                    <li>
+                      <b style="color: green;">Safari</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: green;">Opera</b> - tested and working.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><a href="test2.html">Test&nbsp;#2</a></td>
+                <td>
+                  Basic Browser based XSLT transform.
+                  <ul>
+                    <li>
+                      <b style="color: green;">Mozilla</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: green;">Windows-IE</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: red;">Safari</b> - tested and almost working.&nbsp; Some CSS styles are not
+                      correctly applied and the relative links in the banner go to the wrong location.&nbsp;
+                      <i><b>Note:</b> it is the lack of correct path behavior that causes this problem.&nbsp; It
+                      seems that the base path is not that of the document/frame but of the containing document but
+                      only when the page is created via the XSLT translation.</i>
+                    </li>
+                    <li>
+                      <b style="color: red;">Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT is not
+                      supported.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><a href="test3.html">Test&nbsp;#3</a></td>
+                <td>
+                  Browser based XSLT with XPath/document() function usage.&nbsp; <i><b>Note:</b> Insurrection no longer
+                  depends on the XPath/document() function due to the lack of support within Safari.</i>
+                  <ul>
+                    <li>
+                      <b style="color: green;">Mozilla</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: green;">Windows-IE</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: red;">Safari</b> - tested and mostly not working.&nbsp; The XSLT/XPath document()
+                      function seems to be at fault.
+                    </li>
+                    <li>
+                      <b style="color: red;">Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT is not
+                      supported.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><a href="test4.html">Test&nbsp;#4</a></td>
+                <td>
+                  JavaScript based XML loading, parsing, and DOM creation.
+                  <ul>
+                    <li>
+                      <b style="color: green;">Mozilla</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: green;">Windows-IE</b> - tested and working.&nbsp;
+                      Note that Windows-IE currently uses a built-in ActiveX control to load the XML
+                      and may complain about scripting of the control, depending on your security settings.
+                    </li>
+                    <li>
+                      <b style="color: green;">Safari</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: green;">Opera</b> - tested and mostly working.&nbsp; There are some strange layout
+                      problems as part of the clicking of the links but they are consistent between
+                      the test page and the reference page.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><a href="test5.html">Test&nbsp;#5</a></td>
+                <td>
+                  XSLT based pages with JavaScript called within the generated page.
+                  <ul>
+                    <li>
+                      <b style="color: green;">Mozilla</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: green;">Windows-IE</b> - tested and working.&nbsp;
+                      Note that Windows-IE currently uses a built-in ActiveX control to load the XML
+                      and may complain about scripting of the control, depending on your security settings.
+                    </li>
+                    <li>
+                      <b style="color: red;">Safari</b> - tested and mostly not working.&nbsp; For the same reason
+                      that the styles don't render correctly in <a href="test2.html">Test&nbsp;#2</a>, the JavaScript
+                      is not executed.&nbsp; It is interesting in that the page should look just like the page
+                      in <a href="test1.html">Test&nbsp;#1</a> only this page is generated from XML via client
+                      side XSLT and this causes the URL reference problems and JavaScript execution problems.&nbsp;
+                      <i><b>Note:</b> it is the lack of correct path behavior that causes some of these
+                      problems.&nbsp; It seems that the base path is not that of the document/frame but of the
+                      containing document but only when the page is created via the XSLT translation.</i>
+                    </li>
+                    <li>
+                      <b style="color: red;">Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT is not
+                      supported.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </table>
+            <p>
+              Notes on the browsers I have tested:
+            </p>
+            <ul>
+              <li>
+                <b>Mozilla</b> includes all Mozilla technology based browsers including Firefox,
+                Camino, etc.
+              </li>
+              <li>
+                <b>Windows-IE</b> is IE6.&nbsp; This is the default browser that came with Windows XP.&nbsp;
+                My Testing was done on Windows XP with Service Pack 2 installed.
+              </li>
+              <li>
+                <b>Safari</b> is Mac OSX 10.3.9 release and 10.4 release.
+              </li>
+              <li>
+                <b>Opera</b> is the Linux generic build of 8.0 Final.
+              </li>
+            </ul>
+            <p style="font-size: 120%;">
+              What this means is that currently, only Mozilla/Firefox/etc and Windows-IE comply with the standards
+              enough to use the Insurrection tools without some help.&nbsp; This does, however, cover over 98% of
+              the browsers in use.&nbsp; Insurrection now has some browser compatibility checks that does
+              check for Konqueror, Safari, and Opera and does the XSLT server-side, thus getting those browsers to
+              work.&nbsp; Insurrection specifically checks for those only browsers (via the USER_AGENT header)
+              in order to enable the workaround so as to not reduce the performance of browsers that do
+              support the standards.
+            </p>
+          </div>
+          <div class="footer">$Id$</div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
