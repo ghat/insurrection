@@ -12,16 +12,13 @@
  * connection is not HTTPS and make the link point to the
  * same URL only with "https" protocol.
  */
-function checkForHTTPS(url)
+if (document.location.toString().indexOf('https://') != 0)
 {
-	if (url.indexOf('https://') != 0)
-	{
-		// Figure out what our new URL will look like...
-		url = 'https' + url.substring(url.indexOf(':'));
+	// Figure out what our new URL will look like...
+	var url = document.location.toString();
+	url = 'https' + url.substring(url.indexOf(':'));
 
-		// Add our little element for showing the HTTPS warning...
-		document.write('<div class="NoHTTPS" title="Click the link to go to the secure HTTPS url"><b>Warning!</b>&nbsp; You are not connected via an encrypted HTTPS session.&nbsp; We recommend that you go to the secure, encrypted, HTTPS URL at:&nbsp; ' + url.link() + '</div>');
-	}
+	// Add our little element for showing the HTTPS warning...
+	document.write('<div class="NoHTTPS" title="Click the link to go to the secure HTTPS url"><b>Warning!</b>&nbsp; You are not connected via an encrypted HTTPS session.&nbsp; We recommend that you go to the secure, encrypted, HTTPS URL at:&nbsp; ' + url.link() + '</div>');
 }
-checkForHTTPS(document.location.toString());
 
