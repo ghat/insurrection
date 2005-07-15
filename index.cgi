@@ -19,6 +19,17 @@ my $repoTable = &repositoryTable();
 
 $index =~ s:<repos/>:$repoTable:sgeo;
 
+if ($index =~ m:<about/>:)
+{
+   my $about = '';
+   if (open ABOUT,"<about.template")
+   {
+      $about = join('',<ABOUT>);
+      close ABOUT;
+   }
+   $index =~ s:<about/>:$about:sgeo;
+}
+
 &svn_HEADER('MKSoft Insurrection Server');
 
 print $index;
