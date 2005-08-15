@@ -383,27 +383,6 @@ sub svn_TRAILER($version)
 
 ##############################################################################
 #
-# Months of the year (1 - 12) used for the format below...
-my @months = ('?','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
-#
-# Convert the Subversion log date format into RFC822 format.
-# Note that I do not include the optional "day of week"
-#
-sub dateFormat($isodate)
-{
-   my $isodate = shift;
-   my $result = '?';
-
-   if ($isodate =~ m/(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d:\d\d:\d\d)/o)
-   {
-      $result = $3 . ' ' . $months[$2] . ' ' . $1 . ' ' . $4 . ' GMT';
-   }
-
-   return $result;
-}
-
-##############################################################################
-#
 # This function returns only the number part of the
 # parameter.  We use this to filter incoming parameters
 # to only include numbers (when needed)
@@ -955,6 +934,36 @@ sub webTime($time)
                         $modtime[0]);
 
    return $result;
+}
+
+## We need to be able to reverse a time value
+use Time::Local 'timegm';
+
+##############################################################################
+#
+# Convert the Subversion log date format into RFC822 format.
+# Note that we use the Time::Local for this
+#
+sub timeFromISO($isodate)
+{
+   my $isodate = shift;
+   my $result = 0;
+
+   if ($isodate =~ m/(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)/o)
+   {
+      $result = timegm($6,$5,$4,$3,$2-1,$1);
+   }
+
+   return $result;
+}
+
+##############################################################################
+#
+# Convert the Subversion log date format into RFC822 format.
+#
+sub dateFormat($isodate)
+{
+   return &webTime(&timeFromISO(shift));
 }
 
 ##############################################################################

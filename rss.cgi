@@ -174,7 +174,7 @@ if ((defined $top) && (defined $topDate))
    ## look at the ETag so we don't worry about making a valid
    ## Last-Modified header.
    print $cgi->header('-expires' => '+120m' ,
-                      '-Last-Modified' => &webTime(time) ,
+                      '-Last-Modified' => &dateFormat($topDate) ,
                       '-ETag' => "\"$topDate\"" ,
                       '-type' => 'text/xml; charset=' . $encoding);
 
