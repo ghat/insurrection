@@ -169,7 +169,12 @@ if ((defined $top) && (defined $topDate))
    &loadAccessFile() if (!defined %groupComments);
 
    ## Note that Atom feeds expire after 120 minutes...
+   ## Also, we use ETag and Last-Modified such that we can
+   ## return conditional get results.  Note that we only really
+   ## look at the ETag so we don't worry about making a valid
+   ## Last-Modified header.
    print $cgi->header('-expires' => '+120m' ,
+                      '-Last-Modified' => &webTime(time) ,
                       '-ETag' => "\"$topDate\"" ,
                       '-type' => 'text/xml; charset=' . $encoding);
 

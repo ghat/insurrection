@@ -912,6 +912,10 @@ sub emailAddress($user)
    return $user;
 }
 
+## Some constants we need for the time routines
+my @Months = ( 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' );
+my @Days = ( 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' );
+
 ##############################################################################
 #
 # Convert a time value into a nice string
@@ -919,13 +923,36 @@ sub emailAddress($user)
 sub niceTime($time)
 {
    my @modtime=gmtime shift;
-   my @Months = ( "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" );
-   my @Days = ( "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" );
-
-   $modtime[1] = "0" . $modtime[1] if ($modtime[1] < 10);
    $modtime[5] += 1900 if ($modtime[5] < 1900);
 
-   my $result="$Days[$modtime[6]], $Months[$modtime[4]] $modtime[3], $modtime[5] at $modtime[2]:$modtime[1] GMT";
+   my $result=sprintf('%s, %s %d, %04d at %d:%02d GMT',
+                      $Days[$modtime[6]],
+                      $Months[$modtime[4]],
+                      $modtime[3],
+                      $modtime[5],
+                      $modtime[2],
+                      $modtime[1]);
+
+   return $result;
+}
+
+##############################################################################
+#
+# Convert a time value into a HTTP header time string
+#
+sub webTime($time)
+{
+   my @modtime=gmtime shift;
+   $modtime[5] += 1900 if ($modtime[5] < 1900);
+
+   my $result = sprintf('%s, %02d %s %04d %02d:%02d:%02d GMT',
+                        substr($Days[$modtime[6]],0,3),
+                        $modtime[3],
+                        substr($Months[$modtime[4]],0,3),
+                        $modtime[5],
+                        $modtime[2],
+                        $modtime[1],
+                        $modtime[0]);
 
    return $result;
 }
