@@ -295,6 +295,7 @@ elsif (defined $cgi->param('features'))
          print '<p>Disable updating of svn:log properties</p>';
       }
    }
+   print $reloadForm;
    print &endInnerFrame();
 }
 
