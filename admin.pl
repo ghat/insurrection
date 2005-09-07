@@ -105,7 +105,14 @@ sub svn_HTTP()
 {
    if ($cgi->url =~ m|(https?://[^/]+)|o)
    {
-      return $1;
+      my $tmp = $1;
+      ## Check if we are to use HTTPS
+      ## This is needed in cases where we have been internally
+      ## proxied for supporting the unified URL syntax.  This
+      ## way we can tell if the link came externally from https
+      ## (the rewrite/proxy rule makes sure this is set.)
+      $tmp =~ s|^http:|https:|o if ($cgi->param('HTTPS') eq 'on');
+      return $tmp;
    }
 
    ## If we can not find the host, something bad happened!
@@ -979,7 +986,7 @@ sub startInnerFrame($title,$extra)
 
    $extra = '' if (!defined $extra);
 
-   return('<table class="innerframe" cellspacing="0" cellpadding="0"' . $extra . '>'
+   return('<table class="innerframe" cellspacing="0" cellpadding="0" ' . $extra . '>'
          . '<thead>'
          .  '<tr>'
          .   '<td class="innerframe-top-left">' . $blank . '</td>'
@@ -1018,7 +1025,7 @@ sub endInnerFrame()
 #
 # Start a bold frame with the given title string and optional extra attrs
 # After starting an inner frame, output your normal contents and then
-# call endBoldFrame().  Frames can be nested.
+# call endBoldFrame().
 #
 sub startBoldFrame($title,$extra)
 {
@@ -1027,7 +1034,7 @@ sub startBoldFrame($title,$extra)
 
    $extra = '' if (!defined $extra);
 
-   return('<table class="boldframe" cellspacing="0" cellpadding="0"' . $extra . '>'
+   return('<table class="boldframe" cellspacing="0" cellpadding="0" ' . $extra . '>'
          . '<thead>'
          .  '<tr>'
          .   '<td class="boldframe-top-left">' . $blank . '</td>'
@@ -1374,7 +1381,7 @@ sub repoSize($repo)
 ##############################################################################
 #
 # Return the size limit of a given repository in "k" bytes.  Note that it will
-# return 1gig if there is no known size.
+# 300 meg if there is no known size.
 #
 sub repoSizeLimit($repo)
 {
@@ -1383,7 +1390,7 @@ sub repoSizeLimit($repo)
    ## The repository directory on the local disk...
    my $repoDir = $SVN_BASE . '/' . $repo;
 
-   my $diskLimit = 1024 * 1024;
+   my $diskLimit = 300 * 1024;
 
    ## See if the repository has a specific disk limit
    if (open(DISKLIMIT,'<' . $repoDir . '/disk.limit'))
@@ -1393,6 +1400,11 @@ sub repoSizeLimit($repo)
       close DISKLIMIT;
 
       $diskLimit = 0 + $tmp if ((defined $tmp) && ($tmp =~ m/^\d+$/o));
+   }
+   elsif (open(DISKLIMIT,'>' . $repoDir . '/disk.limit'))
+   {
+      print DISKLIMIT $diskLimit;
+      close DISKLIMIT;
    }
 
    return $diskLimit;
@@ -1439,8 +1451,8 @@ sub repoBandwidthLimit($repo)
    ## The repository directory on the local disk...
    my $repoDir = $SVN_BASE . '/' . $repo;
 
-   ## The bandwidth limit default is 2gig (2 * 1024 * 1024 * 1024 bytes)
-   my $bandwidthLimit = 2 * 1024 * 1024 * 1024;
+   ## The bandwidth limit default is 1gig (1 * 1024 * 1024 * 1024 bytes)
+   my $bandwidthLimit = 1 * 1024 * 1024 * 1024;
 
    ## See if the repository has a specific bandwidth limit
    if (open(BWLIMIT,'<' . $repoDir . '/bandwidth.limit'))
@@ -1450,6 +1462,11 @@ sub repoBandwidthLimit($repo)
       close BWLIMIT;
 
       $bandwidthLimit = 0 + $tmp if ((defined $tmp) && ($tmp =~ m/^\d+$/o));
+   }
+   elsif (open(BWLIMIT,'>' . $repoDir . '/bandwidth.limit'))
+   {
+      print BWLIMIT $bandwidthLimit;
+      close BWLIMIT;
    }
 
    return $bandwidthLimit;

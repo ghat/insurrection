@@ -134,7 +134,7 @@ RewriteRule	^(index|project).html$	/$1.cgi	[PT,L]
 RewriteCond %{REQUEST_METHOD} GET	[OR]
 RewriteCond %{REQUEST_METHOD} POST
 RewriteCond %{QUERY_STRING} Insurrection=(admin|atom|bandwidth|blame|diff|dump|get|log|rss)
-RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&Path=$1"	[P,L]
+RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&HTTPS=%{HTTPS}&Path=$1"	[P,L]
 #RewriteRule	^svn/(.*)$	"http://%{HTTP_HOST}/%1.cgi/$1"	[P,L]
 
 ## What a trick - to get the broken browsers to work.
