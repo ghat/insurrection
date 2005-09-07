@@ -1474,6 +1474,142 @@ sub repoBandwidthLimit($repo)
 
 ##############################################################################
 #
+# Return true if the Immutable Tags pre-commit hook is enabled
+#
+sub isImmutableTags($repo)
+{
+   my $repo = shift;
+
+   my $result = 0;
+   if (open(TST,"<$SVN_BASE/$repo/hooks/pre-commit"))
+   {
+      close(TST);
+      $result = 1;
+   }
+   return $result;
+}
+
+##############################################################################
+#
+# Enable the Immutable Tags pre-commit hook for the repository
+# Returns true if it changed the state of things
+#
+sub enableImmutableTags($repo)
+{
+   my $repo = shift;
+
+   my $result = !&isImmutableTags($repo);
+   if ($result)
+   {
+      ### Yuck - this makes sure that the pre-commit hook
+      ### is set up from our authentication system.  Note
+      ### that this depends on symlink.
+      ### In the "windows" world, we would need to do
+      ### something like copying the hook.  The problem
+      ### with that is that it does not allow for simple
+      ### centeralized management of the hook code.  Using
+      ### the symlink lets me update the hook code in one
+      ### place and have all of the repositories on the
+      ### server use that new version.
+      ### So, yes, this is not Windows server compatible.
+
+      ### One could check for non-funtioning symlinks and
+      ### switch to copy operations here...
+      symlink('../../../authentication/pre-commit',"$SVN_BASE/$repo/hooks/pre-commit");
+   }
+
+   return $result;
+}
+
+##############################################################################
+#
+# Disable the Immutable Tags pre-commit hook for the repository
+# Returns true if it changed the state of things
+#
+sub disableImmutableTags($repo)
+{
+   my $repo = shift;
+
+   my $result = &isImmutableTags($repo);
+   if ($result)
+   {
+      ### Just delete the hook to disable the immutability for tags/releases
+      unlink("$SVN_BASE/$repo/hooks/pre-commit");
+   }
+
+   return $result;
+}
+
+##############################################################################
+#
+# Return true if the revprop change hook is enabled
+#
+sub isRevpropChange($repo)
+{
+   my $repo = shift;
+
+   my $result = 0;
+   if (open(TST,"<$SVN_BASE/$repo/hooks/pre-revprop-change"))
+   {
+      close(TST);
+      $result = 1;
+   }
+   return $result;
+}
+
+##############################################################################
+#
+# Enable the revprop change hook for the repository (svn:log only)
+# Returns true if it changed the state of things
+#
+sub enableRevpropChange($repo)
+{
+   my $repo = shift;
+
+   my $result = !&isRevpropChange($repo);
+   if ($result)
+   {
+      ### Yuck - this makes sure that the hook
+      ### is set up from our authentication system.  Note
+      ### that this depends on symlink.
+      ### In the "windows" world, we would need to do
+      ### something like copying the hook.  The problem
+      ### with that is that it does not allow for simple
+      ### centeralized management of the hook code.  Using
+      ### the symlink lets me update the hook code in one
+      ### place and have all of the repositories on the
+      ### server use that new version.
+      ### So, yes, this is not Windows server compatible.
+
+      ### One could check for non-funtioning symlinks and
+      ### switch to copy operations here...
+      symlink('../../../authentication/pre-revprop-change',"$SVN_BASE/$repo/hooks/pre-revprop-change");
+   }
+
+   return $result;
+}
+
+##############################################################################
+#
+# Disable the revprop change hook for the repository
+# Returns true if it changed the state of things
+#
+sub disableRevpropChange($repo)
+{
+   my $repo = shift;
+
+   my $result = &isRevpropChange($repo);
+   if ($result)
+   {
+      ### Just delete the hook to disable svn:log revprop changing
+      unlink("$SVN_BASE/$repo/hooks/pre-revprop-change");
+   }
+
+   return $result;
+}
+
+##############################################################################
+#
 # This returns an HTML table element that shows a horizontal gauge that
 # represents the "fullness" of the data.  The $fill is the amount in the
 # "container" and the $limit is what a full container can hold.

@@ -263,29 +263,39 @@ elsif (defined $cgi->param('adduser'))
 }
 elsif (defined $cgi->param('features'))
 {
-   my $tlock = $cgi->param('TagLock');
-   $tlock = 0 if (!defined $tlock);
+   ## Show the action log...
+   print &startInnerFrame('Action log: Repository Options');
 
-   if ($tlock)
+   if ($cgi->param('TagLock'))
    {
-      ### Yuck - this makes sure that the pre-commit hook
-      ### is set up from our authentication system.  Note
-      ### that this depends on symlink.
-      ### In the "windows" world, we would need to do
-      ### something like copying the hook.  The problem
-      ### with that is that it does not allow for simple
-      ### centeralized management of the hook code.  Using
-      ### the symlink lets me update the hook code in one
-      ### place and have all of the repositories on the
-      ### server use that new version.
-      ### So, yes, this is not Windows server compatible.
-      symlink('../../../authentication/pre-commit',"$repoDir/hooks/pre-commit");
+      if (&enableImmutableTags($repo))
+      {
+         print '<p>Enable enforcement of immutable /tags and /releases</p>';
+      }
    }
    else
    {
-      ### Remove the pre-commit hook for the repository
-      unlink("$repoDir/hooks/pre-commit");
+      if (&disableImmutableTags($repo))
+      {
+         print '<p>Disable enforcement of immutable /tags and /releases</p>';
+      }
    }
+
+   if ($cgi->param('Revprop'))
+   {
+      if (&enableRevpropChange($repo))
+      {
+         print '<p>Enable updating of svn:log properties</p>';
+      }
+   }
+   else
+   {
+      if (&disableRevpropChange($repo))
+      {
+         print '<p>Disable updating of svn:log properties</p>';
+      }
+   }
+   print &endInnerFrame();
 }
 
 &printAdminForms();
@@ -565,21 +575,25 @@ sub printAdminForms()
    ##############################################################################
    ### Repository feature configuration
    print '<form method="post" action="?Insurrection=admin">'
-       , &startTableFrame(undef,'Feature',undef,'Description',undef);
+       , &startTableFrame(undef,'Repository&nbsp;Option&nbsp;',undef,'Description',undef);
 
    my $tagsLock = '<input type="checkbox" name="TagLock" title="Enable the enforcement of immutable tags and releases"';
-   if (open(TLOCK,"<$repoDir/hooks/pre-commit"))
-   {
-      close(TLOCK);
-      $tagsLock .= ' checked';
-   }
-
+   $tagsLock .= ' checked' if (&isImmutableTags($repo));
    $tagsLock .= '/>Immutable&nbsp;tags';
 
    print &doTableFrameRow($tagsLock,'nowrap style="padding-right: 1em;"',
                           'Enables pre-commit hook that enforces the immutability of the /tags and /releases trees '
                           . 'within the repository.&nbsp; This enforces the rule that only <b>svn copy</b> entries '
                           . 'can be made into those trees.&nbsp; It is recommended to keep this on.','align="left"');
+
+   my $revprop = '<input type="checkbox" name="Revprop" title="Enable the updating of the svn:log revision property"';
+   $revprop .= ' checked' if (&isRevpropChange($repo));
+   $revprop .= '/>svn:log&nbsp;editing';
+
+   print &doTableFrameRow($revprop,'nowrap style="padding-right: 1em;"',
+                          'Enables the updating of the svn:log revision property.&nbsp; Note that revision properties '
+                          . 'are <b>not</b> revision tracked.&nbsp; Also note that this only enables the updating '
+                          . 'of the svn:log property such that other revprop values are still protected.','align="left"');
 
    print &doTableFrameLastRows('<input type="reset"/>','align="left"',
                                '<input type="submit" name="features" value="Save Changes"/>','align="right"');
