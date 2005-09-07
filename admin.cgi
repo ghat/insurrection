@@ -22,6 +22,9 @@ my $isAdmin = &isAdminMember('Admin',$AuthUser);
 my $repo = &svn_REPO();
 my $group = $repo . ':/';
 
+## The repository directory on the local disk...
+my $repoDir = $SVN_BASE . '/' . $repo;
+
 ## Make sure that the anon user is listed (even if no-access)
 ${$groupUsers{$group}}{'*'} = '' if (!defined ${$groupUsers{$group}}{'*'});
 
@@ -258,6 +261,32 @@ elsif (defined $cgi->param('adduser'))
    print $reloadForm;
    print &endInnerFrame();
 }
+elsif (defined $cgi->param('features'))
+{
+   my $tlock = $cgi->param('TagLock');
+   $tlock = 0 if (!defined $tlock);
+
+   if ($tlock)
+   {
+      ### Yuck - this makes sure that the pre-commit hook
+      ### is set up from our authentication system.  Note
+      ### that this depends on symlink.
+      ### In the "windows" world, we would need to do
+      ### something like copying the hook.  The problem
+      ### with that is that it does not allow for simple
+      ### centeralized management of the hook code.  Using
+      ### the symlink lets me update the hook code in one
+      ### place and have all of the repositories on the
+      ### server use that new version.
+      ### So, yes, this is not Windows server compatible.
+      symlink('../../../authentication/pre-commit',"$repoDir/hooks/pre-commit");
+   }
+   else
+   {
+      ### Remove the pre-commit hook for the repository
+      unlink("$repoDir/hooks/pre-commit");
+   }
+}
 
 &printAdminForms();
 
@@ -452,9 +481,6 @@ sub printAdminForms()
    ## Where the usage history sumary files are stored
    my $USAGE_DIR = $SVN_LOGS . '/usage-history';
 
-   ## The repository directory on the local disk...
-   my $repoDir = $SVN_BASE . '/' . $repo;
-
    ## Get the size limit for this repository.
    my $diskLimit = &repoSizeLimit($repo);
 
@@ -535,6 +561,34 @@ sub printAdminForms()
    ##############################################################################
 
    print '</td></tr></table>';
+
+   ##############################################################################
+   ### Repository feature configuration
+   print '<form method="post" action="?Insurrection=admin">'
+       , &startTableFrame(undef,'Feature',undef,'Description',undef);
+
+   my $tagsLock = '<input type="checkbox" name="TagLock" title="Enable the enforcement of immutable tags and releases"';
+   if (open(TLOCK,"<$repoDir/hooks/pre-commit"))
+   {
+      close(TLOCK);
+      $tagsLock .= ' checked';
+   }
+
+   $tagsLock .= '/>Immutable&nbsp;tags';
+
+   print &doTableFrameRow($tagsLock,'nowrap style="padding-right: 1em;"',
+                          'Enables pre-commit hook that enforces the immutability of the /tags and /releases trees '
+                          . 'within the repository.&nbsp; This enforces the rule that only <b>svn copy</b> entries '
+                          . 'can be made into those trees.&nbsp; It is recommended to keep this on.','align="left"');
+
+   print &doTableFrameLastRows('<input type="reset"/>','align="left"',
+                               '<input type="submit" name="features" value="Save Changes"/>','align="right"');
+
+   print &endTableFrame()
+       , '</form>';
+   ### Repository feature configuration
+   ##############################################################################
+
 }
 
 ##############################################################################
