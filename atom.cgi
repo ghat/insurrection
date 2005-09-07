@@ -181,7 +181,7 @@ if ((defined $top) && (defined $topDate))
    my $rLink = &svn_HTTP() . &svn_URL_Escape($SVN_REPOSITORIES_URL . $rpath . $opath) . '?Insurrection=log';
 
    print $top , "\n"
-       #, '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
+       , '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
        , "<!-- Insurrection Web Tools for Subversion Atom Feed -->\n"
        , "<!-- Copyright (c) 2004,2005 - Michael Sinz          -->\n"
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/  -->\n"

@@ -2,7 +2,7 @@
 <!-- $Id$ -->
 <!-- Copyright 2004,2005 - Michael Sinz -->
 <!-- This is my magic Insurrection XSLT transform to HTML -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:atom="http://purl.org/atom/ns#" version="1.0">
 
   <xsl:output
     method="html"
@@ -1087,5 +1087,125 @@
       </xsl:element>
    </div>
   </xsl:template>
+
+  <!-- ******************************************************************************************************************* -->
+  <!-- This is the template for the Atom feed when it happens to be loaded in a browser -->
+  <xsl:template match="atom:feed">
+    <html>
+      <head>
+        <title>
+          <xsl:value-of select="atom:title"/>
+        </title>
+        <xsl:call-template name="feed-links"/>
+        <xsl:call-template name="header"/>
+      </head>
+      <body>
+        <table id="pagetable" cellpadding="0" cellspacing="0">
+          <xsl:call-template name="top-bottom"/>
+          <tbody>
+            <tr>
+              <xsl:call-template name="left-side"/>
+              <td id="content">
+                <xsl:call-template name="banner"/>
+                <div class="footer" style="font-size: 16pt; font-weight: bold;">
+                  <xsl:text>This XML/Atom data is meant to be read using an Atom viewer.</xsl:text>
+                </div>
+                <div class="rss-title">
+                  <xsl:variable name="tmp" select="atom:tagline"/>
+                  <div>
+                    <xsl:variable name="tmp1" select="substring-before($tmp,'. &lt;hr/&gt;')"/>
+                    <xsl:value-of select="substring-before($tmp1,' from ')"/>
+                    <br/>
+                    <xsl:value-of select="substring-after($tmp1,' from ')"/>
+                  </div>
+                  <xsl:element name="span">
+                    <xsl:attribute name="id">title</xsl:attribute>
+                    <xsl:attribute name="contents">
+                      <xsl:value-of select="substring-after($tmp,'. &lt;hr/&gt;')"/>
+                    </xsl:attribute>
+                  </xsl:element>
+                  <xsl:element name="script">
+                    <xsl:attribute name="type">text/javascript</xsl:attribute>
+                    <xsl:attribute name="language">JavaScript</xsl:attribute>
+                    <xsl:text>function setContents(id) { var x=document.getElementById(id); x.innerHTML = x.getAttribute("contents"); x.removeAttribute("contents"); }</xsl:text>
+                    <xsl:text>setContents("title");</xsl:text>
+                  </xsl:element>
+                </div>
+                <xsl:apply-templates select="atom:entry"/>
+                <div class="footer" title="$Id$">
+                  <!-- Do we really want to say Atom is valid XML since it has no DTD?
+                  <a title="Valid XML 1.0!" href="http://validator.w3.org/check?uri=referer">
+                    <img style="margin-left: 1em;" align="right" border="0" src="/valid-xml10.png" alt="Valid XML 1.0!"/>
+                  </a>
+                  -->
+                  <xsl:text>&#160;</xsl:text>
+                </div>
+              </td>
+              <xsl:call-template name="right-side"/>
+            </tr>
+          </tbody>
+        </table>
+      </body>
+    </html>
+  </xsl:template>
+
+  <xsl:template match="atom:entry">
+    <div class="rss-item">
+      <xsl:element name="a">
+        <xsl:attribute name="href">
+          <xsl:value-of select="atom:link/@href"/>
+        </xsl:attribute>
+        <xsl:attribute name="title">
+          <xsl:value-of select="atom:title"/>
+        </xsl:attribute>
+        <xsl:element name="img">
+          <xsl:attribute name="alt"></xsl:attribute>
+          <xsl:attribute name="src">
+            <xsl:call-template name="linkicon-path"/>
+          </xsl:attribute>
+        </xsl:element>
+        <span class="rss-itemtitle">
+          <xsl:value-of select="atom:title"/>
+        </span>
+        <span class="rss-date">
+           <xsl:value-of select="atom:issued"/>
+         </span>
+        <span class="rss-author">
+          <xsl:text>by </xsl:text>
+          <xsl:if test="contains(atom:author/atom:name,'@')">
+            <xsl:value-of select="substring-before(atom:author/atom:name,'@')"/>
+            <xsl:element name="img">
+              <xsl:attribute name="src">
+                <xsl:call-template name="aticon-path"/>
+              </xsl:attribute>
+              <xsl:attribute name="class">user</xsl:attribute>
+              <xsl:attribute name="alt">at</xsl:attribute>
+            </xsl:element>
+            <xsl:value-of select="substring-after(atom:author/atom:name,'@')"/>
+          </xsl:if>
+          <xsl:if test="not(contains(atom:author/atom:name,'@'))">
+            <xsl:value-of select="atom:author/atom:name"/>
+          </xsl:if>
+        </span>
+      </xsl:element>
+      <xsl:element name="div">
+        <xsl:attribute name="class">rss-description</xsl:attribute>
+        <xsl:attribute name="id">
+          <xsl:value-of select="atom:title"/>
+        </xsl:attribute>
+        <xsl:attribute name="contents">
+          <xsl:value-of select="atom:content"/>
+        </xsl:attribute>
+      </xsl:element>
+      <xsl:element name="script">
+        <xsl:attribute name="type">text/javascript</xsl:attribute>
+        <xsl:attribute name="language">JavaScript</xsl:attribute>
+        <xsl:text>setContents("</xsl:text>
+        <xsl:value-of select="atom:title"/>
+        <xsl:text>");</xsl:text>
+      </xsl:element>
+   </div>
+  </xsl:template>
+
 
 </xsl:stylesheet>
