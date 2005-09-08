@@ -2,7 +2,7 @@
 <!-- $Id$ -->
 <!-- Copyright 2004,2005 - Michael Sinz -->
 <!-- This is my magic Insurrection XSLT transform to HTML -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:atom="http://purl.org/atom/ns#" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:atom="http://www.w3.org/2005/Atom" version="1.0">
 
   <xsl:output
     method="html"
@@ -1089,7 +1089,7 @@
   </xsl:template>
 
   <!-- ******************************************************************************************************************* -->
-  <!-- This is the template for the Atom feed when it happens to be loaded in a browser -->
+  <!-- This is the template for the Atom 1.x feed when it happens to be loaded in a browser -->
   <xsl:template match="atom:feed">
     <html>
       <head>
@@ -1111,7 +1111,7 @@
                   <xsl:text>This XML/Atom data is meant to be read using an Atom viewer.</xsl:text>
                 </div>
                 <div class="rss-title">
-                  <xsl:variable name="tmp" select="atom:tagline"/>
+                  <xsl:variable name="tmp" select="atom:subtitle"/>
                   <div>
                     <xsl:variable name="tmp1" select="substring-before($tmp,'. &lt;hr/&gt;')"/>
                     <xsl:value-of select="substring-before($tmp1,' from ')"/>
@@ -1168,7 +1168,7 @@
           <xsl:value-of select="atom:title"/>
         </span>
         <span class="rss-date">
-           <xsl:value-of select="atom:issued"/>
+           <xsl:value-of select="atom:updated"/>
          </span>
         <span class="rss-author">
           <xsl:text>by </xsl:text>

@@ -4,6 +4,12 @@
 # Copyright 2004,2005 - Michael Sinz
 #
 # This script handles the return of atom data.
+# NOTE:  This complies witht the Atom 1.0 and
+#        Atom 1.1 draft standard.
+#        See also:
+#         http://www.ietf.org/internet-drafts/draft-ietf-atompub-format-11.txt
+#         http://www1.ietf.org/mail-archive/web/ietf-announce/current/msg01485.html
+#         http://xml.coverpages.org/ni2005-07-15-a.html
 #
 require 'admin.pl';
 
@@ -180,24 +186,29 @@ if ((defined $top) && (defined $topDate))
 
    my $rLink = &svn_HTTP() . &svn_URL_Escape($SVN_REPOSITORIES_URL . $rpath . $opath) . '?Insurrection=log';
 
+   ## Link to this atom feed
+   my $aLink = &svn_HTTP() . &svn_URL_Escape($SVN_REPOSITORIES_URL . $rpath . $opath) . '?Insurrection=atom';
+
    print $top , "\n"
        , '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
        , "<!-- Insurrection Web Tools for Subversion Atom Feed -->\n"
        , "<!-- Copyright (c) 2004,2005 - Michael Sinz          -->\n"
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/  -->\n"
-       , '<feed version="0.3" xmlns="http://purl.org/atom/ns#">' , "\n"
-       , '<title>Repository: ' , &svn_XML_Escape($rpath . ': ' . $opath) , '</title>' , "\n"
-       , '<tagline type="text/html" mode="escaped">Atom Feed of the activity in "' , &svn_XML_Escape($opath)
+       , '<feed xmlns="http://www.w3.org/2005/Atom">' , "\n"
+       , '<title type="text">Repository: ' , &svn_XML_Escape($rpath . ': ' . $opath) , '</title>' , "\n"
+       , '<subtitle type="html">Atom Feed of the activity in "' , &svn_XML_Escape($opath)
        ,   '" of the "' , &svn_XML_Escape($rpath)
        ,   '" repository from ' , &dateFormat($topDate)
        ,   ' to ' , &dateFormat($endDate) , '. &lt;hr/&gt;'
        ,   &svn_XML_Escape($groupComments{$rpath . ':/'})
-       , '</tagline>' , "\n"
+       , '</subtitle>' , "\n"
        , '<link rel="alternate" type="text/html" href="' , &svn_XML_Escape($rLink) , '"/>' , "\n"
-       , '<generator>Insurrection Atom Feeder - '
+       , '<link rel="self" type="application/atom+xml" href="' , &svn_XML_Escape($aLink) , '"/>' , "\n"
+       , '<id>' , &svn_XML_Escape($aLink) , '</id>' , "\n"
+       , '<generator uri="http://svn.sinz.com/project.html">Insurrection Atom Feeder - '
        ,   &svn_XML_Escape('$Id$')
        , '</generator>' , "\n"
-       , '<modified>' , $topDate , '</modified>';
+       , '<updated>' , $topDate , '</updated>';
 
    foreach my $entry (@entries)
    {
@@ -223,13 +234,12 @@ if ((defined $top) && (defined $topDate))
 
       ## Output this item...
       print '<entry>' , "\n"
-          , '<title>Revision ' , $revision , '</title>'
-          , '<issued>' , $date , '</issued>'
-          , '<modified>' , $date , '</modified>'
+          , '<title type="text">Revision ' , $revision , '</title>'
+          , '<updated>' , $date , '</updated>'
           , '<author><name>' , $author , '</name></author>' , "\n"
           , '<id>' , &svn_XML_Escape($link) , '</id>' , "\n"
           , '<link rel="alternate" type="text/html" href="' , &svn_XML_Escape($link) , '"/>' , "\n"
-          , '<content type="text/html" mode="escaped">' , &svn_XML_Escape($logmsg) , '</content>' , "\n"
+          , '<content type="html">' , &svn_XML_Escape($logmsg) , '</content>' , "\n"
           , '</entry>' , "\n";
    }
    print "</feed>\n";
