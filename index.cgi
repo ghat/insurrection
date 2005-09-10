@@ -30,7 +30,7 @@ if ($index =~ m:<about/>:)
    $index =~ s:<about/>:$about:sgeo;
 }
 
-&svn_HEADER('MKSoft Insurrection Server');
+&svn_HEADER($SVN_INDEX_TITLE);
 
 print $index;
 

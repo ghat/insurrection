@@ -8,6 +8,9 @@
 # Don't forget the matching insurrection.js and insurrection.xsl files.
 #
 
+## This is the title of the main index.cgi page
+our $SVN_INDEX_TITLE = 'MKSoft Insurrection Server';
+
 ## This is the base of the repositories tree.  Repositories are within
 our $SVN_BASE = '/home/subversion/repositories';
 

@@ -237,7 +237,7 @@ if ((defined $top) && (defined $topDate))
 else
 {
    print "Status: 404 Log Not Available\n";
-   &svn_HEADER('SVN Feed - Insurrection Server');
+   &svn_HEADER('SVN Atom - Insurrection Server');
 
    print '<h1>Failed to access the log</h1>'
        , '<h3>Log command:</h3>'
