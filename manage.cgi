@@ -166,6 +166,109 @@ elsif ((defined $cgi->param('DelUser')) && (defined $cgi->param('Delete')))
    print $reloadForm;
    print &endInnerFrame();
 }
+elsif (defined $cgi->param('NewRepository'))
+{
+   my $newRepo = $cgi->param('NewRepository');
+   if (($newRepo =~ m/^[a-zA-Z][-_.a-zA-Z0-9]+$/) &&
+      (length($newRepo) > 2) &&
+      (length($newRepo) < 32))
+   {
+      &lockAccessFile();
+      &loadAccessFile();
+
+      my $group = "$newRepo:/";
+      if (defined $groupUsers{$group})
+      {
+         print &startBoldFrame('Repository already exists: "' . &svn_XML_Escape($newRepo) . '"')
+             , '<h2>Repository name already exists</h2>'
+             , &endBoldFrame();
+      }
+      else
+      {
+         print &startInnerFrame('Creating new repository "' . &svn_XML_Escape($newRepo) . '"') , '<pre>';
+
+         ## Note that by default, new repositories have the system administrator
+         ## as a R/W user.  The system administrator may wish to add a repository
+         ## administrator to the repository at some point.  That would be done
+         ## using the normal management tools and not part of the creation process.
+         my %initialUsers;
+         $initialUsers{$AuthUser} = 'rw';
+         $groupComments{$group} = 'Newly created repository <i>(Please edit this description></i>';
+         %{$groupUsers{$group}} = %initialUsers;
+
+         #####################################################################
+         ##
+         ## This is where we create a new repository for the system.  Note
+         ## that new repository structure is defined here.  If different
+         ## structure is needed, this would be where you would need to change.
+         ##
+         ## Note that all of the initial structure work is
+         ## Now, actually create the repository...
+         print "Creating repository...\n";
+         system($SVNADMIN_CMD,'create','--fs-type','fsfs',"$SVN_BASE/$newRepo");
+
+         ## Now set up the default layout the way I want by checking out the
+         ## repository into a temp directory and then adding the structure
+         my $tmpdir = "/tmp/newRepo-$^T";
+         mkdir($tmpdir);
+         system($SVN_CMD,'checkout','--non-interactive','--no-auth-cache','file://' . $SVN_BASE . '/' . &svn_URL_Escape($newRepo),"$tmpdir/.");
+
+         ## Build the trunk/branches/tags/releases directory structure
+         system('mkdir',"$tmpdir/trunk","$tmpdir/branches","$tmpdir/tags","$tmpdir/releases");
+         system($SVN_CMD,'add',"$tmpdir/trunk","$tmpdir/branches","$tmpdir/tags","$tmpdir/releases");
+
+         ## Build the initial .svn_index file...
+         if (open(TMP,">$tmpdir/.svn_index"))
+         {
+            print TMP '<!-- $' , 'Id$ -->' , "\n"
+                    , "<h2>Repository: " , &svn_XML_Escape($newRepo) , "</h2>\n";
+            close(TMP);
+            system($SVN_CMD,'add',"$tmpdir/.svn_index");
+            system($SVN_CMD,'propset','svn:eol-style','native',"$tmpdir/.svn_index");
+            system($SVN_CMD,'propset','svn:keywords','Id',"$tmpdir/.svn_index");
+         }
+
+         ## We do a quick commit of this layout before setting up the hooks
+         ## and access rights to ensure that all of this is in place before
+         ## the repository is public.  Note also that the administrative
+         ## user account that created the repository will be used as the
+         ## user who did the initial checkin.
+         system($SVN_CMD,'commit','--non-interactive','--no-auth-cache','--username',$AuthUser,'-m','Initial repository creation and layout',"$tmpdir/.");
+
+         ## Ok, lets get the hook defined by default
+         &enableImmutableTags($newRepo);
+
+         ## Set up the initial bandwidth and disk space limits files
+         ## (Just so that the defaults are written to the repository limit files)
+         &repoBandwidthLimit($newRepo);   ## Use this to get/write the default
+         &repoSizeLimit($newRepo);        ## Use this to get/write the default
+
+         ## Clean up the temp directory we used to make this happen
+         system('rm','-rf',$tmpdir);
+
+         ## Save the changes to the access control file
+         &saveAccessFile("manage.cgi: Created new repository:\n\n\t$newRepo");
+         &loadAccessFile();
+         ##
+         ## The repository is now created with the initial access rights
+         ## and comment.
+         ##
+         #####################################################################
+
+
+         print '</pre>' , &endInnerFrame();
+      }
+
+      &unlockAccessFile();
+   }
+   else
+   {
+      print &startBoldFrame('Invalid repository name: "' . &svn_XML_Escape($newRepo) . '"')
+          , '<h2>Invalid name for new repository</h2>'
+          , &endBoldFrame();
+   }
+}
+
 
 ##############################################################################
 ### System repository administration form
@@ -215,6 +318,18 @@ print &doTableFrameRow( '' , undef
 
 print &endTableFrame();
 ### System repository administration form
+##############################################################################
+
+##############################################################################
+### Create repository form
+print &startInnerFrame('Create a new repository')
+    , '<form action="?" method="post">'
+    , '<table border="0" cellpadding="1" cellspacing="3" style="margin: auto;">'
+    , '<tr><td align="right">Repository name:</td><td align="left">&nbsp;<input type="text" size="16" maxlength="32" name="NewRepository"></td><td align="right">&nbsp;<input type="submit" name="Operation" value="Create"></td></tr>'
+    , '</table>'
+    , '</form>'
+    , &endInnerFrame();
+### Create repository form
 ##############################################################################
 
 ##############################################################################
