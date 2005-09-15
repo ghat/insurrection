@@ -36,6 +36,17 @@
   </li>
   <br/>
   <li>
+    <a href=".htaccess"><code>.htaccess</code></a>
+    <ul>
+      The Apache <a href=".htaccess"><code>.htaccess</code></a> file for the tools and
+      administration CGIs that live in the directory.&nbsp; Note that this references
+      the same password file as the <code>mod_authz_svn</code> plugin is configured
+      for.&nbsp; Note that this file will need to be edited to match your repository
+      location if it is not <code>/svn</code> on the server.
+    </ul>
+  </li>
+  <br/>
+  <li>
     <a href="insurrection.conf"><code>insurrection.conf</code></a>
     <ul>
       This is the Apache 2.0.x virtual server configuration file for the svn.* server.&nbsp;
@@ -48,7 +59,14 @@
     <a href="InsurrectionLogo.gif"><code>InsurrectionLogo.gif</code></a>
     <ul>
       The Insurrection Web Tools for Subversion logo.  Special thanks to
-      Dan Case from Carroll College for his design input for the logo.
+      Dan Case from Carroll College for his design input for the logo.&nbsp;
+      Note that you will need to make a logo file that is of the same name
+      as the host that you are acting as for Insurrection.&nbsp; This is
+      a minor additional security step.&nbsp;  For example, if your server
+      is <code>http://svn.code-host.net/...</code> then you will need to
+      have a file of the name <code>svn.code-host.net.gif</code> that contains
+      the logo you want displayed.  Just copy this file to that name and
+      you will be all set.
     </ul>
   </li>
   <br/>
@@ -160,16 +178,6 @@
       <a href=".svn_index"><code>.svn_index</code></a> file in the repository will
       have that file shown as a secondary banner in the web page, just like this
       file.&nbsp; The file should be a HTML fragment in order to correctly render.
-    </ul>
-  </li>
-  <br/>
-  <li>
-    <a href=".htaccess"><code>.htaccess</code></a>
-    <ul>
-      The Apache <a href=".htaccess"><code>.htaccess</code></a> file for the tools and
-      administration CGIs that live in the directory.&nbsp; Note that this references
-      the same password file as the <code>mod_authz_svn</code> plugin is configured
-      for.
     </ul>
   </li>
   <br/>
