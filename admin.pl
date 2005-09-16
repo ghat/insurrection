@@ -1381,7 +1381,7 @@ sub repoSize($repo)
 ##############################################################################
 #
 # Return the size limit of a given repository in "k" bytes.  Note that it will
-# 300 meg if there is no known size.
+# 250 meg if there is no known size.
 #
 sub repoSizeLimit($repo)
 {
@@ -1390,7 +1390,7 @@ sub repoSizeLimit($repo)
    ## The repository directory on the local disk...
    my $repoDir = $SVN_BASE . '/' . $repo;
 
-   my $diskLimit = 300 * 1024;
+   my $diskLimit = 250 * 1024;
 
    ## See if the repository has a specific disk limit
    if (open(DISKLIMIT,'<' . $repoDir . '/disk.limit'))
@@ -1442,7 +1442,7 @@ sub repoBandwidth($repo)
 ##############################################################################
 #
 # Return the bandwidth limit of a given repository in bytes per month.
-# Note that it will return 2gig if there is no known limit.
+# Note that it will return 1gig if there is no known limit.
 #
 sub repoBandwidthLimit($repo)
 {
@@ -1451,8 +1451,8 @@ sub repoBandwidthLimit($repo)
    ## The repository directory on the local disk...
    my $repoDir = $SVN_BASE . '/' . $repo;
 
-   ## The bandwidth limit default is 1gig (1 * 1024 * 1024 * 1024 bytes)
-   my $bandwidthLimit = 1 * 1024 * 1024 * 1024;
+   ## The bandwidth limit default is 1gig (1024 * 1024 * 1024 bytes)
+   my $bandwidthLimit = 1024 * 1024 * 1024;
 
    ## See if the repository has a specific bandwidth limit
    if (open(BWLIMIT,'<' . $repoDir . '/bandwidth.limit'))
