@@ -60,9 +60,11 @@ else
 {
    ## Get the revision history list so we can count the ones we want
    ## and we can follow renames (actually, copies) through the history
+   ## and use "head" to only get as many as needed...
    my $hcmd = $SVNLOOK_CMD . ' history';
    $hcmd .= ' -r "' . $r1 . '"' if (defined $r1);
    $hcmd .= ' "' . $SVN_BASE . '/' . $rpath . '" "' . $opath . '"';
+   $hcmd .= ' | head -' . ($maxEntries + 3);
    @revs = (`$hcmd` =~ m:(\d+)\s+(/[^\n]*):gso);
    $revcount = @revs / 2;
    $maxEntries = $revcount if (!defined $maxEntries);
