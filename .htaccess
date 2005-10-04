@@ -54,7 +54,7 @@ DirectoryIndex index.cgi
 ## mod_authz_svn take care of the path check before
 ## we proxy to here.  We then just validate in these
 ## scripts that we have been proxied.
-<Files ~ "^(atom|blame|diff|get|log|rss)\.cgi$">
+<Files ~ "^(atom|blame|diff|get|log|ls|rss)\.cgi$">
 	SetHandler cgi-script
 </Files>
 
@@ -133,9 +133,8 @@ RewriteRule	^(index|project).html$	/$1.cgi	[PT,L]
 ## last parameter before the end of the URI.  Ugly but it works...
 RewriteCond %{REQUEST_METHOD} GET	[OR]
 RewriteCond %{REQUEST_METHOD} POST
-RewriteCond %{QUERY_STRING} Insurrection=(admin|atom|bandwidth|blame|diff|dump|get|log|rss)
+RewriteCond %{QUERY_STRING} Insurrection=(admin|atom|bandwidth|blame|diff|dump|get|log|ls|rss)
 RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&HTTPS=%{HTTPS}&Path=$1"	[P,L]
-#RewriteRule	^svn/(.*)$	"http://%{HTTP_HOST}/%1.cgi/$1"	[P,L]
 
 ## What a trick - to get the broken browsers to work.
 ## Now the need XMLHttp, but the don't need the XSLT
@@ -168,6 +167,25 @@ RewriteCond %{QUERY_STRING} !XMLHttp=1
 RewriteCond %{HTTP_USER_AGENT} Opera		[OR]
 RewriteCond %{HTTP_USER_AGENT} Safari		[OR]
 RewriteCond %{HTTP_USER_AGENT} Konqueror
-RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/broken_xslt.cgi?&Path=$1"	[P,L]
-#RewriteRule	^svn/(.*/)$	"http://%{HTTP_HOST}/broken_xslt.cgi/$1"	[P,L]
+RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/broken_xslt.cgi?HTTPS=%{HTTPS}&Path=$1"	[P,L]
+
+## The following rule is to catch the directory XML listing
+## request and not let mod_dav_svn answer but rather our own
+## CGI which will produce a slightly enhanced output.  This
+## rule is not required, but if it is used, the directory
+## listings will include revision date/number/author for
+## each individual entry.
+##
+## If this rule is not used, you can still get the enhanced
+## listings via the ?Insurrection=ls CGI option (which is
+## basically what this rule does)
+##
+## !!!NOTE!!!  If this rule runs before the broken XSLT
+##             browser test rule, the enhanced listing
+##             CGI will implement the work around.
+##             However, this is not the most bandwidth
+##             friendly way - so keeping this rule after
+##             the broken XSLT hack will solve that.
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/ls.cgi?%{QUERY_STRING}&Insurrection=ls&HTTPS=%{HTTPS}&Path=$1"	[P,L]
 
