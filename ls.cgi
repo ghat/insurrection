@@ -77,32 +77,11 @@ if (defined $ls)
    ## Get the XML version and encoding...
    $ls =~ m:(<\?xml.*?\?>):so;
    print $1 , "\n"
-       , '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n";
-
-   ## This really is not needed here, so we may wish to rip it out
-   ## It is only needed for fully validating XML parsers
-   print '<!DOCTYPE svn [' , "\n"
-       , '  <!ELEMENT svn   (index)>' , "\n"
-       , '  <!ATTLIST svn   version  CDATA #IMPLIED' , "\n"
-       , '                  href     CDATA #REQUIRED>' , "\n"
-       , '  <!ELEMENT index (updir?, (file | dir)*)>' , "\n"
-       , '  <!ATTLIST index name     CDATA #IMPLIED' , "\n"
-       , '                  path     CDATA #IMPLIED' , "\n"
-       , '                  rev      CDATA #IMPLIED>' , "\n"
-       , '  <!ELEMENT updir EMPTY>' , "\n"
-       , '  <!ATTLIST file  name     CDATA #REQUIRED' , "\n"
-       , '                  author   CDATA #REQUIRED' , "\n"
-       , '                  revision CDATA #REQUIRED' , "\n"
-       , '                  date     CDATA #REQUIRED' , "\n"
-       , '                  size     CDATA #REQUIRED' , "\n"
-       , '                  href     CDATA #REQUIRED>' , "\n"
-       , '  <!ATTLIST dir   name     CDATA #REQUIRED' , "\n"
-       , '                  author   CDATA #REQUIRED' , "\n"
-       , '                  revision CDATA #REQUIRED' , "\n"
-       , '                  date     CDATA #REQUIRED' , "\n"
-       , '                  href     CDATA #REQUIRED>' , "\n"
-       , ']>' , "\n";
-
+       , '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
+       , "<!-- Insurrection Web Tools for Subversion: svn ls  -->\n"
+       , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
+       , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
+       , '<!DOCTYPE svn SYSTEM "' , &svn_HTTP() , $SVN_URL_PATH , 'ls.dtd">' , "\n";
 
    ## Note that we don't include the repository revision as it is
    ## not known without doing yet more overhead - and it really is
