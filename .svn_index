@@ -122,11 +122,26 @@
   </li>
   <br/>
   <li>
+    <a href="ls.cgi"><code>ls.cgi</code></a>
+    <ul>
+      This CGI gets the XML formatted listing of a given path in the repository and lets the
+      <a href="insurrection.xsl"><code>insurrection.xsl</code></a> XSLT transform it into HTML.&nbsp;
+      Note that the XML output from this CGI matches that of the mod_dav_svn output for directories
+      with the addition of latest revision details for each entry.&nbsp; The output XML uses the
+      <a href="ls.dtd"><code>ls.dtd</code></a> DTD description and does not include the DTD in-line
+      as the mod_dav_svn output does.&nbsp; This CGI is optional and can be turned off via simple
+      change to the rewrite rule that handles it in the <a href=".htaccess"><code>.htaccess</code></a>
+      file.
+    </ul>
+  </li>
+  <br/>
+  <li>
     <a href="log.cgi"><code>log.cgi</code></a>
     <ul>
       This CGI gets the XML formatted revision history from Subversion and returns it
       with the request to use the <a href="insurrection.xsl"><code>insurrection.xsl</code></a>
-      presentation transform.
+      presentation transform.&nbsp; The output XML uses the <a href="log.dtd"><code>log.dtd</code></a>
+      DTD description.
     </ul>
   </li>
   <br/>
