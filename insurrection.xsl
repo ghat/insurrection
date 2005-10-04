@@ -330,7 +330,7 @@
               <xsl:text> - </xsl:text>
             </xsl:if>
             <xsl:if test="string-length(@rev) = 0">
-              <xsl:text>&#8212; </xsl:text>
+              <xsl:text> - </xsl:text>
             </xsl:if>
             <xsl:if test="string-length(@rev) != 0">
               <xsl:text>Revision </xsl:text>
@@ -433,6 +433,20 @@
             <xsl:value-of select="@href"/>
           </xsl:attribute>
           <div class="dir">
+            <!-- If we have extended info, put it here -->
+            <xsl:if test="string-length(@revision) != 0">
+              <span class="revinfo">
+                <xsl:value-of select="@date"/>
+              </span>
+              <span class="revinfo">
+                <xsl:text>r</xsl:text>
+                <xsl:value-of select="@revision"/>
+              </span>
+              <span class="revinfo">
+                <xsl:value-of select="@author"/>
+              </span>
+              <xsl:value-of select="@rev"/>
+            </xsl:if>
             <xsl:element name="img">
               <xsl:attribute name="alt">Folder</xsl:attribute>
               <xsl:attribute name="class">svnentryicon</xsl:attribute>
@@ -518,6 +532,20 @@
             <xsl:value-of select="@href"/>
           </xsl:attribute>
           <div class="file">
+            <!-- If we have extended info, put it here -->
+            <xsl:if test="string-length(@revision) != 0">
+              <span class="revinfo">
+                <xsl:value-of select="@date"/>
+              </span>
+              <span class="revinfo">
+                <xsl:text>r</xsl:text>
+                <xsl:value-of select="@revision"/>
+              </span>
+              <span class="revinfo">
+                <xsl:value-of select="@author"/>
+              </span>
+              <xsl:value-of select="@rev"/>
+            </xsl:if>
             <xsl:element name="img">
               <xsl:attribute name="alt">File</xsl:attribute>
               <xsl:attribute name="class">svnentryicon</xsl:attribute>

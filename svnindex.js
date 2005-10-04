@@ -216,6 +216,10 @@ function doNextItem(actionList)
 			td.appendChild(a);
 			div = document.createElement('div');
 			div.className = 'dir';
+
+			// Get the detail info if available...
+			addRevInfo(div,action);
+
 			a.appendChild(div);
 			img = document.createElement('img');
 			div.appendChild(img);
@@ -249,6 +253,10 @@ function doNextItem(actionList)
 			td.appendChild(a);
 			div = document.createElement('div');
 			div.className = 'file';
+
+			// Get the detail info if available...
+			addRevInfo(div,action);
+
 			a.appendChild(div);
 			img = document.createElement('img');
 			div.appendChild(img);
@@ -320,6 +328,31 @@ function doNextItem(actionList)
 }
 
 /*
+ * This common bit of code will conditionally add the
+ * extended revision info if it is in the action item.
+ */
+function addRevInfo(a,action)
+{
+	if (action.rev)
+	{
+		var span = document.createElement('span');
+		span.className = 'revinfo';
+		span.appendChild(document.createTextNode(action.date));
+		a.appendChild(span);
+
+		span = document.createElement('span');
+		span.className = 'revinfo';
+		span.appendChild(document.createTextNode('r' + action.rev));
+		a.appendChild(span);
+
+		span = document.createElement('span');
+		span.className = 'revinfo';
+		span.appendChild(document.createTextNode(action.author));
+		a.appendChild(span);
+	}
+}
+
+/*
  * Given a target object and the completed XMLHttpRequest
  * object, this builds the job list for showing the directory.
  */
@@ -356,6 +389,14 @@ function loadDirTarget(target,responseXML)
 		action.type = 'dir';
 		action.name = dirs[i].getAttribute('name');
 		action.href = dirs[i].getAttribute('href');
+
+		// In case the extended data is available, add it too...
+		if (dirs[i].getAttribute('revision'))
+		{
+			action.rev = dirs[i].getAttribute('revision');
+			action.author = dirs[i].getAttribute('author');
+			action.date = dirs[i].getAttribute('date');
+		}
 		actionList.push(action);
 	}
 
@@ -368,6 +409,14 @@ function loadDirTarget(target,responseXML)
 		action.type = 'file';
 		action.name = files[i].getAttribute('name');
 		action.href = files[i].getAttribute('href');
+
+		// In case the extended data is available, add it too...
+		if (files[i].getAttribute('revision'))
+		{
+			action.rev = files[i].getAttribute('revision');
+			action.author = files[i].getAttribute('author');
+			action.date = files[i].getAttribute('date');
+		}
 		actionList.push(action);
 	}
 

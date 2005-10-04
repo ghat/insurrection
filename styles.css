@@ -167,6 +167,17 @@ td.pathname
   white-space: nowrap;
 }
 
+.revinfo
+{
+  float: right;
+  color: rgb(35%,35%,35%);
+  font-size: 80%;
+  font-weight: normal;
+  text-decoration: none;
+  margin-left: 0.4em;
+  margin-right: 0.4em;
+}
+
 .svnentryicon
 {
   margin-right: 0.5em;
