@@ -65,7 +65,7 @@ if (defined $ls)
 {
    my @entries = ($ls =~ m:(<entry.*?>.*?</entry>):sgo);
 
-   print $cgi->header('-expires' => '+1d' ,
+   print $cgi->header('-expires' => '+120m' ,
                       '-type' => $sendType);
 
    ## Note, we can just fall-through if this fails.  We would
