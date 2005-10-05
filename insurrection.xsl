@@ -435,17 +435,16 @@
           <div class="dir">
             <!-- If we have extended info, put it here -->
             <xsl:if test="string-length(@revision) != 0">
-              <span class="revinfo">
+              <span class="revinfo revinfo-date">
                 <xsl:value-of select="@date"/>
               </span>
-              <span class="revinfo">
+              <span class="revinfo revinfo-rev">
                 <xsl:text>r</xsl:text>
                 <xsl:value-of select="@revision"/>
               </span>
-              <span class="revinfo">
+              <span class="revinfo revinfo-author">
                 <xsl:value-of select="@author"/>
               </span>
-              <xsl:value-of select="@rev"/>
             </xsl:if>
             <xsl:element name="img">
               <xsl:attribute name="alt">Folder</xsl:attribute>
@@ -534,17 +533,16 @@
           <div class="file">
             <!-- If we have extended info, put it here -->
             <xsl:if test="string-length(@revision) != 0">
-              <span class="revinfo">
+              <span class="revinfo revinfo-date">
                 <xsl:value-of select="@date"/>
               </span>
-              <span class="revinfo">
+              <span class="revinfo revinfo-rev">
                 <xsl:text>r</xsl:text>
                 <xsl:value-of select="@revision"/>
               </span>
-              <span class="revinfo">
+              <span class="revinfo revinfo-author">
                 <xsl:value-of select="@author"/>
               </span>
-              <xsl:value-of select="@rev"/>
             </xsl:if>
             <xsl:element name="img">
               <xsl:attribute name="alt">File</xsl:attribute>

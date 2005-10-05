@@ -173,9 +173,34 @@ td.pathname
   color: rgb(35%,35%,35%);
   font-size: 80%;
   font-weight: normal;
+  font-style: normal;
   text-decoration: none;
+  text-align: left;
   margin-left: 0.4em;
   margin-right: 0.4em;
+}
+
+.revinfo-date
+{
+  color: rgb(45%,45%,45%);
+}
+
+.revinfo-author
+{
+  font-style: italic;
+  color: rgb(45%,45%,45%);
+  overflow: hidden;
+}
+
+/*
+ * This is a nasty trick to keep the rev column lined up
+ * Note that we assume the date will be lined up due to
+ * the constant spacing of numbers.
+ */
+.revinfo-rev
+{
+  width: 5em;
+  text-align: right;
 }
 
 .svnentryicon
