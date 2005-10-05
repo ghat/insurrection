@@ -435,14 +435,14 @@
           <div class="dir">
             <!-- If we have extended info, put it here -->
             <xsl:if test="string-length(@revision) != 0">
-              <span class="revinfo revinfo-date">
+              <span class="revinfo-date">
                 <xsl:value-of select="@date"/>
               </span>
-              <span class="revinfo revinfo-rev">
+              <span class="revinfo-rev">
                 <xsl:text>r</xsl:text>
                 <xsl:value-of select="@revision"/>
               </span>
-              <span class="revinfo revinfo-author">
+              <span class="revinfo-author">
                 <xsl:value-of select="@author"/>
               </span>
             </xsl:if>
@@ -533,14 +533,14 @@
           <div class="file">
             <!-- If we have extended info, put it here -->
             <xsl:if test="string-length(@revision) != 0">
-              <span class="revinfo revinfo-date">
+              <span class="revinfo-date">
                 <xsl:value-of select="@date"/>
               </span>
-              <span class="revinfo revinfo-rev">
+              <span class="revinfo-rev">
                 <xsl:text>r</xsl:text>
                 <xsl:value-of select="@revision"/>
               </span>
-              <span class="revinfo revinfo-author">
+              <span class="revinfo-author">
                 <xsl:value-of select="@author"/>
               </span>
             </xsl:if>

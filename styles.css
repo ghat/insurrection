@@ -167,7 +167,7 @@ td.pathname
   white-space: nowrap;
 }
 
-.revinfo
+.revinfo-date, .revinfo-author, .revinfo-rev
 {
   float: right;
   color: rgb(35%,35%,35%);

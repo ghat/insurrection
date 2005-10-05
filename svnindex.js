@@ -336,17 +336,17 @@ function addRevInfo(a,action)
 	if (action.rev)
 	{
 		var span = document.createElement('span');
-		span.className = 'revinfo revinfo-date';
+		span.className = 'revinfo-date';
 		span.appendChild(document.createTextNode(action.date));
 		a.appendChild(span);
 
 		span = document.createElement('span');
-		span.className = 'revinfo revinfo-rev';
+		span.className = 'revinfo-rev';
 		span.appendChild(document.createTextNode('r' + action.rev));
 		a.appendChild(span);
 
 		span = document.createElement('span');
-		span.className = 'revinfo revinfo-author';
+		span.className = 'revinfo-author';
 		span.appendChild(document.createTextNode(action.author));
 		a.appendChild(span);
 	}
