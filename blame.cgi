@@ -22,7 +22,7 @@ my $docURL = &svn_URL();
 my $getLog = &svn_URL_Escape($SVN_REPOSITORIES_URL . &svn_REPO() . &svn_RPATH()) . '?Insurrection=log';
 
 ## Now, lets build the correct command to run...
-my $cmd = $SVN_CMD . ' blame --non-interactive --no-auth-cache -r ' . $rev . ' ' . $docURL;
+my $cmd = $SVN_CMD . ' blame --non-interactive --no-auth-cache -r ' . $rev . ' ' . $docURL . '@' . $rev;
 
 &svn_HEADER('Annotate ' . $rev . ' - ' . $cgi->path_info);
 

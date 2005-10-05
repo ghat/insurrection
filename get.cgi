@@ -18,13 +18,13 @@ $rev = 'HEAD' if (!defined $rev);
 my $docURL = &svn_URL();
 
 ## Lets see if we can find the mime type...
-my $mimeget = $SVN_CMD . ' propget --non-interactive --no-auth-cache -r ' . $rev . ' svn:mime-type ' . $docURL;
+my $mimeget = $SVN_CMD . ' propget --non-interactive --no-auth-cache svn:mime-type ' . $docURL . '@' . $rev;
 my $mime = `$mimeget`;
 chomp $mime;
 $mime = 'text/plain' if ((!defined $mime) || ($mime eq ''));
 
 ## Now, lets build the correct command to run...
-my $cmd = $SVN_CMD . ' 2>/dev/null cat --non-interactive --no-auth-cache -r ' . $rev . ' ' . $docURL;
+my $cmd = $SVN_CMD . ' 2>/dev/null cat --non-interactive --no-auth-cache ' . $docURL . '@' . $rev;
 
 print $cgi->header('-expires' => '+1d' ,
                    '-type' => $mime);
