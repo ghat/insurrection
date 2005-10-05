@@ -1,0 +1,129 @@
+<!-- Insurrection Web Tools for Subversion: Index   -->
+<!-- Copyright (c) 2004,2005 - Michael Sinz         -->
+<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->
+<!-- $Id$ -->
+
+<!-- We use my tabs.js tool to dynamically build the tab frames for this page -->
+<script type="text/javascript" language="JavaScript" src="tabs.js"></script>
+
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSet('main',['Repositories','Atom &amp; RSS','Local links','External links','About']);
+//--></script>
+
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSetPage('main');
+//--></script>
+<p>
+  To access the repositories below via a web browser, just click on the links.&nbsp;
+  You may be asked to enter your username and password to get access
+  to restricted repositories.
+</p>
+<repos/>
+<p>
+  To access the repositories above via Subversion, browse to the location in the
+  repository you want via your web browser and then use that URL with your favorite
+  Subversion client tool.&nbsp; You may asked to enter your username
+  and password for access to any restricted repositories.
+</p>
+<p>
+  <i><b>Note:</b>&nbsp; You should normally <b>not</b> check out the whole repository
+  from the root as it may contain many tags and/or branches.</i>
+</p>
+
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSetPage('main');
+//--></script>
+<p>
+  <span style="float: right; margin-left: 3px;">
+    <a href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=atom"><img src="valid-atom.png" alt="[Valid Atom]" title="Validate my Atom feed"/></a>
+    <br/>
+    <a href="http://feedvalidator.org/check.cgi?url=http://svn.code-host.net/svn/Insurrection/?Insurrection=rss"><img src="valid-rss.png" alt="[Valid RSS]" title="Validate my RSS feed"/></a>
+  </span>
+  Atom and RSS feeds are available for activity in a repository or sub-tree of a repository.&nbsp;
+  The Atom and RSS link buttons you will see while browsing the repositories will produce a feed for
+  that part of the repository.
+</p>
+<p>
+  The Atom feed has been validated to conform to the current
+  <a href="http://www.ietf.org/internet-drafts/draft-ietf-atompub-protocol-04.txt">IETF draft</a>
+  standard.
+</p>
+<p>
+  The RSS feed has been validated to conform to the
+  <a href="http://blogs.law.harvard.edu/tech/rss">RSS 2.0 specification</a>.
+</p>
+<p>
+  Both feeds support HTTP "Conditional GET" operation via the the HTTP ETag header to
+  reduce bandwidth and system overhead when there are no new updates since the last
+  download of the feed.&nbsp; Most feed readers and browsers support this.&nbsp; You
+  can read more about it at <a href="http://fishbowl.pastiche.org/2002/10/21/http_conditional_get_for_rss_hackers">this
+  blog</a> and in <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19">the HTTP specification</a>.
+</p>
+
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSetPage('main');
+//--></script>
+<p>Some resources that are located on this server.</p>
+<table class="tableframe" cellspacing="0" cellpadding="1" width="100%">
+  <tr class="tableframe-row-odd">
+    <td nowrap><a href="project.html">The Insurrection Project</a></td>
+    <td class="tableframe-div"></td>
+    <td>The Insurrection project information page - the code that we developed for our service.</td>
+  </tr>
+  <tr class="tableframe-row-even">
+    <td><a href="browser-tests/index.html">Browser Test Pages</a></td>
+    <td class="tableframe-div"></td>
+    <td>Some simple browser compatibility test pages for the Insurrection Web Tools.</td>
+  </tr>
+  <tr class="tableframe-row-odd">
+    <td nowrap><a href="rewrite-test/index.html">Apache mod_rewrite Tests</a></td>
+    <td class="tableframe-div"></td>
+    <td>It seems that certain URL patterns do not get processed correctly within mod_rewrite in Apache 2.0.54</td>
+  </tr>
+  <tr class="tableframe-row-even">
+    <td nowrap><a href="best-practices.html">My Subversion Quick-Start</a></td>
+    <td class="tableframe-div"></td>
+    <td>Some introductory documentation about Subversion and the
+    revision control rules and procedures that I follow.</td>
+  </tr>
+</table>
+
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSetPage('main');
+//--></script>
+<p>Some resources that we think are useful for working with Code-Host services.</p>
+<table class="tableframe" cellspacing="0" cellpadding="1" width="100%">
+  <tr class="tableframe-row-odd">
+    <td nowrap><a href="http://subversion.tigris.org/">The Subversion Project</a></td>
+    <td class="tableframe-div"></td>
+    <td>The Subversion project home page</td>
+  </tr>
+  <tr class="tableframe-row-even">
+    <td nowrap><a href="http://svnbook.red-bean.com/">The Subversion Book</a></td>
+    <td class="tableframe-div"></td>
+    <td>
+      The Subversion Book - a freely available, very good book on using Subversion.&nbsp; Also published
+      by <a href="http://www.oreilly.com/catalog/0596004486/">O'Reilly Media</a>.
+    </td>
+  </tr>
+  <tr class="tableframe-row-odd">
+    <td nowrap><a href="http://svn.sinz.com/project.html">The Insurrection Project</a></td>
+    <td class="tableframe-div"></td>
+    <td>The Insurrection project information page - the code that we developed for our service.</td>
+  </tr>
+  <tr class="tableframe-row-even">
+    <td nowrap><a href="http://subversion.tigris.org/project_links.html">The Subversion Project Links</a></td>
+    <td class="tableframe-div"></td>
+    <td>The Subversion related links page from the Subversion Project</td>
+  </tr>
+</table>
+
+<script type="text/javascript" language="JavaScript"><!--
+  startTabSetPage('main');
+//--></script>
+<about/>
+
+<script type="text/javascript" language="JavaScript"><!--
+  endTabSet('main');
+//--></script>
+
