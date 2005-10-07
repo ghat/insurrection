@@ -14,7 +14,7 @@
   The project page is at <a href="http://insurrection.tigris.org/">http://insurrection.tigris.org/</a>
   but the source code can be accessed via the Insurrection tools itself at
   <a href="http://server:port/">http://server:port/</a>.&nbsp; If you use Subversion,
-  you can get the latest code via: <code>svn&nbsp;co&nbsp;http://server:port/svn/Web/trunk</code>
+  you can get the latest code via: <code>svn&nbsp;co&nbsp;http://server:port/svn/Insurrection/trunk</code>
 </p>
 <h3>Features</h3>
 <ul>
@@ -74,17 +74,116 @@
 
 <h3>Project Status</h3>
 <p>
-  The current code is in active use on at least two non-public Subversion servers.&nbsp;
-  This does not mean that the project is complete or stable.&nbsp; Many things
-  have not been cleaned up or as fully supported as I would like.&nbsp; There is
-  also a lack of clean documentation as to how to install the code.&nbsp; This is
-  because, so far, it has always been installed by the same person who it.
+  The current code is in active use on a number non-public Subversion servers.&nbsp;
+  This does not mean that the project is complete but it is relatively stable.&nbsp;
+  Many things have not been cleaned up or as fully supported as I would like.&nbsp;
+  There is also a lack of clean documentation as to how to install the code.&nbsp;
+  This is because, so far, it has always been installed by the same person who wrote it.
 </p>
 <p>
   I have put up a <a href="http://server:port/"><b>demo server</b> at
   <tt>http://server:port/</tt></a> that has the Insurrection code on it so you
-  can see it in action.
+  can see it in action.&nbsp; I have also made some "Browser Shots" that
+  show a small bit of what using Insurrection is like.&nbsp;
+  <a href="#screenshots" onclick="document.getElementById('screenshots').style.display = 'block'; this.innerHTML = ''; return 0;">(Click to view screen shots)</a>
 </p>
+<div id="screenshots" style="display: none;">
+<p>
+  While it is best to actually see Insurrection in action at
+  <a href="http://server:port/"><b>http://server:port/</b></a>, I have put together
+  a few quick snapshots of the system working in my browser:
+</p>
+<p>
+  <a href="screenshots/fullsize/Index1.jpg"><img src="screenshots/Index1.jpg" align="right" alt="screenshot"/></a>The
+  main page is template driven, with the repositories the logged in user has
+  access to being displayed.&nbsp; Annonymous users will only see repositories
+  that have annonymous access enabled.&nbsp; As you can see, each repository gets
+  its own RSS and Atom feed links in addition to a customizable description.&nbsp;
+  Login can be handled via HTTP/SSL or just normal HTTP.&nbsp; The access user
+  name and password is exactly those of Subversion's WebDAV system such that there
+  is no confusion or possibility of them getting out of sync.
+</p>
+<p>
+  RSS and Atom feeds are not restricted to whole repositories.&nbsp; Subtrees and
+  individual files can also be selected for RSS/Atom feeds.&nbsp; The directory feeds
+  can easily be selected during the browsing of the repository.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Root2.jpg"><img src="screenshots/Root2.jpg" align="right" alt="screenshot"/></a>
+  <a href="screenshots/fullsize/Root1.jpg"><img src="screenshots/Root1.jpg" align="right" alt="screenshot"/></a>
+  When browsing the repository, you get a view of the current state of the repository.&nbsp;
+  As you can see in the second screen shot, the repository browser is internally
+  dynamic in that you can expand folders/directories in place.&nbsp; This is done using
+  async requests from the browser and the bandwidth needed is only the minimal XML
+  structure of the information.&nbsp; All formatting is done either via XSLT and/or JavaScript.&nbsp;
+  (In some browsers JavaScript is used in place of XSLT, in others both XSLT
+  JavaScript is used)
+</p>
+<p>
+  The <img src="info.gif" alt="Get revision history icon"/> icon is the button to select the revision history entries
+  of the repository that pertain to that given item.&nbsp; If the item is a directory,
+  the history will include any changes made within that directory tree.&nbsp; If the
+  item is a file, the history will include any revision which updated that file.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Log2.jpg"><img src="screenshots/Log2.jpg" align="right" alt="screenshot"/></a>
+  <a href="screenshots/fullsize/Log1.jpg"><img src="screenshots/Log1.jpg" align="right" alt="screenshot"/></a>
+  Here we got the revision history of "/trunk" from within the Insurrection repository
+  that was being browsed in the screen shots above.&nbsp; The log shows the commit
+  message for each revision and, when clicked on, the details as to what files where
+  added, deleted, modified, etc.&nbsp; The second picture shows what happens after
+  having clicked on revision 264.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Diff1.jpg"><img src="screenshots/Diff1.jpg" align="right" alt="screenshot"/></a>
+  <a href="screenshots/fullsize/Log3.jpg"><img src="screenshots/Log3.jpg" align="right" alt="screenshot"/></a>
+  For each file listed in the revision details, a popup menu is available that
+  lets you select various operations on that file.&nbsp; In this screen shot
+  we are selecting the "Diff from previous" option which shows us the differences
+  from the previous version of the file.&nbsp; The "Patch from previous" would
+  produce a patch file that would be usable to patch the previous version into
+  the new version.&nbsp; The second screen shot shows the HTML diff output.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Annotate1.jpg"><img src="screenshots/Annotate1.jpg" align="right" alt="screenshot"/></a>
+  <a href="screenshots/fullsize/Log4.jpg"><img src="screenshots/Log4.jpg" align="right" alt="screenshot"/></a>
+  One can also select a specific revision that can then be used to diff against
+  elsewhere in the page.&nbsp; Note that this selection is currently on a specific
+  filename.&nbsp; I am going to be working on removing that requirement.
+</p>
+<p>
+  The second screen shot here shows the result of the "annotate" or "blame" feature.&nbsp;
+  It shows the author and revision that the given lines were last modified/added.&nbsp;
+  Thus, if you want to know who last touched a bit of code you can easily do so.&nbsp;
+  Clicking on a revision in the annotate display will get you the revision entry for
+  that revision of the file.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Admin1.jpg"><img src="screenshots/Admin1.jpg" align="right" alt="screenshot"/></a>
+  This is the administrative page for a repository.&nbsp; Users who are defined as
+  admins for a given repository will be able to access this page.&nbsp; From here
+  the administrator can change the repository description, change user access rights,
+  add new users, download a dump/backup of the repository, and configure certain
+  hook features.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Usage2.jpg"><img src="screenshots/Usage2.jpg" align="right" alt="screenshot"/></a>
+  <a href="screenshots/fullsize/Usage1.jpg"><img src="screenshots/Usage1.jpg" align="right" alt="screenshot"/></a>
+  There is also a bandwidth usage report link in the admin page that depends on
+  external usage tools that I have not released yet.&nbsp; Here are two screen shots
+  of the usage pages of the public Insurrection repository.&nbsp; This depends on
+  a number of tools and scripts to produce this result and is, of course, optional
+  and not required for the full functionality of the Insurrection tools.&nbsp; (I
+  just like having such information available to me.)
+</p>
+<br clear="all">
+</div>
 <p>
   I have put together some simple tests of the client-side/browser capabilities
   that the Insurrection system needs.&nbsp; You can try these tests at
