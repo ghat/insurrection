@@ -1,0 +1,31 @@
+#
+# Simple access control file for the Subversion server
+#
+# $Id$
+#
+# This is a computer managed file - do not hand edit!
+#
+
+#
+# Define the admin groups
+#
+[groups]
+Admin = mks
+
+#
+# Define the repository access rights
+#
+
+# The Insurrection Web Tools for Subversion example repository.&nbsp; This contains an export of the Insurrection source code to play with as an example.
+[Web:/]
+* = r
+demo = r
+michael = r
+mks = rw
+
+# A second example repository.
+[example:/]
+* = r
+demo = r
+michael = rw
+mks = rw

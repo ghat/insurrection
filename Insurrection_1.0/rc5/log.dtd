@@ -1,0 +1,32 @@
+<!-- Insurrection Web Tools for Subversion: log.dtd -->
+<!-- Copyright (c) 2004,2005 - Michael Sinz         -->
+<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->
+
+<!-- $Id$ -->
+
+<!-- This is the DTD for the Insurrection log XML -->
+<!-- It is very simular to the DTD of the SVN LOG -->
+
+<!ELEMENT log      (morelog?, logentry*)>
+<!ATTLIST log      repository    CDATA #REQUIRED
+                   path          CDATA #REQUIRED>
+
+<!ELEMENT morelog  EMPTY>
+<!ATTLIST morelog  href          CDATA #REQUIRED>
+
+<!ELEMENT logentry (author, date, paths?, msg?)>
+<!ATTLIST logentry revision      CDATA #REQUIRED>
+
+<!ELEMENT author   (#PCDATA)>
+
+<!ELEMENT date     (#PCDATA)>
+
+<!ELEMENT paths    (path*)>
+
+<!ELEMENT path     (#PCDATA)>
+<!ATTLIST path     action        CDATA #REQUIRED
+                   copyfrom-path CDATA #IMPLIED
+                   copyfrom-rev  CDATA #IMPLIED>
+
+<!ELEMENT msg      (#PCDATA)>
+
