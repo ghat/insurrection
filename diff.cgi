@@ -15,7 +15,7 @@ my $rev1 = &getNumParam($cgi->param('r1'));
 $rev1 = 'HEAD' if (!defined $rev1);
 
 my $rev2 = &getNumParam($cgi->param('r2'));
-$rev2 = "HEAD" if (!defined $rev2);
+$rev2 = 'HEAD' if (!defined $rev2);
 
 ## Get the peg revision to use to find the path
 ## If there is none, use $rev1
@@ -26,7 +26,9 @@ $peg = $rev1 if (!defined $peg);
 my $docURL = &svn_URL();
 
 ## Now, lets get the diff (or at least try to)
-my $cmd = $SVN_CMD . ' diff --non-interactive --no-auth-cache --notice-ancestry -r ' . $rev1 . ':' . $rev2 . ' "' . $docURL . '@' . $peg . '"';
+## NOTE - we don't use --notice-ancestry as it tends
+## to cause confusing diff output for directories
+my $cmd = $SVN_CMD . ' diff --non-interactive --no-auth-cache -r ' . $rev1 . ':' . $rev2 . ' "' . $docURL . '@' . $peg . '"';
 
 my $results;
 if (open(GETDIFF,"$cmd |"))
@@ -35,7 +37,7 @@ if (open(GETDIFF,"$cmd |"))
    close(GETDIFF);
 }
 
-if (defined $results)
+if ((defined $results) && (length($results) > 1))
 {
    ## Ugly - if there was a request to get diff as a patch, we
    ## short-curcuit all of this and just output the headers as
@@ -95,6 +97,13 @@ if (defined $results)
 
    ## Style the diff line add/delete sections
    $results =~ s|(?<=[\n>])(\@\@[^<\n]*)|<div class="diff3">$1</div>|go;
+
+   ## Add a link at the top to download a "patch" file
+   $results = '<a class="difftitle" href="?Insurrection=diff&amp;getpatch=1&amp;r=' . $peg . '&amp;r1=' . $rev1 . '&amp;r2=' . $rev2 . '">'
+            . 'Download patch file for revision ' . $rev1 . ' to ' . $rev2 . '<br/>'
+            . 'of ' . &svn_XML_Escape($cgi->path_info)
+            . '</a>'
+            . $results;
 }
 else
 {
@@ -102,12 +111,6 @@ else
 }
 
 &svn_HEADER('diff ' . $rev1 . ':' . $rev2 . ' - ' . $cgi->path_info);
-
-## Put a link at the top to get the results as a patch
-print '<a class="difftitle" href="?Insurrection=diff&amp;getpatch=1&amp;r1=' , $rev1 , '&amp;r2=' , $rev2 , '">'
-    , 'Download patch file for revision ' , $rev1 , ' to ' , $rev2 , '<br/>'
-    , 'of ' , &svn_XML_Escape($cgi->path_info)
-    , '</a>';
 
 print $results;
 
