@@ -17,11 +17,16 @@ $rev1 = 'HEAD' if (!defined $rev1);
 my $rev2 = &getNumParam($cgi->param('r2'));
 $rev2 = "HEAD" if (!defined $rev2);
 
+## Get the peg revision to use to find the path
+## If there is none, use $rev1
+my $peg = &getNumParam($cgi->param('r'));
+$peg = $rev1 if (!defined $peg);
+
 ## Get the local document URL
 my $docURL = &svn_URL();
 
 ## Now, lets get the diff (or at least try to)
-my $cmd = $SVN_CMD . ' diff --non-interactive --no-auth-cache --notice-ancestry "' . $docURL . '@' . $rev1 . '" "' . $docURL . '@' . $rev2 . '"';
+my $cmd = $SVN_CMD . ' diff --non-interactive --no-auth-cache --notice-ancestry -r ' . $rev1 . ':' . $rev2 . ' "' . $docURL . '@' . $peg . '"';
 
 my $results;
 if (open(GETDIFF,"$cmd |"))

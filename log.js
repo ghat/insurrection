@@ -332,29 +332,29 @@ function detailClick(repo,action,path,rev,current)
 
 				if (action == 'M')
 				{
-					addLink(dDiff,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&r2=' + rev + '&r1=' + (rev-1),'Diff from previous');
-					addLink(dPatch,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&getpatch=1&r2=' + rev + '&r1=' + (rev-1),'Patch from previous');
+					addLink(dDiff,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&r=' + rev + '&r2=' + rev + '&r1=' + (rev-1),'Diff from previous');
+					addLink(dPatch,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&getpatch=1&r=' + rev + '&r2=' + rev + '&r1=' + (rev-1),'Patch from previous');
 				}
 
 				if (diffPath == fullpath)
 				{
 					if (diffRev < rev)
 					{
-						addLink(dDiff,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&r1=' + diffRev + '&r2=' + rev,'Diff from selected revision: ' + diffRev);
-						addLink(dPatch,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&getpatch=1&r1=' + diffRev + '&r2=' + rev,'Patch from selected revision: ' + diffRev);
+						addLink(dDiff,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&r=' + rev + '&r1=' + diffRev + '&r2=' + rev,'Diff from selected revision: ' + diffRev);
+						addLink(dPatch,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&getpatch=1&r=' + rev + '&r1=' + diffRev + '&r2=' + rev,'Patch from selected revision: ' + diffRev);
 					}
 
 					if (diffRev > rev)
 					{
-						addLink(dDiff,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&r2=' + diffRev + '&r1=' + rev,'Diff to selected revision: ' + diffRev);
-						addLink(dPatch,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&r2=' + diffRev + '&getpatch=1&r1=' + rev,'Patch to selected revision: ' + diffRev);
+						addLink(dDiff,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&r=' + rev + '&r2=' + diffRev + '&r1=' + rev,'Diff to selected revision: ' + diffRev);
+						addLink(dPatch,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&getpatch=1&r=' + rev + '&r2=' + diffRev + '&r1=' + rev,'Patch to selected revision: ' + diffRev);
 					}
 				}
 
 				if ((rev != current) && ((diffPath != fullpath) || (diffRev != current)))
 				{
-					addLink(dDiff,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&r2=' + current + '&r1=' + rev,'Diff to revision ' + current);
-					addLink(dPatch,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&getpatch=1&r2=' + current + '&r1=' + rev,'Patch to revision ' + current);
+					addLink(dDiff,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&r=' + rev + '&r2=' + current + '&r1=' + rev,'Diff to revision ' + current);
+					addLink(dPatch,Insurrection.SVN_URL + fullpath + '?Insurrection=diff&getpatch=1&r=' + rev + '&r2=' + current + '&r1=' + rev,'Patch to revision ' + current);
 				}
 
 				if (dDiff.childNodes.length > 0)
@@ -384,8 +384,8 @@ function detailClick(repo,action,path,rev,current)
 			if (rev > 1)
 			{
 				d1 = newSegment(d2);
-				addLink(d1,Insurrection.SVN_URL + repo + '?Insurrection=diff&r2=' + rev + '&r1=' + (rev-1),'Changeset for this revision');
-				addLink(d1,Insurrection.SVN_URL + repo + '?Insurrection=diff&getpatch=1&r2=' + rev + '&r1=' + (rev-1),'Patchset for this revision');
+				addLink(d1,Insurrection.SVN_URL + repo + '?Insurrection=diff&r=' + rev + '&r2=' + rev + '&r1=' + (rev-1),'Changeset for this revision');
+				addLink(d1,Insurrection.SVN_URL + repo + '?Insurrection=diff&getpatch=1&r=' + rev + '&r2=' + rev + '&r1=' + (rev-1),'Patchset for this revision');
 			}
 
 		}
