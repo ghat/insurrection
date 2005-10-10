@@ -20,7 +20,11 @@ require 'admin.pl';
 ## Get the real document URL
 my $docURL = &svn_URL();
 
-my $getls = $SVN_CMD . ' ls --non-interactive --no-auth-cache --xml ' . $docURL;
+## Get the optional revision to do the LS at
+my $peg = &getNumParam($cgi->param('r'));
+$peg = 'HEAD' if (!defined $peg);
+
+my $getls = $SVN_CMD . ' ls --non-interactive --no-auth-cache --xml -r ' . $peg . ' ' . $docURL . '@' . $peg;
 
 my $pathInfo = $cgi->path_info;
 my ($repo,$repo_path) = ($pathInfo =~ m|^(/[^/]+)(.*?)/$|o);
