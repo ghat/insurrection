@@ -1,0 +1,191 @@
+##
+## $Id$
+## Copyright 2004,2005 - Michael Sinz
+##
+
+AuthUserFile /home/subversion/authentication/passwords
+AuthName "MKSoft Insurrection Repository"
+AuthType Basic
+
+## We want the index.cgi to handle the directory by default...
+DirectoryIndex index.cgi
+
+## Note that I list each file specifically such that
+## there is less chance of running a CGI that was not
+## placed here on purpose.  Also, there is nothing that
+## requires that the CGI scripts end in ".cgi" - I
+## am just doing that to make it easy to see where the
+## CGIs are vs non-CGIs.  This is most noticeable in the
+## CGIs that deal with log processing, etc.
+
+## The main index file is generally available and will
+## show only elements that are available without login.
+<Files ~ "^index\.cgi$">
+	SetHandler cgi-script
+</Files>
+
+## The *.template files are not to be served directly
+## so exclude them here
+<Files ~ "\.template$">
+	Deny from all
+</Files>
+
+## These CGIs require a login in order to validate the
+## user's specific access rights - we can not just check
+## if the user as access to the repository via the
+## above method.
+<Files ~ "^(admin|auth_index|bandwidth|dump|manage|password)\.cgi$">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+## This is a CGI just to fill in some information into
+## the template.  It is only called from the index template
+## and thus really is just a site-specific thing.  I
+## use it to make the project page work for both
+## the local test server and the public servers.
+<Files ~ "^project\.cgi$">
+	SetHandler cgi-script
+</Files>
+
+## These CGIs can be used without login depending on
+## the repository being requested in the path extra
+## and the access rights defined.  We let the Subversion
+## mod_authz_svn take care of the path check before
+## we proxy to here.  We then just validate in these
+## scripts that we have been proxied.
+<Files ~ "^(atom|blame|diff|get|log|ls|rss)\.cgi$">
+	SetHandler cgi-script
+</Files>
+
+## For some browsers, XSLT support is either not working
+## correctly or not working at all.  What this CGI does
+## is to generate the SVN Index base page as HTML and then
+## let the browser and JavaScript via XMLHttp do the
+## real work.  This works in conjunction with the
+## rewrite rule below that does the user agent checking.
+<Files ~ "^broken_xslt\.cgi$">
+	SetHandler cgi-script
+</Files>
+
+## You need to have mod-rewrite enabled in apache
+RewriteEngine On
+
+## Since we depend on HTTP_HOST being a reasonable value
+## in some of the other request, we first filter all
+## requests through here.  Basically, we check that
+## the HTTP_HOST is reasonable and if not, fail the
+## request right here, right now.
+## First we check if the host name has a slash in it.
+## Then we check that the host name has a matching .GIF image.
+## Note that the HTTP_HOST may have the port number
+## on it, so the file name may need to have to be in both
+## forms.
+## This is how we then configure what host name or names
+## we want to support here.  If it has a GIF file
+## then it is a valid host.  If not, out you go...
+RewriteCond %{HTTP_HOST}	"^.*/.*$"	[OR]
+RewriteCond /home/subversion/www/%{HTTP_HOST}.gif !-f
+RewriteRule ^(.*)$	""	[F,L]
+
+## Some custom logo processing based on the host that
+## we are acting as.  We know it exists otherwise
+## the above safety check rule would have caught us.
+## Note that we do this internally (PT) such that
+## the user does not know this exists.
+RewriteRule	^Logo.gif	"/%{HTTP_HOST}.gif"	[PT,L]
+
+## Simple rule to support having intex.html and project.html
+## actually be cgi scripts.
+RewriteRule	^(index|project).html$	/$1.cgi	[PT,L]
+
+## We use a local proxy operation such that we can
+## publicly expose only the normal Subversion paths
+## with the only difference being CGI query strings.
+## We also depend on the rewrites to provide the
+## full path to the repository.  Thus, all of the
+## ^svn/ bits would need to contain the prefix path
+## from this directory into the base of the repositories.
+## Note that we also require proxy support to
+## make this work reasonably transparently.  A
+## redirect would have worked but then would not get
+## the benefit of the authentication from mod_authz_svn
+## that was already done.  The CGIs try to notice this
+## proxy behavior and when proxied to via this mechanism
+## do not do their own authentication.
+##
+## Note that we only look at GET access methods.
+## All other methods are reserver for mod_dav_svn.
+##
+## This is one of the reasons the HTTP_HOST needs
+## to be filtered - otherwise these rules could
+## be used to jump elsewhere on the net by providing
+## incorrect HTTP_HOST values.
+##
+## NOTE - Currently a bug in Apache/mod_rewrite
+## has bugs with certain characters in the URL.
+## http://issues.apache.org/bugzilla/show_bug.cgi?id=34602
+##
+## The rewrite/proxy we do here specifically tries to get
+## around this problem by putting the URI into a CGI parameter
+## and not the path_info and then doing some re-parsing with
+## the understanding that the Path parameter is always the
+## last parameter before the end of the URI.  Ugly but it works...
+RewriteCond %{REQUEST_METHOD} GET	[OR]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteCond %{QUERY_STRING} Insurrection=(admin|atom|bandwidth|blame|diff|dump|get|log|ls|rss)
+RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&HTTPS=%{HTTPS}&Path=$1"	[P,L]
+
+## What a trick - to get the broken browsers to work.
+## Now the need XMLHttp, but the don't need the XSLT
+## to work.
+##
+## Note that the XSLT of Safari is almost working but
+## not quite.  So it is listed here.
+##
+## What we do here is proxy the request to a simple
+## CGI the makes the base HTML framework and kicks off
+## a client side script that does the rest.
+##
+## Note that if someone expressly wants XML, the
+## XMLHttp=1 attribute is needed.  This is used by the
+## XMLHttp object in the JavaScript to make sure that
+## it does get the XML version even when the browser
+## does not support XML/XSLT.
+##
+## Note that we would like to have the real XSLT working
+## as there are some things that are not available
+## without it *and* the bandwidth and server load are
+## much lower.  The good thing is that the top two
+## browser technologies do work correctly enough to
+## not need this hack.  That ends up covering 98% of
+## all wed users.  (That is Mozilla/Firefox and IE)
+##
+## Again, with the same hack to make this work the way I want...
+RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{QUERY_STRING} !XMLHttp=1
+RewriteCond %{HTTP_USER_AGENT} Opera		[OR]
+RewriteCond %{HTTP_USER_AGENT} Safari		[OR]
+RewriteCond %{HTTP_USER_AGENT} Konqueror
+RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/broken_xslt.cgi?HTTPS=%{HTTPS}&Path=$1"	[P,L]
+
+## The following rule is to catch the directory XML listing
+## request and not let mod_dav_svn answer but rather our own
+## CGI which will produce a slightly enhanced output.  This
+## rule is not required, but if it is used, the directory
+## listings will include revision date/number/author for
+## each individual entry.
+##
+## If this rule is not used, you can still get the enhanced
+## listings via the ?Insurrection=ls CGI option (which is
+## basically what this rule does)
+##
+## !!!NOTE!!!  If this rule runs before the broken XSLT
+##             browser test rule, the enhanced listing
+##             CGI will implement the work around.
+##             However, this is not the most bandwidth
+##             friendly way - so keeping this rule after
+##             the broken XSLT hack will solve that.
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/ls.cgi?%{QUERY_STRING}&Insurrection=ls&HTTPS=%{HTTPS}&Path=$1"	[P,L]
+
