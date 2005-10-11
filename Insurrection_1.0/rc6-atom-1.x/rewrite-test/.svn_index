@@ -1,0 +1,40 @@
+<h3>Apache <a href="test.html">mod_rewrite Tests</a></h3>
+<p>
+  In the <a href="http://www.sinz.org/Michael.Sinz/Insurrection/">Insurrection</a> system,
+  I have made use of the Apache <a href="http://httpd.apache.org/docs-2.0/mod/mod_rewrite.html">mod_rewrite</a>
+  to direct certain operations to other internal CGIs.&nbsp; Part of my test setup has a directory
+  within Subversion that is full of files with various 7-bit ASCII characters.&nbsp;  A number of the
+  cases did not work correctly.&nbsp; At first I thought it had to be something I did wrong and
+  worked on finding all escaping issues and URL mishandling within my code.&nbsp; However, after
+  doing all of that, I finally put together this <a href="/rewrite-test/test.html">test setup</a> that shows how
+  certain characters cause rather drastic changes to the passed in URL that otherwise would work
+  if sent directly to the initial intended target.&nbsp; (I have not yet
+  started on the work to support full UTF-8 due to the problems I had run into so far.)
+</p>
+<h3>Apache 2.0.54 mod_rewrite problems</h3>
+<p>
+  All of this was tested with the latest Apache, version 2.0.54, compiled on various Linux platforms.
+</p>
+<p>
+  What I have found is that the redirect rewrite rules cause URL encoded characters within the parameters
+  to be escaped again.&nbsp; That is, the "<b>%</b>" character is replaced with a "<b>%25</b>" which means
+  that if I had a, say, "<b>%20</b>" in the parameter, it would end up being passed as "<b>%2520</b>" which
+  is not the same thing.&nbsp; There are also a problem with the escaped character "<b>%3F</b>"
+  which causes the whole URL to be very confused when it is within the path of the URL.&nbsp;
+  Thus, all escaped characters are passed incorrectly in the CGI parameters and one of them also
+  fails in the URL location.
+</p>
+<p>
+  The proxy rewrite rule works a bit better in that it does not double escape the parameters but there are
+  many more cases where it causes drastic failure of the request.&nbsp; For example, a URL with "<b>%20</b>"
+  in it will get broken at that point as if it was a raw space and the rest of the URL path is lost.&nbsp;
+  The escaped characters that cause the proxy to fail are: "<b>%20</b>", "<b>%23</b>", "<b>%25</b>", and "<b>%3F</b>"
+</p>
+<p>
+  The <a href="/rewrite-test/test.html">test setup</a> here is rather simple and consists of 4 files, the
+  <a href="test.html">test.html</a> frameset, the <a href="control.html">control.html</a> control frame,
+  the <a href="test.cgi">test.cgi</a> CGI used for all of the test frames,
+  and the <a href=".htaccess">.htaccess</a> file that describes the rewrite rules.&nbsp;
+  There are also 3 images that are used to identify each of the frames within the browser.
+</p>
+
