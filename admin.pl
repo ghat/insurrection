@@ -644,10 +644,13 @@ sub unlockAccessFile()
 #
 sub loadAccessFile()
 {
-   open DATA, "<$AccessFile" or die "Can not read file $AccessFile";
-   my @lines = <DATA>;
-   close DATA;
-   chomp @lines;
+   my @lines;
+   if (open(DATA,"<$AccessFile"))
+   {
+      @lines = <DATA>;
+      close DATA;
+      chomp @lines;
+   }
 
    my %empty;
    %groupComments = %empty;
@@ -699,6 +702,31 @@ sub loadAccessFile()
             ${$groupUsers{$section}}{$user} = $access;
             ${$usersGroup{$user}}{$section} = $access;
          }
+      }
+   }
+
+   ## Special case - if we hace no lines in the access file
+   ## or it does not exist, just put all repositories as * = r
+   if (@lines == 0)
+   {
+      if (opendir(REPOS,$SVN_BASE))
+      {
+         foreach my $repo (grep(/^[a-zA-Z][-_.a-zA-Z0-9]+$/,readdir(REPOS)))
+         {
+            ## Check if there is a hooks directory
+            if (opendir(TESTHOOK,"$SVN_BASE/$repo/hooks"))
+            {
+               closedir(TESTHOOK);
+
+               ## Yes, so this looks like a repository
+               my $section = "$repo:/";
+               $groupComments{$section} = "Repository for $repo";
+               %{$groupUsers{$section}} = %empty;
+               ${$groupUsers{$section}}{'*'} = 'r';
+               ${$usersGroup{'*'}}{$section} = 'r';
+            }
+         }
+         closedir(REPOS);
       }
    }
 }
