@@ -82,6 +82,15 @@ form
   background-repeat: no-repeat;
 }
 
+.footer a {color: black;}
+
+.footer img
+{
+  border: 0px;
+  float: right;
+  margin-left: 1em;
+}
+
 .svn
 {
   margin-top: 0.3em;

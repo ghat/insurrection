@@ -66,6 +66,8 @@
   <xsl:template name="previewicon-path">/preview.gif</xsl:template>
   <xsl:template name="linkicon-path">/link.gif</xsl:template>
   <xsl:template name="aticon-path">/at.gif</xsl:template>
+  <xsl:template name="xmlicon-path">/valid-xml10.png</xsl:template>
+  <xsl:template name="htmlicon-path">/valid-html401.png</xsl:template>
 
   <!-- ******************************************************************************************************************* -->
 
@@ -116,6 +118,33 @@
     <link rel="service.feed" type="application/x.atom+xml" href="?Insurrection=atom" title="The Atom feed for this directory in the repository"/>
   </xsl:template>
 
+  <xsl:template name="footer-common">
+    <xsl:text>Powered by </xsl:text>
+    <a title="Insurrection Web Tools for Subversion" href="http://svn.code-host.net/project.html" target="_new">Insurrection</a>
+    <xsl:text> &amp; </xsl:text>
+    <a title="Subversion: The Version Control System" href="http://subversion.tigris.org/" target="_new">Subversion</a>
+  </xsl:template>
+
+  <xsl:template name="footer">
+    <div class="footer" title="$Id$">
+      <a title="Valid XML 1.0!" href="http://validator.w3.org/check?uri=referer">
+        <xsl:element name="img">
+          <xsl:attribute name="src">
+            <xsl:call-template name="xmlicon-path"/>
+          </xsl:attribute>
+          <xsl:attribute name="alt">Valid XML 1.0!</xsl:attribute>
+        </xsl:element>
+      </a>
+      <xsl:call-template name="footer-common"/>
+    </div>
+  </xsl:template>
+
+  <xsl:template name="footer-noXML">
+    <div class="footer" title="$Id$">
+      <xsl:call-template name="footer-common"/>
+    </div>
+  </xsl:template>
+
   <!-- ******************************************************************************************************************* -->
   <!-- This is the template for the SVN index browsing -->
   <xsl:template match="svn">
@@ -140,13 +169,7 @@
               <td id="content">
                 <xsl:call-template name="banner"/>
                 <xsl:apply-templates select="index"/>
-                <div class="footer" title="$Id$">
-                  <a title="Valid XML 1.0!" href="http://validator.w3.org/check?uri=referer">
-                    <img style="margin-left: 1em;" align="right" border="0" src="/valid-xml10.png" alt="Valid XML 1.0!"/>
-                  </a>
-                  <xsl:text>Powered by Insurrection &amp; Subversion </xsl:text>
-                  <xsl:value-of select="@version"/>
-                </div>
+                <xsl:call-template name="footer"/>
               </td>
               <xsl:call-template name="right-side"/>
             </tr>
@@ -664,12 +687,7 @@
                 <!-- If we have a morelog tag, we need to provide a way to get it -->
                 <xsl:apply-templates select="morelog"/>
 
-                <div class="footer" title="$Id$">
-                  <a title="Valid XML 1.0!" href="http://validator.w3.org/check?uri=referer">
-                    <img style="margin-left: 1em;" align="right" border="0" src="/valid-xml10.png" alt="Valid XML 1.0!"/>
-                  </a>
-                  <xsl:text>&#160;</xsl:text>
-                </div>
+                <xsl:call-template name="footer"/>
               </td>
               <xsl:call-template name="right-side"/>
             </tr>
@@ -1039,14 +1057,7 @@
                   </xsl:element>
                 </div>
                 <xsl:apply-templates select="item"/>
-                <div class="footer" title="$Id$">
-                  <!-- Do we really want to say RSS is valid XML since it has no DTD?
-                  <a title="Valid XML 1.0!" href="http://validator.w3.org/check?uri=referer">
-                    <img style="margin-left: 1em;" align="right" border="0" src="/valid-xml10.png" alt="Valid XML 1.0!"/>
-                  </a>
-                  -->
-                  <xsl:text>&#160;</xsl:text>
-                </div>
+                <xsl:call-template name="footer-noXML"/>
               </td>
               <xsl:call-template name="right-side"/>
             </tr>
@@ -1158,14 +1169,7 @@
                   </xsl:element>
                 </div>
                 <xsl:apply-templates select="atom:entry"/>
-                <div class="footer" title="$Id$">
-                  <!-- Do we really want to say Atom is valid XML since it has no DTD?
-                  <a title="Valid XML 1.0!" href="http://validator.w3.org/check?uri=referer">
-                    <img style="margin-left: 1em;" align="right" border="0" src="/valid-xml10.png" alt="Valid XML 1.0!"/>
-                  </a>
-                  -->
-                  <xsl:text>&#160;</xsl:text>
-                </div>
+                <xsl:call-template name="footer-noXML"/>
               </td>
               <xsl:call-template name="right-side"/>
             </tr>
