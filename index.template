@@ -44,7 +44,7 @@
   that part of the repository.
 </p>
 <p>
-  The Atom feed has been validated to conform to the current
+  The Atom feed has been validated to conform to the Atom "0.3"
   <a href="http://www.ietf.org/internet-drafts/draft-ietf-atompub-protocol-04.txt">IETF draft</a>
   standard.
 </p>
