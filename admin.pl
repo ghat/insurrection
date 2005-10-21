@@ -459,7 +459,7 @@ sub checkAuthMode()
       ## next to check if it is "self-referential" and thus already
       ## has cleared the main security checks)
       if ((($ENV{'REMOTE_ADDR'} eq $ENV{'SERVER_ADDR'})
-         && ($ENV{'HTTP_X_FORWARDED_HOST'} =~ m/^(.*, )*$ENV{'HTTP_HOST'}$/))
+         && ($ENV{'HTTP_X_FORWARDED_HOST'} =~ m/^(.*, )*\Q$ENV{'HTTP_HOST'}\E$/))
          && (length($path) > 2)
          && (defined $cgi->param('Insurrection'))
          && ($cgi->param('Insurrection') eq $type))
