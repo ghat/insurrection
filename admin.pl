@@ -453,8 +453,13 @@ sub checkAuthMode()
       ## and now all we need to do is trust it.  In all other cases
       ## Note: This security can be broken if someone else puts in
       ## a proxy on the same server and sets it up just right...
+      ## (Note, to handle HTTP_X_FORWARDED_HOST correctly we need
+      ## deal with multiple entries - we assume that the last entry
+      ## is that added by the current server - which is what we
+      ## next to check if it is "self-referential" and thus already
+      ## has cleared the main security checks)
       if ((($ENV{'REMOTE_ADDR'} eq $ENV{'SERVER_ADDR'})
-         && ($ENV{'HTTP_HOST'} eq $ENV{'HTTP_X_FORWARDED_HOST'}))
+         && ($ENV{'HTTP_X_FORWARDED_HOST'} =~ m/^(.*, )*$ENV{'HTTP_HOST'}$/))
          && (length($path) > 2)
          && (defined $cgi->param('Insurrection'))
          && ($cgi->param('Insurrection') eq $type))
