@@ -137,7 +137,7 @@ if ((defined $rpath)
              , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
              , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
              , '<!DOCTYPE log SYSTEM "' , &svn_HTTP() , $SVN_URL_PATH , 'log.dtd">' , "\n"
-             , '<log repository="' , &svn_XML_Escape($rpath) , '" path="' , &svn_XML_Escape($opath) , '">' , "\n";
+             , '<log repository="' , &svn_XML_Escape($rpath) , '" path="' , &svn_XML_Escape($opath) , '" editlog="' , &isRevpropChange($rpath) , '">' , "\n";
 
          ## Since we always include the last entry as the first entry on the
          ## next page, we can not support next pages with $maxEntries == 1

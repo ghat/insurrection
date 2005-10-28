@@ -451,6 +451,47 @@ td.details
   font-size: 9pt;
 }
 
+.editlog
+{
+  float: right;
+  margin-left: 3px;
+  margin-bottom: 2px;
+}
+
+.logedit
+{
+  margin-top: 3px;
+  border-top: 1px black solid;
+  padding-top: 3px;
+  display: none;
+}
+
+.savelog, .previewlog, .cancellog
+{
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.propedit
+{
+  margin-left: 3px;
+  background: rgb(95%,95%,95%);
+  border: 1px rgb(50%,50%,50%) solid;
+  padding: 4px;
+}
+
+.propedit:hover
+{
+  background: rgb(90%,90%,90%);
+}
+
+.propedit:focus
+{
+  border: 2px black solid;
+  padding: 3px;
+  background: rgb(95%,95%,85%);
+}
+
 .morelog
 {
   text-align: right;

@@ -34,7 +34,7 @@ DirectoryIndex index.cgi
 ## user's specific access rights - we can not just check
 ## if the user as access to the repository via the
 ## above method.
-<Files ~ "^(admin|auth_index|bandwidth|dump|manage|password)\.cgi$">
+<Files ~ "^(admin|auth_index|bandwidth|dump|manage|password|savelog)\.cgi$">
 	SetHandler cgi-script
 	require valid-user
 </Files>
@@ -133,7 +133,7 @@ RewriteRule	^(index|project).html$	/$1.cgi	[PT,L]
 ## last parameter before the end of the URI.  Ugly but it works...
 RewriteCond %{REQUEST_METHOD} GET	[OR]
 RewriteCond %{REQUEST_METHOD} POST
-RewriteCond %{QUERY_STRING} Insurrection=(admin|atom|bandwidth|blame|diff|dump|get|log|ls|rss)
+RewriteCond %{QUERY_STRING} Insurrection=(admin|atom|bandwidth|blame|diff|dump|get|log|ls|rss|savelog)
 RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&HTTPS=%{HTTPS}&Path=$1"	[P,L]
 
 ## What a trick - to get the broken browsers to work.

@@ -63,6 +63,7 @@
   <xsl:template name="adminicon-path">/admin.gif</xsl:template>
   <xsl:template name="editicon-path">/edit.gif</xsl:template>
   <xsl:template name="saveicon-path">/save.gif</xsl:template>
+  <xsl:template name="cancelicon-path">/cancel.gif</xsl:template>
   <xsl:template name="previewicon-path">/preview.gif</xsl:template>
   <xsl:template name="linkicon-path">/link.gif</xsl:template>
   <xsl:template name="aticon-path">/at.gif</xsl:template>
@@ -817,9 +818,93 @@
             </span>
           </span>
           <div class="logmsg">
-            <xsl:call-template name="lf2br">
-              <xsl:with-param name="StringToTransform" select="msg"/>
-            </xsl:call-template>
+            <xsl:if test="/log/@editlog = 1">
+              <xsl:element name="img">
+                <xsl:attribute name="src">
+                  <xsl:call-template name="editicon-path"/>
+                </xsl:attribute>
+                <xsl:attribute name="class">editlog</xsl:attribute>
+                <xsl:attribute name="alt">Edit log message</xsl:attribute>
+                <xsl:attribute name="title">Edit log message</xsl:attribute>
+                <xsl:attribute name="onclick">
+                  <xsl:text>editLog(this,</xsl:text>
+                  <xsl:value-of select="@revision"/>
+                  <xsl:text>);</xsl:text>
+                </xsl:attribute>
+              </xsl:element>
+              <xsl:element name="div">
+                <xsl:attribute name="id">
+                  <xsl:text>Log:</xsl:text>
+                  <xsl:value-of select="@revision"/>
+                </xsl:attribute>
+                <xsl:call-template name="lf2br">
+                  <xsl:with-param name="StringToTransform" select="msg"/>
+                </xsl:call-template>
+              </xsl:element>
+              <xsl:element name="div">
+                <xsl:attribute name="id">
+                  <xsl:text>LogEdit:</xsl:text>
+                  <xsl:value-of select="@revision"/>
+                </xsl:attribute>
+                <xsl:attribute name="class"><xsl:text>logedit</xsl:text></xsl:attribute>
+                <xsl:element name="textarea">
+                  <xsl:attribute name="id">
+                    <xsl:text>LogEd:</xsl:text>
+                    <xsl:value-of select="@revision"/>
+                  </xsl:attribute>
+                  <xsl:attribute name="class">propedit</xsl:attribute>
+                  <xsl:attribute name="title">Log message editor</xsl:attribute>
+                  <xsl:attribute name="cols">70</xsl:attribute>
+                  <xsl:attribute name="rows">8</xsl:attribute>
+                  <xsl:attribute name="wrap">on</xsl:attribute>
+                </xsl:element>
+                <br/>
+                <xsl:element name="img">
+                  <xsl:attribute name="src">
+                    <xsl:call-template name="previewicon-path"/>
+                  </xsl:attribute>
+                  <xsl:attribute name="class">previewlog</xsl:attribute>
+                  <xsl:attribute name="alt">Preview log message</xsl:attribute>
+                  <xsl:attribute name="title">Preview log message</xsl:attribute>
+                  <xsl:attribute name="onclick">
+                    <xsl:text>previewLog(</xsl:text>
+                    <xsl:value-of select="@revision"/>
+                    <xsl:text>);</xsl:text>
+                  </xsl:attribute>
+                </xsl:element>
+                <xsl:element name="img">
+                  <xsl:attribute name="src">
+                    <xsl:call-template name="saveicon-path"/>
+                  </xsl:attribute>
+                  <xsl:attribute name="class">savelog</xsl:attribute>
+                  <xsl:attribute name="alt">Save log message</xsl:attribute>
+                  <xsl:attribute name="title">Save log message</xsl:attribute>
+                  <xsl:attribute name="onclick">
+                    <xsl:text>saveLog(</xsl:text>
+                    <xsl:value-of select="@revision"/>
+                    <xsl:text>);</xsl:text>
+                  </xsl:attribute>
+                </xsl:element>
+                <xsl:element name="img">
+                  <xsl:attribute name="src">
+                    <xsl:call-template name="cancelicon-path"/>
+                  </xsl:attribute>
+                  <xsl:attribute name="class">cancellog</xsl:attribute>
+                  <xsl:attribute name="alt">Cancel log message edit</xsl:attribute>
+                  <xsl:attribute name="title">Cancel log message edit</xsl:attribute>
+                  <xsl:attribute name="onclick">
+                    <xsl:text>cancelLog(</xsl:text>
+                    <xsl:value-of select="@revision"/>
+                    <xsl:text>);</xsl:text>
+                  </xsl:attribute>
+                </xsl:element>
+              </xsl:element>
+            </xsl:if>
+            <xsl:if test="not(/log/@editlog = 1)">
+              <xsl:call-template name="lf2br">
+                <xsl:with-param name="StringToTransform" select="msg"/>
+              </xsl:call-template>
+            </xsl:if>
           </div>
         </xsl:element>
 

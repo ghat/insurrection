@@ -32,13 +32,16 @@ function toggle(rev)
 	var div=getDetail(rev);
 	if (div)
 	{
-		if (div.style.display == "none")
+		if (!div.editButton)
 		{
-			div.style.display = "";
-		}
-		else
-		{
-			div.style.display = "none";
+			if (div.style.display == "none")
+			{
+				div.style.display = "";
+			}
+			else
+			{
+				div.style.display = "none";
+			}
 		}
 	}
 }
@@ -576,5 +579,189 @@ function SetCookie(name, value)
 	var CookieExpires = '; expires=' + Expires.toGMTString();
 
     document.cookie = name + '=' + escape(value) + CookieExpires + '; path=/';
+}
+
+/*
+ * Start the editing process for a given log message.
+ * This displays the textarea that will be used for the
+ * edit work and hides the edit button since we are now
+ * in active editing mode.  We also read the log message
+ * from the <div> that it is within in order that we
+ * start with the same message as was being displayed.
+ * (less overhead to the server)
+ */
+function editLog(edit,rev)
+{
+	// This ugly little thing here is to force the other click
+	// that is going to be registered to show the list of paths
+	// for this revision.  This way the log editing will be
+	// done with the revisions showing...
+	var details = getDetail(rev);
+	details.style.display = '';
+
+	// remember the edit button and hide it...
+	details.editButton = edit;
+	edit.style.display = 'none';
+
+	// Get our log message since we are going to edit it...
+	// This lets the browser deal with correct scaping of the nodes
+	var log = document.getElementById('Log:' + rev);
+
+	var t = log.firstChild;
+	var msg = '';
+	while (t)
+	{
+		if (t.nodeName == '#text')
+		{
+			msg += t.nodeValue;
+		}
+		else
+		{
+			msg += "\n";
+		}
+		t = t.nextSibling;
+	}
+
+	// Set up the edit textarea with the current log message
+	var ed = document.getElementById('LogEd:' + rev);
+	ed.value = msg;
+
+	// remember to save the original in order to support cancel
+	ed.original = msg + '';
+
+	document.getElementById('LogEdit:' + rev).style.display='block';
+}
+
+/*
+ * Take the msg string and put it into the log message
+ * display for the given revision.  This converts any "\n"
+ * in the string into "<br/>" HTML/DOM elements.
+ */
+function showLog(rev,msg)
+{
+	var log = document.getElementById('Log:' + rev);
+	log.innerHTML = '';	// Cear out the old log...
+
+	// start putting the message into the log element
+	var i;
+	while((i = msg.indexOf("\n")) >= 0)
+	{
+		if (i > 0)
+		{
+			log.appendChild(document.createTextNode(msg.substr(0,i)));
+		}
+		msg = msg.substr(i+1);
+		log.appendChild(document.createElement('br'));
+	}
+	if (msg.length > 0)
+	{
+		log.appendChild(document.createTextNode(msg));
+	}
+}
+
+/*
+ * Show what we have been editing in the normal log view area
+ * as a preview of what the real thing will look like.
+ */
+function previewLog(rev)
+{
+	// Get the message and start putting it into the log
+	showLog(rev,document.getElementById('LogEd:' + rev).value);
+}
+
+/*
+ * End the editing - hides the edit textarea and displays
+ * the edit button again.
+ */
+function endEdit(rev)
+{
+	var details = getDetail(rev);
+	details.style.display = '';
+
+	// remember the edit button and hide it...
+	details.editButton.style.display = '';
+	details.editButton = null;
+
+	// Hide the edit area
+	document.getElementById('LogEdit:' + rev).style.display = 'none';
+}
+
+/*
+ * Cancel the log edit by restoring the original log message
+ * and ending the edit state for this revision.
+ */
+function cancelLog(rev)
+{
+	// Revert to the value before the edit...
+	showLog(rev,document.getElementById('LogEd:' + rev).original);
+
+	// And end the edit...
+	endEdit(rev);
+}
+
+/*
+ * Start the "save" operation for the edited log message.
+ * This checks to see if any changes have been made and
+ * if there are no changes it acts just like a cancel.
+ * (No server traffic if there is no actual content change)
+ */
+function saveLog(rev)
+{
+	// Hide the edit area as we are now "down" editing
+	document.getElementById('LogEdit:' + rev).style.display = 'none';
+
+	// Now, lets get the XMLHTTP object
+	var details = getDetail(rev);
+	details.xml = getXMLHTTP();
+
+	var ed = document.getElementById('LogEd:' + rev);
+	if (ed.value == ed.original)
+	{
+		// No change so just cancel the thing...
+		cancelLog(rev);
+	}
+	else
+	{
+		if (details.xml)
+		{
+			details.xml.onreadystatechange = function() { saveLogCheck(rev); };
+			details.xml.open("POST",'?Insurrection=savelog',true);
+			details.xml.send('rev=' + rev + '&newLog=' + escape(ed.value));
+
+			// Show that we are saving...
+			showLog(rev,'...saving...');
+		}
+		else
+		{
+			// Revert to the value from before we edited...  (no XMLHTTP support)
+			showLog(rev,ed.original);
+
+			// No need to restore the edit button if there is no XMLHTTP support
+			details.editButton = null;
+		}
+	}
+}
+
+/*
+ * This is the callback for the XMLHTTP request
+ * It handles the final disposition of the save operation
+ */
+function saveLogCheck(rev)
+{
+	var details = getDetail(rev);
+	if ((details.xml) && (details.xml.readyState == 4))
+	{
+		if (details.xml.status == 200)
+		{
+			previewLog(rev);
+			endEdit(rev);
+		}
+		else
+		{
+			cancelLog(rev);
+			alert('Log save failed: ' + details.xml.statusText);
+		}
+		details.xml = null;
+	}
 }
 
