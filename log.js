@@ -726,6 +726,7 @@ function saveLog(rev)
 		{
 			details.xml.onreadystatechange = function() { saveLogCheck(rev); };
 			details.xml.open("POST",'?Insurrection=savelog',true);
+			details.xml.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 			details.xml.send('rev=' + rev + '&newLog=' + escape(ed.value));
 
 			// Show that we are saving...

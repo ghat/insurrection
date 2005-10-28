@@ -48,7 +48,6 @@ if ((defined $msg) && (defined $rev))
          if ($logUser eq $AuthUser)
          {
             ## Next, if all is ok, set the property
-
             ## svn propset svn:log --revprop -r <n> <newLog> <url>
             print "Status: 200 Saved log message\n\n";
 
@@ -56,26 +55,26 @@ if ((defined $msg) && (defined $rev))
             ## result...
             system($SVN_CMD,'-q','--no-auth-cache','--non-interactive',
                             'propset','svn:log','--revprop',
-                            '-r',$rev,$msg,$localURL);
+                            '-r',$rev,'--',$msg,$localURL);
          }
          else
          {
-            print "Status: 403 Only the original author may update the log entry\n";
+            print "Status: 403 Only the original author may update the log entry\n\n";
          }
       }
       else
       {
-         print "Status: 403 Log message update disabled\n";
+         print "Status: 403 Log message update disabled\n\n";
       }
    }
    else
    {
       ## Fail due to rights...
-      print "Status: 403 Log message update forbidden\n";
+      print "Status: 403 Log message update forbidden\n\n";
    }
 }
 else
 {
-   print "Status: 403 Protocol error\n";
+   print "Status: 403 Protocol error\n\n";
 }
 
