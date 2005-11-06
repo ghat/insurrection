@@ -387,8 +387,8 @@ function detailClick(repo,action,path,rev,current)
 			if (rev > 1)
 			{
 				d1 = newSegment(d2);
-				addLink(d1,Insurrection.SVN_URL + repo + '?Insurrection=diff&r=' + rev + '&r2=' + rev + '&r1=' + (rev-1),'Changeset for this revision');
-				addLink(d1,Insurrection.SVN_URL + repo + '?Insurrection=diff&getpatch=1&r=' + rev + '&r2=' + rev + '&r1=' + (rev-1),'Patchset for this revision');
+				addLink(d1,Insurrection.SVN_URL + repo + '/?Insurrection=diff&r=' + rev + '&r2=' + rev + '&r1=' + (rev-1),'Changeset for this revision');
+				addLink(d1,Insurrection.SVN_URL + repo + '/?Insurrection=diff&getpatch=1&r=' + rev + '&r2=' + rev + '&r1=' + (rev-1),'Patchset for this revision');
 			}
 
 		}
