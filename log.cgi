@@ -64,7 +64,7 @@ else
    my $hcmd = $SVNLOOK_CMD . ' history';
    $hcmd .= ' -r "' . $r1 . '"' if (defined $r1);
    $hcmd .= ' "' . $SVN_BASE . '/' . $rpath . '" "' . $opath . '"';
-   $hcmd .= ' | head -' . ($maxEntries + 3);
+   $hcmd .= ' 2>/dev/null | head -' . ($maxEntries + 3);
    @revs = (`$hcmd` =~ m:(\d+)\s+(/[^\n]*):gso);
    $revcount = @revs / 2;
    $maxEntries = $revcount if (!defined $maxEntries);
