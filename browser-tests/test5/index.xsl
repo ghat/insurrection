@@ -15,7 +15,7 @@
     <html>
       <head>
         <title>Insurrection Browser Compatibility Test #5</title>
-        <link href="/favicon.ico" rel="shortcut icon"/>
+        <link href="../favicon.ico" rel="shortcut icon"/>
         <link href="../styles.css" rel="stylesheet" type="text/css"/>
         <script type="text/javascript" language="JavaScript" src="index.js"></script>
       </head>
@@ -58,7 +58,7 @@
             <xsl:attribute name="class">svnentryicon</xsl:attribute>
             <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="src">
-              <xsl:text>/folder.gif</xsl:text>
+              <xsl:text>../folder.gif</xsl:text>
             </xsl:attribute>
           </xsl:element>
           <xsl:text>.. (Parent Directory)</xsl:text>
@@ -77,7 +77,7 @@
             <xsl:attribute name="class">dirarrow</xsl:attribute>
             <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="src">
-              <xsl:text>/opened.gif</xsl:text>
+              <xsl:text>../opened.gif</xsl:text>
             </xsl:attribute>
           </xsl:element>
         </td>
@@ -86,7 +86,7 @@
             <xsl:attribute name="class">svnentryicon</xsl:attribute>
             <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="src">
-              <xsl:text>/folder.gif</xsl:text>
+              <xsl:text>../folder.gif</xsl:text>
             </xsl:attribute>
           </xsl:element>
           <xsl:value-of select="@path"/>
@@ -108,7 +108,7 @@
             <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="alt">Get revision history</xsl:attribute>
             <xsl:attribute name="src">
-              <xsl:text>/info.gif</xsl:text>
+              <xsl:text>../info.gif</xsl:text>
             </xsl:attribute>
           </xsl:element>
         </td>
@@ -118,7 +118,7 @@
           <xsl:element name="img">
             <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="src">
-              <xsl:text>/blank.gif</xsl:text>
+              <xsl:text>../blank.gif</xsl:text>
             </xsl:attribute>
           </xsl:element>
         </td>
@@ -140,7 +140,7 @@
           <xsl:attribute name="class">dirarrow</xsl:attribute>
           <xsl:attribute name="align">middle</xsl:attribute>
           <xsl:attribute name="src">
-            <xsl:text>/closed.gif</xsl:text>
+            <xsl:text>../closed.gif</xsl:text>
           </xsl:attribute>
         </xsl:element>
       </td>
@@ -150,7 +150,7 @@
             <xsl:attribute name="class">svnentryicon</xsl:attribute>
             <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="src">
-              <xsl:text>/folder.gif</xsl:text>
+              <xsl:text>../folder.gif</xsl:text>
             </xsl:attribute>
           </xsl:element>
           <xsl:value-of select="@name"/>
@@ -162,7 +162,7 @@
           <xsl:attribute name="align">middle</xsl:attribute>
           <xsl:attribute name="alt">Get revision history</xsl:attribute>
           <xsl:attribute name="src">
-            <xsl:text>/info.gif</xsl:text>
+            <xsl:text>../info.gif</xsl:text>
           </xsl:attribute>
         </xsl:element>
       </td>
@@ -175,7 +175,7 @@
         <xsl:element name="img">
           <xsl:attribute name="align">middle</xsl:attribute>
           <xsl:attribute name="src">
-            <xsl:text>/blank.gif</xsl:text>
+            <xsl:text>../blank.gif</xsl:text>
           </xsl:attribute>
         </xsl:element>
       </td>
@@ -185,7 +185,7 @@
             <xsl:attribute name="class">svnentryicon</xsl:attribute>
             <xsl:attribute name="align">middle</xsl:attribute>
             <xsl:attribute name="src">
-              <xsl:text>/file.gif</xsl:text>
+              <xsl:text>../file.gif</xsl:text>
             </xsl:attribute>
           </xsl:element>
           <xsl:value-of select="@name"/>
@@ -196,7 +196,7 @@
           <xsl:attribute name="align">middle</xsl:attribute>
           <xsl:attribute name="alt">Get revision history</xsl:attribute>
           <xsl:attribute name="src">
-            <xsl:text>/info.gif</xsl:text>
+            <xsl:text>../info.gif</xsl:text>
           </xsl:attribute>
         </xsl:element>
       </td>
