@@ -14,7 +14,7 @@
   <xsl:template match="svn">
     <html>
       <head>
-        <title>Insurrection Browser Compatibility Test #2</title>
+        <title>Insurrection Browser Compatibility Test #3</title>
         <xsl:copy-of select="document('test.xml')/xml/header/*"/>
       </head>
       <body>
