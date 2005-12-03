@@ -58,16 +58,6 @@ DirectoryIndex index.cgi
 	SetHandler cgi-script
 </Files>
 
-## For some browsers, XSLT support is either not working
-## correctly or not working at all.  What this CGI does
-## is to generate the SVN Index base page as HTML and then
-## let the browser and JavaScript via XMLHttp do the
-## real work.  This works in conjunction with the
-## rewrite rule below that does the user agent checking.
-<Files ~ "^broken_xslt\.cgi$">
-	SetHandler cgi-script
-</Files>
-
 ## You need to have mod-rewrite enabled in apache
 RewriteEngine On
 
@@ -135,39 +125,6 @@ RewriteCond %{REQUEST_METHOD} GET	[OR]
 RewriteCond %{REQUEST_METHOD} POST
 RewriteCond %{QUERY_STRING} Insurrection=(admin|atom|bandwidth|blame|diff|dump|get|log|ls|rss|savelog)
 RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&HTTPS=%{HTTPS}&Path=$1"	[P,L]
-
-## What a trick - to get the broken browsers to work.
-## Now the need XMLHttp, but the don't need the XSLT
-## to work.
-##
-## Note that the XSLT of Safari is almost working but
-## not quite.  So it is listed here.
-##
-## What we do here is proxy the request to a simple
-## CGI the makes the base HTML framework and kicks off
-## a client side script that does the rest.
-##
-## Note that if someone expressly wants XML, the
-## XMLHttp=1 attribute is needed.  This is used by the
-## XMLHttp object in the JavaScript to make sure that
-## it does get the XML version even when the browser
-## does not support XML/XSLT.
-##
-## Note that we would like to have the real XSLT working
-## as there are some things that are not available
-## without it *and* the bandwidth and server load are
-## much lower.  The good thing is that the top two
-## browser technologies do work correctly enough to
-## not need this hack.  That ends up covering 98% of
-## all wed users.  (That is Mozilla/Firefox and IE)
-##
-## Again, with the same hack to make this work the way I want...
-RewriteCond %{REQUEST_METHOD} GET
-RewriteCond %{QUERY_STRING} !XMLHttp=1
-RewriteCond %{HTTP_USER_AGENT} Opera		[OR]
-RewriteCond %{HTTP_USER_AGENT} Safari		[OR]
-RewriteCond %{HTTP_USER_AGENT} Konqueror
-RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/broken_xslt.cgi?HTTPS=%{HTTPS}&Path=$1"	[P,L]
 
 ## The following rule is to catch the directory XML listing
 ## request and not let mod_dav_svn answer but rather our own
