@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id$ -->
 <!-- Copyright 2004,2005 - Michael Sinz -->
 <!-- This is my magic Insurrection XSLT transform to HTML -->
