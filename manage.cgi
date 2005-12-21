@@ -193,7 +193,7 @@ elsif (defined $cgi->param('NewRepository'))
          ## using the normal management tools and not part of the creation process.
          my %initialUsers;
          $initialUsers{$AuthUser} = 'rw';
-         $groupComments{$group} = 'Newly created repository <i>(Please edit this description></i>';
+         $groupComments{$group} = 'Newly created repository <i>(Please edit this description)</i>';
          %{$groupUsers{$group}} = %initialUsers;
 
          #####################################################################
