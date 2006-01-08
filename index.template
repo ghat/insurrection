@@ -45,8 +45,7 @@
 </p>
 <p>
   The Atom feed has been validated to conform to the Atom 1.0
-  <a href="http://www.ietf.org/internet-drafts/draft-ietf-atompub-format-11.txt">IETF draft</a>
-  standard.
+  <a href="http://www.ietf.org/rfc/rfc4287.txt">IETF standard and RFC-4287</a>.
 </p>
 <p>
   The RSS feed has been validated to conform to the
