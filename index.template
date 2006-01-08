@@ -52,7 +52,7 @@
   <a href="http://blogs.law.harvard.edu/tech/rss">RSS 2.0 specification</a>.
 </p>
 <p>
-  Both feeds support HTTP "Conditional GET" operation via the the HTTP ETag header to
+  Both feeds support HTTP "Conditional GET" operation via the the HTTP ETag/If-None-Match headers to
   reduce bandwidth and system overhead when there are no new updates since the last
   download of the feed.&nbsp; Most feed readers and browsers support this.&nbsp; You
   can read more about it at <a href="http://fishbowl.pastiche.org/2002/10/21/http_conditional_get_for_rss_hackers">this
