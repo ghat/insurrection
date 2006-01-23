@@ -417,7 +417,7 @@ sub getNumParam($param)
 # not quite.  So it is listed here.
 #
 # Note that if someone expressly wants XML, the
-# XMLHttp=1 attribute is needed.
+# X-Insurrection-JS header will be set to "true"
 #
 # Note that we would like to have the real XSLT working
 # as there are some things that are not available
@@ -426,10 +426,32 @@ sub getNumParam($param)
 # browser technologies do work correctly enough to
 # not need this hack.  That ends up covering 98% of
 # all wed users.  (That is Mozilla/Firefox and IE)
+# Safari will/does work correctly as of webkit 420+
+# so also detect that.
+# 
+# Note test filter downwards - thus the "OK" or 0 return
+# is done as early as possible.
 #
 sub isBrokenBrowser()
 {
-   return ((!defined $cgi->param('XMLHttp')) && ($cgi->user_agent =~ m/(Opera)|(Safari)|(Konqueror)/o));
+   ## If the user agent does not match this pattern we
+   ## assume that it is a correctly working browser
+   return 0 if (!($cgi->user_agent =~ m/(Opera)|(Safari)|(Konqueror)/o));
+
+   ## If the request is from the JavaScript code then
+   ## it is for sure not broken behavior...
+   return 0 if (defined $ENV{'HTTP_X_INSURRECTION_JS'});
+
+   ## Safari has some extra checking since as of webkit 420+
+   ## it seems to handle XML/XSLT correctly...
+   if ($cgi->user_agent =~ m:AppleWebKit/(\d+\.\d+):o)
+   {
+      my $ver = $1 + 0;
+      return 0 if ($ver >= 420);
+   }
+
+   ## Well, if we get here it must be a broken browser
+   return 1;
 }
 
 ##############################################################################

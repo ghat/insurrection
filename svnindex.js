@@ -479,7 +479,15 @@ function loadDir(arrow)
 				target.innerHTML = 'xml.open("GET","' + target.id + '",true);';
 
 				target.xml.onreadystatechange = function() { loadDirCheck(target); };
-				target.xml.open("GET",target.id + '?XMLHttp=1',true);
+				target.xml.open("GET",target.id,true);
+
+				// Signal that we are within the JavaScript and want the raw XML
+				// even if we are in a browser that normally can not handle raw XML
+				// NOTE - We would have done this by setting a new User-Agent
+				// header but not all browsers seem to support that so we have
+				// our own header.
+				target.xml.setRequestHeader('X-Insurrection-JS','true');
+
 				target.xml.send(null);
 			}
 		}

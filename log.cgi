@@ -86,16 +86,10 @@ my $cmd = $SVN_CMD . ' log --non-interactive --no-auth-cache -v --xml ' . $rev .
 ## What a trick - to get the broken browsers to work.
 ## Removes the need for XSLT...
 ##
-## Note that the XSLT of Safari is almost working but
-## not quite.  So it is listed here.
-##
 ## What we do here is redirect the output of this
 ## CGI into a server-side XSLT processor when the
 ## client user-agent string seems to match known
 ## broken clients.
-##
-## Note that if someone expressly wants XML, the
-## XMLHttp=1 attribute is needed.
 ##
 ## Note that we would like to have the real XSLT working
 ## as there are some things that are not available
