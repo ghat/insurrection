@@ -436,7 +436,7 @@ sub isBrokenBrowser()
 {
    ## If the user agent does not match this pattern we
    ## assume that it is a correctly working browser
-   return 0 if (!($cgi->user_agent =~ m/(Opera)|(Safari)|(Konqueror)/o));
+   return 0 if (!($cgi->user_agent =~ m/(Opera)|(Safari)|(Konqueror)|(Blazer)/o));
 
    ## If the request is from the JavaScript code then
    ## it is for sure not broken behavior...
