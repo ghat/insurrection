@@ -136,13 +136,6 @@ RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&HTTPS=%{HTTPS
 ## If this rule is not used, you can still get the enhanced
 ## listings via the ?Insurrection=ls CGI option (which is
 ## basically what this rule does)
-##
-## !!!NOTE!!!  If this rule runs before the broken XSLT
-##             browser test rule, the enhanced listing
-##             CGI will implement the work around.
-##             However, this is not the most bandwidth
-##             friendly way - so keeping this rule after
-##             the broken XSLT hack will solve that.
 RewriteCond %{REQUEST_METHOD} GET
-RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/ls.cgi?%{QUERY_STRING}&Insurrection=ls&HTTPS=%{HTTPS}&Path=$1"	[P,L]
+RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/ls.cgi?Insurrection=ls&HTTPS=%{HTTPS}&Path=$1"	[P,L]
 
