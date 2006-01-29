@@ -67,7 +67,8 @@ foreach my $line (`$cmd`)
 
    ## Only the .svn_index file and the initial directories
    ## at the root are allowed.
-   if (!(($path =~ m:/:) || ($path =~ m:^\.svn_index:)))
+   if ((!(($path =~ m:/:) || ($path =~ m:^\.svn_index:)))
+       || (($action eq 'A') && ($path =~ m:^[^/]+/$:)))
    {
       print STDERR "You must not change things at the root!";
       exit 1;
