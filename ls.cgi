@@ -84,8 +84,11 @@ if (defined $ls)
    ## Note that we don't include the repository revision as it is
    ## not known without doing yet more overhead - and it really is
    ## not needed in the display.
+   ## (Ok, so we do include it if there is specified revision)
    print '<svn href="http://www.sinz.org/Michael.Sinz/Insurrection/">'
-       , '<index path="' , &svn_XML_Escape($repo_path) , '">' , "\n";
+       , '<index path="' , &svn_XML_Escape($repo_path) , '"';
+   print ' rev="' , $peg , '"' if ($peg ne 'HEAD');
+   print '>' , "\n";
 
    print "<updir/>\n" if ($repo_path ne '/');
 
