@@ -232,6 +232,11 @@
           <xsl:element name="script">
             <xsl:attribute name="type">text/javascript</xsl:attribute>
             <xsl:attribute name="language">JavaScript</xsl:attribute>
+            <xsl:if test="string-length(index/@rev) != 0">
+              <xsl:text>document.InsurrectionRev=</xsl:text>
+              <xsl:value-of select="index/@rev"/>
+              <xsl:text>;</xsl:text>
+            </xsl:if>
             <xsl:text>loadBanner('.svn_index');</xsl:text>
           </xsl:element>
         </xsl:if>
@@ -279,6 +284,7 @@
   <!-- This builds a directory/URL path string with links for each element -->
   <xsl:template name="pathtree">
     <xsl:param name="path"/>
+    <xsl:param name="rev"/>
     <xsl:if test="$path = '/'">
       <xsl:text>/</xsl:text>
     </xsl:if>
@@ -289,6 +295,10 @@
             <xsl:call-template name="pathlink">
               <xsl:with-param name="path" select="$path"/>
             </xsl:call-template>
+            <xsl:if test="string-length($rev) != 0">
+              <xsl:text>?Insurrection=ls&amp;r=</xsl:text>
+              <xsl:value-of select="$rev"/>
+            </xsl:if>
           </xsl:attribute>
           <xsl:if test="substring-before($path,'/') = ''">
             <xsl:text>&lt;root&gt;</xsl:text>
@@ -298,6 +308,7 @@
         </xsl:element>
         <xsl:call-template name="pathtree">
           <xsl:with-param name="path" select="substring-after($path,'/')"/>
+          <xsl:with-param name="rev" select="$rev"/>
         </xsl:call-template>
       </xsl:if>
       <xsl:if test="not(contains($path,'/'))">
@@ -346,6 +357,7 @@
             </xsl:element>
             <xsl:call-template name="pathtree">
               <xsl:with-param name="path" select="@path"/>
+              <xsl:with-param name="rev" select="@rev"/>
             </xsl:call-template>
           </td>
           <td class="rev">
@@ -357,45 +369,54 @@
               <xsl:text> - </xsl:text>
             </xsl:if>
             <xsl:if test="string-length(@rev) != 0">
-              <xsl:text>Revision </xsl:text>
+              <xsl:text>as of r</xsl:text>
               <xsl:value-of select="@rev"/>
             </xsl:if>
           </td>
-          <td class="showlog">
-            <xsl:element name="a">
-              <xsl:attribute name="title">Atom Feed of activity in this directory</xsl:attribute>
-              <xsl:attribute name="href">
-                <xsl:text>?Insurrection=atom</xsl:text>
-              </xsl:attribute>
-              <xsl:element name="img">
-                <xsl:attribute name="align">middle</xsl:attribute>
-                <xsl:attribute name="alt">Atom Feed of activity in this directory</xsl:attribute>
-                <xsl:attribute name="src">
-                  <xsl:call-template name="atomicon-path"/>
+          <xsl:if test="string-length(@rev) = 0">
+            <td class="showlog">
+              <xsl:element name="a">
+                <xsl:attribute name="title">Atom Feed of activity in this directory</xsl:attribute>
+                <xsl:attribute name="href">
+                  <xsl:text>?Insurrection=atom</xsl:text>
                 </xsl:attribute>
+                <xsl:element name="img">
+                  <xsl:attribute name="align">middle</xsl:attribute>
+                  <xsl:attribute name="alt">Atom Feed of activity in this directory</xsl:attribute>
+                  <xsl:attribute name="src">
+                    <xsl:call-template name="atomicon-path"/>
+                  </xsl:attribute>
+                </xsl:element>
               </xsl:element>
-            </xsl:element>
-          </td>
-          <td class="showlog">
-            <xsl:element name="a">
-              <xsl:attribute name="title">RSS Feed of activity in this directory</xsl:attribute>
-              <xsl:attribute name="href">
-                <xsl:text>?Insurrection=rss</xsl:text>
-              </xsl:attribute>
-              <xsl:element name="img">
-                <xsl:attribute name="align">middle</xsl:attribute>
-                <xsl:attribute name="alt">RSS Feed of activity in this directory</xsl:attribute>
-                <xsl:attribute name="src">
-                  <xsl:call-template name="rssicon-path"/>
+            </td>
+            <td class="showlog">
+              <xsl:element name="a">
+                <xsl:attribute name="title">RSS Feed of activity in this directory</xsl:attribute>
+                <xsl:attribute name="href">
+                  <xsl:text>?Insurrection=rss</xsl:text>
                 </xsl:attribute>
+                <xsl:element name="img">
+                  <xsl:attribute name="align">middle</xsl:attribute>
+                  <xsl:attribute name="alt">RSS Feed of activity in this directory</xsl:attribute>
+                  <xsl:attribute name="src">
+                    <xsl:call-template name="rssicon-path"/>
+                  </xsl:attribute>
+                </xsl:element>
               </xsl:element>
-            </xsl:element>
-          </td>
+            </td>
+          </xsl:if>
           <td class="showlog">
+            <xsl:if test="string-length(@rev) != 0">
+              <xsl:attribute name="colspan">3</xsl:attribute>
+            </xsl:if>
             <xsl:element name="a">
               <xsl:attribute name="title">Show revision history for this directory</xsl:attribute>
               <xsl:attribute name="href">
                 <xsl:text>?Insurrection=log</xsl:text>
+                <xsl:if test="string-length(@rev) != 0">
+                  <xsl:text>&amp;r1=</xsl:text>
+                  <xsl:value-of select="@rev"/>
+                </xsl:if>
               </xsl:attribute>
               <xsl:element name="img">
                 <xsl:attribute name="align">middle</xsl:attribute>
@@ -455,6 +476,10 @@
           </xsl:attribute>
           <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
+            <xsl:if test="string-length(../@rev) != 0">
+              <xsl:text>?Insurrection=ls&amp;r=</xsl:text>
+              <xsl:value-of select="../@rev"/>
+            </xsl:if>
           </xsl:attribute>
           <div class="dir">
             <!-- If we have extended info, put it here -->
@@ -493,6 +518,10 @@
           <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
             <xsl:text>?Insurrection=log</xsl:text>
+            <xsl:if test="string-length(../@rev) != 0">
+              <xsl:text>&amp;r1=</xsl:text>
+              <xsl:value-of select="../@rev"/>
+            </xsl:if>
           </xsl:attribute>
           <xsl:element name="img">
             <xsl:attribute name="align">middle</xsl:attribute>
@@ -553,6 +582,10 @@
           </xsl:attribute>
           <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
+            <xsl:if test="string-length(../@rev) != 0">
+              <xsl:text>?Insurrection=get&amp;r=</xsl:text>
+              <xsl:value-of select="../@rev"/>
+            </xsl:if>
           </xsl:attribute>
           <div class="file">
             <!-- If we have extended info, put it here -->
@@ -590,6 +623,10 @@
           <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
             <xsl:text>?Insurrection=log</xsl:text>
+            <xsl:if test="string-length(../@rev) != 0">
+              <xsl:text>&amp;r1=</xsl:text>
+              <xsl:value-of select="../@rev"/>
+            </xsl:if>
           </xsl:attribute>
           <xsl:element name="img">
             <xsl:attribute name="align">middle</xsl:attribute>

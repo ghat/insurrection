@@ -80,6 +80,34 @@ function loadBannerCheck(target)
 }
 
 /*
+ * This function takes a base URI and optionally adds
+ * the needed CGI parameters to specifiy a specific version to get
+ */
+function getWithRev(uri)
+{
+	if (document.InsurrectionRev)
+	{
+		uri = uri + '?Insurrection=get&r=' + document.InsurrectionRev;
+	}
+
+	return(uri);
+}
+
+/*
+ * This function takes a base URI and optionally adds
+ * the needed CGI parameters to specifiy a specific version to ls
+ */
+function lsWithRev(uri)
+{
+	if (document.InsurrectionRev)
+	{
+		uri = uri + '?Insurrection=ls&r=' + document.InsurrectionRev;
+	}
+
+	return(uri);
+}
+
+/*
  * This function is called if the local banner file was
  * found in the SVN directory being displayed.  It will
  * then use the XMLHttpRequest() feature of the browser
@@ -99,7 +127,7 @@ function loadBanner(name)
 		if (target.xml)
 		{
 			target.xml.onreadystatechange = function() { loadBannerCheck(target); };
-			target.xml.open("GET",name,true);
+			target.xml.open("GET",getWithRev(name),true);
 			target.xml.send(null);
 		}
 	}
@@ -211,7 +239,7 @@ function doNextItem(actionList)
 			tr.appendChild(td);
 
 			a = document.createElement('a');
-			a.href = tgt;
+			a.href = lsWithRev(tgt);
 			a.title = 'Go to directory "' + action.name + '"';
 			td.appendChild(a);
 			div = document.createElement('div');
@@ -248,7 +276,7 @@ function doNextItem(actionList)
 			tr.appendChild(td);
 
 			a = document.createElement('a');
-			a.href = tgt;
+			a.href = getWithRev(tgt);
 			a.title = 'Get latest version of "' + action.name + '"';
 			td.appendChild(a);
 			div = document.createElement('div');
@@ -288,6 +316,10 @@ function doNextItem(actionList)
 		}
 
 		a.href = tgt + '?Insurrection=log';
+		if (document.InsurrectionRev)
+		{
+			a.href += '&r1=' + document.InsurrectionRev;
+		}
 		img = document.createElement('img');
 		img.src = document.getElementById('infoImage').src;
 		img.align = 'middle';
@@ -463,6 +495,9 @@ function loadDir(arrow)
 	// of doing one already...
 	var target = document.getElementById('.' + arrow.id);
 
+	// Generate the URI we will need...
+	target.uri = lsWithRev(target.id);
+
 	if (target)
 	{
 		target.arrow = arrow;
@@ -476,10 +511,10 @@ function loadDir(arrow)
 				foldDir(arrow);
 
 				// Set the internal text such that we know where we are...
-				target.innerHTML = 'xml.open("GET","' + target.id + '",true);';
+				target.innerHTML = 'xml.open("GET","' + target.uri + '",true);';
 
 				target.xml.onreadystatechange = function() { loadDirCheck(target); };
-				target.xml.open("GET",target.id,true);
+				target.xml.open("GET",target.uri,true);
 
 				// Signal that we are within the JavaScript and want the raw XML
 				// even if we are in a browser that normally can not handle raw XML
