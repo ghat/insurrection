@@ -764,6 +764,28 @@
           <xsl:text>);</xsl:text>
         </xsl:attribute>
         <xsl:value-of select="@revision"/>
+        <br/>
+        <xsl:element name="a">
+          <xsl:attribute name="class">showlog</xsl:attribute>
+          <xsl:attribute name="href">
+            <xsl:text>./?Insurrection=ls&amp;r=</xsl:text>
+            <xsl:value-of select="@revision"/>
+          </xsl:attribute>
+          <xsl:attribute name="title">
+            <xsl:text>Browse repository at revision </xsl:text>
+            <xsl:value-of select="@revision"/>
+          </xsl:attribute>
+          <xsl:element name="img">
+            <xsl:attribute name="alt">
+              <xsl:text>Browse repository at revision </xsl:text>
+              <xsl:value-of select="@revision"/>
+            </xsl:attribute>
+            <xsl:attribute name="src">
+              <xsl:call-template name="diricon-path"/>
+            </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+
       </xsl:element>
       <xsl:element name="td">
         <xsl:attribute name="class">user</xsl:attribute>
