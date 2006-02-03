@@ -768,7 +768,8 @@
         <xsl:element name="a">
           <xsl:attribute name="class">showlog</xsl:attribute>
           <xsl:attribute name="href">
-            <xsl:text>./?Insurrection=ls&amp;r=</xsl:text>
+            <xsl:value-of select="../@rpath"/>
+            <xsl:text>/?Insurrection=ls&amp;r=</xsl:text>
             <xsl:value-of select="@revision"/>
           </xsl:attribute>
           <xsl:attribute name="title">

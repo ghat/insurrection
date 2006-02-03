@@ -10,6 +10,7 @@
 <!ELEMENT log      (morelog?, logentry*)>
 <!ATTLIST log      repository    CDATA #REQUIRED
                    path          CDATA #REQUIRED
+                   rpath         CDATA #REQUIRED
                    editlog       CDATA #IMPLIED>
 
 <!ELEMENT morelog  EMPTY>
