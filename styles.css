@@ -117,17 +117,7 @@ form
   padding-right: 5px;
   text-align: right;
   white-space: nowrap;
-}
-
-.updirrow
-{
-  padding: 0px;
-  background: rgb(100%,90%,70%);
-}
-
-.updir
-{
-  padding: 2px;
+  font-size: 80%;
 }
 
 .pathrow
@@ -718,6 +708,13 @@ td.details
   border-top: 1px rgb(50%,50%,50%) solid;
   background: rgb(85%,85%,85%);
   padding-top: 1px;
+}
+
+.idiff
+{
+  margin: 4px;
+  padding: 4px;
+  border: 1px black solid;
 }
 
 .diffprop

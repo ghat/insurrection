@@ -245,34 +245,6 @@
     </html>
   </xsl:template>
 
-  <xsl:template match="updir">
-    <tr class="updirrow">
-      <td colspan="6">
-        <xsl:element name="a">
-          <xsl:attribute name="title">Go to parent directory</xsl:attribute>
-          <xsl:attribute name="href">
-	    <xsl:text>../</xsl:text>
-            <xsl:if test="string-length(../@rev) != 0">
-              <xsl:text>?Insurrection=ls&amp;r=</xsl:text>
-              <xsl:value-of select="../@rev"/>
-            </xsl:if>
-	  </xsl:attribute>
-          <div class="updir">
-            <xsl:element name="img">
-              <xsl:attribute name="alt">Folder</xsl:attribute>
-              <xsl:attribute name="class">svnentryicon</xsl:attribute>
-              <xsl:attribute name="align">middle</xsl:attribute>
-              <xsl:attribute name="src">
-                <xsl:call-template name="diricon-path"/>
-              </xsl:attribute>
-            </xsl:element>
-            <xsl:text>.. (Parent Directory)</xsl:text>
-          </div>
-        </xsl:element>
-      </td>
-    </tr>
-  </xsl:template>
-
   <!-- Make a relative link string for the top directory given a relative path -->
   <xsl:template name="pathlink">
     <xsl:param name="path"/>
@@ -335,7 +307,6 @@
 
       <!-- I could not come up with a non-table way to render this the way I wanted -->
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <xsl:apply-templates select="updir"/>
         <tr class="pathrow">
           <td class="foldspace">
             <xsl:element name="img">
