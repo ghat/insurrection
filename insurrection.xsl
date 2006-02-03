@@ -250,7 +250,13 @@
       <td colspan="6">
         <xsl:element name="a">
           <xsl:attribute name="title">Go to parent directory</xsl:attribute>
-          <xsl:attribute name="href">..</xsl:attribute>
+          <xsl:attribute name="href">
+	    <xsl:text>../</xsl:text>
+            <xsl:if test="string-length(../@rev) != 0">
+              <xsl:text>?Insurrection=ls&amp;r=</xsl:text>
+              <xsl:value-of select="../@rev"/>
+            </xsl:if>
+	  </xsl:attribute>
           <div class="updir">
             <xsl:element name="img">
               <xsl:attribute name="alt">Folder</xsl:attribute>
