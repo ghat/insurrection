@@ -1,0 +1,141 @@
+#!/usr/bin/perl
+
+# $Id$
+
+# PRE-COMMIT HOOK
+#
+# The pre-commit hook is invoked before a Subversion txn is
+# committed.  Subversion runs this hook by invoking a program
+# (script, executable, binary, etc.) named 'pre-commit' (for which
+# this file is a template), with the following ordered arguments:
+#
+#   [1] REPOS-PATH   (the path to this repository)
+#   [2] TXN-NAME     (the name of the txn about to be committed)
+#
+# The default working directory for the invocation is undefined, so
+# the program should set one explicitly if it cares.
+#
+# If the hook program exits with success, the txn is committed; but
+# if it exits with failure (non-zero), the txn is aborted, no commit
+# takes place, and STDERR is returned to the client.   The hook
+# program can use the 'svnlook' utility to help it examine the txn.
+#
+# On a Unix system, the normal procedure is to have 'pre-commit'
+# invoke other programs to do the real work, though it may do the
+# work itself too.
+#
+#   ***  NOTE: THE HOOK PROGRAM MUST NOT MODIFY THE TXN, EXCEPT  ***
+#   ***  FOR REVISION PROPERTIES (like svn:log or svn:author).   ***
+#
+#   This is why we recommend using the read-only 'svnlook' utility.
+#   In the future, Subversion may enforce the rule that pre-commit
+#   hooks should not modify the versioned data in txns, or else come
+#   up with a mechanism to make it safe to do so (by informing the
+#   committing client of the changes).  However, right now neither
+#   mechanism is implemented, so hook writers just have to be careful.
+#
+# Note that 'pre-commit' must be executable by the user(s) who will
+# invoke it (typically the user httpd runs as), and that user must
+# have filesystem-level permission to access the repository.
+
+my $RepositoryPath = $ARGV[0];
+my $Transaction = $ARGV[1];
+
+## This is the command we will run to look into the transaction...
+my $cmd = "/home/subversion/svn/bin/svnlook changed -t $Transaction $RepositoryPath";
+
+## We keep track of the "added" paths such that we know what
+## a new directory is.  The reason for this is such that we
+## can accept, in a single transaction, non-add events into
+## a tag when the directory was an add event.  If the directory
+## was not an add event, it will not be accepted.
+## This extra complication is needed to allow making tags
+## from mixed revision WC.  For some reason that operation
+## comes in as a transaction that has delete events in it
+## which means that a simplistic add-only hook blocks those.
+my @addDirStack;
+my $lastPath = undef;
+
+## Yes, this could have been a bit more compact but I wanted to
+## make the code as reasonably clear as possible given the
+## nature of what it is doing.
+foreach my $line (`$cmd`)
+{
+   chomp $line;
+
+   my ($action,$path) = ($line =~ /^(\S+)\s+(.*)/);
+
+   ## Only the .svn_index file and the initial directories
+   ## at the root are allowed.
+   if ((!(($path =~ m:/:) || ($path =~ m:^\.svn_index:)))
+       || (($action eq 'A') && ($path =~ m:^[^/]+/$:)))
+   {
+      print STDERR "You must not change things at the root!";
+      exit 1;
+   }
+
+   ## We check if the current path in within the previous one.
+   ## If not, then we pop the previous one and check again.
+   ## Once we have hit the end of the stack then no path
+   ## was a parent and this must be a new one.
+   while ((defined $lastPath) && (!($path =~ m:^$lastPath:)))
+   {
+      pop(@addDirStack);
+      $lastPath = undef;
+      $lastPath = $addDirStack[@addDirStack-1] if (@addDirStack > 0);
+   }
+
+   ## If the path is a directory (ends in '/') and the action is
+   ## Add then we add this directory to the stack and remember it
+   ## as our lastPath.
+   if (($action eq 'A') && ($path =~ m:/$:))
+   {
+      push(@addDirStack,$path);
+      $lastPath = $path;
+   }
+
+   ## the /tags/ tree is special in that things never change once
+   ## being put there.  Ok, so there is a possibility of putting
+   ## a new directory within an older one, but at least you can
+   ## not check out a tag and change the data in it.
+   if ($path =~ m:^tags/:)
+   {
+      if ($action ne 'A')
+      {
+         ## If we don't have a valid "last added directory" this was a
+         ## non-authorized change.  It takes just one to fail the whole
+         ## transaction.
+         if (!defined $lastPath)
+         {
+            print STDERR "You can not check in changes into tags.\n"
+                       , "Make a branch and make your changes there\n"
+                       , "and then make a new tag.";
+            exit 1;
+         }
+      }
+   }
+
+   ## the /releasess/ tree is special in that things never change once
+   ## being put there.  Ok, so there is a possibility of putting
+   ## a new directory within an older one, but at least you can
+   ## not check out a tag and change the data in it.
+   if ($path =~ m:^releases/:)
+   {
+      if ($action ne 'A')
+      {
+         ## If we don't have a valid "last added directory" this was a
+         ## non-authorized change.  It takes just one to fail the whole
+         ## transaction.
+         if (!defined $lastPath)
+         {
+            print STDERR "You can not check in changes into releases.\n"
+                       , "Make a branch and make your changes there\n"
+                       , "and then make a new release.";
+            exit 1;
+         }
+      }
+   }
+}
+
+# All checks passed, so allow the commit.
+exit 0
