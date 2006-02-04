@@ -98,6 +98,29 @@ if ((defined $results) && (length($results) > 1))
    ## Style the diff line add/delete sections
    $results =~ s|(?<=[\n>])(\@\@[^<\n]*)|<div class="diff3">$1</div>|go;
 
+   ## Now, if we have a "cannot display" file type with the mime-type
+   ## of an image file, we will try to show the old and new images...
+   while ($results =~ m|>diff:\s+([^<]*)</div>(Cannot\s+display:\s+file\s+marked\s+as\s+a\s+binary\s+type.\s+svn:mime-type\s*=\s*image/[^\s<]*)|so)
+   {
+      my $imageFile = $1;
+      my $replaceSrc = $2;
+
+      my $idiff = '<table class="idiff" cellpadding="0" cellspacing="0">'
+                . '<tr class="diff1">'
+                .  '<th>r' . $rev1 . '</th>'
+                .  '<td><img class="idiff" alt="at r' . $rev1 . '" src="' . &svn_URL_Escape($imageFile) . '?Insurrection=get&amp;r=' . $rev1 . '"/></td>'
+                . '</tr>'
+                . '<tr class="diff2">'
+                .  '<th>r' . $rev2 . '</th>'
+                .  '<td><img class="idiff" alt="at r' . $rev2 . '" src="' . &svn_URL_Escape($imageFile) . '?Insurrection=get&amp;r=' . $rev2 . '"/></td>'
+                . '</tr>'
+                . '</table>';
+
+
+      ## Finally, delete the "can't diff" and replace it with the fun stuff...
+      $results =~ s|$replaceSrc|$idiff|s;
+   }
+
    ## Add a link at the top to download a "patch" file
    $results = '<a class="difftitle" href="?Insurrection=diff&amp;getpatch=1&amp;r=' . $peg . '&amp;r1=' . $rev1 . '&amp;r2=' . $rev2 . '">'
             . 'Download patch file for revision ' . $rev1 . ' to ' . $rev2 . '<br/>'

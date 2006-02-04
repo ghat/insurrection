@@ -710,11 +710,25 @@ td.details
   padding-top: 1px;
 }
 
-.idiff
+img.idiff
 {
-  margin: 4px;
-  padding: 4px;
+  margin: 0px;
+  margin-left: 0.5em;
+  padding: 1px;
+  background: rgb(100%,100%,100%);
   border: 1px black solid;
+}
+
+.idiff th
+{
+  padding-left: 1em;
+}
+
+.idiff td
+{
+  padding-right: 0.5em;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 .diffprop
