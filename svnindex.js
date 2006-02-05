@@ -277,7 +277,14 @@ function doNextItem(actionList)
 
 			a = document.createElement('a');
 			a.href = getWithRev(tgt);
-			a.title = 'Get latest version of "' + action.name + '"';
+			if (document.InsurrectionRev)
+			{
+				a.title = 'Get "' + action.name + '" as of revision ' + document.InsurrectionRev;
+			}
+			else
+			{
+				a.title = 'Get latest version of "' + action.name + '"';
+			}
 			td.appendChild(a);
 			div = document.createElement('div');
 			div.className = 'file';

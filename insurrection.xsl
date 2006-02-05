@@ -56,6 +56,7 @@
   <xsl:template name="infoicon-path">/info.gif</xsl:template>
   <xsl:template name="spacericon-path">/spacer.gif</xsl:template>
   <xsl:template name="blankicon-path">/blank.gif</xsl:template>
+  <xsl:template name="pasticon-path">/past.gif</xsl:template>
   <xsl:template name="rssicon-path">/rss.gif</xsl:template>
   <xsl:template name="atomicon-path">/atom.gif</xsl:template>
   <xsl:template name="loginicon-path">/login.gif</xsl:template>
@@ -346,7 +347,7 @@
               <xsl:text> - </xsl:text>
             </xsl:if>
             <xsl:if test="string-length(@rev) != 0">
-              <xsl:text>as of r</xsl:text>
+              <xsl:text>as of revision </xsl:text>
               <xsl:value-of select="@rev"/>
             </xsl:if>
           </td>
@@ -553,9 +554,17 @@
       <td class="pathname">
         <xsl:element name="a">
           <xsl:attribute name="title">
-            <xsl:text>Get latest version of "</xsl:text>
+            <xsl:text>Get </xsl:text>
+            <xsl:if test="string-length(../@rev) = 0">
+              <xsl:text>latest version of </xsl:text>
+            </xsl:if>
+            <xsl:text>"</xsl:text>
             <xsl:value-of select="@name"/>
             <xsl:text>"</xsl:text>
+            <xsl:if test="string-length(../@rev) != 0">
+              <xsl:text> as of revision </xsl:text>
+              <xsl:value-of select="../@rev"/>
+            </xsl:if>
           </xsl:attribute>
           <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
@@ -565,7 +574,6 @@
             </xsl:if>
           </xsl:attribute>
           <div class="file">
-            <!-- If we have extended info, put it here -->
             <xsl:if test="string-length(@revision) != 0">
               <span class="revinfo-date">
                 <xsl:value-of select="@date"/>
@@ -734,16 +742,10 @@
       <xsl:attribute name="class">revision</xsl:attribute>
       <xsl:element name="th">
         <xsl:attribute name="class">revision</xsl:attribute>
-        <xsl:attribute name="title">Show / hide details</xsl:attribute>
-        <xsl:attribute name="onclick">
-          <xsl:text>toggle(</xsl:text>
-          <xsl:value-of select="@revision"/>
-          <xsl:text>);</xsl:text>
-        </xsl:attribute>
         <xsl:value-of select="@revision"/>
         <br/>
         <xsl:element name="a">
-          <xsl:attribute name="class">showlog</xsl:attribute>
+          <xsl:attribute name="class">browsepast</xsl:attribute>
           <xsl:attribute name="href">
             <xsl:value-of select="../@rpath"/>
             <xsl:text>/?Insurrection=ls&amp;r=</xsl:text>
@@ -759,7 +761,7 @@
               <xsl:value-of select="@revision"/>
             </xsl:attribute>
             <xsl:attribute name="src">
-              <xsl:call-template name="diricon-path"/>
+              <xsl:call-template name="pasticon-path"/>
             </xsl:attribute>
           </xsl:element>
         </xsl:element>
