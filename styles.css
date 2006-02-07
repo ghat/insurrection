@@ -298,29 +298,26 @@ td.foldspace
   color: blue;
 }
 
-.browsepast
+a.browsepast
 {
-  padding: 2px;
+  padding: 1px;
   display: block;
   text-align: center;
-}
-
-.browsepast img
-{
-  vertical-align: middle;
+  opacity: 0.6;
 }
 
 a.browsepast:hover
 {
+  opacity: 1.0;
   border: 1px black outset;
-  padding: 1px;
+  padding: 0px;
   background: rgb(100%,100%,50%);
 }
 
 a.browsepast:active
 {
   border: 1px black inset;
-  padding: 1px;
+  padding: 0px;
   background: rgb(100%,70%,50%);
 }
 

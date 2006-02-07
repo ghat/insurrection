@@ -330,7 +330,12 @@
               <xsl:attribute name="class">svnentryicon</xsl:attribute>
               <xsl:attribute name="align">middle</xsl:attribute>
               <xsl:attribute name="src">
-                <xsl:call-template name="diricon-path"/>
+                <xsl:if test="string-length(@rev) = 0">
+                  <xsl:call-template name="diricon-path"/>
+                </xsl:if>
+                <xsl:if test="string-length(@rev) != 0">
+                  <xsl:call-template name="pasticon-path"/>
+                </xsl:if>
               </xsl:attribute>
             </xsl:element>
             <xsl:call-template name="pathtree">
