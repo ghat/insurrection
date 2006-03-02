@@ -74,19 +74,23 @@ RewriteEngine On
 ## This is how we then configure what host name or names
 ## we want to support here.  If it has a GIF file
 ## then it is a valid host.  If not, out you go...
+## (but only for GET/POST operations...)
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
 RewriteCond %{HTTP_HOST}	"^.*/.*$"	[OR]
 RewriteCond /home/subversion/www/%{HTTP_HOST}.gif !-f
-RewriteRule ^(.*)$	""	[F,L]
+RewriteRule	^(.*)$		""	[F,L]
 
 ## Some custom logo processing based on the host that
 ## we are acting as.  We know it exists otherwise
 ## the above safety check rule would have caught us.
 ## Note that we do this internally (PT) such that
 ## the user does not know this exists.
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
 RewriteRule	^Logo.gif	"/%{HTTP_HOST}.gif"	[PT,L]
 
 ## Simple rule to support having intex.html and project.html
 ## actually be cgi scripts.
+RewriteCond %{REQUEST_METHOD}		"^(GET|POST)$"
 RewriteRule	^(index|project).html$	/$1.cgi	[PT,L]
 
 ## We use a local proxy operation such that we can
@@ -121,8 +125,7 @@ RewriteRule	^(index|project).html$	/$1.cgi	[PT,L]
 ## and not the path_info and then doing some re-parsing with
 ## the understanding that the Path parameter is always the
 ## last parameter before the end of the URI.  Ugly but it works...
-RewriteCond %{REQUEST_METHOD} GET	[OR]
-RewriteCond %{REQUEST_METHOD} POST
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
 RewriteCond %{QUERY_STRING} Insurrection=(admin|atom|bandwidth|blame|diff|dump|get|log|ls|rss|savelog)
 RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&HTTPS=%{HTTPS}&Path=$1"	[P,L]
 
@@ -136,6 +139,6 @@ RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&HTTPS=%{HTTPS
 ## If this rule is not used, you can still get the enhanced
 ## listings via the ?Insurrection=ls CGI option (which is
 ## basically what this rule does)
-RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
 RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/ls.cgi?Insurrection=ls&HTTPS=%{HTTPS}&Path=$1"	[P,L]
 
