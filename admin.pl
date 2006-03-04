@@ -273,7 +273,7 @@ sub svn_HEADER($title,$expires,$doctype)
    my $doctype = shift;
 
    ## If no doctype, set the good default...
-   $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' if (!defined $doctype);
+   $doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' if (!defined $doctype);
 
    ## Expires is optional and thus we default it to 1 day if not given.
    $expires = '+1d' if (!defined $expires);
