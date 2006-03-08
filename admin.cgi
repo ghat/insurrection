@@ -183,7 +183,7 @@ elsif (defined $cgi->param('adduser'))
 
    ## Only simple characters in the user name and nothing too long
    ## Ok, we picked the size limit out of thin air but it is a reasonable limit.
-   if (($user =~ /^[a-z][-.@a-z0-9_]+$/o) || (length($user) < 64))
+   if (($user =~ /^[a-z][-.@a-z0-9_]+$/o) && (length($user) < 64))
    {
 
       ## Lock the password file...
