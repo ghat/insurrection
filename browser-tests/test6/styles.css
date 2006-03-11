@@ -1,6 +1,6 @@
 /* $Id$ */
 
-body
+BODY
 {
     color: black;
     background: rgb(140,120,120);
@@ -9,15 +9,15 @@ body
     text-align: center;
 }
 
-img
+IMG
 {
     border: none;
 }
 
-a {color: blue; text-decoration: none;}
-a:visited {color: darkblue; text-decoration: none;}
-a:hover {color: green; text-decoration: underline;}
-a:active {color: red; text-decoration: underline;}
+A {color: blue; text-decoration: none;}
+A:visited {color: darkblue; text-decoration: none;}
+A:hover {color: green; text-decoration: underline;}
+A:active {color: red; text-decoration: underline;}
 
 #pagetable
 {
@@ -35,7 +35,7 @@ a:active {color: red; text-decoration: underline;}
     border: solid 1px black;
 }
 
-.versiontable th
+.versiontable TH
 {
     background-color: rgb(182,38,133);
     color: white;
@@ -45,7 +45,7 @@ a:active {color: red; text-decoration: underline;}
     padding-top: 2px;
 }
 
-.versiontable td
+.versiontable TD
 {
     font-size: 90%;
     border-right: 1px gray dotted;
@@ -59,7 +59,7 @@ a:active {color: red; text-decoration: underline;}
     font-size: 11pt;
 }
 
-.accesstable th
+.accesstable TH
 {
     background-color: rgb(182,38,133);
     color: white;
@@ -72,7 +72,7 @@ a:active {color: red; text-decoration: underline;}
     border-left: 1px black solid;
 }
 
-.accesstable td
+.accesstable TD
 {
     border: 1px black solid;
     border-bottom: 0px;
@@ -91,7 +91,7 @@ a:active {color: red; text-decoration: underline;}
     border: 0px;
 }
 
-#versions th
+#versions TH
 {
     border: 0px;
     padding: 2px;
@@ -99,7 +99,7 @@ a:active {color: red; text-decoration: underline;}
     text-align: left;
 }
 
-#versions td
+#versions TD
 {
     border: 0px;
     padding: 0px;
@@ -107,9 +107,9 @@ a:active {color: red; text-decoration: underline;}
     text-align: right;
 }
 
-.accesstable a {color: darkblue; text-decoration: none;}
-.accesstable a:hover {color: green;}
-.accesstable a:active {color: red;}
+.accesstable A {color: darkblue; text-decoration: none;}
+.accesstable A:hover {color: green;}
+.accesstable A:active {color: red;}
 
 .accesstitles
 {
@@ -125,7 +125,7 @@ a:active {color: red; text-decoration: underline;}
     font-size: 9pt;
 }
 
-.accessinfo th
+.accessinfo TH
 {
     background-color: rgb(182,38,133);
     color: white;
@@ -138,7 +138,7 @@ a:active {color: red; text-decoration: underline;}
     border-left: 1px black solid;
 }
 
-.accessinfo td
+.accessinfo TD
 {
     background-color: white;
     border-top: 1px gray solid;
@@ -211,7 +211,7 @@ a:active {color: red; text-decoration: underline;}
   background: rgb(100%,80%,40%);
 }
 
-.pathrow td
+.pathrow TD
 {
   border-top: 1px solid rgb(90%,70%,30%);
 }
@@ -221,10 +221,10 @@ a:active {color: red; text-decoration: underline;}
   padding: 2px;
 }
 
-.path a {color: black; text-decoration: none;}
-.path a:visited {color: black; text-decoration: none;}
-.path a:hover {color: blue; background: rgb(100%,100%,0%); text-decoration: none; padding-left: 0.5em; padding-right: 0.5em;}
-.path a:active {color: red; background: rgb(100%,100%,0%); text-decoration: none; padding-left: 0.5em; padding-right: 0.5em;}
+.path A {color: black; text-decoration: none;}
+.path A:visited {color: black; text-decoration: none;}
+.path A:hover {color: blue; background: rgb(100%,100%,0%); text-decoration: none; padding-left: 0.5em; padding-right: 0.5em;}
+.path A:active {color: red; background: rgb(100%,100%,0%); text-decoration: none; padding-left: 0.5em; padding-right: 0.5em;}
 
 .svnentryicon
 {
@@ -237,7 +237,7 @@ a:active {color: red; text-decoration: underline;}
   background: rgb(80%,80%,70%);
 }
 
-.dirrow td
+.dirrow TD
 {
   border-top: 1px solid rgb(70%,70%,60%);
 }
@@ -253,7 +253,7 @@ a:active {color: red; text-decoration: underline;}
   background: rgb(95%,95%,95%);
 }
 
-.filerow td
+.filerow TD
 {
   border-top: 1px solid rgb(85%,85%,85%);
 }
@@ -271,7 +271,7 @@ a:active {color: red; text-decoration: underline;}
   opacity: 0.6;
 }
 
-td.showlog
+TD.showlog
 {
   width: 1%;
 }
@@ -287,7 +287,7 @@ td.showlog
   opacity: 1.00;
 }
 
-.showlog a:hover
+.showlog A:hover
 {
   background: rgb(100%,100%,50%);
 }
@@ -351,17 +351,17 @@ td.showlog
   font-size: 12pt;
 }
 
-tr.revision
+TR.revision
 {
   cursor: pointer; cursor: hand;
 }
 
-tr.revision:hover
+TR.revision:hover
 {
   background: rgb(100%,100%,75%);
 }
 
-th.revision
+TH.revision
 {
   border: 0px;
   padding-right: 4px;
@@ -371,7 +371,7 @@ th.revision
   font-size: 14pt;
 }
 
-td.user
+TD.user
 {
   padding-right: 4px;
   text-align: left;
@@ -387,7 +387,7 @@ td.user
   vertical-align: baseline;
 }
 
-span.revdate
+SPAN.revdate
 {
   margin-left: 1em;
   font-size: 8pt;
@@ -436,7 +436,7 @@ span.revdate
   text-align: right;
 }
 
-td.details
+TD.details
 {
   width: 99%;
 }
@@ -561,10 +561,10 @@ td.details
   text-align: left;
 }
 
-.pathpopupmenu a         {color: black; text-decoration: none;}
-.pathpopupmenu a:visited {color: black; text-decoration: none;}
-.pathpopupmenu a:hover   {color: blue; text-decoration: underline;}
-.pathpopupmenu a:active  {color: red; text-decoration: underline;}
+.pathpopupmenu A         {color: black; text-decoration: none;}
+.pathpopupmenu A:visited {color: black; text-decoration: none;}
+.pathpopupmenu A:hover   {color: blue; text-decoration: underline;}
+.pathpopupmenu A:active  {color: red; text-decoration: underline;}
 
 .pathpopupmenuitem
 {
@@ -638,7 +638,7 @@ td.details
   width: 99%;
 }
 
-.blamelines pre
+.blamelines PRE
 {
   margin: 0px;
   padding: 0px;

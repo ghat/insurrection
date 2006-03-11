@@ -20,8 +20,8 @@
           </div>
           <div class="svn">
             <p>
-              The following test pages are to test if your browser is compatible with the
-              Insurrection Web Tools for Subversion.&nbsp; Where ever possible, the tests have
+              The following test pages are to test browser functionality as it relates to features
+              used by the Insurrection Web Tools for Subversion.&nbsp; Where ever possible, the tests have
               been broken out into individual situations such that the core issues can be
               identified.&nbsp; The tests require at least and HTML 4.0 browser in order to
               view the reference samples as they are presented in HTML.
@@ -30,7 +30,14 @@
               The reference pages are rendered using plain HTML plus style sheets.&nbsp; The
               test pages should render just like the reference pages.&nbsp; The links below
               will load the two pages within frames in your browser such that you can see the
-              test page and reference page at the same time.
+              test page and reference page at the same time using frames.
+            </p>
+            <p>
+              Just because your browser fails one or more of these tests does not mean it will 
+              fail to work with Insurrection.&nbsp; Insurrection code has some browser 
+              specific workarounds in it for XSLT failures in certain browsers as noted below.&nbsp; 
+              These tests do not show the use of the workarounds in order to show the raw 
+              browser failures.
             </p>
             <table class="versiontable" border="0" width="100%">
               <tr>
@@ -161,6 +168,33 @@
                   </ul>
                 </td>
               </tr>
+              <tr>
+                <td><a href="test6.html">Test&nbsp;#6</a></td>
+                <td>
+                  Basic Browser based XSLT transform with HTML output format.
+                  <ul>
+                    <li>
+                      <b style="color: red;">Mozilla</b> - tested and not working in newer (1.8+/Firefox 
+                      1.5+) versions.&nbsp; <a href="test2.html">Test&nbsp;#2</a> shows this exact 
+                      same test setup with the CSS formatted in a way such that rendering works.
+                    </li>
+                    <li>
+                      <b style="color: green;">Windows-IE</b> - tested and working.
+                    </li>
+                    <li>
+                      <b style="color: red;">Safari</b> - tested and almost working.&nbsp; Some CSS styles are not
+                      correctly applied and the relative links in the banner go to the wrong location.&nbsp;
+                      <i><b>Note:</b> it is the lack of correct path behavior that causes this problem.&nbsp; It
+                      seems that the base path is not that of the document/frame but of the containing document but
+                      only when the page is created via the XSLT translation.</i>
+                    </li>
+                    <li>
+                      <b style="color: red;">Opera</b> - tested and not working at all.&nbsp; It seems that XML/XSLT is not
+                      supported.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
             </table>
             <p>
               Notes on the browsers I have tested:
@@ -168,27 +202,31 @@
             <ul>
               <li>
                 <b>Mozilla</b> includes all Mozilla technology based browsers including Firefox,
-                Camino, etc.
+                Camino, etc.  Mozilla 1.8+ and Firefox 1.5+ currently fail test #6 but the
+                workaround so trivial that it does not matter.
               </li>
               <li>
                 <b>Windows-IE</b> is IE6.&nbsp; This is the default browser that came with Windows XP.&nbsp;
                 My Testing was done on Windows XP with Service Pack 2 installed.
               </li>
               <li>
-                <b>Safari</b> is Mac OSX 10.3.9 release and 10.4 release.
+                <b>Safari</b> is Mac OSX 10.3.9 release and 10.4 release.&nbsp; Safari with Webkit 420+ is now working.
               </li>
               <li>
                 <b>Opera</b> is the Linux generic build of 8.0 Final.
               </li>
             </ul>
             <p style="font-size: 120%;">
-              What this means is that currently, only Mozilla/Firefox/etc and Windows-IE comply with the standards
-              enough to use the Insurrection tools without some help.&nbsp; This does, however, cover over 98% of
-              the browsers in use.&nbsp; Insurrection now has some browser compatibility checks that does
-              check for Konqueror, Safari, and Opera and does the XSLT server-side, thus getting those browsers to
-              work.&nbsp; Insurrection specifically checks for only those browsers (via the USER_AGENT header)
-              in order to enable the workaround so as to not reduce the performance of browsers that do
-              support the standards.
+              What this means is that Mozilla/Firefox/etc, upcoming Safari versions, and 
+              Windows-IE comply with the standards enough to use the Insurrection tools 
+              without some help.&nbsp; This does, however, cover over 98% of the browsers in 
+              use.&nbsp; Insurrection has some browser compatibility checks that check for 
+              Konqueror, Safari, and Opera.  These checks then remove the client side XSLT 
+              processing and move it to server-side XSLT processing.&nbsp; This is not the 
+              preferred solution as it significantly increases the amount of data that needs 
+              to be sent to the client.&nbsp; Insurrection specifically checks for only those 
+              browsers (via the USER_AGENT header) in order to enable the workaround so as to 
+              not reduce the performance of browsers that do support the standards.
             </p>
           </div>
           <div class="footer">$Id$</div>
