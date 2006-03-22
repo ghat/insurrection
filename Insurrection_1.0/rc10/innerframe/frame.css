@@ -1,0 +1,205 @@
+/*
+ * $Id$
+ * Copyright 2004,2005 - Michael Sinz
+ */
+
+.innerframe, .innerframe td, .innerframe img
+{
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+
+td.innerframe
+{
+  text-align: left;
+}
+
+td.innerframe p
+{
+  font-size: 12pt;
+}
+
+.innerframe-top, .innerframe-top-light
+{
+  text-align: center;
+  vertical-align: middle;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: black;
+}
+
+.innerframe-top-light-space
+{
+  width: 99%;
+}
+
+.innerframe-top a, .innerframe-top a:visited
+{
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+}
+
+.innerframe-top a:hover, .innerframe-top a:active
+{
+  color: black;
+  text-decoration: underline;
+}
+
+.innerframe-top-light a, .innerframe-top-light a:visited
+{
+  cursor: pointer;
+  color: #447744;
+  text-decoration: none;
+}
+
+.innerframe-top-light a:hover, .innerframe-top-light a:active
+{
+  color: #006600;
+  text-decoration: underline;
+}
+
+.innerframe-top-left, .innerframe-top, .innerframe-top-right, .innerframe-top-left img,
+.innerframe-top-left-tab, .innerframe-top-left-tab img,
+.innerframe-top-right-tab, .innerframe-top-right-tab img,
+.innerframe-top-left-light, .innerframe-top-left-light img,
+.innerframe-top-right-light, .innerframe-top-light, .innerframe-top-light-space,
+.innerframe-top-light-left-tab, .innerframe-top-light-left-tab img,
+.innerframe-top-light-right-tab, .innerframe-top-light-right-tab img
+{
+  height: 24px;
+  min-height: 24px;
+  max-height: 24px;
+}
+
+.innerframe-bottom-left, .innerframe-bottom, .innerframe-bottom-right, .innerframe-bottom-right img
+{
+  height: 16px;
+  min-height: 16px;
+  max-height: 16px;
+}
+
+.innerframe-top-left, .innerframe-left, .innerframe-bottom-left, .innerframe-top-left img,
+.innerframe-top-left-tab, .innerframe-top-left-tab img,
+.innerframe-top-left-light, .innerframe-top-left-light img,
+.innerframe-top-light-left-tab, .innerframe-top-light-left-tab img,
+.innerframe-top-light-right-tab, .innerframe-top-light-right-tab img,
+.innerframe-top-right, .innerframe-right, .innerframe-bottom-right, .innerframe-bottom-right img,
+.innerframe-top-right-tab, .innerframe-top-right-tab img,
+.innerframe-top-right-light
+{
+  width: 17px;
+  min-width: 17px;
+  max-width: 17px;
+}
+
+.innerframe-top-left, .innerframe-top-right, .innerframe-bottom-left, .innerframe-bottom-right,
+.innerframe-top-left-tab, .innerframe-top-right-tab,
+.innerframe-top-light-left-tab, .innerframe-top-light-right-tab
+{
+  background-repeat: no-repeat;
+}
+
+.innerframe-top, .innerframe-bottom,
+.innerframe-top-light, .innerframe-top-light-space
+{
+  background-repeat: repeat-x;
+}
+
+.innerframe-left, .innerframe-right
+{
+  background-repeat: repeat-y;
+}
+
+.innerframe-top-left
+{
+  background-image: url('./top-left.gif');
+  background-position: bottom right;
+}
+
+.innerframe-top
+{
+  background-image: url('./top.gif');
+  background-position: bottom left;
+}
+
+.innerframe-top-right
+{
+  background-image: url('./top-right.gif');
+  background-position: bottom left;
+}
+
+.innerframe-left
+{
+  background-image: url('./left.gif');
+  background-position: top right;
+}
+
+.innerframe-right
+{
+  background-image: url('./right.gif');
+  background-position: top left;
+}
+
+.innerframe-bottom-left
+{
+  background-image: url('./bottom-left.gif');
+  background-position: top right;
+}
+
+.innerframe-bottom
+{
+  background-image: url('./bottom.gif');
+  background-position: top left;
+}
+
+.innerframe-bottom-right
+{
+  background-image: url('./bottom-right.gif');
+  background-position: top left;
+}
+
+.innerframe-top-left-light
+{
+  background-image: url('./top-left-light.gif');
+  background-position: bottom right;
+}
+
+.innerframe-top-light, .innerframe-top-light-space
+{
+  background-image: url('./top-light.gif');
+  background-position: bottom left;
+}
+
+.innerframe-top-right-light
+{
+  background-image: url('./top-right-light.gif');
+  background-position: bottom left;
+}
+
+.innerframe-top-light-left-tab
+{
+  background-image: url('./top-light-left-tab.gif');
+  background-position: bottom right;
+}
+
+.innerframe-top-light-right-tab
+{
+  background-image: url('./top-light-right-tab.gif');
+  background-position: bottom left;
+}
+
+.innerframe-top-left-tab
+{
+  background-image: url('./top-left-tab.gif');
+  background-position: bottom right;
+}
+
+.innerframe-top-right-tab
+{
+  background-image: url('./top-right-tab.gif');
+  background-position: bottom left;
+}
+

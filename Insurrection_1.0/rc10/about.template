@@ -1,0 +1,37 @@
+<!-- Insurrection Web Tools for Subversion: About   -->
+<!-- Copyright (c) 2004,2005 - Michael Sinz         -->
+<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->
+<!-- $Id$ -->
+<h1>About Us</h1>
+<p style="font-size: 12pt;">
+  <b><a href="http://svn.code-host.net/">Code-Host.net</a></b> by MKSoft Development provides
+  reliable &amp; secure hosted document and code revision management services via the
+  internet.&nbsp; The service is built on industry leading technologies:
+  <a href="http://www.cisco.com/">Cisco</a> firewalls,
+  <a href="http://www.kernel.org/">Linux</a> servers,
+  <a href="http://www.apache.org/">Apache</a> webservers,
+  <a href="http://subversion.tigris.org/">Subversion</a> repositories,
+  and the <a href="http://www.sinz.org/Michael.Sinz/Insurrection/project.html">Insurrection</a> web interface.
+</p>
+<p style="font-size: 12pt;">
+  The Code-Host.net servers are high-quality, carrier grade servers that are co-located
+  in high-security, high-bandwidth data centers.&nbsp; The repositories on the servers
+  are backed up nightly to a secured backup system with at least two generations of
+  complete backups available.&nbsp; For that extra level of security, each server is
+  secured behind a dedicated external firewall in addition to the server's internal firewall.
+</p>
+<p style="font-size: 12pt;">
+  <b>MKSoft Development</b> provides advanced internet and computer technology consulting
+  services.&nbsp; MKSoft Development has a full range of revision management solutions
+  ranging from basic network hosted revision management accounts to full custom
+  integrated systems at customer sites.&nbsp; We have built custom revision management and
+  software build solutions for over 15 years for a variety of environments and using
+  various technologies proven and stable technolgies.&nbsp; Reliability and security are
+  always critical concerns, especially for revision management systems.
+</p>
+<p style="font-size: 12pt;">
+  <b><a href="http://www.sinz.org/">Michael Sinz</a></b> has been in the technology and software industry since 1979.&nbsp;
+  In addition to his commercial work, he has been contributing to "open source" for much
+  of that time.
+</p>
+

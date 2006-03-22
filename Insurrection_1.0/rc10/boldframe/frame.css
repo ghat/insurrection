@@ -1,0 +1,134 @@
+/*
+ * $Id$
+ * Copyright 2004,2005 - Michael Sinz
+ */
+
+.boldframe
+{
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  background-color: #dddddd;
+}
+
+td.boldframe
+{
+  text-align: left;
+}
+
+.boldframe-top
+{
+  text-align: center;
+  vertical-align: middle;
+  font-size: 16px;
+  white-space: nowrap;
+  color: white;
+}
+
+.boldframe-top-left, .boldframe-top, .boldframe-top-right, .boldframe-top-left img
+{
+  height: 37px;
+  min-height: 37px;
+  max-height: 37px;
+}
+
+.boldframe-bottom-left, .boldframe-bottom, .boldframe-bottom-right, .boldframe-bottom-right img
+{
+  height: 15px;
+  min-height: 15px;
+  max-height: 15px;
+}
+
+.boldframe-top-left, .boldframe-left, .boldframe-bottom-left, .boldframe-top-left img
+{
+  width: 13px;
+  min-width: 13px;
+  max-width: 13px;
+}
+
+.boldframe-top-right, .boldframe-right, .boldframe-bottom-right, .boldframe-bottom-right img
+{
+  width: 13px;
+  min-width: 13px;
+  max-width: 13px;
+}
+
+.boldframe-top-left, .boldframe-top-right, .boldframe-bottom-left, .boldframe-bottom-right
+{
+  background-repeat: no-repeat;
+}
+
+.boldframe-top, .boldframe-bottom
+{
+  background-repeat: repeat-x;
+}
+
+.boldframe-left, .boldframe-right
+{
+  background-repeat: repeat-y;
+}
+
+.boldframe-top-left
+{
+  background-image: url('./top-left.gif');
+  background-position: bottom right;
+}
+
+.boldframe-top
+{
+  background-image: url('./top.gif');
+  background-position: bottom left;
+}
+
+.boldframe-top-right
+{
+  background-image: url('./top-right.gif');
+  background-position: bottom left;
+}
+
+.boldframe-left
+{
+  background-image: url('./left.gif');
+  background-position: top right;
+}
+
+.boldframe-right
+{
+  background-image: url('./right.gif');
+  background-position: top left;
+}
+
+.boldframe-bottom-left
+{
+  background-image: url('./bottom-left.gif');
+  background-position: top right;
+}
+
+.boldframe-bottom
+{
+  background-image: url('./bottom.gif');
+  background-position: top left;
+}
+
+.boldframe-bottom-right
+{
+  background-image: url('./bottom-right.gif');
+  background-position: top left;
+}
+
+/* A hidden status element within a bold frame... */
+.boldframe-status
+{
+  display: none;
+  background-color: #aaddcc;
+  margin: 0px;
+  margin-top: 2px;
+  margin-bottom: 5px;
+  padding: 3px;
+  padding-left: 1em;
+  padding-right: 1em;
+  border-top: 2px solid #000000;
+  border-left: 2px solid #000000;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
