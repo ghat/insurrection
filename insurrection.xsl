@@ -228,19 +228,19 @@
           <xsl:attribute name="alt"></xsl:attribute>
         </xsl:element>
 
-        <!-- If there is a local banner defined, have the JS load it -->
-        <xsl:if test="index/file[@href = '.svn_index']">
-          <xsl:element name="script">
-            <xsl:attribute name="type">text/javascript</xsl:attribute>
-            <xsl:attribute name="language">JavaScript</xsl:attribute>
-            <xsl:if test="string-length(index/@rev) != 0">
-              <xsl:text>document.InsurrectionRev=</xsl:text>
-              <xsl:value-of select="index/@rev"/>
-              <xsl:text>;</xsl:text>
-            </xsl:if>
+        <xsl:element name="script">
+          <xsl:attribute name="type">text/javascript</xsl:attribute>
+          <xsl:attribute name="language">JavaScript</xsl:attribute>
+          <xsl:if test="string-length(index/@rev) != 0">
+            <xsl:text>document.InsurrectionRev=</xsl:text>
+            <xsl:value-of select="index/@rev"/>
+            <xsl:text>;</xsl:text>
+          </xsl:if>
+          <!-- If there is a local banner defined, have the JS load it -->
+          <xsl:if test="index/file[@href = '.svn_index']">
             <xsl:text>loadBanner('.svn_index');</xsl:text>
-          </xsl:element>
-        </xsl:if>
+          </xsl:if>
+        </xsl:element>
 
       </body>
     </html>
@@ -275,7 +275,7 @@
               <xsl:with-param name="path" select="$path"/>
             </xsl:call-template>
             <xsl:if test="string-length($rev) != 0">
-              <xsl:text>?Insurrection=ls&amp;r=</xsl:text>
+              <xsl:text>?r</xsl:text>
               <xsl:value-of select="$rev"/>
             </xsl:if>
           </xsl:attribute>
@@ -460,7 +460,7 @@
           <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
             <xsl:if test="string-length(../@rev) != 0">
-              <xsl:text>?Insurrection=ls&amp;r=</xsl:text>
+              <xsl:text>?r</xsl:text>
               <xsl:value-of select="../@rev"/>
             </xsl:if>
           </xsl:attribute>
@@ -574,7 +574,7 @@
           <xsl:attribute name="href">
             <xsl:value-of select="@href"/>
             <xsl:if test="string-length(../@rev) != 0">
-              <xsl:text>?Insurrection=get&amp;r=</xsl:text>
+              <xsl:text>?r</xsl:text>
               <xsl:value-of select="../@rev"/>
             </xsl:if>
           </xsl:attribute>
@@ -753,7 +753,7 @@
           <xsl:attribute name="class">browsepast</xsl:attribute>
           <xsl:attribute name="href">
             <xsl:value-of select="../@rpath"/>
-            <xsl:text>/?Insurrection=ls&amp;r=</xsl:text>
+            <xsl:text>/?r</xsl:text>
             <xsl:value-of select="@revision"/>
           </xsl:attribute>
           <xsl:attribute name="title">

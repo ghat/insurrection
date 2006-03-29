@@ -129,6 +129,22 @@ RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
 RewriteCond %{QUERY_STRING} Insurrection=(admin|atom|bandwidth|blame|diff|dump|get|log|ls|rss|savelog)
 RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&HTTPS=%{HTTPS}&Path=$1"	[P,L]
 
+## To support being able to get a revision with just the
+## revision number, we support "ls" if it is a directory
+## (ends with a "/")  This removes the need to have the
+## ?Insurrection=ls&r=XXX and just makes it ?rXXX
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
+RewriteCond %{QUERY_STRING}	"^r([0-9]+)$"
+RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/ls.cgi?Insurrection=ls&r=%1&HTTPS=%{HTTPS}&Path=$1"	[P,L]
+
+## To support being able to get a revision with just the
+## revision number, we support "get" if it is not a directory
+## (ends without a "/")  This removes the need to have the
+## ?Insurrection=ls&r=XXX and just makes it ?rXXX
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
+RewriteCond %{QUERY_STRING}	"^r([0-9]+)$"
+RewriteRule	^svn(/.*[^/])$	"http://%{HTTP_HOST}/get.cgi?Insurrection=get&r=%1&HTTPS=%{HTTPS}&Path=$1"	[P,L]
+
 ## The following rule is to catch the directory XML listing
 ## request and not let mod_dav_svn answer but rather our own
 ## CGI which will produce a slightly enhanced output.  This

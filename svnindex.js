@@ -87,7 +87,7 @@ function getWithRev(uri)
 {
 	if (document.InsurrectionRev)
 	{
-		uri = uri + '?Insurrection=get&r=' + document.InsurrectionRev;
+		uri = uri + '?r' + document.InsurrectionRev;
 	}
 
 	return(uri);
@@ -101,7 +101,7 @@ function lsWithRev(uri)
 {
 	if (document.InsurrectionRev)
 	{
-		uri = uri + '?Insurrection=ls&r=' + document.InsurrectionRev;
+		uri = uri + '?r' + document.InsurrectionRev;
 	}
 
 	return(uri);
