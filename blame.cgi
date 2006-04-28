@@ -19,7 +19,7 @@ $rev = 'HEAD' if (!defined $rev);
 my $docURL = &svn_URL();
 
 ## The URL to get a history log entry.
-my $getLog = &svn_URL_Escape($SVN_REPOSITORIES_URL . &svn_REPO() . &svn_RPATH()) . '?Insurrection=log';
+my $getLog = &svn_URL_Escape($SVN_REPOSITORIES_URL . &svn_REPO()) . '/?Insurrection=log';
 
 ## Now, lets build the correct command to run...
 my $cmd = $SVN_CMD . ' blame --non-interactive --no-auth-cache -r ' . $rev . ' ' . $docURL . '@' . $rev;
