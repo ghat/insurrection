@@ -34,7 +34,7 @@ DirectoryIndex index.cgi
 ## user's specific access rights - we can not just check
 ## if the user as access to the repository via the
 ## above method.
-<Files ~ "^(admin|auth_index|bandwidth|dump|manage|password|savelog)\.cgi$">
+<Files ~ "^(admin|auth_index|bandwidth|dump|manage|manage_users|password|savelog)\.cgi$">
 	SetHandler cgi-script
 	require valid-user
 </Files>
