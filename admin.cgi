@@ -299,16 +299,25 @@ elsif (defined $cgi->param('features'))
    print &endInnerFrame();
 }
 
-&printAdminForms();
-
 print '</center>';
+
+&printAdminForms();
 
 &svn_TRAILER('$Id$');
 
 sub printAdminForms()
 {
+   print '<script type="text/javascript" language="JavaScript" src="' , $SVN_URL_PATH , 'tabs.js"></script>'
+       , '<script type="text/javascript" language="JavaScript"><!--' 
+       , "\nstartTabSet('admin',['Description','Users','New User','Dump','Usage','Hooks']);"
+       , '//--></script>';
+
    ##############################################################################
    ### Repository description administration form
+   print '<script type="text/javascript" language="JavaScript"><!--'
+       , "\nstartTabSetPage('admin');"
+       , '//--></script>';
+
    my $repolink = '<a title="Explore repository ' . &svn_XML_Escape($repo) . '" href="' . &svn_XML_Escape($SVN_REPOSITORIES_URL . $repo) . '/">' . &svn_XML_Escape($repo) . '</a>';
 
    my $editlink = '';
@@ -379,6 +388,10 @@ sub printAdminForms()
 
    ##############################################################################
    ### User access administration form
+   print '<script type="text/javascript" language="JavaScript"><!--'
+       , "\nstartTabSetPage('admin');"
+       , '//--></script>';
+
    print '<form method="post" action="?Insurrection=admin">'
        , '<input type="hidden" name="version" value="' , &svn_XML_Escape($accessVersion) , '"/>'
        , &startTableFrame(undef,'User Name&nbsp;',undef,'Access rights',undef);
@@ -419,10 +432,12 @@ sub printAdminForms()
    ### User access administration form
    ##############################################################################
 
-   print '<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="left" valign="top">';
-
    ##############################################################################
    ### Add new user form
+   print '<script type="text/javascript" language="JavaScript"><!--'
+       , "\nstartTabSetPage('admin');"
+       , '//--></script>';
+
    print '<form method="post" action="?Insurrection=admin">'
        , &startInnerFrame('Add new user')
        , '<p>'
@@ -447,10 +462,12 @@ sub printAdminForms()
    ### Add new user form
    ##############################################################################
 
-   print '</td><td valign="top" align="center" width="50%">';
-
    ##############################################################################
    ### Repository dump form
+   print '<script type="text/javascript" language="JavaScript"><!--'
+       , "\nstartTabSetPage('admin');"
+       , '//--></script>';
+
    my $action = '?';
    $action = $SVN_URL_PATH . 'dump.cgi/' . $repo if ($isAdmin);
 
@@ -488,6 +505,9 @@ sub printAdminForms()
 
    ##############################################################################
    ### Repository usage form
+   print '<script type="text/javascript" language="JavaScript"><!--'
+       , "\nstartTabSetPage('admin');"
+       , '//--></script>';
 
    ## Where the usage history sumary files are stored
    my $USAGE_DIR = $SVN_LOGS . '/usage-history';
@@ -571,10 +591,12 @@ sub printAdminForms()
    ### Repository usage form
    ##############################################################################
 
-   print '</td></tr></table>';
-
    ##############################################################################
    ### Repository feature configuration
+   print '<script type="text/javascript" language="JavaScript"><!--'
+       , "\nstartTabSetPage('admin');"
+       , '//--></script>';
+
    print '<form method="post" action="?Insurrection=admin">'
        , &startTableFrame(undef,'Repository&nbsp;Option&nbsp;',undef,'Description',undef);
 
@@ -604,6 +626,9 @@ sub printAdminForms()
    ### Repository feature configuration
    ##############################################################################
 
+   print '<script type="text/javascript" language="JavaScript"><!--'
+       , "\nendTabSet('admin');"
+       , '//--></script>';
 }
 
 ##############################################################################
