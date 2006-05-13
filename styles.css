@@ -42,8 +42,8 @@ form
 
 #content
 {
-  /* Remove the width style if you want it to be more dynamic */
-  width: 672px;
+  /* Change this width as you wish - note that this defined the minimum width */
+  width: 742px;
   color: black;
   background: white;
 }
