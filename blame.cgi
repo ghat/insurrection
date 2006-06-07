@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # $Id$
-# Copyright 2004,2005 - Michael Sinz
+# Copyright 2004-2006 - Michael Sinz
 #
 # This script handles the display of the "svn blame"
 # output for a specific version.

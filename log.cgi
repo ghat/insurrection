@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # $Id$
-# Copyright 2004,2005 - Michael Sinz
+# Copyright 2004-2006 - Michael Sinz
 #
 # This script handles the display of SVN history/logs
 #
@@ -128,7 +128,7 @@ if ((defined $rpath)
       {
          print '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
              , "<!-- Insurrection Web Tools for Subversion: History -->\n"
-             , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
+             , "<!-- Copyright (c) 2004-2006 - Michael Sinz         -->\n"
              , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
              , '<!DOCTYPE log SYSTEM "' , &svn_HTTP() , $SVN_URL_PATH , 'log.dtd">' , "\n"
              , '<log repository="' , &svn_XML_Escape($rpath)

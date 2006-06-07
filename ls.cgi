@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # $Id$
-# Copyright 2004,2005 - Michael Sinz
+# Copyright 2004-2006 - Michael Sinz
 #
 # This script handles the return of a slightly better XML listing
 # than the mod_dav_svn does.  The XML schema is basically compatible
@@ -77,7 +77,7 @@ if (defined $ls)
    print $1 , "\n"
        , '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
        , "<!-- Insurrection Web Tools for Subversion: svn ls  -->\n"
-       , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
+       , "<!-- Copyright (c) 2004-2006 - Michael Sinz         -->\n"
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
        , '<!DOCTYPE svn SYSTEM "' , &svn_HTTP() , $SVN_URL_PATH , 'ls.dtd">' , "\n";
 

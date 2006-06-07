@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
-<!-- Copyright 2004,2005 - Michael Sinz -->
+<!-- Copyright 2004-2006 - Michael Sinz -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
   <xsl:output

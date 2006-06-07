@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # $Id$
-# Copyright 2004,2005 - Michael Sinz
+# Copyright 2004-2006 - Michael Sinz
 #
 # This script handles the return of rss data.
 #
@@ -183,7 +183,7 @@ if ((defined $top) && (defined $topDate))
    print $top , "\n"
        , '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
        , "<!-- Insurrection Web Tools for Subversion RSS Feed -->\n"
-       , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
+       , "<!-- Copyright (c) 2004-2006 - Michael Sinz         -->\n"
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
        , '<rss version="2.0">'
        , '<channel>' , "\n"

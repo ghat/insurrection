@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # $Id$
-# Copyright 2004,2005 - Michael Sinz
+# Copyright 2004-2006 - Michael Sinz
 #
 # A simple display of the invocation of this CGI
 #

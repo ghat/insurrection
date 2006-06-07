@@ -1,6 +1,6 @@
 /*
  * $Id$
- * Copyright 2004,2005 - Michael Sinz
+ * Copyright 2004-2006 - Michael Sinz
  *
  * Some JavaScript support routines for the svn log pages
  */

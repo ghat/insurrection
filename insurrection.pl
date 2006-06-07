@@ -1,6 +1,6 @@
 #
 # $Id$
-# Copyright 2004,2005 - Michael Sinz
+# Copyright 2004-2006 - Michael Sinz
 #
 # These are the constants that define some of the subversion configuration
 # within the system plus some common code that is best to be shared.

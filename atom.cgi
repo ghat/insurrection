@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # $Id$
-# Copyright 2004,2005 - Michael Sinz
+# Copyright 2004-2006 - Michael Sinz
 #
 # This script handles the return of atom data.
 # NOTE:  This complies witht the Atom 1.0 and
@@ -192,7 +192,7 @@ if ((defined $top) && (defined $topDate))
    print $top , "\n"
        , '<?xml-stylesheet type="text/xsl" href="' , $SVN_URL_PATH , 'insurrection.xsl"?>' , "\n"
        , "<!-- Insurrection Web Tools for Subversion Atom Feed -->\n"
-       , "<!-- Copyright (c) 2004,2005 - Michael Sinz          -->\n"
+       , "<!-- Copyright (c) 2004-2006 - Michael Sinz          -->\n"
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/  -->\n"
        , '<feed xmlns="http://www.w3.org/2005/Atom">' , "\n"
        , '<title type="text">Repository: ' , &svn_XML_Escape($rpath . ': ' . $opath) , '</title>' , "\n"

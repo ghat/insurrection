@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- $Id$ -->
-<!-- Copyright 2004,2005 - Michael Sinz -->
+<!-- Copyright 2004-2006 - Michael Sinz -->
 <!-- This is my magic Insurrection XSLT transform to HTML -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:atom="http://www.w3.org/2005/Atom" version="1.0">
 

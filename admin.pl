@@ -1,6 +1,6 @@
 #
 # $Id$
-# Copyright 2004,2005 - Michael Sinz
+# Copyright 2004-2006 - Michael Sinz
 #
 # This is some common code that all of the Perl code
 # needs.  Note that this includes the default configuration
@@ -289,7 +289,7 @@ sub svn_HEADER($title,$expires,$doctype)
 
    print $doctype , "\n"
        , "<!-- Insurrection Web Tools for Subversion          -->\n"
-       , "<!-- Copyright (c) 2004,2005 - Michael Sinz         -->\n"
+       , "<!-- Copyright (c) 2004-2006 - Michael Sinz         -->\n"
        , "<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->\n"
        , '<html>'
        ,  '<head>'

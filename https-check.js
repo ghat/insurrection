@@ -1,6 +1,6 @@
 /*
  * $Id$
- * Copyright 2004,2005 - Michael Sinz
+ * Copyright 2004-2006 - Michael Sinz
  *
  * Check for HTTPS connections and warn if it is not an
  * https connection by rendering a display in the
