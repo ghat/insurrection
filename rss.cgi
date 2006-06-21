@@ -234,6 +234,7 @@ if ((defined $top) && (defined $topDate))
           , '<pubDate>' , &dateFormat($date) , '</pubDate>'
           , '<author>' , $author , '</author>' , "\n"
           , '<link>' , &svn_XML_Escape($link) , '</link>' , "\n"
+          , '<guid>' , &svn_XML_Escape($link) , '</guid>' , "\n"
           , '<description>' , &svn_XML_Escape($logmsg) , '</description>' , "\n"
           , '</item>' , "\n";
    }
