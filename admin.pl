@@ -1330,6 +1330,14 @@ sub repositoryTable()
    $result .= &makeRepositoryTable(1);
    $result .= &makeRepositoryTable(0) if (defined $AuthUser);
 
+   ## Just in case, if the login button was not displayed
+   ## because of no available repositories, put it up here...
+   if ($loginButton ne '')
+   {
+      $result .= &startTableFrame('width="100%"',$loginButton . '&nbsp;',undef)
+               . &endTableFrame();
+   }
+
    return $result;
 }
 
