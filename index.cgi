@@ -11,7 +11,13 @@
 #
 require 'admin.pl';
 
-open INDEX,"<index.template" || die "Where is index.template?";
+## Start out assuming a server-name based template
+my $template = $ENV{'SERVER_NAME'} . '.template';
+
+## Try opening by server name and then try the default...
+$template = 'index.template' if (! -r $template);
+
+open INDEX,"<$template" || die "Where is $template?";
 my $index = join('',<INDEX>);
 close INDEX;
 
