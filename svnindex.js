@@ -134,9 +134,16 @@ function loadBanner(name)
 }
 
 /*
+ * A noop function for our use during the load process...
+ */
+function noop()
+{
+}
+
+/*
  * This is to support the changing of the visible state and the arrow.
  */
-function foldDir(arrow)
+function foldDir(arrow,busy)
 {
 	var target = document.getElementById('.' + arrow.id);
 	if (target)
@@ -144,11 +151,34 @@ function foldDir(arrow)
 		var row = document.getElementById(target.id + '/');
 		if (row)
 		{
-			if (row.style.display == 'none')
+			if (busy)
 			{
+				// Change the onclick to basically be a no-op
+				// since we are busy...
+				if (!arrow.busy)
+				{
+					arrow['onclick'] = noop;
+				}
+
+				arrow.src = document.getElementById('openingImage').src;
+				arrow.title = 'Opening...';
+				row.style.display = '';
+				arrow.busy = true;
+			}
+			else if (arrow.busy || (row.style.display == 'none'))
+			{
+				// Change the onclick to just fold the directory as
+				// we have completed the load.  We only change this
+				// once...
+				if (arrow.busy)
+				{
+					arrow['onclick'] = function(){foldDir(arrow,false);};
+				}
+
 				row.style.display = '';
 				arrow.src = document.getElementById('openedImage').src;
 				arrow.title = 'Collapse directory';
+				arrow.busy = false;
 			}
 			else
 			{
@@ -209,7 +239,6 @@ function doNextItem(actionList)
 		}
 
 		tr = document.createElement('tr');
-		action.target.dirlist.appendChild(tr);
 
 		if (action.type == 'dir')
 		{
@@ -333,6 +362,9 @@ function doNextItem(actionList)
 		img.alt = a.title;
 		a.appendChild(img);
 
+		// Append the line now that we actually have the full row complete...
+		action.target.dirlist.appendChild(tr);
+
 		// Directories also have a hidden second row where the
 		// in-line sub-directory expansion happens.  Fun stuff
 		if (action.type == 'dir')
@@ -340,7 +372,6 @@ function doNextItem(actionList)
 			tr = document.createElement('tr');
 			tr.style.display = 'none';
 			tr.id = tgt + '/';
-			action.target.dirlist.appendChild(tr);
 
 			td = document.createElement('td');
 			tr.appendChild(td);
@@ -355,6 +386,8 @@ function doNextItem(actionList)
 			tr.appendChild(td);
 			td.id = tgt;
 			td.colSpan = 2;
+
+			action.target.dirlist.appendChild(tr);
 		}
 	}
 
@@ -363,6 +396,10 @@ function doNextItem(actionList)
 	if (actionList.length > 0)
 	{
 		setTimeout(function() {doNextItem(actionList);},1);
+	}
+	else
+	{
+		foldDir(actionList.arrow,false);
 	}
 }
 
@@ -397,10 +434,6 @@ function addRevInfo(a,action)
  */
 function loadDirTarget(target,responseXML)
 {
-	// Change the onclick to just fold the directory as
-	// we have completed the load...
-	target.arrow['onclick'] = function(){foldDir(this);};
-
 	// Clear our HTML container before we start building this.
 	target.innerHTML = '';
 
@@ -459,6 +492,9 @@ function loadDirTarget(target,responseXML)
 		actionList.push(action);
 	}
 
+	// Save the arrow location...
+	actionList.arrow = target.arrow;
+
 	// Ask the system to process the list...
 	doNextItem(actionList);
 }
@@ -514,11 +550,11 @@ function loadDir(arrow)
 			target.xml = getXMLHTTP();
 			if (target.xml)
 			{
-				// Flip the arrow and start showing the rows now...
-				foldDir(arrow);
+				// Flip the arrow into busy state...
+				foldDir(arrow,true);
 
 				// Set the internal text such that we know where we are...
-				target.innerHTML = 'xml.open("GET","' + target.uri + '",true);';
+				target.innerHTML = 'Loading ' + target.uri + ' ...';
 
 				target.xml.onreadystatechange = function() { loadDirCheck(target); };
 				target.xml.open("GET",target.uri,true);

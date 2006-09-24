@@ -50,6 +50,7 @@
        that the images are at the "root" of the server. -->
   <!-- Note: the data within these templates must be literal - no XSLT tags -->
   <xsl:template name="closedicon-path">/closed.gif</xsl:template>
+  <xsl:template name="openingicon-path">/opening.gif</xsl:template>
   <xsl:template name="openedicon-path">/opened.gif</xsl:template>
   <xsl:template name="diricon-path">/folder.gif</xsl:template>
   <xsl:template name="fileicon-path">/file.gif</xsl:template>
@@ -184,6 +185,14 @@
             <xsl:call-template name="closedicon-path"/>
           </xsl:attribute>
           <xsl:attribute name="id">closedImage</xsl:attribute>
+          <xsl:attribute name="style">display: none</xsl:attribute>
+          <xsl:attribute name="alt"></xsl:attribute>
+        </xsl:element>
+        <xsl:element name="img">
+          <xsl:attribute name="src">
+            <xsl:call-template name="openingicon-path"/>
+          </xsl:attribute>
+          <xsl:attribute name="id">openingImage</xsl:attribute>
           <xsl:attribute name="style">display: none</xsl:attribute>
           <xsl:attribute name="alt"></xsl:attribute>
         </xsl:element>
