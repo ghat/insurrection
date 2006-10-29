@@ -1,0 +1,159 @@
+/*
+ * $Id$
+ * Copyright 2004-2006 - Michael Sinz
+ */
+
+.btableframe
+{
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  background-color: #dddddd;
+}
+
+.btableframe-row-even
+{
+  background-color: #FFFFFF;
+  vertical-align: baseline;
+  text-align: left;
+}
+
+.btableframe-row-odd
+{
+  background-color: #F4F4F4;
+  vertical-align: baseline;
+  text-align: left;
+}
+
+.btableframe-row-odd td, .btableframe-row-even td
+{
+  padding: 1px;
+}
+
+.btableframe-top
+{
+  text-align: center;
+  vertical-align: middle;
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: white;
+}
+
+.btableframe-top-left, .btableframe-top, .btableframe-top-right, .btableframe-top-div
+{
+  height: 37px;
+  min-height: 37px;
+  max-height: 37px;
+}
+
+.btableframe-bottom-left, .btableframe-bottom, .btableframe-bottom-right, .btableframe-bottom-div
+{
+  height: 15px;
+  min-height: 15px;
+  max-height: 15px;
+}
+
+.btableframe-top-left, .btableframe-left, .btableframe-bottom-left
+{
+  width: 11px;
+  min-width: 11px;
+  max-width: 11px;
+}
+
+.btableframe-top-right, .btableframe-right, .btableframe-bottom-right
+{
+  width: 11px;
+  min-width: 11px;
+  max-width: 11px;
+}
+
+.btableframe-top-div, .btableframe-div, .btableframe-bottom-div
+{
+  width: 4px;
+  min-width: 4px;
+  max-width: 4px;
+}
+
+.btableframe-top-left, .btableframe-top-right, .btableframe-bottom-left, .btableframe-bottom-right, .btableframe-top-div, .btableframe-bottom-div
+{
+  background-repeat: no-repeat;
+}
+
+.btableframe-top, .btableframe-bottom
+{
+  background-repeat: repeat-x;
+}
+
+.btableframe-left, .btableframe-right, .btableframe-div
+{
+  background-repeat: repeat-y;
+}
+
+.btableframe-top-left
+{
+  background-image: url('./top-left.gif');
+  background-position: bottom right;
+}
+
+.btableframe-top
+{
+  background-image: url('./top.gif');
+  background-position: bottom left;
+}
+
+.btableframe-top-div
+{
+  background-image: url('./top-div.gif');
+  background-position: bottom center;
+}
+
+.btableframe-top-right
+{
+  background-image: url('./top-right.gif');
+  background-position: bottom left;
+}
+
+.btableframe-left
+{
+  background-image: url('./left.gif');
+  background-position: top right;
+}
+
+td.btableframe-div
+{
+  padding: 0px;
+  background-image: url('./div.gif');
+  background-position: top center;
+}
+
+.btableframe-right
+{
+  background-image: url('./right.gif');
+  background-position: top left;
+}
+
+.btableframe-bottom-left
+{
+  background-image: url('./bottom-left.gif');
+  background-position: top right;
+}
+
+.btableframe-bottom
+{
+  background-image: url('./bottom.gif');
+  background-position: top left;
+}
+
+.btableframe-bottom-div
+{
+  background-image: url('./bottom-div.gif');
+  background-position: top center;
+}
+
+.btableframe-bottom-right
+{
+  background-image: url('./bottom-right.gif');
+  background-position: top left;
+}
+

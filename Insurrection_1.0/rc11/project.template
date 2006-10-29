@@ -1,0 +1,221 @@
+<!-- Insurrection Web Tools for Subversion: Project -->
+<!-- Copyright (c) 2004-2006 - Michael Sinz         -->
+<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->
+<!-- $Id$ -->
+<h1>Insurrection Web Tools</h1>
+<p>
+  One of my pet projects has been to build a better web based interface to a revision control system
+  known as <a href="http://subversion.tigris.org/">Subversion</a>.&nbsp;
+  The <a href="/">Insurrection</a> project is the result of that effort.&nbsp;
+  While it is still under development, it already is a very compelling web interface to
+  <a href="http://subversion.tigris.org/">Subversion</a> and is in active use in a number of places.
+</p>
+<p>
+  The project page is at <a href="http://insurrection.tigris.org/">http://insurrection.tigris.org/</a>
+  but the source code can be accessed via the Insurrection tools itself at
+  <a href="http://server:port/">http://server:port/</a>.&nbsp; If you use Subversion,
+  you can get the latest code via: <code>svn&nbsp;co&nbsp;http://server:port/svn/Insurrection/trunk</code>
+</p>
+<h3>Features</h3>
+<ul>
+  <li>Easily browse the repository</li>
+  <li>Access any version of any file</li>
+  <li>View revision histories</li>
+  <li>View differences at various revisions</li>
+  <li>Annotate files with respect to author and revision</li>
+  <li>Get RSS and Atom feeds of changes in a repository or part of a repository or a specific file</li>
+  <li>All repository features are via repository consistent URLs</li>
+  <li>Administrate user access to repositories</li>
+</ul>
+<h3>Design Goals</h3>
+<ul>
+  <li>
+    Must work without the need to install anything on the host OS.&nbsp; This means
+    that all of the functionality of this system must work in a user process with a
+    locally built Apache and Subversion code base.&nbsp; We do assume some basic
+    features of a "unix" like operating environment, such as having a basic Perl
+    installation.
+  </li>
+  <li>
+    Make use of modern browser technology to reduce server side overhead and
+    bandwidth usage.&nbsp; This means using client-side XSLT transforms to embellish
+    XML output into a presentable form.&nbsp; This means heavy use of XSLT, CSS, and
+    JavaScript where needed to product a better result.&nbsp; No aiming at the
+    lowest possible version.
+  </li>
+  <li>
+    Try not to use any browser or platform specific extensions if at all possible.&nbsp;
+    This means that none of the JavaScript will do browser detection.&nbsp; <i style="color: darkgreen;">There
+    is one case were we have to check for a Microsoft-ism due to the lack of a
+    common standard but the check is written such that if IE does start supporting
+    the standard it will automatically used that form.&nbsp;</i> The minimum browser
+    support is for Firefox 1.0, Mozilla 1.7.x, and IE 6 with IE 5+, Opera, and Safari
+    to be supported where reasonable.&nbsp; <i style="color: darkgreen;">Safari is
+    partially working due to bugs in Safari.&nbsp; Opera is not working due to lack of
+    an XSLT implementation.&nbsp;</i>
+    (See <a href="/browser-tests/">these browser functionality tests</a>
+    that I have put together for details on client side requirements.)
+  </li>
+  <li>
+    To provide a way to administrate and support multiple repositories on the same
+    server.&nbsp; Currently the code does not support a single repository only
+    format since it assumes a multi-repository structure.&nbsp; Support for single
+    repository configuration will be looked at if it does not adversely impact the
+    support for multiple repositories.
+  </li>
+  <li>
+    To make sure that we don't use any more bad puns as we have used our allowance
+    in the naming of this project.
+  </li>
+  <li>
+    ...more to come...
+  </li>
+</ul>
+
+<h3>Project Status</h3>
+<p>
+  The current code is in active use on a number non-public Subversion servers.&nbsp;
+  This does not mean that the project is complete but it is relatively stable.&nbsp;
+  Many things have not been cleaned up or as fully supported as I would like.&nbsp;
+  There is also a lack of clean documentation as to how to install the code.&nbsp;
+  This is because, so far, it has always been installed by the same person who wrote it.
+</p>
+<p>
+  I have put up a <a href="http://server:port/"><b>demo server</b> at
+  <tt>http://server:port/</tt></a> that has the Insurrection code on it so you
+  can see it in action.&nbsp; I have also made some "Browser Shots" that
+  show a small bit of what using Insurrection is like.&nbsp;
+  <a href="#screenshots" onclick="document.getElementById('screenshots').style.display = 'block'; this.innerHTML = ''; return 0;">(Click to view screen shots)</a>
+</p>
+<div id="screenshots" style="display: none;">
+<p>
+  While it is best to actually see Insurrection in action at
+  <a href="http://server:port/"><b>http://server:port/</b></a>, I have put together
+  a few quick snapshots of the system working in my browser:
+</p>
+<p>
+  <a href="screenshots/fullsize/Index1.jpg"><img src="screenshots/Index1.jpg" align="right" alt="screenshot"/></a>The
+  main page is template driven, with the repositories the logged in user has
+  access to being displayed.&nbsp; Annonymous users will only see repositories
+  that have annonymous access enabled.&nbsp; As you can see, each repository gets
+  its own RSS and Atom feed links in addition to a customizable description.&nbsp;
+  Login can be handled via HTTP/SSL or just normal HTTP.&nbsp; The access user
+  name and password is exactly those of Subversion's WebDAV system such that there
+  is no confusion or possibility of them getting out of sync.
+</p>
+<p>
+  RSS and Atom feeds are not restricted to whole repositories.&nbsp; Subtrees and
+  individual files can also be selected for RSS/Atom feeds.&nbsp; The directory feeds
+  can easily be selected during the browsing of the repository.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Root2.jpg"><img src="screenshots/Root2.jpg" align="right" alt="screenshot"/></a>
+  <a href="screenshots/fullsize/Root1.jpg"><img src="screenshots/Root1.jpg" align="right" alt="screenshot"/></a>
+  When browsing the repository, you get a view of the current state of the repository.&nbsp;
+  As you can see in the second screen shot, the repository browser is internally
+  dynamic in that you can expand folders/directories in place.&nbsp; This is done using
+  async requests from the browser and the bandwidth needed is only the minimal XML
+  structure of the information.&nbsp; All formatting is done either via XSLT and/or JavaScript.&nbsp;
+  (In some browsers JavaScript is used in place of XSLT, in others both XSLT
+  JavaScript is used)
+</p>
+<p>
+  The <img src="info.gif" alt="Get revision history icon"/> icon is the button to select the revision history entries
+  of the repository that pertain to that given item.&nbsp; If the item is a directory,
+  the history will include any changes made within that directory tree.&nbsp; If the
+  item is a file, the history will include any revision which updated that file.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Log2.jpg"><img src="screenshots/Log2.jpg" align="right" alt="screenshot"/></a>
+  <a href="screenshots/fullsize/Log1.jpg"><img src="screenshots/Log1.jpg" align="right" alt="screenshot"/></a>
+  Here we got the revision history of "/trunk" from within the Insurrection repository
+  that was being browsed in the screen shots above.&nbsp; The log shows the commit
+  message for each revision and, when clicked on, the details as to what files where
+  added, deleted, modified, etc.&nbsp; The second picture shows what happens after
+  having clicked on revision 264.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Diff1.jpg"><img src="screenshots/Diff1.jpg" align="right" alt="screenshot"/></a>
+  <a href="screenshots/fullsize/Log3.jpg"><img src="screenshots/Log3.jpg" align="right" alt="screenshot"/></a>
+  For each file listed in the revision details, a popup menu is available that
+  lets you select various operations on that file.&nbsp; In this screen shot
+  we are selecting the "Diff from previous" option which shows us the differences
+  from the previous version of the file.&nbsp; The "Patch from previous" would
+  produce a patch file that would be usable to patch the previous version into
+  the new version.&nbsp; The second screen shot shows the HTML diff output.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Annotate1.jpg"><img src="screenshots/Annotate1.jpg" align="right" alt="screenshot"/></a>
+  <a href="screenshots/fullsize/Log4.jpg"><img src="screenshots/Log4.jpg" align="right" alt="screenshot"/></a>
+  One can also select a specific revision that can then be used to diff against
+  elsewhere in the page.&nbsp; Note that this selection is currently on a specific
+  filename.&nbsp; I am going to be working on removing that requirement.
+</p>
+<p>
+  The second screen shot here shows the result of the "annotate" or "blame" feature.&nbsp;
+  It shows the author and revision that the given lines were last modified/added.&nbsp;
+  Thus, if you want to know who last touched a bit of code you can easily do so.&nbsp;
+  Clicking on a revision in the annotate display will get you the revision entry for
+  that revision of the file.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Admin1.jpg"><img src="screenshots/Admin1.jpg" align="right" alt="screenshot"/></a>
+  This is the administrative page for a repository.&nbsp; Users who are defined as
+  admins for a given repository will be able to access this page.&nbsp; From here
+  the administrator can change the repository description, change user access rights,
+  add new users, download a dump/backup of the repository, and configure certain
+  hook features.
+</p>
+<br clear="all">
+<p>
+  <a href="screenshots/fullsize/Usage2.jpg"><img src="screenshots/Usage2.jpg" align="right" alt="screenshot"/></a>
+  <a href="screenshots/fullsize/Usage1.jpg"><img src="screenshots/Usage1.jpg" align="right" alt="screenshot"/></a>
+  There is also a bandwidth usage report link in the admin page that depends on
+  external usage tools that I have not released yet.&nbsp; Here are two screen shots
+  of the usage pages of the public Insurrection repository.&nbsp; This depends on
+  a number of tools and scripts to produce this result and is, of course, optional
+  and not required for the full functionality of the Insurrection tools.&nbsp; (I
+  just like having such information available to me.)
+</p>
+<br clear="all">
+</div>
+<p>
+  I have put together some simple tests of the client-side/browser capabilities
+  that the Insurrection system needs.&nbsp; You can try these tests at
+  <a href="http://server:port/browser-tests/">http://server:port/browser-tests/</a>
+  and the source for these tests are in the source repository.
+</p>
+<p>
+  The goal of this set of tools is to become a reasonably complete Subversion
+  repository browsing system plus a simple administration system for repository
+  access controls.
+</p>
+
+<h3>Why reinvent the wheel?</h3>
+<p>
+  While, in some ways I believe that I have built something that already exists, I
+  have done so mainly due to direct needs or issues with what already exists.&nbsp;
+  <i style="color: darkgreen;">See some of the design goals above...</i>
+</p>
+<p>
+  The main reason was the need for running within a standard Linux server install
+  without the need for any root access.&nbsp; This makes this a clean install onto
+  already supported NOC servers within a company without special needs or
+  configuration.&nbsp; The current setups I have installed allows for the
+  migration of the whole system to another machine by just moving the user account
+  and directories.&nbsp; No special backup procedures, system installs, or extra
+  patching for securty or administration.&nbsp; (For example, my setup runs on a
+  plain-vanilla RedHat AS2.1 install)
+</p>
+<p>
+  One of the key components that made this possible is the Subversion Filesystem
+  database backend support.&nbsp; In my testing of the FSFS repositories, I have
+  found that they are actually more reliable than the BDB ones.&nbsp; (Less
+  operator intervention in the case of a lights-out environment.)
+</p>
+

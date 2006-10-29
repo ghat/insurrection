@@ -1,0 +1,160 @@
+##
+## $Id$
+## Copyright 2004-2006 - Michael Sinz
+##
+
+AuthUserFile /home/subversion/authentication/passwords
+AuthName "MKSoft Insurrection Repository"
+AuthType Basic
+
+## We want the index.cgi to handle the directory by default...
+DirectoryIndex index.cgi
+
+## Note that I list each file specifically such that
+## there is less chance of running a CGI that was not
+## placed here on purpose.  Also, there is nothing that
+## requires that the CGI scripts end in ".cgi" - I
+## am just doing that to make it easy to see where the
+## CGIs are vs non-CGIs.  This is most noticeable in the
+## CGIs that deal with log processing, etc.
+
+## The main index file is generally available and will
+## show only elements that are available without login.
+<Files ~ "^index\.cgi$">
+	SetHandler cgi-script
+</Files>
+
+## The *.template files are not to be served directly
+## so exclude them here
+<Files ~ "\.template$">
+	Deny from all
+</Files>
+
+## These CGIs require a login in order to validate the
+## user's specific access rights - we can not just check
+## if the user as access to the repository via the
+## above method.
+<Files ~ "^(admin|auth_index|bandwidth|dump|manage|manage_users|password|savelog)\.cgi$">
+	SetHandler cgi-script
+	require valid-user
+</Files>
+
+## This is a CGI just to fill in some information into
+## the template.  It is only called from the index template
+## and thus really is just a site-specific thing.  I
+## use it to make the project page work for both
+## the local test server and the public servers.
+<Files ~ "^project\.cgi$">
+	SetHandler cgi-script
+</Files>
+
+## These CGIs can be used without login depending on
+## the repository being requested in the path extra
+## and the access rights defined.  We let the Subversion
+## mod_authz_svn take care of the path check before
+## we proxy to here.  We then just validate in these
+## scripts that we have been proxied.
+<Files ~ "^(atom|blame|diff|get|log|ls|rss)\.cgi$">
+	SetHandler cgi-script
+</Files>
+
+## You need to have mod-rewrite enabled in apache
+RewriteEngine On
+
+## Since we depend on HTTP_HOST being a reasonable value
+## in some of the other request, we first filter all
+## requests through here.  Basically, we check that
+## the HTTP_HOST is reasonable and if not, fail the
+## request right here, right now.
+## First we check if the host name has a slash in it.
+## Then we check that the host name has a matching .GIF image.
+## Note that the HTTP_HOST may have the port number
+## on it, so the file name may need to have to be in both
+## forms.
+## This is how we then configure what host name or names
+## we want to support here.  If it has a GIF file
+## then it is a valid host.  If not, out you go...
+## (but only for GET/POST operations...)
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
+RewriteCond %{HTTP_HOST}	"^.*/.*$"	[OR]
+RewriteCond /home/subversion/www/%{HTTP_HOST}.gif !-f
+RewriteRule	^(.*)$		""	[F,L]
+
+## Some custom logo processing based on the host that
+## we are acting as.  We know it exists otherwise
+## the above safety check rule would have caught us.
+## Note that we do this internally (PT) such that
+## the user does not know this exists.
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
+RewriteRule	^Logo.gif	"/%{HTTP_HOST}.gif"	[PT,L]
+
+## Simple rule to support having intex.html and project.html
+## actually be cgi scripts.
+RewriteCond %{REQUEST_METHOD}		"^(GET|POST)$"
+RewriteRule	^(index|project).html$	/$1.cgi	[PT,L]
+
+## We use a local proxy operation such that we can
+## publicly expose only the normal Subversion paths
+## with the only difference being CGI query strings.
+## We also depend on the rewrites to provide the
+## full path to the repository.  Thus, all of the
+## ^svn/ bits would need to contain the prefix path
+## from this directory into the base of the repositories.
+## Note that we also require proxy support to
+## make this work reasonably transparently.  A
+## redirect would have worked but then would not get
+## the benefit of the authentication from mod_authz_svn
+## that was already done.  The CGIs try to notice this
+## proxy behavior and when proxied to via this mechanism
+## do not do their own authentication.
+##
+## Note that we only look at GET access methods.
+## All other methods are reserver for mod_dav_svn.
+##
+## This is one of the reasons the HTTP_HOST needs
+## to be filtered - otherwise these rules could
+## be used to jump elsewhere on the net by providing
+## incorrect HTTP_HOST values.
+##
+## NOTE - Currently a bug in Apache/mod_rewrite
+## has bugs with certain characters in the URL.
+## http://issues.apache.org/bugzilla/show_bug.cgi?id=34602
+##
+## The rewrite/proxy we do here specifically tries to get
+## around this problem by putting the URI into a CGI parameter
+## and not the path_info and then doing some re-parsing with
+## the understanding that the Path parameter is always the
+## last parameter before the end of the URI.  Ugly but it works...
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
+RewriteCond %{QUERY_STRING} Insurrection=(admin|atom|bandwidth|blame|diff|dump|get|log|ls|rss|savelog)
+RewriteRule	^svn(/.*)$	"http://%{HTTP_HOST}/%1.cgi?%{QUERY_STRING}&HTTPS=%{HTTPS}&Path=$1"	[P,L]
+
+## To support being able to get a revision with just the
+## revision number, we support "ls" if it is a directory
+## (ends with a "/")  This removes the need to have the
+## ?Insurrection=ls&r=XXX and just makes it ?rXXX
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
+RewriteCond %{QUERY_STRING}	"^r([0-9]+)$"
+RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/ls.cgi?Insurrection=ls&r=%1&HTTPS=%{HTTPS}&Path=$1"	[P,L]
+
+## To support being able to get a revision with just the
+## revision number, we support "get" if it is not a directory
+## (ends without a "/")  This removes the need to have the
+## ?Insurrection=ls&r=XXX and just makes it ?rXXX
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
+RewriteCond %{QUERY_STRING}	"^r([0-9]+)$"
+RewriteRule	^svn(/.*[^/])$	"http://%{HTTP_HOST}/get.cgi?Insurrection=get&r=%1&HTTPS=%{HTTPS}&Path=$1"	[P,L]
+
+## The following rule is to catch the directory XML listing
+## request and not let mod_dav_svn answer but rather our own
+## CGI which will produce a slightly enhanced output.  This
+## rule is not required, but if it is used, the directory
+## listings will include revision date/number/author for
+## each individual entry.
+##
+## If this rule is not used, you can still get the enhanced
+## listings via the ?Insurrection=ls CGI option (which is
+## basically what this rule does)
+RewriteCond %{REQUEST_METHOD}	"^(GET|POST)$"
+RewriteRule	^svn(/.*/)$	"http://%{HTTP_HOST}/ls.cgi?Insurrection=ls&HTTPS=%{HTTPS}&Path=$1"	[P,L]
+

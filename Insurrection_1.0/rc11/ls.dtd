@@ -1,0 +1,36 @@
+<!-- Insurrection Web Tools for Subversion: ls.dtd  -->
+<!-- Copyright (c) 2004-2006 - Michael Sinz         -->
+<!-- http://www.sinz.org/Michael.Sinz/Insurrection/ -->
+
+<!-- $Id$ -->
+
+<!-- This is the DTD for the Insurrection ls XML -->
+<!-- It is very simular to the DTD of the mod_dav_svn -->
+
+<!ELEMENT svn   (index)>
+
+<!ATTLIST svn   version  CDATA #IMPLIED
+                href     CDATA #REQUIRED>
+
+<!ELEMENT index (updir?, (file | dir)*)>
+
+<!ATTLIST index name     CDATA #IMPLIED
+                path     CDATA #IMPLIED
+                rev      CDATA #IMPLIED>
+<!ELEMENT updir EMPTY>
+
+<!ELEMENT file EMPTY>
+<!ATTLIST file  name     CDATA #REQUIRED
+                author   CDATA #REQUIRED
+                revision CDATA #REQUIRED
+                date     CDATA #REQUIRED
+                size     CDATA #REQUIRED
+                href     CDATA #REQUIRED>
+
+<!ELEMENT dir EMPTY>
+<!ATTLIST dir   name     CDATA #REQUIRED
+                author   CDATA #REQUIRED
+                revision CDATA #REQUIRED
+                date     CDATA #REQUIRED
+                href     CDATA #REQUIRED>
+

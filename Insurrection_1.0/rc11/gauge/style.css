@@ -1,0 +1,106 @@
+/*
+ * $Id$
+ * Copyright 2004-2006 - Michael Sinz
+ */
+
+/* A little fun with a gauge */
+table.gauge, table.gauge td, table.gauge tr, table.gauge img
+{
+  background-color: transparent;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+}
+
+/*
+ * Ugly, ugly hack - MS-IE has a rendering bug with 100% width
+ * on a table within a cell of another table under certain conditions.
+ * It just so happens that the 100% is not needed in MS-IE
+ * so we don't want it but then that breaks other browsers.
+ * However, MS-IE does not handle this type of style selector
+ * (using the requirement of an attribute)  Anyway, this makes
+ * MS-IE not see this attribute and yet other browsers that need
+ * it, still see it!  If not for the IE bug, the '[class]' would
+ * not be needed.  If not for the CSS IE bug, we could not work
+ * around the IE rendering bug.
+ */
+table.gauge[class]
+{
+  width: 100%;
+}
+
+.gaugefilled, .gaugeempty, .gaugecritical
+{
+  background-repeat: repeat-x;
+  background-position: center left;
+}
+
+.gaugefilled
+{
+  background-image: url('./filled.gif');
+}
+
+.gaugeempty
+{
+  background-image: url('./empty.gif');
+}
+
+.gaugecritical
+{
+  background-image: url('./critical.gif');
+}
+
+.gaugestartfilled img, .gaugestartempty img, .gaugestartcritical img
+{
+  width: 3px;
+  height: 9px;
+}
+
+.gaugestartfilled, .gaugestartempty, .gaugestartcritical
+{
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+
+.gaugestartfilled
+{
+  background-image: url('./start/filled.gif');
+}
+
+.gaugestartempty
+{
+  background-image: url('./start/empty.gif');
+}
+
+.gaugestartcritical
+{
+  background-image: url('./start/critical.gif');
+}
+
+.gaugeendfilled img, .gaugeendempty img, .gaugeendcritical img
+{
+  width: 3px;
+  height: 9px;
+}
+
+.gaugeendfilled, .gaugeendempty, .gaugeendcritical
+{
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+.gaugeendfilled
+{
+  background-image: url('./end/filled.gif');
+}
+
+.gaugeendempty
+{
+  background-image: url('./end/empty.gif');
+}
+
+.gaugeendcritical
+{
+  background-image: url('./end/critical.gif');
+}
+
