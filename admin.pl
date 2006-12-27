@@ -285,7 +285,7 @@ sub svn_HEADER($title,$expires,$doctype)
    $header =~ s|(<link\s[^>]*)/>|$1>|gso;
 
    print $cgi->header('-expires' => $expires ,
-                      '-type' => 'text/html');
+                      '-type' => 'text/html; charset=utf-8');
 
    print $doctype , "\n"
        , "<!-- Insurrection Web Tools for Subversion          -->\n"
@@ -428,7 +428,7 @@ sub getNumParam($param)
 # all wed users.  (That is Mozilla/Firefox and IE)
 # Safari will/does work correctly as of webkit 420+
 # so also detect that.
-# 
+#
 # Note test filter downwards - thus the "OK" or 0 return
 # is done as early as possible.
 #
