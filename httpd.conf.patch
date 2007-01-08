@@ -1,0 +1,444 @@
+--- httpd-svn.conf.orig	2006-01-31 09:03:03.000000000 -0500
++++ httpd-svn.conf	2006-07-31 17:24:09.984777320 -0400
+@@ -216,8 +216,9 @@
+ #
+ #Listen 12.34.56.78:80
+ 
+ Listen 80
++Listen 443
+ 
+ #
+ # Dynamic Shared Object (DSO) Support
+ #
+@@ -228,8 +229,10 @@
+ # to be loaded here.
+ #
+ # Example:
+ # LoadModule foo_module modules/mod_foo.so
++LoadModule dav_svn_module     modules/mod_dav_svn.so
++LoadModule authz_svn_module   modules/mod_authz_svn.so
+ #
+ 
+ #
+ # ExtendedStatus controls whether Apache will generate "full" status
+@@ -263,19 +266,19 @@
+ #  NOTE that some kernels refuse to setgid(Group) or semctl(IPC_SET)
+ #  when the value of (unsigned)Group is above 60000; 
+ #  don't use Group #-1 on these systems!
+ #
+-User nobody
+-Group #-1
++User svn
++Group svn
+ </IfModule>
+ </IfModule>
+ 
+ #
+ # ServerAdmin: Your address, where problems with the server should be
+ # e-mailed.  This address appears on some server-generated pages, such
+ # as error documents.  e.g. admin@your-domain.com
+ #
+-ServerAdmin you@example.com
++ServerAdmin mksoft@tigris.org
+ 
+ #
+ # ServerName gives the name and port that the server uses to identify itself.
+ # This can often be determined automatically, but we recommend you specify
+@@ -303,9 +307,9 @@
+ # DocumentRoot: The directory out of which you will serve your
+ # documents. By default, all requests are taken from this directory, but
+ # symbolic links and aliases may be used to point to other locations.
+ #
+-DocumentRoot "/home/subversion/apache/htdocs"
++DocumentRoot "/home/subversion/www"
+ 
+ #
+ # Each directory to which Apache has access can be configured with respect
+ # to which services and features are allowed and/or disabled in that
+@@ -328,9 +332,9 @@
+ 
+ #
+ # This should be changed to whatever you set DocumentRoot to.
+ #
+-<Directory "/home/subversion/apache/htdocs">
++#<Directory "/home/subversion/www">
+ 
+ #
+ # Possible values for the Options directive are "None", "All",
+ # or any combination of:
+@@ -342,30 +346,32 @@
+ # The Options directive is both complicated and important.  Please see
+ # http://httpd.apache.org/docs-2.0/mod/core.html#options
+ # for more information.
+ #
+-    Options Indexes FollowSymLinks
++#    Options Indexes FollowSymLinks ExecCGI
+ 
+ #
+ # AllowOverride controls what directives may be placed in .htaccess files.
+ # It can be "All", "None", or any combination of the keywords:
+ #   Options FileInfo AuthConfig Limit Indexes
+ #
+-    AllowOverride None
++#    AllowOverride All
+ 
+ #
+ # Controls who can get stuff from this server.
+ #
+-    Order allow,deny
+-    Allow from all
++#    Order allow,deny
++#    Allow from all
+ 
+-</Directory>
++#</Directory>
+ 
+ #
+-# UserDir: The name of the directory that is appended onto a user's home
+-# directory if a ~user request is received.
++# Prevent access to the .svn directories in the tree
+ #
+-UserDir public_html
++<DirectoryMatch "^/.*/\.svn">
++    Order allow,deny
++    Deny from all
++</DirectoryMatch>
+ 
+ #
+ # Control access to UserDir directories.  The following is an example
+ # for a site where these directories are restricted to read-only.
+@@ -470,9 +476,9 @@
+ # container, error messages relating to that virtual host will be
+ # logged here.  If you *do* define an error logfile for a <VirtualHost>
+ # container, that host's errors will be logged there and not here.
+ #
+-ErrorLog logs/error_log
++ErrorLog /home/subversion/logs/error_log
+ 
+ #
+ # LogLevel: Control the number of messages logged to the error_log.
+ # Possible values include: debug, info, notice, warn, error, crit,
+@@ -498,9 +504,10 @@
+ # container, they will be logged here.  Contrariwise, if you *do*
+ # define per-<VirtualHost> access logfiles, transactions will be
+ # logged therein and *not* in this file.
+ #
+-CustomLog logs/access_log common
++LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" svnlog
++CustomLog /home/subversion/logs/access_log svnlog
+ 
+ #
+ # If you would like to have agent and referer logfiles, uncomment the
+ # following directives.
+@@ -521,9 +528,9 @@
+ # and compiled in modules.
+ # Set to one of:  Full | OS | Minor | Minimal | Major | Prod
+ # where Full conveys the most information, and Prod the least.
+ #
+-ServerTokens Full
++ServerTokens Minimal
+ 
+ #
+ # Optionally add a line containing the server version and virtual host
+ # name to server-generated pages (internal error documents, FTP directory 
+@@ -546,47 +553,47 @@
+ #
+ # We include the /icons/ alias for FancyIndexed directory listings.  If you
+ # do not use FancyIndexing, you may comment this out.
+ #
+-Alias /icons/ "/home/subversion/apache/icons/"
+-
+-<Directory "/home/subversion/apache/icons">
+-    Options Indexes MultiViews
+-    AllowOverride None
+-    Order allow,deny
+-    Allow from all
+-</Directory>
+-
++#Alias /icons/ "/home/subversion/apache/icons/"
++#
++#<Directory "/home/subversion/apache/icons">
++#    Options Indexes MultiViews
++#    AllowOverride None
++#    Order allow,deny
++#    Allow from all
++#</Directory>
++#
+ #
+ # This should be changed to the ServerRoot/manual/.  The alias provides
+ # the manual, even if you choose to move your DocumentRoot.  You may comment
+ # this out if you do not care for the documentation.
+ #
+-AliasMatch ^/manual(?:/(?:de|en|es|fr|ja|ko|ru))?(/.*)?$ "/home/subversion/apache/manual$1"
+-
+-<Directory "/home/subversion/apache/manual">
+-    Options Indexes
+-    AllowOverride None
+-    Order allow,deny
+-    Allow from all
+-
+-    <Files *.html>
+-        SetHandler type-map
+-    </Files>
+-
+-    SetEnvIf Request_URI ^/manual/(de|en|es|fr|ja|ko|ru)/ prefer-language=$1
+-    RedirectMatch 301 ^/manual(?:/(de|en|es|fr|ja|ko|ru)){2,}(/.*)?$ /manual/$1$2
+-</Directory>
+-
++#AliasMatch ^/manual(?:/(?:de|en|es|fr|ja|ko|ru))?(/.*)?$ "/home/subversion/apache/manual$1"
++#
++#<Directory "/home/subversion/apache/manual">
++#    Options Indexes
++#    AllowOverride None
++#    Order allow,deny
++#    Allow from all
++#
++#    <Files *.html>
++#        SetHandler type-map
++#    </Files>
++#
++#    SetEnvIf Request_URI ^/manual/(de|en|es|fr|ja|ko|ru)/ prefer-language=$1
++#    RedirectMatch 301 ^/manual(?:/(de|en|es|fr|ja|ko|ru)){2,}(/.*)?$ /manual/$1$2
++#</Directory>
++#
+ #
+ # ScriptAlias: This controls which directories contain server scripts.
+ # ScriptAliases are essentially the same as Aliases, except that
+ # documents in the realname directory are treated as applications and
+ # run by the server when requested rather than as documents sent to the client.
+ # The same rules about trailing "/" apply to ScriptAlias directives as to
+ # Alias.
+ #
+-ScriptAlias /cgi-bin/ "/home/subversion/apache/cgi-bin/"
++#ScriptAlias /cgi-bin/ "/home/subversion/apache/cgi-bin/"
+ 
+ <IfModule mod_cgid.c>
+ #
+ # Additional to mod_cgid.c settings, mod_cgid has Scriptsock <path>
+@@ -598,14 +605,14 @@
+ #
+ # "/home/subversion/apache/cgi-bin" should be changed to whatever your ScriptAliased
+ # CGI directory exists, if you have that configured.
+ #
+-<Directory "/home/subversion/apache/cgi-bin">
+-    AllowOverride None
+-    Options None
+-    Order allow,deny
+-    Allow from all
+-</Directory>
++#<Directory "/home/subversion/apache/cgi-bin">
++#    AllowOverride None
++#    Options None
++#    Order allow,deny
++#    Allow from all
++#</Directory>
+ 
+ #
+ # Redirect allows you to tell clients about documents which used to exist in
+ # your server's namespace, but do not anymore. This allows you to tell the
+@@ -620,49 +627,49 @@
+ #
+ # IndexOptions: Controls the appearance of server-generated directory
+ # listings.
+ #
+-IndexOptions FancyIndexing VersionSort
++#IndexOptions FancyIndexing VersionSort
+ 
+ #
+ # AddIcon* directives tell the server which icon to show for different
+ # files or filename extensions.  These are only displayed for
+ # FancyIndexed directories.
+ #
+-AddIconByEncoding (CMP,/icons/compressed.gif) x-compress x-gzip
++#AddIconByEncoding (CMP,/icons/compressed.gif) x-compress x-gzip
+ 
+-AddIconByType (TXT,/icons/text.gif) text/*
+-AddIconByType (IMG,/icons/image2.gif) image/*
+-AddIconByType (SND,/icons/sound2.gif) audio/*
+-AddIconByType (VID,/icons/movie.gif) video/*
+-
+-AddIcon /icons/binary.gif .bin .exe
+-AddIcon /icons/binhex.gif .hqx
+-AddIcon /icons/tar.gif .tar
+-AddIcon /icons/world2.gif .wrl .wrl.gz .vrml .vrm .iv
+-AddIcon /icons/compressed.gif .Z .z .tgz .gz .zip
+-AddIcon /icons/a.gif .ps .ai .eps
+-AddIcon /icons/layout.gif .html .shtml .htm .pdf
+-AddIcon /icons/text.gif .txt
+-AddIcon /icons/c.gif .c
+-AddIcon /icons/p.gif .pl .py
+-AddIcon /icons/f.gif .for
+-AddIcon /icons/dvi.gif .dvi
+-AddIcon /icons/uuencoded.gif .uu
+-AddIcon /icons/script.gif .conf .sh .shar .csh .ksh .tcl
+-AddIcon /icons/tex.gif .tex
+-AddIcon /icons/bomb.gif core
+-
+-AddIcon /icons/back.gif ..
+-AddIcon /icons/hand.right.gif README
+-AddIcon /icons/folder.gif ^^DIRECTORY^^
+-AddIcon /icons/blank.gif ^^BLANKICON^^
++#AddIconByType (TXT,/icons/text.gif) text/*
++#AddIconByType (IMG,/icons/image2.gif) image/*
++#AddIconByType (SND,/icons/sound2.gif) audio/*
++#AddIconByType (VID,/icons/movie.gif) video/*
++
++#AddIcon /icons/binary.gif .bin .exe
++#AddIcon /icons/binhex.gif .hqx
++#AddIcon /icons/tar.gif .tar
++#AddIcon /icons/world2.gif .wrl .wrl.gz .vrml .vrm .iv
++#AddIcon /icons/compressed.gif .Z .z .tgz .gz .zip
++#AddIcon /icons/a.gif .ps .ai .eps
++#AddIcon /icons/layout.gif .html .shtml .htm .pdf
++#AddIcon /icons/text.gif .txt
++#AddIcon /icons/c.gif .c
++#AddIcon /icons/p.gif .pl .py
++#AddIcon /icons/f.gif .for
++#AddIcon /icons/dvi.gif .dvi
++#AddIcon /icons/uuencoded.gif .uu
++#AddIcon /icons/script.gif .conf .sh .shar .csh .ksh .tcl
++#AddIcon /icons/tex.gif .tex
++#AddIcon /icons/bomb.gif core
++
++#AddIcon /icons/back.gif ..
++#AddIcon /icons/hand.right.gif README
++#AddIcon /icons/folder.gif ^^DIRECTORY^^
++#AddIcon /icons/blank.gif ^^BLANKICON^^
+ 
+ #
+ # DefaultIcon is which icon to show for files which do not have an icon
+ # explicitly set.
+ #
+-DefaultIcon /icons/unknown.gif
++#DefaultIcon /icons/unknown.gif
+ 
+ #
+ # AddDescription allows you to place a short description after a file in
+ # server-generated indexes.  These are only displayed for FancyIndexed
+@@ -678,16 +685,16 @@
+ # default, and append to directory listings.
+ #
+ # HeaderName is the name of a file which should be prepended to
+ # directory indexes. 
+-ReadmeName README.html
+-HeaderName HEADER.html
++#ReadmeName README.html
++#HeaderName HEADER.html
+ 
+ #
+ # IndexIgnore is a set of filenames which directory indexing should ignore
+ # and not include in the listing.  Shell-style wildcarding is permitted.
+ #
+-IndexIgnore .??* *~ *# HEADER* README* RCS CVS *,v *,t
++#IndexIgnore .??* *~ *# HEADER* README* RCS CVS *,v *,t
+ 
+ #
+ # DefaultLanguage and AddLanguage allows you to specify the language of 
+ # a document. You can then use content negotiation to give a browser a 
+@@ -859,9 +866,9 @@
+ # For type maps (negotiated resources):
+ # (This is enabled by default to allow the Apache "It Worked" page
+ #  to be distributed in multiple languages.)
+ #
+-AddHandler type-map var
++#AddHandler type-map var
+ 
+ #
+ # Filters allow you to process content before it is sent to the client.
+ #
+@@ -1017,9 +1022,105 @@
+ 
+ #
+ # Use name-based virtual hosting.
+ #
+-#NameVirtualHost *:80
++NameVirtualHost svn.sinz.com:80
++
++<VirtualHost svn.sinz.com:80>
++	ServerName svn.sinz.com
++	DocumentRoot "/home/subversion/www"
++	<Directory "/home/subversion/www">
++		Options Indexes FollowSymLinks ExecCGI
++		AllowOverride All
++		Order allow,deny
++		Allow from all
++	</Directory>
++
++	# Never show our internal .svn directories
++	<DirectoryMatch "^/.*/\.svn">
++		Order allow,deny
++		Deny from all
++	</DirectoryMatch>
++
++	# To help reduce bandwidth usage, if the client supports it, use deflate
++	AddOutputFilterByType DEFLATE text/html text/xml text/plain text/css application/x-javascript
++	DeflateCompressionLevel 6
++
++	<Location /svn>
++	    DAV svn
++	    SVNParentPath /home/subversion/repositories
++	    SVNIndexXSLT "/insurrection.xsl"
++
++	    # our access control policy
++	    AuthzSVNAccessFile /home/subversion/authentication/access
++
++	    # try anonymous but require a user if needed
++	    Satisfy Any
++	    Require valid-user
++
++	    # how to authenticate a user
++	    AuthType Basic
++	    AuthName "MKSoft Subversion Repository"
++	    AuthUserFile /home/subversion/authentication/passwords
++	</Location>
++</VirtualHost>
++
++## Note that the SSL version *always* needs authorization
++## There is no open connection in the SSL world.
++<VirtualHost svn.sinz.com:443>
++	ServerName svn.sinz.com
++	DocumentRoot "/home/subversion/www"
++	<Directory "/home/subversion/www">
++		Options Indexes FollowSymLinks ExecCGI
++		AllowOverride All
++		Order allow,deny
++		Allow from all
++		Require valid-user
++	</Directory>
++
++	# Never show our internal .svn directories
++	<DirectoryMatch "^/.*/\.svn">
++		Order allow,deny
++		Deny from all
++	</DirectoryMatch>
++
++	# To help reduce bandwidth usage, if the client supports it, use deflate
++	AddOutputFilterByType DEFLATE text/html text/xml text/plain text/css application/x-javascript
++	DeflateCompressionLevel 6
++
++	SSLEngine on
++	SSLVerifyClient none
++	SSLCertificateFile	/home/subversion/authentication/ssl/server.crt
++	SSLCertificateKeyFile	/home/subversion/authentication/ssl/server.key
++
++	<Location /svn>
++	    DAV svn
++	    SVNParentPath /home/subversion/repositories
++	    SVNIndexXSLT "/insurrection.xsl"
++
++	    # our access control policy
++	    AuthzSVNAccessFile /home/subversion/authentication/access
++
++	    # try anonymous but require a user if needed
++	    Require valid-user
++
++	    # how to authenticate a user
++	    AuthType Basic
++	    AuthName "MKSoft Subversion Repository"
++	    AuthUserFile /home/subversion/authentication/passwords
++	</Location>
++</VirtualHost>
+ 
+ #
+ # VirtualHost example:
+ # Almost any Apache directive may go into a VirtualHost container.
