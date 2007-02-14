@@ -808,6 +808,69 @@ sub saveAccessFile($reason)
             print DATA "$user = $access\n";
          }
       }
+## Uncomment if you are managing svn+ssh:// access separately
+## in per-repository authz files (and make sure that the files
+## editted here are the right ones.)
+##
+
+#       foreach my $group (sort keys %groupUsers)
+#       {
+# 	  my $svn_all_your_base = $SVN_BASE; 
+# 	  $svn_all_your_base =~ s[^/][];
+# 	  $groupz = $group;
+# 	  if ($group =~ m/\w+/) {
+# 	      $groupz =~ s/:.*?$//;
+	      
+# 	      open SVNDATA , ">$SVN_BASE/$groupz/conf/svnserve.conf"
+# 		  or die "Can not write to file $SVN_BASE/$group/conf/svnserve.conf";
+# 	      print SVNDATA "\n"
+# 		  ,'#Edited by Insurrection',"\n"
+# 		  ,"[general]\nanon-access = none\nauth-access = write\nauthz-db = authz\n\n";
+# 	      close SVNDATA;
+# 	      open SVNDATA , ">$SVN_BASE/$groupz/conf/authz"
+# 		  or die "Can not write to file $SVN_BASE/$group/conf/authz";
+# 	      print SVNDATA "\n"
+# 		  ,'#Edited by Insurrection',"\n"
+# 		  ,'[',$svn_all_your_base,$groupz,':/]',"\n";
+# 	      my %users = %{$groupUsers{$group}};
+	      
+# 	      foreach my $user (sort keys %users)
+# 	      {
+# 		  my $access = $users{$user};
+		  
+# 		  if (getpwnam($user)){
+# 		      print SVNDATA "$user = $access\n";
+# 		  }
+# 	      }
+	      
+# 	      close SVNDATA; 
+# 	  } else {
+# 	      print DATA "# svnserve.conf is munged. $group \n";
+# 	  }
+#       }
+
+## This section uses POSIX ACLs to manage authorization 
+## for file:// access. It could also work for svn:// and 
+## svn+ssh:// access. No group management is needed here.
+## Note pointer to the setfacl utility. You may need to change that. 
+
+#       foreach my $group (sort keys %groupUsers){
+#         # 1. remove all extended acls. 
+# 
+#         $groupz = $group;
+#         if ($group =~ m/\w+/) {
+#             $groupz =~ s/:.*?$//;
+#             system('/usr/bin/setfacl','-bR',"$SVN_BASE/$groupz");
+#             my %users = %{$groupUsers{$group}};
+# 
+#             foreach my $user (sort keys %users)
+#             {
+#                 my $access = $users{$user};
+#                 
+#                 if (getpwnam($user) && $access ){
+#                     system('/usr/bin/setfacl','-Rm',"u:$user:${access}x","$SVN_BASE/$groupz");
+#                 }
+#             }
 
       flock(DATA,LOCK_UN);
       close DATA;

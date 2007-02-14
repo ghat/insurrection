@@ -361,6 +361,38 @@ function doNextItem(actionList)
 		img.align = 'middle';
 		img.alt = a.title;
 		a.appendChild(img);
+                // The 4th column for both files and directories is the
+                // same, so we do that outside of the separate elements.
+                // (This is the "upload" icon/action)
+                td = document.createElement('td');
+                tr.appendChild(td);
+  
+                td.className = 'upload';
+                a = document.createElement('a');
+                td.appendChild(a);
+  
+                if (action.type == 'dir')
+                {
+                        a.title = 'Upload new member of directory "' + action.name + '"';
+                        a.href = tgt + '?Insurrection=upload&dir=yes';
+  
+                }
+                else
+                {
+                        a.title = 'Upload new revision for file "' + action.name + '"';
+                        a.href = tgt + '?Insurrection=upload';
+                }
+  
+                if (document.InsurrectionRev)
+                {
+                        a.href += '&r1=' + document.InsurrectionRev;
+                }
+                img = document.createElement('img');
+                img.src = document.getElementById('uploadImage').src;
+                img.align = 'middle';
+                img.alt = a.title;
+                a.appendChild(img);
+  
 
 		// Append the line now that we actually have the full row complete...
 		action.target.dirlist.appendChild(tr);

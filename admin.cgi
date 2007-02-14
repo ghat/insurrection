@@ -21,6 +21,12 @@ my $isAdmin = &isAdminMember('Admin',$AuthUser);
 ## sub-path management later
 my $repo = &svn_REPO();
 my $group = $repo . ':/';
+# Makes the repository name clear.
+# Good for presenting where you want if you redesign anything.
+if ((defined $cgi->param('repo'))&& ($group eq ':/')){
+    $repo =  $cgi->param('repo');
+    $group = $repo.':/';
+}
 
 ## The repository directory on the local disk...
 my $repoDir = $SVN_BASE . '/' . $repo;
@@ -36,7 +42,9 @@ print '<center>'
     ,  '<span style="font-weight: bold;">' , $repo , '</span>'
     , '</div>';
 
-my $reloadForm = '<br/><center><a href="?Insurrection=admin" title="reload">Reload administration page</a></center>';
+my $reloadForm = '<br/><center><a href="?Insurrection=admin&repo='.$repo.'" title="reload">Reload administration page</a>
+</center>';
+
 
 my $newDescription = $cgi->param('newDescription');
 if (defined $newDescription)
@@ -177,6 +185,11 @@ elsif (defined $cgi->param('adduser'))
    ## Since there is little in the way of "old" to deal with.
    my $user = $cgi->param('NewUser');
    chomp $user;
+   # Allows different local and remote user names. 
+   if ($user eq "username"){ $user = '';}
+   my $useremail = $cgi->param('NewUserEmail');
+   chomp $useremail;
+   if ($useremail eq "user email address"){ $useremail = '';}
 
    ## Show the action log...
    print &startInnerFrame('Action log: Add User');
@@ -194,11 +207,17 @@ elsif (defined $cgi->param('adduser'))
 
       if (!defined $userPasswords{$user})
       {
+## If you uncomment these lines, Insurrection will treat
+## usernames differently if they have local shell accounts. 
+## This is only usefull if you are using mod_auth_pam
+# 
+#        if (!getpwnam($user)) { 
          my $pw = &genPassword();
          $userPasswords{$user} = crypt($pw,$pw);
          $userDates{$user} = 0;  ## The user never changed his password yet...
          &savePasswordFile("admin.cgi: Added user $user");
-
+#        }
+## One more line above to uncomment. 
          if (open EMAIL,'| /usr/sbin/sendmail -t')
          {
             print EMAIL 'From: "Insurrection Administrator" <' , &emailAddress($AuthUser) , '>' , "\n"
@@ -255,7 +274,7 @@ elsif (defined $cgi->param('adduser'))
    }
    else
    {
-      print '<h2 style="color: red;">Invalid characters in username.</h2>';
+      print '<h2 style="color: red;">Invalid characters in username '.$user.'.</h2>';
    }
 
    print $reloadForm;
@@ -328,6 +347,7 @@ sub printAdminForms()
    {
       print '<form name="Description" id="Description" method="post" action="?Insurrection=admin">'
           , '<input type="hidden" name="version" value="' , &svn_XML_Escape($accessVersion) , '"/>'
+	  ,'<input type="hidden" name="repo" value="',$repo,'"/>',
           , '<input type="hidden" name="newDescription" value=""/>'
           , '</form>';
 
@@ -394,6 +414,7 @@ sub printAdminForms()
 
    print '<form method="post" action="?Insurrection=admin">'
        , '<input type="hidden" name="version" value="' , &svn_XML_Escape($accessVersion) , '"/>'
+       ,'<input type="hidden" name="repo" value="',$repo,'"/>',
        , &startTableFrame(undef,'User Name&nbsp;',undef,'Access rights',undef);
 
    my @accessLevels = ('No Access','Read Only','Full Access','Administrator','Delete User');
@@ -442,11 +463,15 @@ sub printAdminForms()
        , &startInnerFrame('Add new user')
        , '<p>'
        ,  '<input type="hidden" name="Insurrection" value="admin"/>'
+       ,  '<input type="hidden" name="repo" value="',$repo,'"/>'
+
        ,  '<input type="text" name="NewUser" value="" size="28" maxlength="56" title="Enter the EMail address of the new user"/>'
+       ,  '<input type="text" name="NewUserEmail" value="user email address" size="28" maxlength="56" title="Enter the email address of the new user"/>'
+
        ,  '<input type="submit" name="adduser" value="Add"/>'
        , '</p>'
        , '<p>'
-       ,  'To add a new user, enter their EMail address above.'
+       ,  'To add a new user, enter their username and  EMail address above.'
        , '</p>'
        , '<p>'
        ,  'After the new user has been added, '

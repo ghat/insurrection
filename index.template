@@ -4,6 +4,7 @@
 <!-- $Id$ -->
 
 <!-- We use my tabs.js tool to dynamically build the tab frames for this page -->
+<!-- EDITTHIS if Insurrection isn't your root resource on the server. -->
 <script type="text/javascript" language="JavaScript" src="tabs.js"></script>
 
 <script type="text/javascript" language="JavaScript"><!--

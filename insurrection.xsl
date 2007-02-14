@@ -38,6 +38,8 @@
        need to update. -->
   <!-- Note: the data within this template must be literal - no XSLT tags -->
   <xsl:template name="header">
+  <!-- EDITTHIS Here are quite a few paths that need to change if 
+       you move Insurrection to a subdirectory of the server root. -->
     <link href="/favicon.ico" rel="shortcut icon"/>
     <link href="/styles.css" rel="stylesheet" type="text/css"/>
     <script src="/insurrection.js" language="JavaScript" type="text/javascript"></script>
@@ -71,6 +73,7 @@
   <xsl:template name="aticon-path">/at.gif</xsl:template>
   <xsl:template name="xmlicon-path">/valid-xml10.png</xsl:template>
   <xsl:template name="htmlicon-path">/valid-html401.png</xsl:template>
+  <xsl:template name="uploadicon-path">/upload.gif</xsl:template>
 
   <!-- ******************************************************************************************************************* -->
 
@@ -225,6 +228,14 @@
             <xsl:call-template name="infoicon-path"/>
           </xsl:attribute>
           <xsl:attribute name="id">infoImage</xsl:attribute>
+          <xsl:attribute name="style">display: none</xsl:attribute>
+          <xsl:attribute name="alt"></xsl:attribute>
+        </xsl:element>
+        <xsl:element name="img">
+          <xsl:attribute name="src">
+            <xsl:call-template name="uploadicon-path"/>
+          </xsl:attribute>
+          <xsl:attribute name="id">uploadImage</xsl:attribute>
           <xsl:attribute name="style">display: none</xsl:attribute>
           <xsl:attribute name="alt"></xsl:attribute>
         </xsl:element>
@@ -419,6 +430,30 @@
               </xsl:element>
             </xsl:element>
           </td>
+      <td class="upload">
+        <xsl:element name="a">
+          <xsl:attribute name="title">
+            <xsl:text>Upload new file or create a new subdirectory "</xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text>"</xsl:text>
+          </xsl:attribute>
+          <xsl:attribute name="href">
+            <xsl:value-of select="@href"/>
+            <xsl:text>?Insurrection=upload&amp;dir=yes</xsl:text>
+          </xsl:attribute>
+          <xsl:element name="img">
+            <xsl:attribute name="align">middle</xsl:attribute>
+            <xsl:attribute name="alt">
+              <xsl:text>upload a new file or create a new subdirectory "</xsl:text>
+              <xsl:value-of select="@name"/>
+              <xsl:text>"</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="src">
+              <xsl:call-template name="uploadicon-path"/>
+            </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+      </td>
         </tr>
         <tr id=".//">
           <td>
@@ -524,6 +559,30 @@
             </xsl:attribute>
             <xsl:attribute name="src">
               <xsl:call-template name="infoicon-path"/>
+            </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+      </td>
+      <td class="upload">
+        <xsl:element name="a">
+          <xsl:attribute name="title">
+            <xsl:text>Upload new file for this directory "</xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text>"</xsl:text>1
+          </xsl:attribute>
+          <xsl:attribute name="href">
+            <xsl:value-of select="@href"/>
+            <xsl:text>?Insurrection=upload&amp;dir=yes</xsl:text>
+          </xsl:attribute>
+          <xsl:element name="img">
+            <xsl:attribute name="align">middle</xsl:attribute>
+            <xsl:attribute name="alt">
+              <xsl:text>upload new file for this directory "</xsl:text>
+              <xsl:value-of select="@name"/>
+              <xsl:text>"</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="src">
+              <xsl:call-template name="uploadicon-path"/>
             </xsl:attribute>
           </xsl:element>
         </xsl:element>
@@ -636,6 +695,30 @@
             </xsl:attribute>
             <xsl:attribute name="src">
               <xsl:call-template name="infoicon-path"/>
+            </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+      </td>
+      <td class="upload">
+        <xsl:element name="a">
+          <xsl:attribute name="title">
+            <xsl:text>Upload new version for this file "</xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text>"</xsl:text>
+          </xsl:attribute>
+          <xsl:attribute name="href">
+            <xsl:value-of select="@href"/>
+            <xsl:text>?Insurrection=upload</xsl:text>
+          </xsl:attribute>
+          <xsl:element name="img">
+            <xsl:attribute name="align">middle</xsl:attribute>
+            <xsl:attribute name="alt">
+              <xsl:text>upload new version for this file "</xsl:text>
+              <xsl:value-of select="@name"/>
+              <xsl:text>"</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="src">
+              <xsl:call-template name="uploadicon-path"/>
             </xsl:attribute>
           </xsl:element>
         </xsl:element>
