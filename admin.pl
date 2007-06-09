@@ -711,7 +711,7 @@ sub loadAccessFile()
             %{$groupUsers{$section}} = %empty;
          }
       }
-      elsif (($line =~ m/^(Admin\S*)\s+=\s*(.*?)$/o) && ($section eq 'groups'))
+      elsif (($line =~ m/^(Admin\S*)\s*=\s*(.*?)$/o) && ($section eq 'groups'))
       {
          ## Ahh, an admin definition - now lets deal with it...
          my $group = $1;
@@ -719,7 +719,7 @@ sub loadAccessFile()
 
          @{$groupAdmins{$group}} = @users;
       }
-      elsif (($line =~ m/^(\S+)\s+=\s*(.*?)$/o) && ($section ne 'groups'))
+      elsif (($line =~ m/^(\S+)\s*=\s*(.*?)$/o) && ($section ne 'groups'))
       {
          my $user = $1;
          my $access = $2;
