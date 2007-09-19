@@ -7,6 +7,16 @@
 </p>
 <ul>
   <li>
+    <a href="docs/Debian-Install.html"><code>Debian Install how-to</code></a>
+    <ul>
+      Due to the hard work and kind submission of Severin Leonhardt, there is
+      now a "how-to" document for Insurrection install on Debian linux systems.
+      I would like to thank Severin for his efforts and for sharing with the
+      project.
+    </ul>
+  </li>
+  <br/>
+  <li>
     <a href="insurrection.js"><code>insurrection.js</code></a>
     <ul>
       This is the JavaScript based configuration file.&nbsp; This contains the

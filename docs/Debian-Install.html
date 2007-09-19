@@ -1,0 +1,357 @@
+<meta http-equiv="Context-Type" content="text/html; charset=us-ascii">
+<html>
+  <head>
+    <title>Installing Insurrection on Debian</title>
+    <meta content="">
+    <style>
+      .shell { min-width:640px; border: 1px solid black; background-color:#eee; font-style:italic; padding:10px}
+      .config { border: 1px solid black; background-color:#ffe; padding:10px }
+      .indent { margin-left:2em }
+      dd { margin-bottom:10px}
+      dt {font-style:italic; }
+    </style>
+  </head>
+  <body>
+<h1>Installing Insurrection on Debian</h1>
+<br/>
+Insurrection is a very powerfull and nice-looking webgui for the version control system Subversion. It uses modern techniques to make browsing Repositories easy and intuitive.
+<br/><br/>
+<h2>Prerequirements</h2>
+There are mainly two parts you need for insurrection, that would be all the necessary software, and a DNS.
+
+<h3>Software</h3>
+The Insurrection scripts are written in Perl. So you need the Perl interpreter, which is usually already installed on a Debian system.
+ You also need Apache with the modules dav,svn,proxy and rewrite. And of course you need subversion. It's easy to install all those packages via apt as <u>root</u>:
+
+<blockquote class="shell"><code>
+$> apt-get install perl apache2 subversion libapache2-svn
+</code></blockquote>
+
+<h3>DNS</h3>
+You will also need a DNS Server which you can configure. Insurrection only works if it's access by a domain name, therefore you have to set up a DNS Server to point the desired domain name to a apache server. In this howto I will not explain how to do this, but you can find a lot about it on the Internet.
+
+<br/><br/>
+
+<h2>Authentication and repository folder</h2>
+
+<h3>Folders and files</h3>
+Now we need two folders. One for all the repositories and the other for the authentication files. In this howto I will use <code>/srv/svn/auth</code> as authentication folder and <code>/srv/svn/repos</code> for the repositories. If you want to use different directories feel free to use them but rembember to use them all throughout instead of mine. So now we create them:
+
+<blockquote class="shell">
+<code>
+$> mkdir /srv/svn <br/>
+$> mkdir /srv/svn/auth<br/>
+$> mkdir /srv/svn/repos
+</code>
+</blockquote>
+
+Later the apache process will have to read and write in those directories, so we let the user und group of apache own the directories. Usually the user and the group are called <code>www-data</code> but you might want to check that in your apache configuration. On the commandline you can easilly change the ownership by the following commands:<br/>
+
+<blockquote class="shell">
+<code>
+$> cd /srv <br/>
+$> chown -R www-data svn<br/>
+$> chgrp -R www-data svn
+</code>
+</blockquote>
+<br/>
+In the authentication folder we create two files: The Apache authentication file (passwords) and the access configuration file (access) of Subversion (which Insurrection uses too).<br/>
+<blockquote class="shell">
+<code>
+$> cd /srv/svn/auth<br/>
+$> touch passwords access
+</code>
+</blockquote>
+
+<br/><br/>
+<h3>Authentication - file &quot;passwords&quot;</h3>
+
+ The Apache authentication file can be modified with htpasswd. Basically you give the filename and username as a parameter and are then asked for the users password. That way you can add users or change their passwords.
+
+<blockquote class="shell">
+<code>
+$> htpasswd passwords user<br/>
+Password:
+</code>
+</blockquote>
+<br/>
+For more information on htpasswd consult <a href="http://httpd.apache.org/docs/2.0/programs/htpasswd.html" target="_blank">http://httpd.apache.org/docs/2.0/programs/htpasswd.html</a>.
+
+<br/><br/>
+
+<h3>Access control - file &quot;access&quot;</h3>
+
+How this configuration files works is described very well in the Subversion Book: <a href="http://svnbook.red-bean.com/en/1.4/svn.serverconfig.pathbasedauthz.html" target="_blank"> http://svnbook.red-bean.com/en/1.4/svn.serverconfig.pathbasedauthz.html</a>
+<br/><br/>
+<b>Notice:</b> If you want anonymous access you have to define this for every repository in this file.
+
+
+<br/><br/>
+
+
+<h2>Installing Insurrection</h2>
+Now we have to get Insurrection. You can check it out from its subversion repository into the root or any subfolder of your web presence.<br/> In this Howto we will create a new virtual server for insurrection, so it will be at the document root. But whenever you have to do something differently if insurrection is in a subfolder I will tell you.<br/>
+We will use <code>/var/www/insurrection</code> as the document root of our new virtual server, but perhaps you want to place it somewhere else. Just remember to use your path instead of this one, whenever it occures.
+
+<blockquote class="shell">
+<code>
+$> svn co http://svn.code-host.net/svn/Insurrection/trunk /var/www/insurrection
+</code>
+</blockquote>
+
+<h3>Cleanup</h3>
+There might be several files and folders you don&apos;t need to run Insurrection. If you want you can delete them:<br>
+<code>.htauth browser-tests rewrite-test screenshots .svn_index httpd.conf.patch insurrection.conf</code>
+<br/>
+
+<h3>Rights and Ownership</h3>
+First you should change the owership of all files and folders to the apache user and group. As previously mentioned this is usually  <code>www-data</code> but again you might want to check that in your apache configuration.
+
+<blockquote class="shell">
+<code>
+$> cd /var/www/insurrection <br/>
+$> chown -R www-data *<br/>
+$> chgrp -R www-data *
+</code>
+</blockquote>
+
+We also have to make sure that all scripts are executable. So we have to set the executable flag for the files by running the following command in the insurrection folder:
+
+<blockquote class="shell">
+<code>
+$> chmod u+x *.pl *.cgi
+</code>
+</blockquote>
+<br/>
+
+<br/><br/>
+
+<h2>Insurrection configuration files</h2>
+Insurrection uses several programming languages, therefore we have several configuration files to adjust to our needs.<br/>
+<h3>insurrection.pl</h3>
+Altough this configuration file is selfexplaining some remarks on the settings follow:<br/>
+<dl>
+
+<dt>$SVN_INDEX_TITLE</dt>
+<dd>This is the title of the main page, usually shown in the browser&apos;s window title. Should be a string which identifies your repositories.</dd>
+
+<dt>$SVN_BASE</dt>
+<dd>All repositories will lie under this directory. It should be our previously created <code>/srv/svn/repos</code> or whatever you named it.</dd>
+
+<dt>$SVN_AUTH</dt>
+<dd>The other previously created directory for authentication files, <code>/srv/svn/auth</code> or the direcotry you created for this.</dd>
+
+<dt>$SVN_LOGS</dt>
+<dd>The Logfiles will lie under this direcotry, on debian usually <code>/var/log/apache2</code></dd>
+
+<dt>$SVN_BIN</dt>
+<dd>The directory in which the subversion binaries lie. If you did a normal installation this would be <code>/usr/bin</code></dd>
+
+<dt>$EMAIL_DOMAIN</dt>
+<dd>The domain of your email adress with a prefixed @. This will be used in the rss part for naming the author and for welcome mails to new users.</dd>
+
+<dt>$HTTPS_LOGIN</dt>
+<dd>Set to 1 if you want authentication to be done only through HTTPS, otherwise 0. Of course https has to be configured in apache for this to work.</dd>
+
+<dt>$SVN_LOG_ENTRIES</dt>
+<dd>The amount of revisions usually shown.</dd>
+
+<dt>$SVN_URL_PATH</dt>
+<dd>Under which path Insurrection lies in your web-hierarchy. For example:<br/>
+If Insurrection will be reached through http://server/insurrection then this value has to be set to /insurrection/ (notice the leading and trailing slashes).<br/> If Insurrection lies in the document root (http://server/ will lead to Insurrection) you have to set this to just one slash (/),<br/> which is the case in this Howto.</dd>
+
+<dt>$SVN_REPOSITORIES_URL</dt>
+<dd>This variable represents the subdirectory under which all repositories will be reached. For example http://server/ will lead to Insurrection whereas all repositories URLs will begin with http://server/svn/</dd>
+
+</dl>
+You don't have to change the last three variables if your subversion binaries aren&apos;t namend differently to the standard.
+<br/><br/>
+
+<h3>insurrection.js</h3>
+The only thing you have to really do here is checking that Insurrection.SVN_URL is set to the same as $SVN_REPOSITORIES_URL of the Insurrection.pl file.<br/>
+The other variable, Insurrection.SliderSteps, sets how many steps the unfolding of popups will use. A higher number means slower, a lower numbers means faster. 1 means instantly.
+<br/><br/>
+
+<h3>insurrection.xsl</h3>
+If Insurrection is installed in a subfolder you have to adjust the paths to all files in this XML Style Sheet. Those paths have to be absolute and not relative. At the time of writing the changes would have to be made to the following lines:<br/>
+(Replace &quot;subfolder&quot; with the name of your actual subfolder.)<br/>
+<blockquote class="config">
+<code>
+Line 31: &lt;img src="/subfolder/Logo.gif" ...<br/>
+Line 41: &lt;link href="/subfolder/favicon.ico" ... <br/>
+Line 42: &lt;link href="/subfolder/styles.css" ... <br/>
+Line 43: &lt;script src="/subfolder/insurrection.js" ... <br/>
+Line 44: &lt;script src="/subfolder/svnindex.js" ... <br/>
+Line 45: &lt;script src="/subfolder/log.js" ... <br/>
+</code>
+</blockquote>
+<br/><br/>
+And the same from Line 52 to 73 with the paths to the images<br/>
+<blockquote class="config">
+<code>
+&lt;xsl:template name="closedicon-path"&gt;/subfolder/closed.gif&lt;/xsl:template&gt;
+</code><br/> etc...
+</blockquote>
+<br/><br/>
+
+<h3>.htaccess</h3>
+We can split this configuration up in two parts. At the beginning of the file the authentication stuff and at the end all the rewrite stuff.<br/><br/>
+<i>AuthUserFile</i> should point to the password file we previously created with htpasswd2,which would be <code>/srv/svn/auth/passwords</code>.<br/>
+<i>AuthName</i> is the authentication realm. Basically this will be shown to the user if he has to authenticate.<br/>
+<i>AuthType</i> should be left to Basic, except you know why you want another authentication type (which will probably not work on some browsers but most certanly be more secure).<br/><br/>
+
+Futher down at the rewrite rules we have to change some lines:<br/>
+<blockquote class="config">
+<code>80: RewriteCond /home/subversion/www/%{HTTP_HOST}.gif !-f</code>
+</blockquote><br/>
+There we have to give the full path to Insurrection. For example if Insurrection is at  <code>/var/www/insurrection</code> this has to be:<br/>
+<blockquote class="config">
+<code>80: RewriteCond /var/www/insurrection/%{HTTP_HOST}.gif !-f</code>
+</blockquote><br/>
+(For further explanation of this part see the chapter Domainname.)<br/><br/>
+
+If you have set Insurrection to be under a folder (and not at the root) of your web presence you have to change the last 4 RewriteRules (first is at line 130). Change <code>http://%{HTTP_HOST}/</code> to have the directory included. For example: <code>http://%{HTTP_HOST}/subfolder/</code>, replacing &quot;subfolder&quot; with the name of your acutal subfolder.
+
+
+
+<br/><br/>
+
+
+<h2>Domainname</h2>
+Insurrection only works if you connect to the server by a domainname and not by IP.<br/><br/>
+
+Insurrection checks whether there is a gif image named [your full hostname].gif in the insurrection folder. This gif image is also used as the logo shown at the Insurrection main page. So you have to create a little gif file with a nice logo and put it in the insurrection main folder. Say your server is at svn.mycompany.com you have to name the file svn.mycomany.com.gif. <br/><br/>
+
+If someone tries to access the insurrection page by IP or another domain name he will get the error message &quot;Forbidden&quot;.
+<br/><br/>
+
+<h2>Apache configuration</h2>
+The subversion webdav, rewrite and proxy modules have to be loaded. Modules are loaded by creating a symbolic link in <code>/etc/apache2/mods-enabled</code> to their correspoding .conf and .load file in  <code>/etc/apache2/mods-available</code>. As this is already the case for subversion webdav module, we only have to add the other two modules:
+
+<blockquote class="shell">
+<code>
+$> cd /etc/apache2/mods-enabled<br/>
+$> ln -s ../mods-available/rewrite.load<br/>
+$> ln -s ../mods-available/proxy.conf<br/>
+$> ln -s ../mods-available/proxy.load<br/>
+</code>
+</blockquote>
+<br/><br/>
+
+Next we create a virtual host for Insurrection. A virtual host allows you to...<br/>
+Leave virtualHost out... can put everything in server config.. or use _default_ as domain name.<br/>
+
+The configuration files for virtual hosts are at <code>/etc/apache2/sites-available/</code>. So we put a new file called insurrection there. In this file we write the following configuration, in which I explain the most important lines:
+
+<blockquote class="config">
+<code>
+# use the domainname you configured in your DNS server, or _default_<br/>
+&lt;VirtualHost svn.mycompany.com:80&gt;<br/>
+<div class="indent">
+    ServerName svn.mycomapny.com<br/>
+    # create own logfiles for subversion (and Insurrection)<br/>
+    CustomLog  /var/log/apache2/svn_error_log common<br/>
+    ErrorLog   /var/log/apache2/svn_error_log<br/>
+    <br/>
+    #<br/>
+    # The Insurrection tree lives here...<br/>
+    #<br/>
+    DocumentRoot /var/www/insurrection<br/>
+    &lt;Directory &quot;/var/www/insurrection&quot;&gt;<br/>
+    <br/>
+    <div class="indent">
+        Options FollowSymLinks ExecCGI<br/>
+        <br/>
+        #<br/>
+        # AllowOverride controls what directives may be placed in .htaccess files.<br/>
+        # It can be "All", "None", or any combination of the keywords:<br/>
+        #   Options FileInfo AuthConfig Limit<br/>
+        #<br/>
+        # This is needed because we do many things with the .htaccess file.<br/>
+        AllowOverride All<br/>
+        <br/>
+        Order allow,deny<br/>
+        Allow from all
+    </div>
+    &lt;/Directory&gt;<br/>
+    <br/>
+    # Never show our internal .svn directories<br/>
+    &lt;DirectoryMatch &quot;^/.*/\.svn&quot;&gt;<br/>
+    <div class="indent">
+        Order allow,deny<br/>
+        Deny from all
+    </div>
+    &lt;/DirectoryMatch&gt;<br/>
+    <br/>
+    &lt;Location /svn&gt;
+    <div class="indent">
+        DAV svn<br/>
+         # this is the root under which all our repositories lie<br/>
+        SVNParentPath /srv/svn/repos<br/><br/>
+        SVNIndexXSLT &quot;/insurrection.xsl&quot;<br/>
+        # If insurrection is in a subfolder you should use the next line instead <br/>
+        # but remember to replace &quot;subfolder&qout; with the name of your actual subfolder <br/>
+        # SVNIndexXSLT &quot;/subfolder/insurrection.xsl&quot;<br/>
+        <br/>
+        # our access control policy<br/>
+        AuthzSVNAccessFile /srv/svn/auth/access<br/>
+        <br/>
+        # try anonymous but require a user if needed<br/>
+        Satisfy Any<br/>
+        Require valid-user<br/>
+        <br/>
+        # how to authenticate a user<br/>
+        AuthType Basic<br/>
+        AuthName "Code-Host Repository"<br/>
+        # our previously created file containing all usernames and passwords<br/>
+        AuthUserFile /srv/svn/auth/passwords
+    </div>
+    &lt;/Location&gt;<br/>
+</div>
+&lt;/VirtualHost&gt;
+</code>
+</blockquote>
+<br/>
+Now we enable this configuration by linking to it from the <code>/etc/apache2/sites-enabled</code> folder:
+<blockquote class="shell">
+<code>
+$> cd /etc/apache2/sites-enabled <br/>
+$> ln -s ../sites-available/insurrection
+</code>
+</blockquote>
+<br/>
+<br/>
+
+<h2>Startup</h2>
+
+To see Insurrection in action we should create a repository now:
+<blockquote class="shell">
+<code>
+$> svnadmin create /srv/svn/repos/myFirstRepository
+</code>
+</blockquote>
+
+<br/>
+After restarting Apache now Insurrection should be up and running, so let's give it a try:
+<blockquote class="shell">
+<code>
+$> /etc/init.d/apache2 restart
+</code>
+</blockquote>
+<br/>
+Go with your browser to your previously configured virtual host (http://svn.mycompany.com) and see if Insurrection is there.
+
+<br/><br/>
+
+<h2>Known Problems</h2>
+At the moment there is only one known problem:
+
+<h3>&quot;can't set pointer (...) invalid argument&quot;</h3>
+This error usually appears if <i>mod_dav_svn</i> is not linked against the same version of APR as Apache.
+<br/><br/>
+
+<hr/>
+written by Severin Leonhardt
+
+</body>
+</html>
