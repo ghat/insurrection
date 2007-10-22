@@ -63,7 +63,13 @@ else
    ## and use "head" to only get as many as needed...
    my $hcmd = $SVNLOOK_CMD . ' history';
    $hcmd .= ' -r "' . $r1 . '"' if (defined $r1);
-   $hcmd .= ' "' . $SVN_BASE . '/' . $rpath . '" "' . $opath . '"';
+
+   ## Escape the shell special "$" character for svnlook as it
+   ## takes raw path names and not URLs which would have this escaped.
+   my $eopath = $opath;
+   $eopath =~ s/\$/\\\$/g;
+
+   $hcmd .= ' "' . $SVN_BASE . '/' . $rpath . '" "' . $eopath . '"';
    $hcmd .= ' 2>/dev/null | head -' . ($maxEntries + 3);
    @revs = (`$hcmd` =~ m:(\d+)\s+(/[^\n]*):gso);
    $revcount = @revs / 2;
