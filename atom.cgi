@@ -217,6 +217,9 @@ if ((defined $top) && (defined $topDate))
       my ($logmsg) = ($entry =~ m:<msg>\s*(.*?)\s*</msg>:so);
       my ($date) = ($entry =~ m:<date>\s*(.*?)\s*</date>:so);
 
+      ## Get the first line of the log message
+      my ($firstLine) = ($logmsg =~ m:^\s*(.*?)\s*(\n|$):so);
+
       ## Convert line enders into <br/>
       $logmsg =~ s:\n:<br/>:sgo;
 
@@ -234,7 +237,7 @@ if ((defined $top) && (defined $topDate))
 
       ## Output this item...
       print '<entry>' , "\n"
-          , '<title type="text">Revision ' , $revision , '</title>'
+          , '<title type="text">Revision ' , $revision , ': ' , &svn_XML_Escape($firstLine) , '</title>'
           , '<updated>' , $date , '</updated>'
           , '<author><name>' , $author , '</name></author>' , "\n"
           , '<id>' , &svn_XML_Escape($link) , '</id>' , "\n"
