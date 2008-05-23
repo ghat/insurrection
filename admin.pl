@@ -428,6 +428,10 @@ sub getNumParam($param)
 # all wed users.  (That is Mozilla/Firefox and IE)
 # Safari will/does work correctly as of webkit 420+
 # so also detect that.
+# 
+# Also, now that I have an iPod Touch, I found out that the
+# "Safari" browser in it does not do XML/XSLT at all so
+# we need to make it "bad"
 #
 # Note test filter downwards - thus the "OK" or 0 return
 # is done as early as possible.
@@ -443,9 +447,13 @@ sub isBrokenBrowser()
    return 0 if (defined $ENV{'HTTP_X_INSURRECTION_JS'});
 
    ## Safari has some extra checking since as of webkit 420+
-   ## it seems to handle XML/XSLT correctly...
+   ## it seems to handle XML/XSLT correctly...  (But not on
+   ## the iPhone or iPod Touch!)
    if ($cgi->user_agent =~ m:AppleWebKit/(\d+\.\d+):o)
    {
+      ## Darn "full Safari" in iPod/iPhone is not really...
+      return 1 if ($cgi->user_agent =~ m/iPod/);
+
       my $ver = $1 + 0;
       return 0 if ($ver >= 420);
    }
