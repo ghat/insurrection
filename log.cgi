@@ -62,6 +62,7 @@ else
    ## and we can follow renames (actually, copies) through the history
    ## and use "head" to only get as many as needed...
    my $hcmd = $SVNLOOK_CMD . ' history';
+   $hcmd .= ' --limit ' . ($maxEntries + 2);
    $hcmd .= ' -r "' . $r1 . '"' if (defined $r1);
 
    ## Escape the shell special "$" character for svnlook as it
