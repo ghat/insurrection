@@ -125,7 +125,7 @@
     <xsl:text>Powered by </xsl:text>
     <a title="Insurrection Web Tools for Subversion" href="http://svn.code-host.net/project.html" target="_new">Insurrection</a>
     <xsl:text> &amp; </xsl:text>
-    <a title="Subversion: The Version Control System" href="http://subversion.tigris.org/" target="_new">Subversion</a>
+    <a title="Subversion: The Version Control System" href="http://subversion.apache.org/" target="_new">Subversion</a>
   </xsl:template>
 
   <xsl:template name="footer">

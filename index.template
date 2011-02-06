@@ -93,7 +93,7 @@
 <p>Some resources that we think are useful for working with Code-Host services.</p>
 <table class="tableframe" cellspacing="0" cellpadding="1" width="100%">
   <tr class="tableframe-row-odd">
-    <td nowrap><a href="http://subversion.tigris.org/">The Subversion Project</a></td>
+    <td nowrap><a href="http://subversion.apache.org/">The Subversion Project</a></td>
     <td class="tableframe-div"></td>
     <td>The Subversion project home page</td>
   </tr>
@@ -109,11 +109,6 @@
     <td nowrap><a href="http://svn.sinz.com/project.html">The Insurrection Project</a></td>
     <td class="tableframe-div"></td>
     <td>The Insurrection project information page - the code that we developed for our service.</td>
-  </tr>
-  <tr class="tableframe-row-even">
-    <td nowrap><a href="http://subversion.tigris.org/links.html">The Subversion Project Links</a></td>
-    <td class="tableframe-div"></td>
-    <td>The Subversion related links page from the Subversion Project</td>
   </tr>
 </table>
 

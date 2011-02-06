@@ -5,10 +5,10 @@
 <h1>Insurrection Web Tools</h1>
 <p>
   One of my pet projects has been to build a better web based interface to a revision control system
-  known as <a href="http://subversion.tigris.org/">Subversion</a>.&nbsp;
+  known as <a href="http://subversion.apache.org/">Subversion</a>.&nbsp;
   The <a href="/">Insurrection</a> project is the result of that effort.&nbsp;
   While it is still under development, it already is a very compelling web interface to
-  <a href="http://subversion.tigris.org/">Subversion</a> and is in active use in a number of places.
+  <a href="http://subversion.apache.org/">Subversion</a> and is in active use in a number of places.
 </p>
 <p>
   The project page is at <a href="http://insurrection.tigris.org/">http://insurrection.tigris.org/</a>
